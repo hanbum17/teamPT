@@ -13,9 +13,9 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class AttachFileServiceImpl implements AttachFileService{
 	
-	//private final AttachFileMapper attachFileMapper ;
+	private final AttachFileMapper attachFileMapper ;
 	
-//	@Override
+//	@Overridef
 //	public List<AttachFileDTO> getAllFiles(String uno) {
 //		
 //		return attachFileMapper.getAllFiles(uno);
