@@ -26,7 +26,7 @@ public class EventVO {
     private String esite;       // 행사 사이트
     private String ehost;       // 행사 주최
     private String econtent;    // 행사 내용
-    private String uno;         // 공통 식별자
+    private Long uno;         // 공통 식별자
     private int eviewsCnt;      // 행사 조회수
     private float erating;      // 행사 평점
     private String excoord;     // 행사 X좌표
