@@ -14,7 +14,7 @@ public class VroomController {
 	//Vroom의 메인페이지
 	@GetMapping("/main")
 	public String main() {
-		return "vroom/vroomMain" ;
+		return "vroom/vroomMain" ; //테스트(삭제안되어있으면 해당 주석 삭제해주세용)
 	}
 	
 	@GetMapping("/festivalList")
