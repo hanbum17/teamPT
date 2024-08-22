@@ -5,11 +5,7 @@
 	<!-- 록귀파트 -->
 	<select id="getAllFiles" resultType="com.teamproject.myteam01.domain.AttachFileDTO" parameterType="String">
 	<![CDATA[
-<<<<<<< HEAD
 		SELECT * FROM ATTACHFILES WHERE uno = #{uno}
-=======
-		SELECT * FROM ATTACHFILES WHERE uno = 1
->>>>>>> CHYJ
 	]]>
 	</select>
 	

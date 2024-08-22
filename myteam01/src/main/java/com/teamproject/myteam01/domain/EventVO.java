@@ -33,7 +33,6 @@ public class EventVO {
     private String eycoord;     // 행사 Y좌표
     
     
-<<<<<<< HEAD
     public EventVO(String ehost, String excoord, String eycoord) {
         this.ehost = ehost;
         this.excoord = excoord;
@@ -44,6 +43,3 @@ public class EventVO {
 
 
 
-=======
-}
->>>>>>> CHYJ
