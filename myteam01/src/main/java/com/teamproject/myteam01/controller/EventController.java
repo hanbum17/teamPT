@@ -1,8 +1,13 @@
 package com.teamproject.myteam01.controller;
 
+import java.util.List;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -15,6 +20,7 @@ import com.teamproject.myteam01.domain.RestaurantVO;
 import com.teamproject.myteam01.domain.RestaurantsReviewVO;
 import com.teamproject.myteam01.service.EventService;
 
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
@@ -26,35 +32,65 @@ public class EventController {
 
 	private final EventService eventService ;
 	
-	//록귀 파트
-		@GetMapping("/detail")
-		public String eventDetail(@RequestParam("eno")Long eno, Model model) {
-			EventVO event = eventService.eventDetail(eno);
-			if(event != null) {
-				model.addAttribute("Event", event);
-				model.addAttribute("Reviews", eventService.selectReviews(eno));
-				return "event/eventDetail";
-			} else {
-				return "redirect:/list";
-			}
-			
-		}
-		
-		@PostMapping("/registerReview")
-		public String registerReview(Model model, EventReviewVO eventReview) {
-			eventService.registerReview(eventReview);
-			return "redirect:/event/detail?fno=" + eventReview.getEno() ;
-		}
-		
-		@PostMapping("/deleteReview")
-	    @ResponseBody  // 이 어노테이션은 JSON이나 텍스트 데이터를 응답으로 보내기 위해 사용됩니다.
-	    public String deleteReview(@RequestParam("erno") Long erno) {
-			eventService.copyReview(erno);
-			eventService.deleteReview(erno);
-	        // 성공적인 처리 후 응답 메시지를 반환
-	        return "리뷰 삭제 처리 완료";  // 클라이언트에게 전송될 응답
-	    }
+	//테스트
+	@GetMapping("/test")
+	public String test() {
+//		for(EventVO event : eventList) {
+//			eventService.updateEventCoord(event);
+//		}
+		return "test" ;
+	}
 	
+	
+//	@PostMapping("updateEventCoord")
+//	@ResponseBody
+//	public ResponseEntity<Void> updateEventCoord(@RequestParam(value = "list") List<EventVO> list) {
+//		System.out.println("updateEventCoord 컨트롤러 실행됨");
+//		System.out.println(list);
+//		List<EventVO> eventList = eventService.eventList();
+//		
+//		for(EventVO event : eventList) {
+//			eventService.updateEventCoord(event);
+//		}
+//		return new ResponseEntity<> (HttpStatus.OK);
+//	}
+	
+	//록귀 파트
+	@GetMapping("/detail")
+	public String eventDetail(@RequestParam("eno")Long eno, Model model, 
+							  @RequestParam(value = "pageNum", defaultValue = "1") int pageNum) {
+		EventVO event = eventService.eventDetail(eno);
+		if(event != null) {
+			model.addAttribute("Event", event);
+			model.addAttribute("PageNum", pageNum);
+			model.addAttribute("Reviews", eventService.selectReviews(eno, pageNum));
+			return "event/eventDetail";
+		} else {
+			return "redirect:/list";
+		}
+	}
+	
+	@GetMapping("/reviews/{pageNum}")
+	public ResponseEntity<List<EventReviewVO>> pagingReviews(Long eno, @PathVariable("pageNum") int pageNum){
+		List<EventReviewVO> reviews = eventService.selectReviews(eno, pageNum);
+		return new ResponseEntity<> (reviews, HttpStatus.OK);
+	}
+	
+	@PostMapping("/registerReview")
+	public String registerReview(Model model, EventReviewVO eventReview) {
+		eventService.registerReview(eventReview);
+		return "redirect:/event/detail?eno=" + eventReview.getEno() ;
+	}
+	
+	@PostMapping("/deleteReview")
+    @ResponseBody
+    public String deleteReview(@RequestParam("erno") Long erno) {
+		System.out.println("erno");
+		eventService.copyReview(erno);
+		eventService.deleteReview(erno);
+        // 성공적인 처리 후 응답 메시지를 반환
+        return "리뷰 삭제 처리 완료";  // 클라이언트에게 전송될 응답
+    }
 	
 	
 	

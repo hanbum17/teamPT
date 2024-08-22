@@ -11,7 +11,7 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 </head>
 <body>
-
+<%-- <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/> --%>
 <input type="text" placeholder="주소입력" id="address">
 
 <div id="map" style="width:100%;height:350px;"></div>
@@ -20,7 +20,6 @@
 
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=fe9306b4adbbf3249d28d6b7a2c37c0a&libraries=services"></script>
 <script>
-
 var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
     mapOption = {
         center: new kakao.maps.LatLng(37.14146122533543, 127.06907845124624), // 지도의 중심좌표
@@ -40,6 +39,12 @@ var marker = new kakao.maps.Marker({
 
 //마커표시
 marker.setMap(map);
+
+</script>
+<script type="text/javascript" src="/js/updateEventCoord.js"></script>
+<script>
+
+selectEhost();
 
 <!-- 인풋창 입력시 중심좌표 이동 -->
 $("#address").on("change", function(){
@@ -105,14 +110,14 @@ var data = {x: x, y: y, input_coord: input_coord, output_coord: output_coord} ;
 
 $(document).ready(function(){
 	$.ajax({
-		type: "get",
+		type: "post",
 		url: "https://dapi.kakao.com/v2/local/geo/transcoord.json",
 		data: data,
 		beforeSend: function (xhr) {
 	        xhr.setRequestHeader("Authorization","KakaoAK 6b861044f2ac4d9e31f7e31184ac5a2b");
 	    },
 		success: function(result){
-			console.log(result);
+			console.log("좌표변환성공");
 		}
 	});
 })

@@ -25,8 +25,8 @@ public class EventServiceImpl implements EventService{
 	}
 	
 	@Override
-	public List<EventReviewVO> selectReviews(Long fno) {
-		return eventMapper.selectReviews(fno);
+	public List<EventReviewVO> selectReviews(Long eno, int pageNum) {
+		return eventMapper.selectReviews(eno, pageNum);
 	}
 	
 	@Override
@@ -35,17 +35,24 @@ public class EventServiceImpl implements EventService{
 	}
 	
 	@Override
-	public int copyReview(Long frno) {
-		return eventMapper.copyReview(frno);
+	public int copyReview(Long erno) {
+		return eventMapper.copyReview(erno);
 	}
 
 	@Override
-	public int deleteReview(Long frno) {
-		return eventMapper.deleteReview(frno);
+	public int deleteReview(Long erno) {
+		return eventMapper.deleteReview(erno);
 	}
 
+	@Override
+	public void updateEventCoord(EventVO event) {
+		eventMapper.updateEventCoord(event);
+	}
 	
-	
+	@Override
+	public List<String> selectEHOST(){
+		return eventMapper.selectEHOST();
+	}
 	
 
 	//희준

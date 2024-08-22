@@ -14,8 +14,27 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+
 @Controller
 public class FileDownloadAjaxController {
+
+    @GetMapping(value = "/displayThumbnail")
+    public ResponseEntity<byte[]> sendThumbnail(@RequestParam("fileName") String fileName) {
+        File thumbnailFile = new File(fileName);
+
+        if (!thumbnailFile.exists()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("Content-Type", Files.probeContentType(thumbnailFile.toPath()));
+            return new ResponseEntity<>(Files.readAllBytes(thumbnailFile.toPath()), headers, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
     @GetMapping(value = "/doFileDownloadByAjax")
     public ResponseEntity<Resource> doFileDownloadByAjax(@RequestParam("fileName") String fileName) {

@@ -47,7 +47,37 @@
 	</div>
 	<!-- 지도를 표시할 div 입니다 -->
 	<div id="map" style="width:500px;height:350px;"></div>
+	
+	<!-- 첨부파일 div -->
+	<div id="attachFiles">
+		
+	</div>
+	
+<script>
+var uno = ${Event.uno } ;
+var thumbnail ;
+var resultHTML ;
+	$.ajax({
+		type: "GET",
+		url: "/attachFile/getFiles",
+		data: {uno: uno},
+		success: function(fileList){
+			console.log(fileList) ;
+			thumbnail = fileList[0].repoPath + "/"+ fileList[0].uploadPath + "/" + fileList[0].uuid + fileList[0].fileName ;
+			resultHTML += '<li>'
+					   +  		'<img src="${contextPath}/attachFile/displayThumbnail?thumbnail=' + thumbnail + '" style="height:250px; width:300px;"><p>' + fileList[0].fileName + '</p>';
+					   +  		'&emsp; '
+					   +  '</li>' ;
+			$("#attachFiles").append(resultHTML);		   
+			
+		}
+	});
+</script>	
+	
+	
+	<!-- 리뷰 wrap Div -->
 	<div id="reviews_wrap">
+		<!-- 리뷰등록 form -->
 		<form action="${contextPath }/event/registerReview" method="post">
 			<input type="text" id="ertitle" name="ertitle" placeholder="제목"><br>
 			<textarea id="ercontent" name="ercontent" placeholder="내용"></textarea><br>
@@ -56,10 +86,10 @@
 			<input type="text" id="eno" name="eno" value="${Event.eno }" readonly> <!-- 나중에 type="hidden" 으로 변경 -->
 			<button id="review_register_btn">리뷰등록</button>
 		</form>
-		
-		<c:forEach items="${Reviews }" var="review">
-			<div class="review_div">
-				<ul class="review_ul" data-frno="${review.erno }" data-uno="${review.uno }" data-fno="${review.fno }">
+		<!-- 리뷰 표시 div -->
+		<div class="review_div">
+			<c:forEach items="${Reviews }" var="review">
+				<ul class="review_ul" data-erno="${review.erno }" data-uno="${review.uno }" data-eno="${review.eno }">
 					<li>erno: ${review.erno }</li>
 					<li>ertitle: ${review.ertitle }</li>
 					<li>ercontent: ${review.ercontent }</li>
@@ -70,11 +100,49 @@
 					<li>eno: ${review.eno }</li>
 				</ul>
 				<button class="review_blind_btn">블라인드처리</button>
-			</div>
-		</c:forEach>
+			</c:forEach>
+		</div>
+		<button id="review_Btn">리뷰더보기</button>
 	</div>
 
-
+<script>
+var pageNum = ${PageNum} ;
+var resultHTML = "";
+$("#review_Btn").on("click", function(){
+	var eno = ${Event.eno } ;
+	pageNum = pageNum + 1 ; 	
+	$.ajax({
+		type: "GET",
+		url: "/event/reviews/" + pageNum,
+		data: {eno: eno},
+		success: function(result){
+			if(result.length != 0){
+				for(var i in result){
+					resultHTML 
+					+= '<ul class="review_ul" data-erno="'+ result[i].erno +'" data-uno="'+ result[i].uno +'" data-eno="'+ result[i].eno +'">'
+					+ '<li>erno: '+ result[i].erno +'</li>'
+					+	 '<li>ertitle: '+ result[i].ertitle +'</li>'
+					+	 '<li>ercontent: '+ result[i].ercontent +'</li>'
+					+	 '<li>erwriter: '+ result[i].erwriter +'</li>'
+					+	 '<li>erregDate: '+ result[i].erregDate +'</li>'
+					+	 '<li>errating: '+ result[i].errating +'</li>'
+					+	 '<li>uno: '+ result[i].uno +'</li>'
+					+	 '<li>eno: '+ result[i].eno +'</li>'
+					+ '</ul>' 
+					+ '<button class="review_blind_btn">블라인드처리</button>' ;	
+				}// for - end
+				
+				$(".review_div").append(resultHTML) ;
+				
+			}// if - end
+			else if(!result.length){
+				alert("리뷰가 더 없음.");
+				$("#review_Btn").hide();
+			}
+		}//success - end
+	}); //ajax-end
+});
+</script>
 <script>
 var erno;
 $(".review_div").on("click", ".review_blind_btn", function(){
@@ -82,8 +150,8 @@ $(".review_div").on("click", ".review_blind_btn", function(){
     eno = ${Event.eno }
     $.ajax({
         type: "POST",
-        url: "/event/deleteReview",  // 요청을 보낼 URL
-        data: { erno: erno, eno: eno},  // 서버로 전송할 데이터
+        url: "${contextPath}/event/deleteReview",  // 요청을 보낼 URL
+        data: {erno: erno, eno: eno},  // 서버로 전송할 데이터
         success: function(response) {
             // 요청이 성공적으로 완료되었을 때 실행할 코드
             alert("리뷰가 성공적으로 삭제 처리되었습니다.");
@@ -132,10 +200,12 @@ $(".review_div").on("click", ".review_blind_btn", function(){
 <!-- 카카오api 스크립트 -->
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=fe9306b4adbbf3249d28d6b7a2c37c0a"></script>
 <script>
-/* var overlay ;
+/* 
+var overlay ;
 
 var x = ${Event.excoord} ;
 var y = ${Event.eycoord} ;
+
 var input_coord = "TM" ;
 var output_coord = "WGS84" ;
 var data = {x: x, y: y, input_coord: input_coord, output_coord: output_coord} ;
@@ -153,20 +223,20 @@ $(document).ready(function(){
 			loadMap(result) ;
 		}//success end
 	}); // ajax end
-})// document ready end */
+})// document ready end
+*/
 
-
-function loadMap(result){
+function loadMap(){
 	
 	var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
 	mapOption = { 
-	       center: new kakao.maps.LatLng(result.documents[0].y, result.documents[0].x), // 지도의 중심좌표
+	       center: new kakao.maps.LatLng(${Event.eycoord }, ${Event.excoord }), // 지도의 중심좌표
 	       level: 3 // 지도의 확대 레벨
 	};
 	
 	// 지도를 표시할 div와  지도 옵션으로  지도를 생성합니다
 	var map = new kakao.maps.Map(mapContainer, mapOption); 
-	var markerPosition  = new kakao.maps.LatLng(result.documents[0].y, result.documents[0].x); 
+	var markerPosition  = new kakao.maps.LatLng(${Event.eycoord }, ${Event.excoord }); 
 	
 	// 마커를 생성합니다
 	var marker = new kakao.maps.Marker({
@@ -187,7 +257,7 @@ function loadMap(result){
 	   '                <img src="https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/thumnail.png" width="73" height="70">' +
 	   '           </div>' + 
 	   '            <div class="desc">' + 
-	   '                <div class="ellipsis">${Event.eaddress }</div>' + 
+	   '                <div class="ellipsis">${Event.ecost }<br>${Event.eaddress }</div>' + 
 	   '            </div>' + 
 	   '        </div>' + 
 	   '    </div>' +    
@@ -207,6 +277,8 @@ function loadMap(result){
 	});
 	
 } //loadMap() end
+
+loadMap();
 
 // 커스텀 오버레이를 닫기 위해 호출되는 함수입니다 
 function closeOverlay() {

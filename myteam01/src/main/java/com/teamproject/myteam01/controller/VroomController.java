@@ -14,12 +14,7 @@ public class VroomController {
 	//Vroom의 메인페이지
 	@GetMapping("/main")
 	public String main() {
-		return "vroom/vroomMain" ;
-	}
-	
-	@GetMapping("/restaurant")
-	public String restMain() {
-		return "main_restaurant";
+		return "/jsp/vroom/vroomMain" ;
 	}
 	
 }
