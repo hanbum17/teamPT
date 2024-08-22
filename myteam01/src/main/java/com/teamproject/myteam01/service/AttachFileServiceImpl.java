@@ -15,11 +15,11 @@ public class AttachFileServiceImpl implements AttachFileService{
 	
 	private final AttachFileMapper attachFileMapper ;
 	
-	@Override
-	public List<AttachFileDTO> getAllFiles(String uno) {
-		
-		return attachFileMapper.getAllFiles(uno);
-	}
+//	@Override
+//	public List<AttachFileDTO> getAllFiles(String uno) {
+//		
+//		return attachFileMapper.getAllFiles(uno);
+//	}
 	
 	
 	
