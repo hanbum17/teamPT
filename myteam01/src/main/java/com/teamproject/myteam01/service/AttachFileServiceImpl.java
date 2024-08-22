@@ -26,6 +26,10 @@ public class AttachFileServiceImpl implements AttachFileService{
 		return attachFileMapper.findByUuid(uuid);
 	}
 	
+	public String AA() {
+		return null;
+	}
+	
 	
 	
 	
