@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.teamproject.myteam01.mapper.MyBoardMapper">
+	<select id="showMyDate" resultType="java.util.Date">
+			SELECT sysdate FROM dual
+	</select>
+	
+	<select id="selectBaordList" resultType="com.teamproject.myteam01.domain.BoardVO">
+	<![CDATA[
+		SELECT * FROM tbl_myboard WHERE rownum <= 10
+	]]>
+	</select>
+</mapper>
