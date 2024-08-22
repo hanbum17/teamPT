@@ -14,7 +14,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-<<<<<<< HEAD
 
 @Controller
 public class FileDownloadAjaxController {
@@ -37,11 +36,6 @@ public class FileDownloadAjaxController {
         }
     }
 
-=======
-@Controller
-public class FileDownloadAjaxController {
-
->>>>>>> CHYJ
     @GetMapping(value = "/doFileDownloadByAjax")
     public ResponseEntity<Resource> doFileDownloadByAjax(@RequestParam("fileName") String fileName) {
         try {
@@ -70,8 +64,4 @@ public class FileDownloadAjaxController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> CHYJ

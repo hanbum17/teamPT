@@ -3,7 +3,6 @@
 <mapper namespace="com.teamproject.myteam01.mapper.EventMapper">
 
 	<!--  록귀 파트  -->
-<<<<<<< HEAD
 	<!-- 이벤트테이블 좌표 UPDATE 테스트 -->
 	<select id="selectEHOST" resultType="String">
 		SELECT EHOST FROM EVENT ORDER BY ENO DESC 
@@ -14,8 +13,6 @@
 		    eycoord = #{eycoord}
 		WHERE EHOST = #{ehost}
 	</update>
-=======
->>>>>>> CHYJ
 	<!--  행사 디테일  -->
 	<select id="eventDetail" resultType="com.teamproject.myteam01.domain.EventVO">
 	<![CDATA[
@@ -24,7 +21,6 @@
 	</select>
 	<!--  행사리뷰조회  -->
 	<select id="selectReviews" resultType="com.teamproject.myteam01.domain.EventReviewVO"> 
-<<<<<<< HEAD
 		WITH Reviews AS (
 		    SELECT ERNO, ERTITLE, ERCONTENT, ERWRITER, ERREGDATE, ERMODDATE, ERRATING, UNO, ENO, 
 		    ROW_NUMBER() OVER (ORDER BY ERREGDATE DESC) AS rn
@@ -34,9 +30,6 @@
 		FROM Reviews
 		WHERE ENO = #{eno}
 		AND rn BETWEEN (#{pageNum} - 1) * 3 + 1 AND #{pageNum} * 3
-=======
-		SELECT * FROM EVENT_reviews WHERE ENO = #{eno} ORDER BY ERNO DESC 
->>>>>>> CHYJ
 	</select>
 	<!--  행사리뷰등록  -->
 	<insert id="registerReview" parameterType="com.teamproject.myteam01.domain.EventReviewVO"> 
@@ -46,11 +39,7 @@
 	<!--  행사리뷰삭제시 DEL_REVIEWS 테이블로 옮기기  -->
 	<insert id="copyReview" parameterType="com.teamproject.myteam01.domain.EventReviewVO"> 
 		INSERT INTO DEL_REVIEWS (DRNO, DRTITLE, DRCONTENT, DRWRITER, DRREGDATE, DRMODDATE, DRRATING, DTYPE) 
-<<<<<<< HEAD
 		SELECT ERNO, ERTITLE, ERCONTENT, ERWRITER, ERREGDATE, ERMODDATE, ERRATING, 4 AS DTYPE FROM EVENT_REVIEWS
-=======
-		SELECT ERNO, ERTITLE, ERCONTENT, ERWRITER, ERREGDATE, ERMODDATE, ERRATING,  4 AS DTYPE FROM EVENT_REVIEWS
->>>>>>> CHYJ
 		WHERE ERNO = #{erno} 
 	</insert>
 	<!--  행사리뷰삭제  -->

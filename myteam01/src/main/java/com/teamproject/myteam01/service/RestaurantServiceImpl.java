@@ -48,7 +48,6 @@ public class RestaurantServiceImpl implements RestaurantService{
 
 	
 	//윤정 파트
-<<<<<<< HEAD
 		@Override
 		   public Long registerRest(RestaurantVO rest, AttachFileDTO attach) {
 		      System.out.println("서비스에 전달된 레스토랑 값: "+rest);
@@ -69,27 +68,5 @@ public class RestaurantServiceImpl implements RestaurantService{
 
 		      return rest.getFno();
 		   }
-=======
-	@Override
-	   public Long registerRest(RestaurantVO rest, AttachFileDTO attach) {
-	      System.out.println("서비스에 전달된 레스토랑 값: "+rest);
-	      
-	      
-	      restaurantMapper.insertRestaurant(rest);
-	      System.out.println("서비스에 전달 후: "+rest);
-	      
-	      List<AttachFileDTO> attachFilelist = rest.getAttachFileList();
-	      if(attachFilelist!=null) {
-	         attachFilelist
-	               .forEach(attachFile -> {
-	            	   attachFile.setUno(rest.getUno());
-	            	   System.out.println("첨부파일 데이터: "+ attachFile);
-	            	   restAttachFile.insertAttachFile(attachFile) ;
-	                       }); //forEach-end
-	           }
-
-	      return rest.getFno();
-	   }
->>>>>>> CHYJ
 	
 }
