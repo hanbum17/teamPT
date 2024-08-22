@@ -11,6 +11,10 @@ public interface AttachFileMapper {
 	public List<AttachFileDTO> getAllFiles(String uno);
 	
 	//윤정
+<<<<<<< HEAD
 	public void insertAttachFile(AttachFileDTO restAttachFile);
+=======
+	public void insertAttachFile(AttachFileDTO attachFile);
+>>>>>>> CHYJ
 	
 }

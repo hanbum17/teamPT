@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
   body {
       background-color: #7B7D86; /* 밝은 회색 배경 색상 */
@@ -100,3 +101,80 @@
   .footer a:hover {
       text-decoration: underline;
   }
+=======
+body {
+    background-color: #7B7D86; /* 밝은 회색 배경 색상 */
+    margin: 0;
+    font-family: Arial, sans-serif;
+    color: #ffffff; /* 기본 글씨 색상: 흰색 */
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background-color: transparent; /* 상단 바 배경 제거 */
+    color: #ffffff;
+    border-bottom: none; /* 흰색 줄 제거 */
+}
+
+.header .logo {
+    font-size: 30px; /* 글자 크기 2/3로 줄임 */
+    font-weight: bold;
+}
+
+.header .nav {
+    font-size: 20px; /* 글자 크기 2/3로 줄임 */
+}
+
+.header .nav a {
+    color: #ffffff;
+    text-decoration: none;
+    margin: 0 15px; /* 글자 사이 간격 조정 */
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: calc(100vh - 60px); /* 상단 바의 높이를 제외한 전체 높이 */
+    padding: 20px;
+}
+
+.box {
+    background-color: #ffffff;
+    color: #000000;
+    border-radius: 15px;
+    padding: 30px; /* 패딩 추가 */
+    text-align: center;
+    width: 20%; /* 가로폭*/
+    max-width: 400px; /* 최대 가로폭 조정 */
+    height: 70%; /* 세로를 화면의 60%로 설정 */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px; /* 박스와 문구 사이의 간격 */
+}
+
+.message {
+    color: #ffffff; /* 문구 색상: 흰색 */
+    font-size: 23px; /* 글자 크기 1.5배 */
+}
+
+.footer {
+    background-color: #6c6e6e; /* 회색보다 살짝 더 진한 회색 */
+    padding: 20px;
+    text-align: center;
+}
+
+.footer a {
+    color: #ffffff; /* 글자 색상: 흰색 */
+    text-decoration: none;
+    margin: 0 10px;
+    font-size: 15px; /* 글자 크기 1.3배 줄임 */
+}
+
+.footer a:hover {
+    text-decoration: underline;
+}
+>>>>>>> CHYJ
