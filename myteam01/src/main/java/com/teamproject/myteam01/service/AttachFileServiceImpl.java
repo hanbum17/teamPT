@@ -13,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class AttachFileServiceImpl implements AttachFileService{
 	
-<<<<<<< HEAD
 	private final AttachFileMapper attachFileMapper ;
 	
 	@Override
@@ -21,17 +20,8 @@ public class AttachFileServiceImpl implements AttachFileService{
 		
 		return attachFileMapper.getAllFiles(uno);
 	}
-=======
-	//private final AttachFileMapper attachFileMapper ;
-	
-//	@Override
-//	public List<AttachFileDTO> getAllFiles(String uno) {
-//		
-//		return attachFileMapper.getAllFiles(uno);
-//	}
 	
 	
->>>>>>> CHYJ
 	
 	
 	

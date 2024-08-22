@@ -27,15 +27,13 @@ public class RestaurantController {
 
 	private final RestaurantService restaurantService ;
 	
-<<<<<<< HEAD
-=======
+
 	//테스트
 	@GetMapping("/test")
 	public String test() {
 		return "test" ;
 	}
-	
->>>>>>> CHYJ
+
 	
 	//록귀 파트
 	@GetMapping("/detail")
@@ -74,23 +72,7 @@ public class RestaurantController {
 		
 		
 		@PostMapping("/rest_register")
-<<<<<<< HEAD
-	    public String restaurantRegister(RestaurantVO rest, RedirectAttributes redirectAttr,AttachFileDTO attach) {
-	        System.out.println("식당 등록 컨트롤러: " + rest);
-	        List<AttachFileDTO> attachFileList=rest.getAttachFileList();
-	        
-	        if(attachFileList != null) {
-	        	attachFileList.forEach(attachFile -> System.out.println("첨부파일 확인: "+attachFile.toString())) ;
-	        }else {
-	            System.out.println("controller:첨부파일 없음 ");
-	        }
 
-	        Long fno = restaurantService.registerRest(rest, attachFileList.get(0));
-	        System.out.println("등록된 식당 번호: " + fno);
-	        redirectAttr.addFlashAttribute("result", fno);
-	        return "redirect:/restaurant/rest_register";
-	    }
-=======
 		public String restaurantRegister(RestaurantVO rest, RedirectAttributes redirectAttr) {
 		    System.out.println("식당 등록 컨트롤러: " + rest);
 		    List<AttachFileDTO> attachFileList = rest.getAttachFileList();
@@ -113,7 +95,7 @@ public class RestaurantController {
 
 		    return "redirect:/restaurant/rest_register";
 		}
->>>>>>> CHYJ
+
 	
 	
 	

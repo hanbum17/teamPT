@@ -9,19 +9,14 @@ public interface EventService {
 
 	//록귀
 	public EventVO eventDetail(Long eno);
-<<<<<<< HEAD
+
 	public List<EventReviewVO> selectReviews(Long eno, int pageNum);
 	public int registerReview(EventReviewVO eventReviewVO);
 	public int copyReview(Long erno);
 	public int deleteReview(Long erno);
 	public List<String> selectEHOST();
 	public void updateEventCoord(EventVO event);
-=======
-	public List<EventReviewVO> selectReviews(Long fno);
-	public int registerReview(EventReviewVO eventReviewVO);
-	public int copyReview(Long frno);
-	public int deleteReview(Long frno);
->>>>>>> CHYJ
+
 	
 	//희준
 	//행사 목록
