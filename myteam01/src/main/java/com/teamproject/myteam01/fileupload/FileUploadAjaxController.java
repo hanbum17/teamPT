@@ -1,7 +1,13 @@
 package com.teamproject.myteam01.fileupload;
 
 import java.io.File;
+<<<<<<< HEAD
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+=======
+import java.io.IOException;
+>>>>>>> CHYJ
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.file.Files;
@@ -25,7 +31,6 @@ public class FileUploadAjaxController {
 
 	private String uploadFileRepoDir = "C:/yourupload";
 
-
 	private String getDatePathName() {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
 		return sdf.format(new Date());
@@ -34,12 +39,10 @@ public class FileUploadAjaxController {
 	private boolean isImageFile(File file) {
 		String fileContentType = null;
 
-
 		try {
 			fileContentType = Files.probeContentType(file.toPath());
 			System.out.println("fileContentType:" + fileContentType);
 			return fileContentType.startsWith("image");
-
 		} catch (IOException e) {
 			System.out.println("오류:" + e.getMessage());
 			return false;
@@ -88,14 +91,12 @@ public class FileUploadAjaxController {
 	            	attachFile.setFileType("F") ; //파일유형 저장
 	            }
 
-
 			} catch (Exception e) {
 				System.out.println(e.getMessage());
 			}
 			attachFileList.add(attachFile);
 		}
 		return attachFileList;
-
 	}
 
 	@PostMapping("/deleteFile")
@@ -123,5 +124,4 @@ public class FileUploadAjaxController {
 		return delResult ? new ResponseEntity<String>("DelSuccess", HttpStatus.OK)
 				: new ResponseEntity<String>("DelFail", HttpStatus.OK);
 	}
-
 }

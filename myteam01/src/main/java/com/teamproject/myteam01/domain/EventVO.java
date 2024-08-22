@@ -31,5 +31,13 @@ public class EventVO {
     private String eycoord;     // 행사 Y좌표
     
 
+    
+    public EventVO(String ehost, String excoord, String eycoord) {
+        this.ehost = ehost;
+        this.excoord = excoord;
+        this.eycoord = eycoord;
+    }
+    
 }
+
 

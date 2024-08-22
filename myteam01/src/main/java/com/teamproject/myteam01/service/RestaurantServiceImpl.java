@@ -69,5 +69,6 @@ public class RestaurantServiceImpl implements RestaurantService{
 	      return rest.getFno();
 	   }
 
+
 	
 }

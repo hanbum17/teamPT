@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.teamproject</groupId>
-	<artifactId>myteam01</artifactId>
+	<artifactId>myteam0814</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
-	<name>myteam01</name>
+	<name>myteam0814</name>
 	<description>test project for Spring Boot</description>
 	<url/>
 	<licenses>
@@ -142,6 +142,7 @@
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-websocket</artifactId>
 </dependency>
+
 
 
 		<dependency>
