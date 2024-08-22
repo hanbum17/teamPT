@@ -11,7 +11,7 @@
 	
 	
 	
-	<!-- 윤정파트 -->
+	<!-- 윤정파트22 -->
 	<insert id="insertAttachFile">
 	    INSERT INTO teampj.ATTACHFILES (uuid, uploadPath, fileName, fileDelFlag, fileType, uno) 
 	    VALUES (#{uuid}, #{uploadPath}, #{fileName}, DEFAULT, #{fileType}, #{uno})
