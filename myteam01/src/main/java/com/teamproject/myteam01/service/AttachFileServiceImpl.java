@@ -21,6 +21,11 @@ public class AttachFileServiceImpl implements AttachFileService{
 		return attachFileMapper.getAllFiles(uno);
 	}
 	
+	@Override
+	public AttachFileDTO getFile(String uuid) {
+		return attachFileMapper.findByUuid(uuid);
+	}
+	
 	
 	
 	

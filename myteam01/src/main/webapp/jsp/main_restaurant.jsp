@@ -80,7 +80,7 @@
 <div class="container" id="restaurant-container">
     <!-- 초기 식당 카드 -->
     <div class="restaurant-card">
-        <img src="file:///C:/Users/yourboot/Desktop/foodpicture/bibimbab.jpg" alt="Restaurant 1">
+        <img src="${contextPath}/files/image/${uuid}" alt="Restaurant Image">
         <div class="restaurant-info">
             <h3>Restaurant 1</h3>
             <p>Location: 남영동 25-1</p>
@@ -88,7 +88,7 @@
         </div>
     </div>
     <div class="restaurant-card">
-        <img src="file:///C:/Users/yourboot/Desktop/foodpicture/bibimbab.jpg" alt="Restaurant 2">
+        <img src="${contextPath}/files/image/${uuid}" alt="Restaurant Image">
         <div class="restaurant-info">
             <h3>Restaurant 2</h3>
             <p>Location: 남영동 25-2</p>
@@ -96,7 +96,7 @@
         </div>
     </div>
     <div class="restaurant-card">
-        <img src="file:///C:/Users/yourboot/Desktop/foodpicture/bibimbab.jpg" alt="Restaurant 3">
+        <img src="${contextPath}/files/image/${uuid}" alt="Restaurant Image">
         <div class="restaurant-info">
             <h3>Restaurant 3</h3>
             <p>Location: 남영동 25-3</p>

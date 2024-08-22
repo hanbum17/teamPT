@@ -5,11 +5,8 @@
 	<!-- 록귀파트 -->
 	<select id="getAllFiles" resultType="com.teamproject.myteam01.domain.AttachFileDTO" parameterType="String">
 	<![CDATA[
-<<<<<<< HEAD
 		SELECT * FROM ATTACHFILES WHERE uno = #{uno}
-=======
-		SELECT * FROM ATTACHFILES WHERE uno = 1
->>>>>>> CHYJ
+
 	]]>
 	</select>
 	
@@ -20,6 +17,10 @@
 	    INSERT INTO teampj.ATTACHFILES (uuid, uploadPath, fileName, fileDelFlag, fileType, uno) 
 	    VALUES (#{uuid}, #{uploadPath}, #{fileName}, DEFAULT, #{fileType}, #{uno})
 	</insert>
+	
+	<select id="findByUuid" resultType="com.example.domain.AttachFileDTO">
+        SELECT * FROM your_table WHERE uuid = #{uuid}
+    </select>
 	
 	
 </mapper>
