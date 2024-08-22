@@ -23,7 +23,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/attachFile")
 public class AttachFileController {
 
-	//_____________록귀의 첨부파일 컨트롤러________________________________________
+	//_____________윤록귀의 첨부파일 컨트롤러________________________________________
 	
 	private final AttachFileServiceImpl fileService; // 파일 정보를 관리하는 서비스
 
