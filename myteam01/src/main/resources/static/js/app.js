@@ -33,7 +33,7 @@ function disconnect() {
     if (stompClient) {
         stompClient.send("/pub/chat/leave",
             {},
-            JSON.stringify({ sender: username, content: 'LEAVE' })
+            JSON.stringify({ sender: username, content: 'LEAVE'})
         );
         stompClient.disconnect();
     }
@@ -44,7 +44,7 @@ function onConnected() {
 
     stompClient.send("/pub/chat/enter",
         {},
-        JSON.stringify({ sender: username, content: 'JOIN', date: formatDate() })
+        JSON.stringify({ sender: username, content: 'JOIN' })
     );
     connectingElement.classList.add('hidden');
 }
@@ -107,13 +107,16 @@ function onMessageReceived(payload) {
     }
 
     var textElement = document.createElement('p');
-    var messageText = document.createTextNode(message.content);
-    textElement.appendChild(messageText);
-
-    messageElement.appendChild(textElement);
-
-    messageArea.appendChild(messageElement);
-    messageArea.scrollTop = messageArea.scrollHeight;
+	var messageText = document.createTextNode(message.content);
+	
+	if(messageElement.classList.value === "chat-message"){
+	    textElement.appendChild(messageText);
+	}
+	
+	    messageElement.appendChild(textElement);
+	
+	    messageArea.appendChild(messageElement);
+	    messageArea.scrollTop = messageArea.scrollHeight;
 }
 
 

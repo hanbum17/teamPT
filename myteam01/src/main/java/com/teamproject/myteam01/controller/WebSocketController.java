@@ -24,19 +24,19 @@ public class WebSocketController {
 	//입장
 	@MessageMapping("/chat/enter")
 	public void enter(@RequestBody ChatMessageDTO chat) {
-		System.out.println("sender: " + chat.getSender() + " content: " + chat.getContent());
+		System.out.println("sender: " + chat.getSender() + " content: " + chat.getContent() + " date: " + chat.getDate());
 		messagingTemplate.convertAndSend("/sub/chat/room/1", chat);
 	}
 	//퇴장
 	@MessageMapping("/chat/leave")
 	public void leave(@RequestBody ChatMessageDTO chat) {
-		System.out.println("sender: " + chat.getSender() + " content: " + chat.getContent());
+		System.out.println("sender: " + chat.getSender() + " content: " + chat.getContent() + " date: " + chat.getDate());
 		messagingTemplate.convertAndSend("/sub/chat/room/1", chat);
 	}
 	//전송
 	@MessageMapping("/chat/message")
 	public void message(@RequestBody ChatMessageDTO chat) {
-		System.out.println("sender: " + chat.getSender() + " content: " + chat.getContent());
+		System.out.println("sender: " + chat.getSender() + " content: " + chat.getContent() + " date: " + chat.getDate());
 		messagingTemplate.convertAndSend("/sub/chat/room/1", chat);
     }
 	

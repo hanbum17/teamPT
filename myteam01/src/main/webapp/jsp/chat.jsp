@@ -12,7 +12,7 @@
 
 <div id="username-page">
     <div class="username-page-container">
-        <h1 class="title">username을 입력하세요</h1>
+        <h1 class="title">실명으로 들어오세요</h1>
         <form id="usernameForm" name="usernameForm">
             <div class="form-group">
                 <input type="text" id="name" placeholder="Username" autocomplete="off" class="form-control" />
@@ -27,7 +27,7 @@
 <div id="chat-page" class="hidden">
     <div class="chat-container">
         <div class="chat-header">
-            <h2>Spring WebSocket Chat Demo</h2>
+            <h2>☆★☆902강의장 임시 채팅방☆★☆</h2>
         </div>
         <div class="connecting">
             연결중...
