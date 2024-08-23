@@ -15,8 +15,6 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-
-
     @GetMapping("/user/register")
     public String showRegistrationForm() {
         return "user/register";
@@ -24,6 +22,12 @@ public class UserController {
 
     @PostMapping("/user/register")
     public String registerUser(UserVO user, Model model) {
+        // 사용자 ID 중복 확인
+        if (userService.isUserIdDuplicate(user.getUserId())) {
+            model.addAttribute("error", "이미 사용 중인 ID입니다.");
+            return "user/register";  // 회원가입 페이지로 다시 이동
+        }
+
         userService.registerUser(user);
         model.addAttribute("message", "회원가입이 성공적으로 완료되었습니다.");
         return "redirect:/user/login";
@@ -33,4 +37,6 @@ public class UserController {
     public String showLoginForm() {
         return "user/login";
     }
+    
+
 }
