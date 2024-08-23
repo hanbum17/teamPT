@@ -4,9 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.teamproject.myteam01.domain.EventReviewVO;
 import com.teamproject.myteam01.domain.EventVO;
-import com.teamproject.myteam01.domain.RestaurantsReviewVO;
 import com.teamproject.myteam01.mapper.EventMapper;
 
 import lombok.RequiredArgsConstructor;
@@ -20,40 +18,10 @@ public class EventServiceImpl implements EventService{
 	
 	//록귀
 	@Override
-	public EventVO eventDetail(Long eno) {
+	public EventVO eventDetail(String eno) {
 		return eventMapper.eventDetail(eno);
 	}
-	
-	@Override
-	public List<EventReviewVO> selectReviews(Long eno, int pageNum) {
-		return eventMapper.selectReviews(eno, pageNum);
-	}
-	
-	@Override
-	public int registerReview(EventReviewVO eventReviewVO) {
-		return eventMapper.registerReview(eventReviewVO);
-	}
-	
-	@Override
-	public int copyReview(Long erno) {
-		return eventMapper.copyReview(erno);
-	}
 
-	@Override
-	public int deleteReview(Long erno) {
-		return eventMapper.deleteReview(erno);
-	}
-
-	@Override
-	public void updateEventCoord(EventVO event) {
-		eventMapper.updateEventCoord(event);
-	}
-	
-	@Override
-	public List<String> selectEHOST(){
-		return eventMapper.selectEHOST();
-	}
-	
 
 	//희준
 	//행사 목록
