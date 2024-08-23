@@ -73,9 +73,10 @@ public class RestaurantController {
 		
 		@PostMapping("/rest_register")
 
-		public String restaurantRegister(RestaurantVO rest, RedirectAttributes redirectAttr) {
+		public String restaurantRegister(RestaurantVO rest, RedirectAttributes redirectAttr, Model model) {
 		    System.out.println("식당 등록 컨트롤러: " + rest);
 		    List<AttachFileDTO> attachFileList = rest.getAttachFileList();
+		    model.addAttribute("attachFileList", attachFileList);
 
 		    if (attachFileList != null && !attachFileList.isEmpty()) {
 		        attachFileList.forEach(attachFile -> System.out.println("첨부파일 확인: " + attachFile.toString()));
