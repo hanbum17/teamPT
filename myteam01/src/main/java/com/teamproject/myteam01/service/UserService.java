@@ -22,11 +22,13 @@ public class UserService {
         String encodedPassword = passwordEncoder().encode(user.getUserPw());
         user.setUserPw(encodedPassword);
         userMapper.insertUser(user);
-        
-        userMapper.insertUserRole(user.getUserId(), "USER");
-        
     }
 
+    public void registerUserRole(String userId, String role) {
+        userMapper.insertUserRole(userId, role);
+    }
+
+    
     // 사용자 ID 중복 여부 확인
     public boolean isUserIdDuplicate(String userId) {
         return userMapper.findByUsername(userId) != null;

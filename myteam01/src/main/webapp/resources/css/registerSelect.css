@@ -1,0 +1,102 @@
+/* 기본 설정 */
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background-color: rgba(var(--b3f, 250, 250, 250), 1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.full-height {
+  height: 100%;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 20px;
+  background-color: white;
+  border-radius: 1px;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1); /* 그림자 추가 */
+}
+
+.selection-container h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.selection-boxes {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+}
+
+.box {
+  width: 150px;
+  height: 150px;
+  border: 1px solid lightgray;
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.3s, border-color 0.3s, background-color 0.3s, box-shadow 0.3s;
+  border-radius: 1px;
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.05); /* 미묘한 그림자 */
+}
+
+.box h3 {
+  margin: 0;
+  font-size: 18px;
+  color: #333;
+}
+
+.box:hover {
+  transform: scale(1.05);
+  border-color: #007bff;
+  background-color: rgba(0, 162, 255, 0.1);
+  box-shadow: 0px 4px 20px rgba(0, 123, 255, 0.2); /* 그림자 강조 */
+}
+
+.box.selected {
+  border-color: #007bff;
+  background-color: rgba(0, 162, 255, 0.3);
+  box-shadow: 0px 4px 20px rgba(0, 123, 255, 0.3); /* 선택된 박스의 그림자 */
+}
+
+/* 애니메이션 추가 */
+.box h3 {
+  transition: color 0.3s;
+}
+
+.box:hover h3 {
+  color: #007bff;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .selection-boxes {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .box {
+    width: 100%;
+    max-width: 250px;
+    height: 120px;
+  }
+}

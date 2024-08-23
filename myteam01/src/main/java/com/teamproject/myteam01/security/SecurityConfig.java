@@ -25,30 +25,24 @@ public class SecurityConfig {
     }
     
     @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
-    @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(authz -> authz
-                .requestMatchers("/user/login", "/user/register", "/jsp/user/login.jsp", "/jsp/user/register.jsp").permitAll()
+                .requestMatchers("/WEB-INF/views/user/**", "user/**","/resources/**").permitAll()  // 로그인 페이지 허용
                 .anyRequest().authenticated()
             )
             .formLogin(form -> form
-                .loginPage("/user/login")
-                .loginProcessingUrl("/login")
-                .usernameParameter("userId")  // 로그인 폼에서의 username 필드 이름을 userId로 변경
+                .loginPage("/user/login")  // 로그인 페이지 경로 설정
+                .loginProcessingUrl("/login")  // 로그인 폼이 제출되는 경로
+                .usernameParameter("userId")  // 로그인 폼의 username 필드 이름
                 .passwordParameter("password")
-                .successHandler(successHandler)  // 성공 핸들러 등록
                 .defaultSuccessUrl("/list", true)
                 .permitAll()
             )
             .logout(logout -> logout
                 .logoutUrl("/logout")
-                .logoutSuccessUrl("/user/login?logout") 
+                .logoutSuccessUrl("/user/login?logout")
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID")
                 .permitAll()
@@ -56,4 +50,5 @@ public class SecurityConfig {
 
         return http.build();
     }
+
 }
