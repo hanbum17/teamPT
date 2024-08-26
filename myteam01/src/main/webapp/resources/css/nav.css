@@ -1,0 +1,161 @@
+/* 기본 스타일 */
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+    background-color: #f5f5f5;
+}
+
+/* 네비게이션 바 스타일 */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fff;
+    padding: 10px 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid #e0e0e0;
+}
+
+/* 로고 스타일 */
+.logo {
+    font-family: 'Raleway', sans-serif;
+    font-size: 28px;
+    color: #007bff;
+    text-decoration: none;
+}
+
+/* 메뉴 스타일 */
+.nav-menu {
+    list-style: none;
+    display: flex;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-item {
+    position: relative;
+    margin-right: 30px;
+}
+
+.nav-item > a {
+    color: #333;
+    text-decoration: none;
+    padding: 10px;
+    font-size: 16px;
+    transition: color 0.3s;
+}
+
+.nav-item > a:hover {
+    color: #007bff;
+}
+
+/* 드롭다운 메뉴 */
+.dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #fff;
+    list-style: none;
+    padding: 10px 0;
+    margin: 0;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    z-index: 1000;
+    width: 180px;
+}
+
+.dropdown li {
+    padding: 0;
+}
+
+.dropdown li a {
+    padding: 10px 20px;
+    display: block;
+    color: #333;
+    text-decoration: none;
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+.dropdown li a:hover {
+    background-color: #f0f0f0;
+    color: #007bff;
+}
+
+.nav-item:hover .dropdown {
+    display: block;
+}
+
+/* 서브 드롭다운 메뉴 */
+.sub-dropdown {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 100%;
+    background-color: #fff;
+    list-style: none;
+    padding: 10px 0;
+    margin: 0;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    z-index: 1000;
+    width: 180px;
+}
+
+.sub-dropdown li a {
+    padding-left: 30px;
+}
+
+.dropdown li:hover .sub-dropdown {
+    display: block;
+}
+
+/* 사용자 정보 섹션 */
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.username {
+    color: #333;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.nav-right a {
+    color: #007bff;
+    text-decoration: none;
+    padding: 5px 10px;
+    font-size: 14px;
+    border-radius: 5px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.nav-right a:hover {
+    background-color: #e0e7ff;
+    color: #0047ab;
+}
+
+
+/* 반응형 스타일 */
+@media (max-width: 768px) {
+    .nav-menu {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .nav-item {
+        margin: 0;
+        padding: 5px 0;
+    }
+
+    .nav-right {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
