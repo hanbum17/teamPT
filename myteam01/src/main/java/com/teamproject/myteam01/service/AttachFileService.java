@@ -6,6 +6,6 @@ import com.teamproject.myteam01.domain.AttachFileDTO;
 
 public interface AttachFileService {
 
-	public List<AttachFileDTO> getAllFiles(String uno);
+	//public List<AttachFileDTO> getAllFiles(String uno);
 	
 }
