@@ -30,7 +30,6 @@ public class AttachFileController {
     @GetMapping("/getFiles")
     public ResponseEntity<List<AttachFileDTO>> getFiles(String uno) {
         List<AttachFileDTO> fileList = fileService.getAllFiles(uno); // DB에서 파일 정보 조회
-        
         return new ResponseEntity<>(fileList, HttpStatus.OK);
     }
 	
