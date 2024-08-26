@@ -117,7 +117,7 @@
     </style>
 </head>
 <body>
-<%@ include file="/jsp/admin_main/header.jsp" %>
+<%@ include file="/WEB-INF/views/admin_main/header.jsp" %>
     <div class="container">
         <h4 class="page-header">식당 등록</h4>
         <form role="form" action="${contextPath}/restaurant/rest_register" method="post" id="frmRegister" enctype="multipart/form-data">
@@ -318,7 +318,7 @@ $("#btnRegister").on("click", function() {
 
     frmRegister.submit();
 });
-<%@ include file="/jsp/admin_main/footer.jsp" %>
+<%@ include file="/WEB-INF/views/admin_main/footer.jsp" %>
 </script>
 </body>
 </html>
