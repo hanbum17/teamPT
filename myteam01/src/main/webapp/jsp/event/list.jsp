@@ -6,6 +6,10 @@
 <head>
     <title>행사&음식점 리스트</title>
     <style>
+         body {
+            color: white; /* 기본 텍스트 색상을 흰색으로 설정 */
+            background-color: #333; /* 배경색도 어두운 색으로 설정하여 가독성 확보 */
+        }
         table {
             width: 100%;
             border-collapse: collapse;
@@ -16,7 +20,11 @@
             border-bottom: 1px solid #ddd;
         }
         th {
-            background-color: #f2f2f2;
+            background-color: #555; /* 헤더 배경색 변경 */
+            color: white; /* 헤더 텍스트 색상 흰색으로 변경 */
+        }
+        td {
+            color: white; /* 데이터 셀 텍스트 색상 흰색으로 변경 */
         }
         .pagination {
             display: flex;
@@ -29,17 +37,27 @@
         }
         .pagination a {
             text-decoration: none;
+            color: white; /* 페이지 네이션 링크 색상 흰색으로 변경 */
         }
         .no_data_msg {
             text-align: center;
-            color: #888;
+            color: #aaa; /* 데이터가 없는 경우 메시지 색상 */
+        }
+        .page-item.active .page-link {
+            background-color: #555; /* 현재 페이지의 배경색 */
+            color: white; /* 현재 페이지의 텍스트 색상 */
+        }
+        .page-item.disabled .page-link {
+            color: #777; /* 비활성 페이지의 색상 */
+        }
+        .page-link {
+            color: white; /* 페이지 링크의 색상 */
         }
     </style>
 </head>
 <body>
-
+<%@ include file="/jsp/admin_main/header.jsp" %>
 <h2>리스트</h2>
-<a href="<c:url value='/logout'/>">로그아웃</a>
 <button type="button" id="btnToEveRegister">행사 등록</button>
 
 <!-- Search and Filter Form -->
@@ -143,6 +161,7 @@
         </li>
     </ul>
 </div>
+<%@ include file="/jsp/admin_main/footer.jsp" %>
 <script>
 <%-- 행사 등록 버튼--%>
 document.getElementById("btnToEveRegister").addEventListener("click", function(){
