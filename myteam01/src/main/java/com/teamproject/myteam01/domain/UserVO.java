@@ -1,6 +1,7 @@
 package com.teamproject.myteam01.domain;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,4 +26,5 @@ public class UserVO {
     private int userType;
     private Timestamp joinDate; 
     private Timestamp lastLoginDate; 
+    private List<String> roles; 
 }

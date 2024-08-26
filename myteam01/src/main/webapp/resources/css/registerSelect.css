@@ -5,7 +5,7 @@ html, body {
 }
 
 body {
-  background-color: rgba(var(--b3f, 250, 250, 250), 1);
+  background: linear-gradient(120deg, #84fab0, #8fd3f4);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -30,6 +30,7 @@ body {
   background-color: white;
   border-radius: 1px;
   box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1); /* 그림자 추가 */
+  animation: fadeIn 1s ease;
 }
 
 .selection-container h2 {
@@ -85,6 +86,11 @@ body {
 
 .box:hover h3 {
   color: #007bff;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
 /* 반응형 디자인 */

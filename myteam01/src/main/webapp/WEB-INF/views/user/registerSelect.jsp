@@ -25,9 +25,11 @@
     </div>
 
     <script>
-        function navigateToRegister(role) {
-            window.location.href = `${pageContext.request.contextPath}/user/register?role=${role}`;
-        }
+    function navigateToRegister(role) {
+        const contextPath = "${pageContext.request.contextPath}";
+        window.location.href = contextPath + "/user/register?role=" + role;
+    }
+
     </script>
 </body>
 </html>

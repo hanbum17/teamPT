@@ -30,7 +30,7 @@
         <h2 class="title">VROOM 회원가입</h2>
 
         <!-- 선택된 회원 유형을 확인하기 위한 디버깅 출력 -->
-        <p>선택된 회원 유형: ${param.role}</p>
+        <p>선택된 회원 유형: ${role}</p>
 
         <form id="registrationForm" action="/user/register" method="post" class="register-form">
             <!-- 선택된 회원 유형을 숨겨진 필드로 전달 -->

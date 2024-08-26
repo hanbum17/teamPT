@@ -96,6 +96,7 @@ body {
     border: none;
     border-radius: 5px;
     padding: 9px;
+    transition: background-color 0.5s ease;
 }
 
 
@@ -116,10 +117,15 @@ body {
 .login-options {
     display: flex;
     align-items: center;
+    gap: 10px; /* 요소 간의 간격 */
+    font-size: 14px;
 }
 
 .login-options input[type="checkbox"] {
-    margin-right: 5px;
+    width: 16px;
+
+
+    cursor: pointer;
 }
 
 .signup-wrapper {
@@ -128,13 +134,28 @@ body {
 
 .signup-link {
     font-size: 14px;
-    color: rgb(86, 96, 235);
-    text-decoration: none;
+    font-weight: bold;
+    color: #808080;
+    cursor : pointer;
+    border: none;
+    background-color: transparent;
+  
 }
 
 .signup-link:hover {
-    text-decoration: underline;
+	color: #00a2ff;
+	transition: color 0.3s ease;
 }
+
+
+/* 아이디 저장 텍스트 스타일 */
+.login-options label {
+	margin-left :-5px;
+    color: #333;
+    transition: color 0.3s ease;
+}
+
+
 
 .findpass {
     margin-top: 90px;

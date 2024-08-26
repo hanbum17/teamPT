@@ -27,7 +27,7 @@
                             type="text"
                             id="userId"
                             name="userId"
-                            placeholder="전화번호, 사용자 이름 또는 이메일"
+                            placeholder="사용자 아이디"
                             required />
                     </div>
                     <div class="login-wrapper flex-center">
@@ -47,9 +47,9 @@
                 <!-- Options below the login button -->
                 <div class="options-container flex-center">
                     <div class="login-options">
-                        <input type="checkbox" id="remember-me">
-                        <label for="remember-me">아이디 저장</label>
-                    </div>
+					    <input type="checkbox" id="remember-me" name="remember-me">
+					    <label for="remember-me">로그인 유지</label>
+					</div>
                     <div class="signup-wrapper">
                         <!-- 회원가입 버튼 클릭 시 registerSelect.jsp로 이동 -->
                         <form action="${pageContext.request.contextPath}/user/registerSelect" method="get">
@@ -65,6 +65,26 @@
     </div>
 
     <script>
+	    document.addEventListener("DOMContentLoaded", function() {
+	        const userIdInput = document.getElementById("userId");
+	        const passwordInput = document.getElementById("password");
+	        const loginButton = document.querySelector(".login-button");
+	
+	        function updateButtonState() {
+	            if (userIdInput.value.trim() !== "" && passwordInput.value.trim() !== "") {
+	                loginButton.style.backgroundColor = "rgba(0, 162, 255, 1)"; // 진한 파란색
+	                loginButton.style.cursor = "pointer"; // 클릭 가능한 커서
+	            } else {
+	                loginButton.style.backgroundColor = "rgba(0, 162, 255, 0.3)"; // 기존 연한 파란색
+	                loginButton.style.cursor = "not-allowed"; // 비활성화된 커서
+	            }
+	        }
+	
+	        // 입력 필드 값이 변경될 때마다 버튼 상태 업데이트
+	        userIdInput.addEventListener("input", updateButtonState);
+	        passwordInput.addEventListener("input", updateButtonState);
+	    });
+    
         const images = [
             "${pageContext.request.contextPath}/resources/img/여행1.jpg",
             "${pageContext.request.contextPath}/resources/img/여행2.jpg",

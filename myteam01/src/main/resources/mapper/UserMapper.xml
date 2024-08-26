@@ -28,6 +28,13 @@
         FROM users
         WHERE userId = #{userId}
     </select>
+    
+    <select id="findRolesByUserId" resultType="String">
+	    SELECT r.ROLE_NAME
+	    FROM ROLES r
+	    JOIN USER_ROLES ur ON r.ROLE_ID = ur.ROLE_ID
+	    WHERE ur.USERID = #{userId}
+	</select>
 
     <!-- 마지막 로그인 날짜 업데이트 -->
     <update id="updateLastLoginDate" parameterType="com.teamproject.myteam01.domain.UserVO">
@@ -54,5 +61,7 @@
     <delete id="deleteUser" parameterType="String">
         DELETE FROM users WHERE userId = #{userId}
     </delete>
+    
+    
 
 </mapper>
