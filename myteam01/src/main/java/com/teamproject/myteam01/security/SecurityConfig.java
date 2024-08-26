@@ -9,13 +9,21 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import com.teamproject.myteam01.service.UserService;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
-    @Autowired
-    private CustomUserDetailsService customUserDetailsService;
+    private final UserService userService;
+    private final CustomAuthenticationSuccessHandler successHandler;
 
+    @Autowired
+    public SecurityConfig(UserService userService, CustomAuthenticationSuccessHandler successHandler) {
+        this.userService = userService;
+        this.successHandler = successHandler;
+    }
+    
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -34,11 +42,15 @@ public class SecurityConfig {
                 .loginProcessingUrl("/login")
                 .usernameParameter("userId")  // 로그인 폼에서의 username 필드 이름을 userId로 변경
                 .passwordParameter("password")
+                .successHandler(successHandler)  // 성공 핸들러 등록
                 .defaultSuccessUrl("/list", true)
                 .permitAll()
             )
             .logout(logout -> logout
-                .logoutSuccessUrl("/user/login?logout")
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/user/login?logout") 
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID")
                 .permitAll()
             );
 

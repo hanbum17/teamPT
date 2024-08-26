@@ -17,4 +17,10 @@ public class VroomController {
 		return "vroom/vroomMain" ;
 	}
 	
+	@GetMapping("/event")
+	public String vroomEvent() {
+		return "vroom/vroomEvent";
+	}
+	
+	
 }

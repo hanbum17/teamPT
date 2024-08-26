@@ -3,11 +3,9 @@
 <%@ taglib uri="jakarta.tags.core" prefix="c" %>
 <%@ taglib uri="jakarta.tags.fmt" prefix="fmt" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath }"/>
-
 <!DOCTYPE html>
 <html>
 <head>
-   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <meta charset="UTF-8">
 <title>행사 등록 페이지</title>
 <style>

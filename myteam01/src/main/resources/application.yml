@@ -9,7 +9,6 @@ spring:
     user:
       name: admin
       password: admin
-server:
   servlet:
     jsp:
       init-parameters:
@@ -53,4 +52,4 @@ mybatis:
 
 logging:
   level:
-    org.springframework.security: DEBUG		
+    org.springframework.security: DEBUG
