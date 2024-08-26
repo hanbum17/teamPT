@@ -2,17 +2,20 @@ package com.teamproject.myteam01.mapper;
 
 import java.util.List;
 
+import com.teamproject.myteam01.domain.EventReviewVO;
 import com.teamproject.myteam01.domain.EventVO;
+import com.teamproject.myteam01.domain.RestaurantsReviewVO;
 
 public interface EventMapper {
 
-	
-	
 	//록귀
-	public EventVO eventDetail(String eno);
-	
-	
-	
+	public EventVO eventDetail(Long eno);
+	public List<EventReviewVO> selectReviews(Long eno, int pageNum);
+	public int registerReview(EventReviewVO eventReviewVO);
+	public int copyReview(Long erno);
+	public int deleteReview(Long erno);
+	public List<String> selectEHOST();
+	public void updateEventCoord(EventVO event);
 	
 	//희준
 	//행사 목록

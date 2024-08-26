@@ -275,7 +275,15 @@ $("#enter_chat").on("click", function(){
   </section>
   <ul>
   	<li>
-      <a href="#">대시보드</a>
+      <a href="#"><i class="fa-solid fa-cat"></i> 글관리</a>
+      <ul>
+        <li><a href="/event/list">행사,식당목록</a></li>
+        <li><a href="/event/register">행사등록</a></li>
+        <li><a href="/restaurant/rest_register">식당등록</a></li>
+      </ul>
+    </li>
+    <!-- <li>
+      <a href="#">구현x_대시보드</a>
       <ul>
         <li><a href="#">text1</a></li>
         <li><a href="#">text2</a></li>
@@ -284,15 +292,7 @@ $("#enter_chat").on("click", function(){
       </ul>
     </li>
     <li>
-      <a href="#"><i class="fa-solid fa-cat"></i> 글관리</a>
-      <ul>
-        <li><a href="#">행사,식당목록</a></li>
-        <li><a href="/event/register">행사등록</a></li>
-        <li><a href="/restaurant/rest_register">식당등록</a></li>
-      </ul>
-    </li>
-    <li>
-      <a href="#">사용자 관리</a>
+      <a href="#">구현x_사용자 관리</a>
       <ul>
         <li><a href="#">ex)신고목록</a></li>
         <li><a href="#">ex)</a></li>
@@ -301,7 +301,7 @@ $("#enter_chat").on("click", function(){
       </ul>
     </li>
     <li>
-      <a href="#">통계</a>
+      <a href="#">구현x_통계</a>
       <ul>
         <li><a href="#">text1</a></li>
         <li><a href="#">text2</a></li>
@@ -310,14 +310,14 @@ $("#enter_chat").on("click", function(){
       </ul>
     </li>
     <li>
-      <a href="#">고객지원</a>
+      <a href="#">구현x_고객지원</a>
       <ul>
         <li><a href="#">text1</a></li>
         <li><a href="#">text2</a></li>
         <li><a href="#">text3</a></li>
         <li><a href="#">text4</a></li>
       </ul>
-    </li>
+    </li> -->
     
   </ul>
 </aside>

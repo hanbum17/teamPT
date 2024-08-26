@@ -2,6 +2,7 @@ package com.teamproject.myteam01.service;
 
 import java.util.List;
 
+import com.teamproject.myteam01.domain.AttachFileDTO;
 import com.teamproject.myteam01.domain.RestaurantVO;
 import com.teamproject.myteam01.domain.RestaurantsReviewVO;
 
@@ -15,6 +16,6 @@ public interface RestaurantService {
 	public int deleteReview(Long frno);
 	
 	//윤정
-	public Long registerRest(RestaurantVO rest);
+	public Long registerRest(RestaurantVO rest, AttachFileDTO attach);
 	
 }

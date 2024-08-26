@@ -4,6 +4,11 @@
 <c:set var="contextPath" value="${pageContext.request.contextPath }"/>
 <!DOCTYPE html>
 <html lang="ko">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script>
+    var contextPath = "${contextPath}"; // contextPath 변수 설정
+    console.log("Context Path: " + contextPath); // 로그로 확인
+</script>
 <head>
     <meta charset="UTF-8">
     <title>식당 등록</title>
@@ -99,12 +104,23 @@
         .custom-file-upload:hover {
             background-color: #a9a9a9; /* 호버 시 색상 (어두운 회색) */
         }
+        .custom-delete {
+            color: red;
+            cursor: pointer;
+            margin-left: 10px;
+            font-weight: bold;
+            text-decoration: underline; /* 밑줄 추가 */
+        }
+        .custom-delete:hover {
+            color: darkred; /* 호버 시 색상 변경 */
+        }
     </style>
 </head>
 <body>
+<%@ include file="/jsp/admin_main/header.jsp" %>
     <div class="container">
         <h4 class="page-header">식당 등록</h4>
-        <form role="form" action="${contextPath}/pro/rest_register" method="post" id="frmRegister" enctype="multipart/form-data">
+        <form role="form" action="${contextPath}/restaurant/rest_register" method="post" id="frmRegister" enctype="multipart/form-data">
             <div class="form-group">
                 <label for="fcategory">카테고리</label>
                 <input type="text" class="form-control" id="fcategory" name="fcategory" placeholder="예: 한식, 중식 등">
@@ -138,10 +154,12 @@
             </div>
 
             <!-- 파일 첨부 버튼 -->
-            <label class="custom-file-upload">
-                파일 선택
-                <input type="file" class="fileInput" id="fileInput" name="fileInput" multiple="multiple">
-            </label>
+            <div class="form-group uploadDiv">
+                <label class="custom-file-upload">
+                    파일 선택
+                    <input type="file" class="fileInput" id="fileInput" name="fileInput" multiple="multiple">
+                </label>
+            </div>
             <div class="form-group fileUploadResult">
                 <ul>
                     <%-- 업로드 후, 업로드 처리결과가 표시될 영역  --%>
@@ -151,7 +169,7 @@
             <button type="button" class="btn" id="btnRegister">등록</button>
         </form>
     </div>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
 <script>
 function checkUploadFile(fileName, fileSize) {
     var allowedMaxSize = 1048576; // 1MB
@@ -168,6 +186,90 @@ function checkUploadFile(fileName, fileSize) {
     }
     return true;
 }
+
+function showUploadResult(uploadResult) {
+    var fileUploadResultUL = $(".fileUploadResult ul");
+    var htmlStr = "";
+    
+    $(uploadResult).each(function(i, attachFile) {
+        var fullFileName = encodeURI(attachFile.repoPath + "/" +
+                                     attachFile.uploadPath + "/" +
+                                     attachFile.uuid + "_" +
+                                     attachFile.fileName);
+        var thumbnail = encodeURI(attachFile.repoPath + "/" +
+                                  attachFile.uploadPath + "/s_" +
+                                  attachFile.uuid + "_" +
+                                  attachFile.fileName);
+        htmlStr += "<li data-uploadpath='" + attachFile.uploadPath + "'"
+                  + " data-uuid='" + attachFile.uuid + "'"
+                  + " data-filename='" + attachFile.fileName + "'"
+                  + " data-filetype='I'>"
+                  + "   <img src='" + contextPath + "/displayThumbnail?fileName=" + thumbnail + "' alt='thumbnail'>"
+                  + "   &emsp;" + attachFile.fileName
+                  + "   <span class='custom-delete'>삭제</span>"
+                  + "</li>";
+    });
+    fileUploadResultUL.append(htmlStr);
+}
+
+var cloneFileInput = $(".uploadDiv").clone();
+console.log(cloneFileInput.html());
+
+$(".uploadDiv").on("change", "input[type='file']", function() {
+    var fileInputs = $("input[name='fileInput']");
+    var uploadFiles = fileInputs[0].files;
+    var formData = new FormData();
+    
+    for (var i = 0; i < uploadFiles.length; i++) {
+        if (!checkUploadFile(uploadFiles[i].name, uploadFiles[i].size)) {
+            console.log("파일 이름: " + uploadFiles[i].name);
+            console.log("파일 크기: " + uploadFiles[i].size);
+            $("#fileInput").val("");
+            return;
+        }
+        formData.append("uploadFiles", uploadFiles[i]);
+    }
+    
+    $.ajax({
+        type: "post",
+        url: "${contextPath}/doFileUploadByAjax",
+        data: formData,
+        contentType: false,
+        processData: false,
+        dataType: "json",
+        success: function(uploadResult, status) {
+            console.log(uploadResult);
+            $(".uploadDiv").html(cloneFileInput.html());
+            showUploadResult(uploadResult);
+        }
+    });
+});
+
+$(".fileUploadResult ul").on("click", ".custom-delete", function() {
+    var fileLi = $(this).parent();
+    var fileName = fileLi.data("repoPath")+"/"+
+    			   fileLi.data("uploadpath") + "/" +
+    			   fileLi.data("uuid") + "_" +
+    			   fileLi.data("filename");
+    var fileType = 'I'; // 적절한 파일 타입 설정
+
+    $.ajax({
+        type: "post",
+        url: "${contextPath}/deleteFile",
+        data: {fileName: fileName, fileType: fileType},
+        dataType: "text",
+        success: function(result) {
+            if (result == "DelSuccess") {
+                alert("파일이 삭제되었습니다.");
+                fileLi.remove();
+            } else {
+                if (confirm("파일이 존재하지 않습니다. 해당 항목을 삭제하시겠습니까?")) {
+                    fileLi.remove();
+                }
+            }
+        }
+    });
+});
 
 function restaurantValue() {
     var fcategory = document.getElementById("fcategory").value;
@@ -216,26 +318,7 @@ $("#btnRegister").on("click", function() {
 
     frmRegister.submit();
 });
-
-// 파일 첨부 시 선택된 파일 이름 표시
-$('#fileInput').on('change', function() {
-    var files = $(this).prop('files');
-    var validFiles = true;
-
-    $('.fileUploadResult ul').empty(); // 기존 목록 초기화
-
-    $.each(files, function(i, file) {
-        if (!checkUploadFile(file.name, file.size)) {
-            validFiles = false;
-            return false; // 루프 중단
-        }
-        $('.fileUploadResult ul').append('<li>' + file.name + '</li>'); // 파일 목록에 추가
-    });
-
-    if (!validFiles) {
-        $(this).val(''); // 입력 필드 초기화
-    }
-});
+<%@ include file="/jsp/admin_main/footer.jsp" %>
 </script>
 </body>
 </html>

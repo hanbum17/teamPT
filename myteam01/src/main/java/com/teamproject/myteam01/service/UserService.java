@@ -3,41 +3,25 @@ package com.teamproject.myteam01.service;
 import com.teamproject.myteam01.domain.UserVO;
 import com.teamproject.myteam01.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
 
-	 @Autowired
+    @Autowired
     private UserMapper userMapper;
-	 
-	 private PasswordEncoder passwordEncoder() {
-	        return new BCryptPasswordEncoder();
-	    }
 
-    // PasswordEncoder를 바로 호출
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     public void registerUser(UserVO user) {
-        String encodedPassword = passwordEncoder().encode(user.getUserPw());
+        String encodedPassword = passwordEncoder.encode(user.getUserPw());
         user.setUserPw(encodedPassword);
         userMapper.insertUser(user);
-        
-        userMapper.insertUserRole(user.getUserId(), "USER");
-        
-    }
-
-    // 사용자 ID 중복 여부 확인
-    public boolean isUserIdDuplicate(String userId) {
-        return userMapper.findByUsername(userId) != null;
     }
 
     public UserVO findByUsername(String userId) {
         return userMapper.findByUsername(userId);
     }
-
-    public void updateLastLoginDate(String userId) {
-        userMapper.updateLastLoginDate(userId);
-    }
 }
-
