@@ -23,8 +23,6 @@ public class WebSocketController {
 	private final SimpMessagingTemplate messagingTemplate ;
 	private int userCnt = 0;
 	
-	private int userCnt = 0;
-	
 	@GetMapping("/chat/chat")
 	public String chat() {
 		return "chat" ;
@@ -79,10 +77,6 @@ public class WebSocketController {
 	}
 	
 	//접속유저수 변환
-	private void updateUserCnt() {
-		messagingTemplate.convertAndSend("/sub/chat/userCnt", userCnt);
-	}
-	
 	private void updateUserCnt() {
 		messagingTemplate.convertAndSend("/sub/chat/userCnt", userCnt);
 	}
