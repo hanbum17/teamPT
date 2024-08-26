@@ -79,8 +79,6 @@ public class FileUploadAjaxController {
 			String uuid=UUID.randomUUID().toString();
 			attachFile.setUuid(uuid);
 			
-			System.out.println("uuid:"+uuid);
-			
 			uploadFileName=uuid+"_"+uploadFileName;
 			System.out.println("uploadFileName: "+uploadFileName);
 			
@@ -113,36 +111,32 @@ public class FileUploadAjaxController {
 		
 	}
 	
-	@PostMapping("/deleteFile")
-	public ResponseEntity<String> deleteFile(String fileName, String fileType) {
-	    System.out.println("fileName: " + fileName);
-	    System.out.println("fileType: " + fileType);
-
-	    try {
-	        fileName = URLDecoder.decode(fileName, "utf-8");
-	        System.out.println("Decoded fileName: " + fileName); // 디코드된 파일 이름 로그 추가
-	    } catch (UnsupportedEncodingException e) {
-	        e.printStackTrace();
-	    }
-
-	    File delFile = new File(fileName);
-	    
-	    boolean delResult = delFile.delete();
-	    
-	    System.out.println("Delete result: " + delResult); // 삭제 결과 로그 추가
-
-	    if (!delResult) {
-	        return new ResponseEntity<String>("F", HttpStatus.NOT_FOUND);
-	    }
-
-	    if (fileType.equals("I")) {
-	        delFile = new File(fileName.replaceFirst("s_", ""));
-	        delResult = delFile.delete();
-	        System.out.println("Thumbnail delete result: " + delResult); // 썸네일 삭제 결과 로그 추가
-	    }
-
-	    return delResult ? new ResponseEntity<String>("DelSuccess", HttpStatus.OK)
-	                     : new ResponseEntity<String>("DelFail", HttpStatus.OK);
+	@PostMapping("/delete")
+	public ResponseEntity<String> deleteFile(String fileName, String fileType){
+		System.out.println("fileName: "+fileName);
+		System.out.println("fileType: "+fileType);
+		
+		try {
+			fileName=URLDecoder.decode(fileName, "utf-8");
+			System.out.println("fileName: "+fileName);
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		
+		File delFile = new File(fileName);
+		
+		boolean delResult = delFile.delete();
+		
+		if(!delResult) {
+			return new ResponseEntity<String>("F",HttpStatus.NOT_FOUND);
+		}
+		
+		if(fileType.equals("I")) {
+			delFile=new File(fileName.replaceFirst("s_", ""));
+			delResult = delFile.delete();
+		}
+		
+		return delResult ? new ResponseEntity<String>("DelSuccess", HttpStatus.OK)
+						 : new ResponseEntity<String>("DelFail", HttpStatus.OK);
 	}
-
 }

@@ -1,0 +1,199 @@
+/* Global settings */
+* {
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(120deg, #84fab0, #8fd3f4); /* 그라데이션 배경 */
+}
+
+/* Flexbox settings */
+.flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Container styles */
+.container {
+    background-color: white;
+    width: 400px;
+    padding: 30px;
+    border-radius: 1px; /* 둥근 모서리 */
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1); /* 부드러운 그림자 */
+    animation: fadeIn 1s ease; /* 페이지 로드 시 부드러운 페이드 인 애니메이션 */
+}
+
+/* Title styles */
+.title {
+    text-align: center;
+    font-size: 26px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+/* Form styles */
+.register-form, .back-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.input-wrapper {
+    margin-bottom: 15px;
+}
+
+.input-wrapper label {
+    font-size: 14px;
+    margin-bottom: 5px;
+    display: block;
+    font-weight: bold;
+    color: #555;
+}
+
+.input-wrapper input[type="text"],
+.input-wrapper input[type="password"],
+.input-wrapper input[type="email"] {
+    font-size: 15px;
+    width: 100%;
+    height: 45px;
+    padding: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    background-color: rgba(0, 0, 0, 0.05);
+    box-sizing: border-box;
+}
+
+.input-wrapper input[type="text"]:focus,
+.input-wrapper input[type="password"]:focus,
+.input-wrapper input[type="email"]:focus {
+    border-color: #00a2ff;
+    box-shadow: 0 0 5px rgba(0, 162, 255, 0.5);
+    outline: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.input-wrapper input[type="text"]:hover,
+.input-wrapper input[type="password"]:hover,
+.input-wrapper input[type="email"]:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* 성별 선택 스타일 */
+.gender-options {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.gender-label {
+    flex: 1;
+    text-align: center;
+    padding: 10px 0;
+    border: 1px solid lightgray;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    background-color: rgba(0, 0, 0, 0.05);
+    font-weight: bold;
+}
+
+/* 선택되지 않은 상태 */
+input[type="radio"] {
+    display: none;
+}
+
+/* 선택된 상태 */
+input[type="radio"]:checked + .gender-label {
+    background-color: #00a2ff;
+    color: white;
+    border: 1px solid #00a2ff;
+}
+
+input[type="radio"]:checked + .gender-label:hover {
+    background-color: #008ccc;
+}
+
+/* 버튼 스타일 */
+.button-wrapper {
+    margin-top: 20px;
+}
+
+.register-button,
+.back-button,
+.step-buttons button {
+    width: 100%;
+    font-size: 16px;
+    color: white;
+    font-weight: bold;
+    background-color: #00a2ff; /* 기본 색상 */
+    border: none;
+    border-radius: 5px;
+    padding: 12px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.register-button:hover,
+.back-button:hover,
+.step-buttons button:hover {
+    background-color: #008ccc; /* 호버 색상 */
+}
+
+/* Previous 버튼 스타일 */
+.step-buttons #prevBtn {
+    background-color: #ff7f50; /* 새로운 색상 (Coral) */
+}
+
+.step-buttons #prevBtn:hover {
+    background-color: #ff6347; /* 호버 색상 (Tomato) */
+}
+
+/* Register 버튼 스타일 */
+.step-buttons #submitBtn {
+    background-color: #32cd32; /* 새로운 색상 (Lime Green) */
+}
+
+.step-buttons #submitBtn:hover {
+    background-color: #2e8b57; /* 호버 색상 (Sea Green) */
+}
+
+
+.back-button {
+    background-color: #868686; /* 차분한 회색 */
+}
+
+.back-button:hover {
+    background-color: #6e6e6e; /* 더 진한 회색 */
+}
+
+/* 페이지 페이드 인 애니메이션 */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* 반응형 디자인 */
+@media (max-width: 480px) {
+    .container {
+        width: 90%;
+        padding: 20px;
+    }
+
+    .input-wrapper input[type="text"],
+    .input-wrapper input[type="password"],
+    .input-wrapper input[type="email"] {
+        height: 40px;
+        padding: 8px;
+    }
+}
