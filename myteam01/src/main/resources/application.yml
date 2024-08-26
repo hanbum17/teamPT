@@ -9,7 +9,6 @@ spring:
     user:
       name: admin
       password: admin
-server:
   servlet:
     jsp:
       init-parameters:

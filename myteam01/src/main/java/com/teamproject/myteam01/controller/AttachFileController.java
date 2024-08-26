@@ -23,14 +23,13 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/attachFile")
 public class AttachFileController {
 
-	//_____________록귀의 첨부파일 컨트롤러________________________________________
+	//_____________윤윤록귀의 첨부파일 컨트롤러________________________________________
 	
 	private final AttachFileServiceImpl fileService; // 파일 정보를 관리하는 서비스
 
     @GetMapping("/getFiles")
     public ResponseEntity<List<AttachFileDTO>> getFiles(String uno) {
         List<AttachFileDTO> fileList = fileService.getAllFiles(uno); // DB에서 파일 정보 조회
-        
         return new ResponseEntity<>(fileList, HttpStatus.OK);
     }
 	
