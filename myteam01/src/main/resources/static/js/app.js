@@ -1,7 +1,3 @@
-/**
- * 
- */
-
 var usernamePage = document.querySelector('#username-page');
 var chatPage = document.querySelector('#chat-page');
 var usernameForm = document.querySelector('#usernameForm');
@@ -21,7 +17,7 @@ var colors = [
 function connect(event) {
     username = document.querySelector('#name').value.trim();
 
-    if(username) {
+    if (username) {
         usernamePage.classList.add('hidden');
         chatPage.classList.remove('hidden');
 
@@ -33,33 +29,38 @@ function connect(event) {
     event.preventDefault();
 }
 
-
-function onConnected() {
-    // Subscribe to the Public Topic
-    stompClient.subscribe('/sub/chat/room/1', onMessageReceived);
-
-    // Tell your username to the server
-    stompClient.send("/pub/chat/enter",
-        {},
-        JSON.stringify({sender: username, content: 'JOIN'})
-    )
-
-    connectingElement.classList.add('hidden');
+function disconnect() {
+    if (stompClient) {
+        stompClient.send("/pub/chat/leave",
+            {},
+            JSON.stringify({ sender: username, content: 'LEAVE' })
+        );
+        stompClient.disconnect();
+    }
 }
 
+function onConnected() {
+    stompClient.subscribe('/sub/chat/room/1', onMessageReceived);
+
+    stompClient.send("/pub/chat/enter",
+        {},
+        JSON.stringify({ sender: username, content: 'JOIN', date: formatDate() })
+    );
+    connectingElement.classList.add('hidden');
+}
 
 function onError(error) {
     connectingElement.textContent = 'Could not connect to WebSocket server. Please refresh this page to try again!';
     connectingElement.style.color = 'red';
 }
 
-
 function sendMessage(event) {
     var messageContent = messageInput.value.trim();
-    if(messageContent && stompClient) {
+    if (messageContent && stompClient) {
         var chatMessage = {
             sender: username,
-            content: messageInput.value
+            content: messageInput.value,
+			date: formatDate()
         };
         stompClient.send("/pub/chat/message", {}, JSON.stringify(chatMessage));
         messageInput.value = '';
@@ -67,18 +68,28 @@ function sendMessage(event) {
     event.preventDefault();
 }
 
+function formatDate(){
+	var today = new Date();
+	var hours = ('0' + today.getHours()).slice(-2); 
+	var minutes = ('0' + today.getMinutes()).slice(-2);
+	var seconds = ('0' + today.getSeconds()).slice(-2); 
+
+	var timeString = hours + ':' + minutes  + ':' + seconds;
+	
+	return timeString ; 
+}
 
 function onMessageReceived(payload) {
     var message = JSON.parse(payload.body);
-console.log("message",message);
+    //console.log("message", message);
     var messageElement = document.createElement('li');
 
-    if(message.content === 'JOIN') {
+    if (message.content === 'JOIN') {
         messageElement.classList.add('event-message');
-        message.content = message.sender + ' joined!';
+        messageElement.textContent = message.sender + ' 님이 입장하셨습니다.';
     } else if (message.content === 'LEAVE') {
         messageElement.classList.add('event-message');
-        message.content = message.sender + ' left!';
+        messageElement.textContent = message.sender + ' 님이 퇴장하셨습니다.';
     } else {
         messageElement.classList.add('chat-message');
 
@@ -115,5 +126,12 @@ function getAvatarColor(messageSender) {
     return colors[index];
 }
 
-usernameForm.addEventListener('submit', connect, true)
-messageForm.addEventListener('submit', sendMessage, true)
+// Listen for the window unload event to handle browser close or refresh
+window.addEventListener('beforeunload', function (event) {
+    disconnect(); // Send a LEAVE message before closing
+    // Optionally, you can provide a custom message in the event to warn the user.
+    // event.preventDefault(); // Some browsers may require this to show a confirmation dialog
+});
+
+usernameForm.addEventListener('submit', connect, true);
+messageForm.addEventListener('submit', sendMessage, true);

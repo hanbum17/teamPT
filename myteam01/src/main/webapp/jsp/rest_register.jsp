@@ -4,6 +4,16 @@
 <c:set var="contextPath" value="${pageContext.request.contextPath }"/>
 <!DOCTYPE html>
 <html lang="ko">
+<<<<<<< HEAD
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script>
+    var contextPath = "${contextPath}"; // contextPath 변수 설정
+    console.log("Context Path: " + contextPath); // 로그로 확인
+</script>
+<head>
+    <meta charset="UTF-8">
+    <title>식당 등록</title>
+=======
 <head>
     <meta charset="UTF-8">
     <title>식당 등록</title>
@@ -12,7 +22,7 @@
         var contextPath = "${contextPath}"; // contextPath 변수 설정
         console.log("Context Path: " + contextPath); // 로그로 확인
     </script>
-
+>>>>>>> CHYJ
     <style>
         body {
             background-color: #f0f2f5; /* 부드러운 배경색 */
@@ -115,7 +125,12 @@
         .custom-delete:hover {
             color: darkred; /* 호버 시 색상 변경 */
         }
-
+<<<<<<< HEAD
+    </style>
+</head>
+<body>
+<%@ include file="/jsp/admin_main/header.jsp" %>
+=======
         #map {
             width: 100%;
             height: 350px;
@@ -124,7 +139,7 @@
     </style>
 </head>
 <body>
-
+>>>>>>> CHYJ
     <div class="container">
         <h4 class="page-header">식당 등록</h4>
         <form role="form" action="${contextPath}/restaurant/rest_register" method="post" id="frmRegister" enctype="multipart/form-data">
@@ -146,13 +161,19 @@
             </div>
             <div class="form-group">
                 <label for="fxcoord">x좌표</label>
-
+<<<<<<< HEAD
+                <input type="text" class="form-control" id="fxcoord" name="fxcoord" placeholder="x좌표를 입력하세요">
+            </div>
+            <div class="form-group">
+                <label for="fycoord">y좌표</label>
+                <input type="text" class="form-control" id="fycoord" name="fycoord" placeholder="y좌표를 입력하세요">
+=======
                 <input type="text" class="form-control" id="fxcoord" name="fxcoord" placeholder="x좌표를 입력하세요" readonly>
             </div>
             <div class="form-group">
                 <label for="fycoord">y좌표</label>
                 <input type="text" class="form-control" id="fycoord" name="fycoord" placeholder="y좌표를 입력하세요" readonly>
-
+>>>>>>> CHYJ
             </div>
             <div class="form-group">
                 <label>등록 확인</label>
@@ -178,6 +199,159 @@
             <button type="button" class="btn" id="btnRegister">등록</button>
         </form>
     </div>
+
+<<<<<<< HEAD
+<script>
+function checkUploadFile(fileName, fileSize) {
+    var allowedMaxSize = 1048576; // 1MB
+    var regExpForbiddenFileExtension = /((\.(exe|dll|sh|c|zip|alz|tar)$)|^[^.]+$|(^\.[^.]{1,}$))/i;
+
+    if (fileSize > allowedMaxSize) {
+        alert("업로드 파일의 크기는 1MB 보다 작아야 합니다.");
+        return false;
+    }
+
+    if (regExpForbiddenFileExtension.test(fileName)) {
+        alert("선택하신 파일은 업로드 하실 수 없는 유형입니다.");
+        return false;
+    }
+    return true;
+}
+
+function showUploadResult(uploadResult) {
+    var fileUploadResultUL = $(".fileUploadResult ul");
+    var htmlStr = "";
+    
+    $(uploadResult).each(function(i, attachFile) {
+        var fullFileName = encodeURI(attachFile.repoPath + "/" +
+                                     attachFile.uploadPath + "/" +
+                                     attachFile.uuid + "_" +
+                                     attachFile.fileName);
+        var thumbnail = encodeURI(attachFile.repoPath + "/" +
+                                  attachFile.uploadPath + "/s_" +
+                                  attachFile.uuid + "_" +
+                                  attachFile.fileName);
+        htmlStr += "<li data-uploadpath='" + attachFile.uploadPath + "'"
+                  + " data-uuid='" + attachFile.uuid + "'"
+                  + " data-filename='" + attachFile.fileName + "'"
+                  + " data-filetype='I'>"
+                  + "   <img src='" + contextPath + "/displayThumbnail?fileName=" + thumbnail + "' alt='thumbnail'>"
+                  + "   &emsp;" + attachFile.fileName
+                  + "   <span class='custom-delete'>삭제</span>"
+                  + "</li>";
+    });
+    fileUploadResultUL.append(htmlStr);
+}
+
+var cloneFileInput = $(".uploadDiv").clone();
+console.log(cloneFileInput.html());
+
+$(".uploadDiv").on("change", "input[type='file']", function() {
+    var fileInputs = $("input[name='fileInput']");
+    var uploadFiles = fileInputs[0].files;
+    var formData = new FormData();
+    
+    for (var i = 0; i < uploadFiles.length; i++) {
+        if (!checkUploadFile(uploadFiles[i].name, uploadFiles[i].size)) {
+            console.log("파일 이름: " + uploadFiles[i].name);
+            console.log("파일 크기: " + uploadFiles[i].size);
+            $("#fileInput").val("");
+            return;
+        }
+        formData.append("uploadFiles", uploadFiles[i]);
+    }
+    
+    $.ajax({
+        type: "post",
+        url: "${contextPath}/doFileUploadByAjax",
+        data: formData,
+        contentType: false,
+        processData: false,
+        dataType: "json",
+        success: function(uploadResult, status) {
+            console.log(uploadResult);
+            $(".uploadDiv").html(cloneFileInput.html());
+            showUploadResult(uploadResult);
+        }
+    });
+});
+
+$(".fileUploadResult ul").on("click", ".custom-delete", function() {
+    var fileLi = $(this).parent();
+    var fileName = fileLi.data("repoPath")+"/"+
+    			   fileLi.data("uploadpath") + "/" +
+    			   fileLi.data("uuid") + "_" +
+    			   fileLi.data("filename");
+    var fileType = 'I'; // 적절한 파일 타입 설정
+
+    $.ajax({
+        type: "post",
+        url: "${contextPath}/deleteFile",
+        data: {fileName: fileName, fileType: fileType},
+        dataType: "text",
+        success: function(result) {
+            if (result == "DelSuccess") {
+                alert("파일이 삭제되었습니다.");
+                fileLi.remove();
+            } else {
+                if (confirm("파일이 존재하지 않습니다. 해당 항목을 삭제하시겠습니까?")) {
+                    fileLi.remove();
+                }
+            }
+        }
+    });
+});
+
+function restaurantValue() {
+    var fcategory = document.getElementById("fcategory").value;
+    var fname = document.getElementById("fname").value;
+    var faddress = document.getElementById("faddress").value;
+    var frating = document.getElementById("frating").value; // 별점
+    var fxcoord = document.getElementById("fxcoord").value; // x좌표
+    var fycoord = document.getElementById("fycoord").value; // y좌표
+    var ftype = document.querySelector('input[name="ftype"]:checked'); // 식당 타입
+    
+    var regExp = /^\s+$/;
+
+    // 모든 필드 검증
+    if (!fcategory || !fname || !faddress || !frating || !fxcoord || !fycoord || !ftype ||
+        regExp.test(fcategory) || regExp.test(fname) || 
+        regExp.test(faddress) || regExp.test(frating) ||
+        regExp.test(fxcoord) || regExp.test(fycoord)) {
+        return false;
+    } else {
+        return true;
+    }
+}
+
+$("#btnRegister").on("click", function() {
+    if (!restaurantValue()) {
+        alert("모든 필드를 유효한 값으로 입력해야 합니다.");
+        return;
+    }
+
+    var frmRegister = $("#frmRegister");
+    var attachFileInputHTML = "";
+
+    $("div.fileUploadResult ul li").each(function(i, objLi) { 
+        var attachLi = $(objLi);
+
+        attachFileInputHTML
+            += "<input type='hidden' name='attachFileList[" + i + "].uuid' value='" + attachLi.data("uuid") + "'>"
+            + "<input type='hidden' name='attachFileList[" + i + "].uploadPath' value='" + attachLi.data("uploadpath") + "'>"
+            + "<input type='hidden' name='attachFileList[" + i + "].fileName' value='" + attachLi.data("filename") + "'>"
+            + "<input type='hidden' name='attachFileList[" + i + "].fileType' value='" + attachLi.data("filetype") + "'>";
+    });
+
+    if (attachFileInputHTML) {
+        frmRegister.append(attachFileInputHTML);
+    }
+
+    frmRegister.submit();
+});
+<%@ include file="/jsp/admin_main/footer.jsp" %>
+</script>
+=======
     <div id="map"></div>
     <p><em>핀을 클릭하여 위치를 조정하세요.</em></p>
 
@@ -379,6 +553,6 @@
             frmRegister.submit();
         });
     </script>
-
+>>>>>>> CHYJ
 </body>
 </html>

@@ -20,15 +20,20 @@ public class AttachFileServiceImpl implements AttachFileService{
 		
 		return attachFileMapper.getAllFiles(uno);
 	}
+
 	
 	@Override
 	public AttachFileDTO getFile(String uuid) {
 		return attachFileMapper.findByUuid(uuid);
 	}
+<<<<<<< HEAD
 	
 	
 	
 	
 	
 	
+=======
+
+>>>>>>> a428ef37d1514c8334ac0e3c6392b2ec71d68e4a
 }

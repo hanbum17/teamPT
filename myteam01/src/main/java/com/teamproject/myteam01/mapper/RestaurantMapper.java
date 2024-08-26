@@ -2,9 +2,12 @@ package com.teamproject.myteam01.mapper;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Mapper;
+
 import com.teamproject.myteam01.domain.RestaurantVO;
 import com.teamproject.myteam01.domain.RestaurantsReviewVO;
 
+@Mapper
 public interface RestaurantMapper {
 
 	//록귀
@@ -16,5 +19,6 @@ public interface RestaurantMapper {
 	
 	//윤정
 	public void insertRestaurant(RestaurantVO rest);
+	public List<RestaurantVO> selectRestList();
 	
 }

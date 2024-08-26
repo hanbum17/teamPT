@@ -36,5 +36,11 @@
        INSERT INTO teampj.RESTAURANTS(fno,fcategory,fname,faddress,uno,fviewscnt,frating,fxcoord,fycoord,ftype)
       VALUES (#{fno}, #{fcategory},#{fname}, #{faddress}, #{uno},DEFAULT,#{frating},#{fxcoord}, #{fycoord},#{ftype})
    </insert>
+   
+   <select id="selectRestList" resultType="com.teamproject.myteam01.domain.RestaurantVO">
+   		SELECT FNO, FCATEGORY, FNAME, FADDRESS, UNO, FVIEWSCNT, FRATING, FXCOORD, FYCOORD, FTYPE 
+   		FROM RESTAURANTS ORDER BY fno DESC
+   
+   </select>
 	
 </mapper>
