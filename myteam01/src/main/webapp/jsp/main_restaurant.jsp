@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib uri="jakarta.tags.core" prefix="c" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath }"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -249,7 +250,9 @@
     }
     function showDetailView(fno) {
     	
-    	fetch(`${contextPath}/getRestaurantDetails?fno=${fno}`)
+    	 var fno = $(".fno-hidden").val() ;
+    	
+    	fetch(`${contextPath}/vroom/getRestaurantDetails?fno=`+fno)
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');

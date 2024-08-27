@@ -41,7 +41,7 @@ public class VroomController {
 		return "main_restaurant";
 	}
 	
-	@GetMapping("/getRestaurantDetail")
+	@GetMapping("/getRestaurantDetails")
 	public RestaurantVO getRestaurantDetail(@RequestParam("fno") Long fno) {
 	    System.out.println("전달된 fno 값: " + fno); 
 	    RestaurantVO detail = restService.restaurantDetail(fno);
