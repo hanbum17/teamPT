@@ -18,10 +18,10 @@ public interface CsService {
 	public CsVO getFAQ(Long faqno);
 	
 	//FAQ 수정
-	public boolean modifyEvent(CsVO faq);
+	public boolean modifyFAQ(CsVO faq);
 	
 	//FAQ 삭제
-	public boolean removeEvent(Long faqno);
+	public boolean removeFAQ(Long faqno);
 	
 	
 }
