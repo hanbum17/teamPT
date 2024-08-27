@@ -7,7 +7,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>피드백 페이지</title>
+<title>고객센터</title>
 <style>
 body {
     font-family: Arial, sans-serif;

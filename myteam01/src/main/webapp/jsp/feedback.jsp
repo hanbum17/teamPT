@@ -93,7 +93,7 @@ label {
  <body>
  <h1>고객의 소리</h1>
     <p>고객의 소리 내용을 여기에 작성합니다.</p>
-    <button onclick="location.href='/csCenter'">고객센터로 돌아가기</button>
+    <button onclick="location.href='/cs/Center'">고객센터로 돌아가기</button>
     
 </body>
 		
