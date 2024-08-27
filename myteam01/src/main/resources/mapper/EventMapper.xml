@@ -7,18 +7,31 @@
 	<select id="selectEHOST" resultType="String">
 		SELECT EHOST FROM EVENT ORDER BY ENO DESC 
 	</select>
+	
+	
+	
 	<update id="updateEventCoord" parameterType="com.teamproject.myteam01.domain.EventVO">
 		UPDATE EVENT
 		SET excoord = #{excoord},
 		    eycoord = #{eycoord}
 		WHERE EHOST = #{ehost}
 	</update>
+	
+	
+	
 	<!--  행사 디테일  -->
 	<select id="eventDetail" resultType="com.teamproject.myteam01.domain.EventVO">
 	<![CDATA[
 		SELECT * FROM EVENT WHERE ENO = #{eno}
 	]]>
 	</select>
+	
+	<select id="selectEventList" resultType="com.teamproject.myteam01.domain.EventVO"> 
+	SELECT ENO, ENAME, EPERIOD, ECOST, EADDRESS, EPLACE, ESITE, EHOST, ECONTENT, UNO, EVIEWSCNT, ERATING, EXCOORD, EYCOORD, ETYPE 
+	FROM teampj.event 
+	ORDER BY ENO DESC 
+	</select>
+	
 	<!--  행사리뷰조회  -->
 	<select id="selectReviews" resultType="com.teamproject.myteam01.domain.EventReviewVO"> 
 		WITH Reviews AS (
@@ -31,17 +44,26 @@
 		WHERE ENO = #{eno}
 		AND rn BETWEEN (#{pageNum} - 1) * 3 + 1 AND #{pageNum} * 3
 	</select>
+	
+	
+	
 	<!--  행사리뷰등록  -->
 	<insert id="registerReview" parameterType="com.teamproject.myteam01.domain.EventReviewVO"> 
 		INSERT INTO EVENT_reviews 
 		VALUES(seq_EVENT_reviews.nextval, #{ertitle}, #{ercontent}, #{erwriter}, DEFAULT, DEFAULT, #{errating}, seq_uno.nextval, #{eno}) 
 	</insert>
+	
+	
+	
 	<!--  행사리뷰삭제시 DEL_REVIEWS 테이블로 옮기기  -->
 	<insert id="copyReview" parameterType="com.teamproject.myteam01.domain.EventReviewVO"> 
 		INSERT INTO DEL_REVIEWS (DRNO, DRTITLE, DRCONTENT, DRWRITER, DRREGDATE, DRMODDATE, DRRATING, DTYPE) 
 		SELECT ERNO, ERTITLE, ERCONTENT, ERWRITER, ERREGDATE, ERMODDATE, ERRATING, 4 AS DTYPE FROM EVENT_REVIEWS
 		WHERE ERNO = #{erno} 
 	</insert>
+	
+	
+	
 	<!--  행사리뷰삭제  -->
 	<delete id="deleteReview"> DELETE EVENT_REVIEWS WHERE ERNO = #{erno} </delete>
 	
