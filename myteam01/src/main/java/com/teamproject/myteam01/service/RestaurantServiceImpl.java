@@ -69,13 +69,9 @@ public class RestaurantServiceImpl implements RestaurantService{
 	      return rest.getFno();
 	   }
 	
-	@Override
-	public List<RestaurantVO> getBoadList(){
-		System.out.println("식당 리스트 서비스 전달");
-		return restaurantMapper.selectRestList();
-	}
-	
-
+		public List<RestaurantVO> getRestList(){
+			return restaurantMapper.selectRestList();
+		}
 
 	
 }

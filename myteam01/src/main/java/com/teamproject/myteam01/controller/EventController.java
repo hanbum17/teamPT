@@ -18,7 +18,6 @@ import com.teamproject.myteam01.domain.EventReviewVO;
 import com.teamproject.myteam01.domain.EventVO;
 import com.teamproject.myteam01.service.EventService;
 
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
@@ -89,7 +88,7 @@ public class EventController {
         // 성공적인 처리 후 응답 메시지를 반환
         return "리뷰 삭제 처리 완료";  // 클라이언트에게 전송될 응답
     }
-	
+
 	
 	
 	

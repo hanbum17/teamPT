@@ -12,11 +12,9 @@ public interface AttachFileMapper {
 	
 	//윤정
 
-
 	public void insertAttachFile(AttachFileDTO attachFile);
 	
 	public AttachFileDTO findByUuid(String uuid);
-
 
 	
 }

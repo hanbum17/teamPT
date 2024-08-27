@@ -1,3 +1,107 @@
+<<<<<<< HEAD
+
+  body {
+      background-color: #7B7D86; /* 밝은 회색 배경 색상 */
+      margin: 0;
+      font-family: Arial, sans-serif;
+      color: #ffffff; /* 기본 글씨 색상: 흰색 */
+  }
+
+  .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px;
+      background-color: transparent; /* 상단 바 배경 제거 */
+      color: #ffffff;
+      border-bottom: none; /* 흰색 줄 제거 */
+  }
+
+  .header .logo {
+      font-size: 30px; /* 글자 크기 */
+      font-weight: bold;
+  }
+
+  .header .nav {
+      font-size: 20px; /* 글자 크기 */
+  }
+
+  .header .nav a {
+      color: #ffffff;
+      text-decoration: none;
+      margin: 0 15px; /* 글자 사이 간격 조정 */
+  }
+
+  .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      width: 80%;
+      max-width: 1200px;
+      margin: 20px auto;
+  }
+
+  .left-column, .right-column {
+      display: flex;
+      flex-direction: column;
+      width: 45%;
+  }
+
+  .box {
+      background-color: #ffffff;
+      color: #000000;
+      border-radius: 15px;
+      padding: 20px; /* 패딩 조정 */
+      text-align: center; /* 텍스트 중앙 정렬 */
+      width: 100%; /* 상자의 가로폭을 열에 맞춤 */
+      max-width: 400px; /* 최대 가로폭 조정 */
+      height: 150px; /* 세로 높이 조정 */
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      margin: 30px 20px; /* 박스와 문구 사이의 간격, 좌우 간격 조정 */
+      font-size: 20px; /* 텍스트 크기 조정 */
+      cursor: grab; /* 드래그 가능 커서 */
+  }
+
+  .draggable {
+      cursor: grab;
+  }
+
+  .additional-boxes {
+      display: none; /* 기본적으로 숨김 */
+      flex-wrap: wrap;
+      justify-content: center;
+      width: 80%;
+      max-width: 1200px;
+      margin: 20px auto;
+  }
+
+  .additional-boxes .box {
+      width: calc(25% - 20px); /* 박스 너비 조정 */
+      margin: 20px; /* 박스 사이의 간격 조정, 좌우 간격 조정 */
+  }
+
+  .message {
+      color: #ffffff; /* 문구 색상: 흰색 */
+      font-size: 23px; /* 글자 크기 */
+  }
+
+  .footer {
+      background-color: #6c6e6e; /* 회색보다 살짝 더 진한 회색 */
+      padding: 20px;
+      text-align: center;
+  }
+
+  .footer a {
+      color: #ffffff; /* 글자 색상: 흰색 */
+      text-decoration: none;
+      margin: 0 10px;
+      font-size: 15px; /* 글자 크기 */
+  }
+
+  .footer a:hover {
+      text-decoration: underline;
+  }
+=======
 body {
     background-color: #7B7D86; /* 밝은 회색 배경 색상 */
     margin: 0;
@@ -73,3 +177,4 @@ body {
 .footer a:hover {
     text-decoration: underline;
 }
+>>>>>>> CHYJ

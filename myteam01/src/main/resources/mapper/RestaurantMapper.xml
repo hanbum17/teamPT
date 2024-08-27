@@ -38,9 +38,9 @@
    </insert>
    
    <select id="selectRestList" resultType="com.teamproject.myteam01.domain.RestaurantVO">
-   		SELECT FNO, FCATEGORY, FNAME, FADDRESS, UNO, FVIEWSCNT, FRATING, FXCOORD, FYCOORD, FTYPE 
-   		FROM RESTAURANTS ORDER BY fno DESC
+        SELECT FNO, FCATEGORY, FNAME, FADDRESS, UNO, FVIEWSCNT, FRATING, FXCOORD, FYCOORD, FTYPE
+		FROM teampj.RESTAURANTS ORDER BY FNO DESC
+    </select>
    
-   </select>
 	
 </mapper>
