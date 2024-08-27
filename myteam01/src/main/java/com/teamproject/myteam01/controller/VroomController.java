@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.teamproject.myteam01.domain.RestaurantVO;
 import com.teamproject.myteam01.service.RestaurantService;
 
 import lombok.RequiredArgsConstructor;
@@ -39,6 +40,16 @@ public class VroomController {
 		model.addAttribute("restList", restService.getRestList());
 		return "main_restaurant";
 	}
+	
+	@GetMapping("/getRestaurantDetail")
+	public RestaurantVO getRestaurantDetail(@RequestParam("fno") Long fno) {
+	    System.out.println("전달된 fno 값: " + fno); 
+	    RestaurantVO detail = restService.restaurantDetail(fno);
+	    return detail;
+	}
+
+	
+	
 	
 	@GetMapping("/event")
 	public String vroomEvent() {
