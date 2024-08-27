@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.teamproject.myteam01.mapper.EventMapper">
+
+	<!-- 희준 -->
+	<!-- FAQ 조회-->
+	<select id="selectFAQList" resultType="com.teamproject.myteam01.domain.CsVO">
+			SELECT FAQNO, FAQCATEGORY, FAQTITLE, FAQCONTENT, FAQREGDATE, FAQMODDATE
+			FROM teampj.FAQ
+			ORDER BY FAQNO DESC
+	</select>
+
+	<!-- FAQ 등록 -->
+	<insert id="registerFAQ" parameterType="com.teamproject.myteam01.domain.CsVO">
+		<selectKey keyProperty="faqno" order="BEFORE" resultType="Long">
+			SELECT teampj.seq_FAQ.nextval FROM dual
+		</selectKey>
+		
+		INSERT INTO teampj.FAQ
+	
+		VALUES (#{faqno}, #{faqcategory}, #{faqtitle}, #{faqcontent}, DEFAULT, DEFAULT)
+	</insert>
+
+	<!-- FAQ 조회 -->
+	<select id="selectFAQ" resultType="com.teamproject.myteam01.domain.EventVO">
+		SELECT FAQNO, FAQCATEGORY, FAQTITLE, FAQCONTENT, FAQREGDATE, FAQMODDATE
+		FROM teampj.FAQ
+		WHERE FAQNO = #{faqno}
+	</select>
+
+	<!-- FAQ 수정 -->
+	<update id="updateFAQ">
+		UPDATE teampj.FAQ
+		SET FAQCATEGORY = #{faqcategory},
+			FAQTITLE = #{faqtitle},
+			FAQCONTENT = #{faqcontent},
+			FAQMODDATE = DEFAULT
+		WHERE FAQNO = #{faqno}
+	</update>
+	
+	<!-- FAQ 삭제 -->
+	<delete id="delFAQ">
+		DELETE teampj.FAQ
+		WHERE FAQNO = #{faqno}
+	</delete>
+	
+
+	
+	
+</mapper>
