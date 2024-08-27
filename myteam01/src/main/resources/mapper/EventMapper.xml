@@ -40,34 +40,34 @@
 	<select id="selectEvent" resultType="com.teamproject.myteam01.domain.EventVO">
 		SELECT ENO, ENAME, EPERIOD, ECOST, EADDRESS, EPLACE, ESITE, EHOST, ECONTENT, UNO, EVIEWSCNT, ERATING, EXCOORD, EYCOORD
 		FROM teampj.event
-		WHERE eno = #{eno}
+		WHERE ENO = #{eno}
 	</select>
 
 	<!-- 행사 수정 -->
 	<update id="updateEvent">
 		UPDATE teampj.event
-		SET ename = #{ename},
-			eperiod = #{eperiod},
-			ecost = #{ecost},
-			eaddress = #{eaddress},
-			eplace = #{eplace},
-			esite = #{esite},
-			ehost = #{ehost},
-			econtent = #{econtent}
-		WHERE eno = #{eno}
+		SET ENAME = #{ename},
+			EPERIOD = #{eperiod},
+			ECOST = #{ecost},
+			EADDRESS = #{eaddress},
+			EPLACE = #{eplace},
+			ESITE = #{esite},
+			EHOST = #{ehost},
+			ECONTENT = #{econtent}
+		WHERE ENO = #{eno}
 	</update>
 	
 	<!-- 행사 삭제 -->
 	<delete id="delEvent">
 		DELETE teampj.event
-		WHERE eno = #{eno}
+		WHERE ENO = #{eno}
 	</delete>
 	
 	<!-- 행사 조회수 증가 -->
 	<update id="updateEviewsCnt">
 		UPDATE teampj.event
 		SET eviewsCnt = eviewsCnt +1
-		WHERE eno = #{eno}
+		WHERE ENO = #{eno}
 	</update>
 	
 	
