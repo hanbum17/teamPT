@@ -17,5 +17,10 @@
 	    VALUES (#{uuid}, #{uploadPath}, #{fileName}, DEFAULT, #{fileType}, #{uno})
 	</insert>
 	
+	<select id="findByUuid" resultType="com.teamproject.myteam01.domain.AttachFileDTO">
+        SELECT UUID, UPLOADPATH, FILENAME, FILEDELFLAG, FILETYPE, UNO 
+        FROM teampj.ATTACHFILES WHERE uuid = #{uuid}
+    </select>
+	
 	
 </mapper>
