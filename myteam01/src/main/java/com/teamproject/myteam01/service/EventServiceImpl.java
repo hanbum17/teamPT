@@ -27,6 +27,7 @@ public class EventServiceImpl implements EventService{
 	@Override
 	public List<EventReviewVO> selectReviews(Long eno, int pageNum) {
 		return eventMapper.selectReviews(eno, pageNum);
+
 	}
 	
 	@Override
@@ -53,6 +54,7 @@ public class EventServiceImpl implements EventService{
 	public List<String> selectEHOST(){
 		return eventMapper.selectEHOST();
 	}
+
 	
 
 	//희준
