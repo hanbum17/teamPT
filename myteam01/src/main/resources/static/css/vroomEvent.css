@@ -1,0 +1,95 @@
+.hidden {
+    display: none;
+}
+
+#container {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+#left, #right {
+    width: 35%; /* Adjusted width to 35% of the container */
+    height: 600px; /* Adjust height as needed */
+    overflow-y: auto; /* Enable vertical scrolling */
+    padding: 10px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+}
+
+.box {
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    position: relative;
+    width: 100%; /* Full width of the container */
+    box-sizing: border-box;
+    background-color: #f9f9f9;
+    overflow: hidden; /* Prevent content from overflowing */
+}
+
+.box img {
+    width: 100px;
+    height: auto;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.box h3 {
+    font-size: 16px;
+    margin: 0 0 5px;
+}
+
+.box p {
+    font-size: 14px;
+    margin: 0;
+}
+
+#detail-view {
+    display: none; /* Hide detail view initially */
+    flex-direction: row; /* Layout children side by side */
+    justify-content: space-between;
+    padding: 20px;
+    box-sizing: border-box;
+    width: 70%; /* Adjust width to make detail view narrower */
+    height: 700px; /* Adjust height to make detail view taller */
+    margin: 0 auto; /* Center the detail view horizontally */
+    position: relative; /* Positioning context for the back button */
+}
+
+.detail-box {
+    width: 48%; /* Adjust width for detail boxes */
+    border: 1px solid #ddd;
+    padding: 20px;
+    box-sizing: border-box;
+    height: 100%; /* Full height of the detail view container */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Center content vertically */
+    overflow: hidden; /* Prevent content from overflowing */
+}
+
+#left-detail {
+    margin-right: 4%; /* Adjust space between detail boxes */
+}
+
+#right-detail {
+    margin-left: 4%; /* Adjust space between detail boxes */
+}
+
+#back-button {
+    position: absolute;
+    top: 20px; /* Space from the top */
+    left: 50%; /* Center horizontally */
+    transform: translateX(-50%); /* Center horizontally with respect to the button's width */
+    padding: 10px 20px; /* Standard button padding */
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    border-radius: 5px;
+}

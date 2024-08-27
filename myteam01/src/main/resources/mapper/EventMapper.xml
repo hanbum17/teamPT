@@ -2,72 +2,91 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.teamproject.myteam01.mapper.EventMapper">
 
+	<!--  록귀 파트  -->
 
+	<!-- 이벤트테이블 좌표 UPDATE 테스트 -->
+	<select id="selectEHOST" resultType="String">
+		SELECT EHOST FROM EVENT ORDER BY ENO DESC 
+	</select>
+	<update id="updateEventCoord" parameterType="com.teamproject.myteam01.domain.EventVO">
+		UPDATE EVENT
+		SET excoord = #{excoord},
+		    eycoord = #{eycoord}
+		WHERE EHOST = #{ehost}
+	</update>
 
-
-	<!-- 록귀 -->
-	<select id="eventDetail" resultType="com.teamproject.myteam01.domain.EventVO" parameterType="String">
+	<!--  행사 디테일  -->
+	<select id="eventDetail" resultType="com.teamproject.myteam01.domain.EventVO">
 	<![CDATA[
-		SELECT * FROM EVENT WHERE ENO = 1
+		SELECT * FROM EVENT WHERE ENO = #{eno}
 	]]>
 	</select>
-	
-	
-	
-	
-	
-	<!-- 희준 -->
-	<!-- 목록조회 -->
-	<select id="selectEventList" resultType="com.teamproject.myteam01.domain.EventVO">
-			SELECT ENO, ENAME, EPERIOD, ECOST, EADDRESS, EPLACE, ESITE, EHOST, ECONTENT, UNO, EVIEWSCNT, ERATING, EXCOORD, EYCOORD
-			FROM teampj.event
-			ORDER BY ENO DESC
-	</select>
+	<!--  행사리뷰조회  -->
+	<select id="selectReviews" resultType="com.teamproject.myteam01.domain.EventReviewVO"> 
 
-	<!-- 행사 등록 -->
-	<insert id="registerEvent" parameterType="com.teamproject.myteam01.domain.EventVO">
-		<selectKey keyProperty="eno" order="BEFORE" resultType="Long">
-			SELECT teampj.seq_event.nextval FROM dual
-		</selectKey>
-		
-		INSERT INTO teampj.event
-	
-		VALUES (#{eno}, #{ename}, #{eperiod}, #{ecost}, #{eaddress}, #{eplace}, #{esite}, #{ehost}, #{econtent}, 
-				DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT)
+		WITH Reviews AS (
+		    SELECT ERNO, ERTITLE, ERCONTENT, ERWRITER, ERREGDATE, ERMODDATE, ERRATING, UNO, ENO, 
+		    ROW_NUMBER() OVER (ORDER BY ERREGDATE DESC) AS rn
+		    FROM Event_Reviews
+		)
+		SELECT ERNO, ERTITLE, ERCONTENT, ERWRITER, ERREGDATE, ERMODDATE, ERRATING, UNO, ENO
+		FROM Reviews
+		WHERE ENO = #{eno}
+		AND rn BETWEEN (#{pageNum} - 1) * 3 + 1 AND #{pageNum} * 3
+	</select>
+	<!--  행사리뷰등록  -->
+	<insert id="registerReview" parameterType="com.teamproject.myteam01.domain.EventReviewVO"> 
+		INSERT INTO EVENT_reviews 
+		VALUES(seq_EVENT_reviews.nextval, #{ertitle}, #{ercontent}, #{erwriter}, DEFAULT, DEFAULT, #{errating}, seq_uno.nextval, #{eno}) 
 	</insert>
-
-	<!-- 행사 조회 -->
-	<select id="selectEvent" resultType="com.teamproject.myteam01.domain.EventVO">
-		SELECT ENO, ENAME, EPERIOD, ECOST, EADDRESS, EPLACE, ESITE, EHOST, ECONTENT, UNO, EVIEWSCNT, ERATING, EXCOORD, EYCOORD
-		FROM teampj.event
-		WHERE ENO = #{eno}
+	<!--  행사리뷰삭제시 DEL_REVIEWS 테이블로 옮기기  -->
+	<insert id="copyReview" parameterType="com.teamproject.myteam01.domain.EventReviewVO"> 
+		INSERT INTO DEL_REVIEWS (DRNO, DRTITLE, DRCONTENT, DRWRITER, DRREGDATE, DRMODDATE, DRRATING, DTYPE) 
+		SELECT ERNO, ERTITLE, ERCONTENT, ERWRITER, ERREGDATE, ERMODDATE, ERRATING, 4 AS DTYPE FROM EVENT_REVIEWS
+		WHERE ERNO = #{erno} 
+	</insert>
+	<!--  행사리뷰삭제  -->
+	<delete id="deleteReview"> DELETE EVENT_REVIEWS WHERE ERNO = #{erno} </delete>
+	
+	
+	
+	
+	
+	<!--  희준  -->
+	<!--  목록조회  -->
+	<select id="selectEventList" resultType="com.teamproject.myteam01.domain.EventVO"> 
+		SELECT ENO, ENAME, EPERIOD, ECOST, EADDRESS, EPLACE, ESITE, EHOST, ECONTENT, 
+		UNO, EVIEWSCNT, ERATING, EXCOORD, EYCOORD, ETYPE 
+		FROM teampj.event ORDER BY ENO DESC 
 	</select>
-
-	<!-- 행사 수정 -->
-	<update id="updateEvent">
-		UPDATE teampj.event
-		SET ENAME = #{ename},
-			EPERIOD = #{eperiod},
-			ECOST = #{ecost},
-			EADDRESS = #{eaddress},
-			EPLACE = #{eplace},
-			ESITE = #{esite},
-			EHOST = #{ehost},
-			ECONTENT = #{econtent}
-		WHERE ENO = #{eno}
+	<!--  행사 등록  -->
+	<insert id="registerEvent" parameterType="com.teamproject.myteam01.domain.EventVO">
+	<selectKey keyProperty="eno" order="BEFORE" resultType="Long"> 
+		SELECT teampj.seq_event.nextval FROM dual 
+	</selectKey>
+		INSERT INTO teampj.event 
+		VALUES (#{eno}, #{ename}, #{eperiod}, #{ecost}, #{eaddress}, #{eplace}, #{esite}, #{ehost}, 
+				#{econtent}, DEFAULT, DEFAULT, DEFAULT, #{excoord}, #{eycoord}, DEFAULT)
+	</insert>
+	<!--  행사 조회  -->
+	<select id="selectEvent" resultType="com.teamproject.myteam01.domain.EventVO"> 
+		SELECT ENO, ENAME, EPERIOD, ECOST, EADDRESS, EPLACE, ESITE, EHOST, 
+		ECONTENT, UNO, EVIEWSCNT, ERATING, EXCOORD, EYCOORD FROM teampj.event 
+		WHERE eno = #{eno} 
+	</select>
+	<!--  행사 수정  -->
+	<update id="updateEvent"> 
+		UPDATE teampj.event SET ename = #{ename}, eperiod = #{eperiod}, ecost = #{ecost}, 
+		eaddress = #{eaddress}, eplace = #{eplace}, esite = #{esite}, ehost = #{ehost}, econtent = #{econtent} 
+		WHERE eno = #{eno} 
 	</update>
-	
-	<!-- 행사 삭제 -->
-	<delete id="delEvent">
-		DELETE teampj.event
-		WHERE ENO = #{eno}
+	<!--  행사 삭제  -->
+	<delete id="delEvent"> 
+		DELETE teampj.event WHERE eno = #{eno} 
 	</delete>
-	
-	<!-- 행사 조회수 증가 -->
-	<update id="updateEviewsCnt">
-		UPDATE teampj.event
-		SET eviewsCnt = eviewsCnt +1
-		WHERE ENO = #{eno}
+	<!--  행사 조회수 증가  -->
+	<update id="updateEviewsCnt"> 
+		UPDATE teampj.event SET eviewsCnt = eviewsCnt +1 WHERE eno = #{eno} 
 	</update>
 	
 	

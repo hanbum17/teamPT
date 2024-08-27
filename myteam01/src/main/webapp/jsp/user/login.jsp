@@ -19,12 +19,5 @@
             <button type="submit">Login</button>
         </div>
     </form>
-    <form action="/user/register" method="get">
-    	<div>
-	        <button type="submit">Sign Up</button>
-	    </div>
-    </form>
-    
-
 </body>
 </html>

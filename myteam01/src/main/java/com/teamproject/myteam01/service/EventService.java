@@ -2,13 +2,22 @@ package com.teamproject.myteam01.service;
 
 import java.util.List;
 
+import com.teamproject.myteam01.domain.EventReviewVO;
 import com.teamproject.myteam01.domain.EventVO;
 
 public interface EventService {
 
 	//록귀
-	public EventVO eventDetail(String eno);
-	
+	public EventVO eventDetail(Long eno);
+
+	public List<EventReviewVO> selectReviews(Long eno, int pageNum);
+	public int registerReview(EventReviewVO eventReviewVO);
+	public int copyReview(Long erno);
+	public int deleteReview(Long erno);
+	public List<String> selectEHOST();
+	public void updateEventCoord(EventVO event);
+
+
 	
 	//희준
 	//행사 목록

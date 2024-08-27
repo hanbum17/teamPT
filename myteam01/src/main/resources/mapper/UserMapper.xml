@@ -6,36 +6,16 @@
 
     <!-- 사용자 등록 -->
     <insert id="insertUser" parameterType="com.teamproject.myteam01.domain.UserVO">
-        <selectKey keyProperty="userNo" order="BEFORE" resultType="Long">
-            SELECT teampj.seq_users.nextval FROM dual
-        </selectKey>
-        INSERT INTO users (userNo, userId, userPw, userName, userGender, userCall, userAddress, userEmail, userType, joinDate)
-        VALUES (#{userNo}, #{userId}, #{userPw}, #{userName}, #{userGender}, #{userCall}, #{userAddress}, #{userEmail}, #{userType}, SYSDATE)
+        INSERT INTO users (userId, userPw, userName, userGender, userCall, userAddress, userEmail, userType)
+        VALUES (#{userId}, #{userPw}, #{userName}, #{userGender}, #{userCall}, #{userAddress}, #{userEmail}, #{userType})
     </insert>
-    
-    <insert id="insertUserRole" flushCache="true">
-	    INSERT INTO user_roles (userId, role_id)
-	    VALUES (
-	        #{userId},
-	        (SELECT role_id FROM roles WHERE role_name = #{roleName})
-	    )
-	</insert>
-
 
     <!-- 사용자명으로 사용자 정보 조회 -->
     <select id="findByUsername" parameterType="String" resultType="com.teamproject.myteam01.domain.UserVO">
-        SELECT userNo, userId, userPw, userName, userGender, userCall, userAddress, userEmail, userType, joinDate, lastLoginDate
+        SELECT userId, userPw, userName, userGender, userCall, userAddress, userEmail, userType
         FROM users
         WHERE userId = #{userId}
     </select>
-
-    <!-- 마지막 로그인 날짜 업데이트 -->
-    <update id="updateLastLoginDate" parameterType="com.teamproject.myteam01.domain.UserVO">
-        UPDATE users
-        SET lastLoginDate = CURRENT_TIMESTAMP
-        WHERE userId = #{userId}
-    </update>
-
 
     <!-- 사용자 정보 업데이트 -->
     <update id="updateUser" parameterType="com.teamproject.myteam01.domain.UserVO">

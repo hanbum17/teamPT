@@ -13,12 +13,16 @@ import lombok.ToString;
 @AllArgsConstructor
 public class AttachFileDTO {
 	
-	private int fileDelFlag ;
-	private Integer filedelflag;
+	//private int fileDelFlag ;
+	private Integer fileDelFlag;
 	
 	private String uuid;
 	private String uploadPath;
 	private String fileName ;
 	private String fileType ;
-	private String repoPath = "C:/myupload" ;
+	private Long uno;
+
+	private String repoPath = "C:/yourupload" ;
+
+
 }

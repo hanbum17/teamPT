@@ -15,6 +15,7 @@ public interface RestaurantMapper {
 	public int deleteReview(Long frno);
 	
 	//윤정
-	public Integer insertRestaurant(RestaurantVO rest);
+	public void insertRestaurant(RestaurantVO rest);
+	public List<RestaurantVO> selectRestList();
 	
 }

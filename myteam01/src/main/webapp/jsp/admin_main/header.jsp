@@ -249,13 +249,22 @@ main {
             <div class="logo">Vroom__Admin</div>
             <nav>
                 <ul>
-                    <li><a href="#login">Login</a></li>
+                	<li id="enter_chat"><a href="#">단체채팅방 입장</a></li>
+                    <li><a href="/user/login">Login</a></li>
                     <li><a href="#aboutus">About Us</a></li>
                     <li><a href="#contactus">Contact Us</a></li>
                 </ul>
             </nav>
         </div>
     </header>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script>
+$("#enter_chat").on("click", function(){
+	
+	window.open("http://195.168.9.110:8080/chat/chat", "_blank", "width=500, height=500") ;
+	
+});
+</script>
 <aside class="side-bar">
   <section class="side-bar__icon-box">
     <section class="side-bar__icon-1">
@@ -266,7 +275,15 @@ main {
   </section>
   <ul>
   	<li>
-      <a href="#">대시보드</a>
+      <a href="#"><i class="fa-solid fa-cat"></i> 글관리</a>
+      <ul>
+        <li><a href="/event/list">행사,식당목록</a></li>
+        <li><a href="/event/register">행사등록</a></li>
+        <li><a href="/restaurant/rest_register">식당등록</a></li>
+      </ul>
+    </li>
+    <!-- <li>
+      <a href="#">구현x_대시보드</a>
       <ul>
         <li><a href="#">text1</a></li>
         <li><a href="#">text2</a></li>
@@ -275,15 +292,7 @@ main {
       </ul>
     </li>
     <li>
-      <a href="#"><i class="fa-solid fa-cat"></i> 글관리</a>
-      <ul>
-        <li><a href="#">행사,식당목록</a></li>
-        <li><a href="/event/register">행사등록</a></li>
-        <li><a href="/restaurant/rest_register">식당등록</a></li>
-      </ul>
-    </li>
-    <li>
-      <a href="#">사용자 관리</a>
+      <a href="#">구현x_사용자 관리</a>
       <ul>
         <li><a href="#">ex)신고목록</a></li>
         <li><a href="#">ex)</a></li>
@@ -292,7 +301,7 @@ main {
       </ul>
     </li>
     <li>
-      <a href="#">통계</a>
+      <a href="#">구현x_통계</a>
       <ul>
         <li><a href="#">text1</a></li>
         <li><a href="#">text2</a></li>
@@ -301,14 +310,14 @@ main {
       </ul>
     </li>
     <li>
-      <a href="#">고객지원</a>
+      <a href="#">구현x_고객지원</a>
       <ul>
         <li><a href="#">text1</a></li>
         <li><a href="#">text2</a></li>
         <li><a href="#">text3</a></li>
         <li><a href="#">text4</a></li>
       </ul>
-    </li>
+    </li> -->
     
   </ul>
 </aside>

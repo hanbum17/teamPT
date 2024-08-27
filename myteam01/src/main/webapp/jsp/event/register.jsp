@@ -3,17 +3,20 @@
 <%@ taglib uri="jakarta.tags.core" prefix="c" %>
 <%@ taglib uri="jakarta.tags.fmt" prefix="fmt" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath }"/>
+
 <!DOCTYPE html>
 <html>
 <head>
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <meta charset="UTF-8">
 <title>행사 등록 페이지</title>
 <style>
 body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
-    margin: 0;
-    overflow-x: hidden;
+    /* 사이드바가 중앙에 위치하므로, body의 flex 스타일을 제거합니다 */
+    margin: 0; /* 기본 여백 제거 */
+    overflow-x: hidden; /* 사이드바가 화면 밖으로 이동하지 않도록 설정 */
 }
 
 form {
@@ -23,9 +26,10 @@ form {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     width: 100%;
     max-width: 600px;
-    margin: 0 auto;
-    position: relative;
-    z-index: 1;
+    /* 중앙에 배치하려면 display flex와 함께 부모 요소에서 정렬해야 합니다 */
+    margin: 0 auto; /* form을 중앙 정렬 */
+    position: relative; /* form이 사이드바의 위에 보일 수 있도록 설정 */
+    z-index: 1; /* 사이드바 위에 위치하도록 설정 */
 }
 
 .form-group {
@@ -108,20 +112,9 @@ label {
     
     <div class="form-group">
         <label>행사 주소</label>
-        <input type="hidden" class="form-control" name="eaddress" id="eaddress">
-        <input type="button" class="btnRegister" onclick="sample4_execDaumPostcode()" value="주소검색"><br>
-        <input type="text" class="form-control" id="sample4_roadAddress" placeholder="주소 검색 버튼을 눌러 입력, 도로명 주소로 입력됩니다." readonly oninput="combineAddress()">   
-        <input type="text" class="form-control" id="sample4_detailAddress" placeholder="상세주소 입력" oninput="combineAddress()">
-        <input type="hidden" class="form-control" id="sample4_extraAddress" placeholder="참고항목" readonly oninput="combineAddress()">
+        <textarea class="form-control" name="eaddress" id="eaddress"></textarea>
     </div>
     
-	<div class="form-group">
-	    <label>지도</label>
-	    <div id="map" style="width:100%;height:350px;"></div>
-	    <p><em>지도 중심좌표가 변경되면 지도 정보가 표출됩니다</em></p>
-	    <p id="result"></p>
-	</div>
-		
     <div class="form-group">
         <label>행사 장소</label>
         <input class="form-control" name="eplace" id="eplace">
@@ -129,7 +122,7 @@ label {
     
     <div class="form-group">
         <label>행사 사이트</label>
-        <input class="form-control" name="esite" id="esite">
+        <textarea class="form-control" rows="3" name="esite" id="esite"></textarea>
     </div>
     
     <div class="form-group">
@@ -159,6 +152,7 @@ label {
     </label>
     <div class="form-group fileUploadResult">
         <ul>
+            <%-- 업로드 후, 업로드 처리결과가 표시될 영역  --%>
         </ul>
     </div>
 
@@ -256,97 +250,68 @@ $('#fileInput').on('change', function() {
 
 <%@ include file="/jsp/admin_main/footer.jsp" %>
 </body>
-<!-- <input type="text" placeholder="주소입력" id="address"> -->
+<input type="text" placeholder="주소입력" id="address">
 
+<div id="map"></div>
 
-
-<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=fe9306b4adbbf3249d28d6b7a2c37c0a&libraries=services"></script> <!-- 지도생성 api -->
-<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script> <!-- 주소검색api -->
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=fe9306b4adbbf3249d28d6b7a2c37c0a&libraries=services"></script>
 <script>
-
-// 지도를 생성하는 코드
-var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
     mapOption = {
-        center: new kakao.maps.LatLng(37.5693656626833, 126.986022414113), // 지도의 초기 중심좌표
+        center: new kakao.maps.LatLng(37.14146122533543, 127.06907845124624), // 지도의 중심좌표
         level: 3 // 지도의 확대 레벨
     };
 
-// 지도를 생성합니다    
+//지도를 생성합니다    
 var map = new kakao.maps.Map(mapContainer, mapOption);
+var address = "의정부시 장곡로 240";
 
-// 마커를 생성합니다
+//마커 생성
 var marker = new kakao.maps.Marker({
-    position: map.getCenter() // 마커의 초기 위치는 지도 중심으로 설정합니다
+    position: map.getCenter()
 });
 
-// 마커를 지도에 표시합니다
+//마커 표시
 marker.setMap(map);
 
-// 도로명 주소 입력 시 지도 중심을 해당 주소로 이동하고 좌표를 업데이트하는 함수
-function updateMapWithAddress(address) {
-    var geocoder = new kakao.maps.services.Geocoder();
-    
-    geocoder.addressSearch(address, function(result, status) {
+// 인풋창 입력 시 중심좌표 이동
+$("#address").on("change", function() {
+   address = $("#address").val();
+   
+   // 주소-좌표 변환 객체를 생성합니다
+   var geocoder = new kakao.maps.services.Geocoder();
+
+   // 주소로 좌표를 검색합니다
+   geocoder.addressSearch(address, function(result, status) {
+
+       // 정상적으로 검색이 완료됐으면 
         if (status === kakao.maps.services.Status.OK) {
-            var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-            
-            // 지도의 중심을 해당 좌표로 이동합니다
-            map.setCenter(coords);
-            // 마커 위치를 업데이트합니다
-            marker.setPosition(coords);
 
-            // 좌표를 eycoord와 excoord 필드에 설정합니다
-            document.getElementById('eycoord').value = result[0].y;
-            document.getElementById('excoord').value = result[0].x;
-        } else {
-            console.error('Geocode was not successful for the following reason: ' + status);
-        }
-    });
-}
+           var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+           console.log("y좌표: " + result[0].y + " x좌표: " + result[0].x);
+         
+           marker.setPosition(coords);
 
-// 도로명 주소 입력 필드의 값이 변경될 때마다 호출되는 이벤트 핸들러
-document.getElementById('sample4_roadAddress').addEventListener('input', function() {
-    var address = this.value.trim();
-    if (address) {
-        updateMapWithAddress(address);
-    }
+           // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
+           map.setCenter(coords);
+           map.setLevel(4);
+       } 
+   });    
 });
 
-// 주소 검색 함수
-function sample4_execDaumPostcode() {
-    new daum.Postcode({
-        oncomplete: function(data) {
-            var roadAddr = data.roadAddress; // 도로명 주소 변수
-            var extraRoadAddr = ''; // 참고 항목 변수
+// 지도에 클릭 이벤트를 등록합니다
+kakao.maps.event.addListener(map, 'click', function(mouseEvent) {        
+  // 클릭한 위도, 경도 정보를 가져옵니다 
+  var latlng = mouseEvent.latLng; 
 
-            if (data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
-                extraRoadAddr += data.bname;
-            }
-            if (data.buildingName !== '' && data.apartment === 'Y') {
-                extraRoadAddr += (extraRoadAddr !== '' ? ', ' + data.buildingName : data.buildingName);
-            }
-            if (extraRoadAddr !== '') {
-                extraRoadAddr = ' (' + extraRoadAddr + ')';
-            }
+  // 마커 위치를 클릭한 위치로 옮깁니다
+  marker.setPosition(latlng);
+  console.log("y좌표: " + latlng.getLat() + ", x좌표: " + latlng.getLng());
 
-            document.getElementById("sample4_roadAddress").value = roadAddr;
-            document.getElementById("sample4_extraAddress").value = extraRoadAddr || '';
-
-            // 입력된 도로명 주소로 지도와 좌표를 업데이트합니다
-            updateMapWithAddress(roadAddr);
-        }
-    }).open();
-}
-
-function combineAddress() {
-    var roadAddress = document.getElementById("sample4_roadAddress").value;
-    var detailAddress = document.getElementById("sample4_detailAddress").value;
-    var extraAddress = document.getElementById("sample4_extraAddress").value;
-
-    var fullAddress = roadAddress + ' ' + detailAddress + ' ' + extraAddress;
-
-    document.getElementById("eaddress").value = fullAddress.trim();
-}
-
+  // y좌표와 x좌표를 각각 입력 필드에 설정합니다
+  document.getElementById('eycoord').value = latlng.getLat(); // y좌표 설정
+  document.getElementById('excoord').value = latlng.getLng(); // x좌표 설정
+});
 </script>
+
 </html>
