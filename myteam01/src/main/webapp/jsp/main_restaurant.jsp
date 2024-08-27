@@ -137,15 +137,16 @@
 
 <div class="container" id="restaurant-container">
     <!-- 레스토랑 카드 반복문으로 생성 -->
-    <c:forEach var="restaurant" items="${restList}">
-        <div class="restaurant-card" onclick="showDetailView(${restaurant.fno})">
-            <img src="${contextPath}/images/bibimbab.jpg" alt="${restaurant.fname} Image">
-            <div class="restaurant-info">
-                <h3>${restaurant.fname}</h3>
-                <p>Location: ${restaurant.faddress}</p>
-                <p>Rating: ${restaurant.frating}</p>
-            </div>
-        </div>
+     <c:forEach var="restaurant" items="${restList}">
+        <div class="restaurant-card" data-fno="${restaurant.fno}" onclick="showDetailView(this.dataset.fno)">
+		    <input type="hidden" class="fno-hidden" value="${restaurant.fno}">
+		    <img src="${contextPath}/images/bibimbab.jpg" alt="${restaurant.fname} Image">
+		    <div class="restaurant-info">
+		        <h3>${restaurant.fname}</h3>
+		        <p>Location: ${restaurant.faddress}</p>
+		        <p>Rating: ${restaurant.frating}</p>
+		    </div>
+		</div>
     </c:forEach>
 
     <!-- 데이터가 없는 경우 표시할 카드 -->
@@ -163,14 +164,15 @@
 
 <!-- 왼쪽 패널: 식당 정보 -->
 <div class="panel left-panel" id="left-panel">
-    <img src="${contextPath}/images/bibimbab.jpg" alt="Detail Image" style="width: 100%; height: auto; border-radius: 10px; margin-bottom: 20px;">
-    <p><strong>전주MZ비빔밥 홍대점</strong></p>
-    <p><strong>4.3</strong>  ★★★★☆ </p>
-    <p><strong>위치:</strong> 전라북도 전주시 가나동 16-53</p>
-    <p><strong>운영시간:</strong> 오전 11시 ~ 오후 10시</p>
-    <p><strong>비빔밥~ 츄베릅^^</p>
+    <img id="panel-image" src="" alt="Detail Image" style="width: 100%; height: auto; border-radius: 10px; margin-bottom: 20px;">
+    <p><strong id="panel-name"></strong></p>
+    <p id="panel-rating"></p>
+    <p><strong>위치:</strong> <span id="panel-location"></span></p>
+    <p><strong>운영시간:</strong> <span id="panel-hours"></span></p>
+    <p id="panel-menu"></p>
     <button class="back-button" onclick="goBack()">Back</button>
 </div>
+
 
 <!-- 오른쪽 패널: 리뷰/별점 -->
 <div class="panel right-panel" id="right-panel">
@@ -212,6 +214,8 @@
 </div>
 
 <script>
+    const contextPath = "${contextPath}";
+
     function toggleReviewForm() {
         const reviewForm = document.getElementById('review-form');
         const reviewButton = document.getElementById('review-button');
@@ -227,28 +231,63 @@
 
     function submitReview() {
         alert('리뷰가 제출되었습니다!');
-        toggleReviewForm(); // 리뷰 제출 후 폼 숨기고 입력 버튼 다시 표시
+        toggleReviewForm(); 
     }
 
     const container = document.getElementById('restaurant-container');
     const leftPanel = document.getElementById('left-panel');
     const rightPanel = document.getElementById('right-panel');
 
-    // 레스토랑 세부 정보를 보여주는 함수
-    function showDetailView(id) {
-        container.style.display = 'none'; // 레스토랑 카드 컨테이너 숨기기
-        leftPanel.style.display = 'block'; // 패널들 표시
-        rightPanel.style.display = 'block';
+    function showLoadingIndicator() {
+        // Create a spinner or loading message if needed
+        document.getElementById('loading-indicator').style.display = 'block';
     }
 
-    // 레스토랑 목록으로 돌아가는 함수
+    function hideLoadingIndicator() {
+        // Hide the spinner or loading message
+        document.getElementById('loading-indicator').style.display = 'none';
+    }
+    function showDetailView(fno) {
+    	
+    	fetch(`${contextPath}/getRestaurantDetails?fno=${fno}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data) {
+                document.getElementById('panel-image').src = contextPath + data.image;
+                document.getElementById('panel-name').textContent = data.name;
+                document.getElementById('panel-rating').textContent = `Rating: ${data.rating}`;
+                document.getElementById('panel-location').textContent = data.location;
+                document.getElementById('panel-hours').textContent = data.hours;
+                document.getElementById('panel-menu').textContent = `Menu: ${data.menu}`;
+
+                container.style.display = 'none';
+                leftPanel.style.display = 'block';
+                rightPanel.style.display = 'block';
+            } else {
+                alert('식당 정보를 찾을 수 없습니다.');
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching restaurant data:', error);
+            alert('식당 정보를 가져오는 데 실패했습니다.');
+        });
+
+    }
+    	
+    
+
+
     function goBack() {
-        container.style.display = 'flex'; // 레스토랑 카드 컨테이너 표시
-        leftPanel.style.display = 'none'; // 패널들 숨기기
+        container.style.display = 'flex';
+        leftPanel.style.display = 'none';
         rightPanel.style.display = 'none';
     }
 
-    // 수직 휠을 수평 스크롤로 변환
     container.addEventListener('wheel', (event) => {
         event.preventDefault();
         container.scrollLeft += event.deltaY;
@@ -257,10 +296,3 @@
 
 </body>
 </html>
-
-
-</script>
-
-</body>
-</html>
-
