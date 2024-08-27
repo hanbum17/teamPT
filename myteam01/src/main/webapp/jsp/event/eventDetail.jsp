@@ -47,7 +47,6 @@
 	</div>
 	<!-- 지도를 표시할 div 입니다 -->
 	<div id="map" style="width:500px;height:350px;"></div>
-<<<<<<< HEAD
 	
 	<!-- 첨부파일 div -->
 	<div id="attachFiles">
@@ -79,9 +78,6 @@ var resultHTML ;
 	<!-- 리뷰 wrap Div -->
 	<div id="reviews_wrap">
 		<!-- 리뷰등록 form -->
-=======
-	<div id="reviews_wrap">
->>>>>>> CHYJ
 		<form action="${contextPath }/event/registerReview" method="post">
 			<input type="text" id="ertitle" name="ertitle" placeholder="제목"><br>
 			<textarea id="ercontent" name="ercontent" placeholder="내용"></textarea><br>
@@ -90,17 +86,10 @@ var resultHTML ;
 			<input type="text" id="eno" name="eno" value="${Event.eno }" readonly> <!-- 나중에 type="hidden" 으로 변경 -->
 			<button id="review_register_btn">리뷰등록</button>
 		</form>
-<<<<<<< HEAD
 		<!-- 리뷰 표시 div -->
 		<div class="review_div">
 			<c:forEach items="${Reviews }" var="review">
 				<ul class="review_ul" data-erno="${review.erno }" data-uno="${review.uno }" data-eno="${review.eno }">
-=======
-		
-		<c:forEach items="${Reviews }" var="review">
-			<div class="review_div">
-				<ul class="review_ul" data-frno="${review.erno }" data-uno="${review.uno }" data-fno="${review.fno }">
->>>>>>> CHYJ
 					<li>erno: ${review.erno }</li>
 					<li>ertitle: ${review.ertitle }</li>
 					<li>ercontent: ${review.ercontent }</li>
@@ -111,7 +100,6 @@ var resultHTML ;
 					<li>eno: ${review.eno }</li>
 				</ul>
 				<button class="review_blind_btn">블라인드처리</button>
-<<<<<<< HEAD
 			</c:forEach>
 		</div>
 		<button id="review_Btn">리뷰더보기</button>
@@ -155,13 +143,6 @@ $("#review_Btn").on("click", function(){
 	}); //ajax-end
 });
 </script>
-=======
-			</div>
-		</c:forEach>
-	</div>
-
-
->>>>>>> CHYJ
 <script>
 var erno;
 $(".review_div").on("click", ".review_blind_btn", function(){
@@ -169,13 +150,8 @@ $(".review_div").on("click", ".review_blind_btn", function(){
     eno = ${Event.eno }
     $.ajax({
         type: "POST",
-<<<<<<< HEAD
         url: "${contextPath}/event/deleteReview",  // 요청을 보낼 URL
         data: {erno: erno, eno: eno},  // 서버로 전송할 데이터
-=======
-        url: "/event/deleteReview",  // 요청을 보낼 URL
-        data: { erno: erno, eno: eno},  // 서버로 전송할 데이터
->>>>>>> CHYJ
         success: function(response) {
             // 요청이 성공적으로 완료되었을 때 실행할 코드
             alert("리뷰가 성공적으로 삭제 처리되었습니다.");
@@ -224,19 +200,12 @@ $(".review_div").on("click", ".review_blind_btn", function(){
 <!-- 카카오api 스크립트 -->
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=fe9306b4adbbf3249d28d6b7a2c37c0a"></script>
 <script>
-<<<<<<< HEAD
 /* 
 var overlay ;
 
 var x = ${Event.excoord} ;
 var y = ${Event.eycoord} ;
 
-=======
-/* var overlay ;
-
-var x = ${Event.excoord} ;
-var y = ${Event.eycoord} ;
->>>>>>> CHYJ
 var input_coord = "TM" ;
 var output_coord = "WGS84" ;
 var data = {x: x, y: y, input_coord: input_coord, output_coord: output_coord} ;
@@ -254,7 +223,6 @@ $(document).ready(function(){
 			loadMap(result) ;
 		}//success end
 	}); // ajax end
-<<<<<<< HEAD
 })// document ready end
 */
 
@@ -263,26 +231,12 @@ function loadMap(){
 	var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
 	mapOption = { 
 	       center: new kakao.maps.LatLng(${Event.eycoord }, ${Event.excoord }), // 지도의 중심좌표
-=======
-})// document ready end */
-
-
-function loadMap(result){
-	
-	var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
-	mapOption = { 
-	       center: new kakao.maps.LatLng(result.documents[0].y, result.documents[0].x), // 지도의 중심좌표
->>>>>>> CHYJ
 	       level: 3 // 지도의 확대 레벨
 	};
 	
 	// 지도를 표시할 div와  지도 옵션으로  지도를 생성합니다
 	var map = new kakao.maps.Map(mapContainer, mapOption); 
-<<<<<<< HEAD
 	var markerPosition  = new kakao.maps.LatLng(${Event.eycoord }, ${Event.excoord }); 
-=======
-	var markerPosition  = new kakao.maps.LatLng(result.documents[0].y, result.documents[0].x); 
->>>>>>> CHYJ
 	
 	// 마커를 생성합니다
 	var marker = new kakao.maps.Marker({
@@ -303,11 +257,7 @@ function loadMap(result){
 	   '                <img src="https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/thumnail.png" width="73" height="70">' +
 	   '           </div>' + 
 	   '            <div class="desc">' + 
-<<<<<<< HEAD
 	   '                <div class="ellipsis">${Event.ecost }<br>${Event.eaddress }</div>' + 
-=======
-	   '                <div class="ellipsis">${Event.eaddress }</div>' + 
->>>>>>> CHYJ
 	   '            </div>' + 
 	   '        </div>' + 
 	   '    </div>' +    
@@ -328,11 +278,8 @@ function loadMap(result){
 	
 } //loadMap() end
 
-<<<<<<< HEAD
 loadMap();
 
-=======
->>>>>>> CHYJ
 // 커스텀 오버레이를 닫기 위해 호출되는 함수입니다 
 function closeOverlay() {
     overlay.setMap(null);     

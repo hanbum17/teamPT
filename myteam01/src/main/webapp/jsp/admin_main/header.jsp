@@ -249,6 +249,7 @@ main {
             <div class="logo">Vroom__Admin</div>
             <nav>
                 <ul>
+                	<li id="enter_chat"><a href="#">단체채팅방 입장</a></li>
                     <li><a href="/user/login">Login</a></li>
                     <li><a href="#aboutus">About Us</a></li>
                     <li><a href="#contactus">Contact Us</a></li>
@@ -256,6 +257,14 @@ main {
             </nav>
         </div>
     </header>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script>
+$("#enter_chat").on("click", function(){
+	
+	window.open("http://195.168.9.110:8080/chat/chat", "_blank", "width=500, height=500") ;
+	
+});
+</script>
 <aside class="side-bar">
   <section class="side-bar__icon-box">
     <section class="side-bar__icon-1">

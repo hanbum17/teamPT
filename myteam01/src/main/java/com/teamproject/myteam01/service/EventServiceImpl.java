@@ -36,7 +36,6 @@ public class EventServiceImpl implements EventService{
 	}
 	
 	@Override
-
 	public int copyReview(Long erno) {
 		return eventMapper.copyReview(erno);
 	}

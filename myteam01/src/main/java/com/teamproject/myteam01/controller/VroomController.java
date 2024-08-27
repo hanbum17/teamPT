@@ -32,16 +32,18 @@ public class VroomController {
 		return "vroom/vroomMain" ; //테스트(삭제안되어있으면 해당 주석 삭제해주세용22)
 	}
 	
-	@GetMapping("/festivalList")
-	public String festivalList() {
-		return "vroom/festivalList" ;
 
-	}
 	
 	@GetMapping("/restaurant")
 	public String restMain(Model model) {
 		model.addAttribute("restList", restService.getRestList());
 		return "main_restaurant";
+	}
+	
+	@GetMapping("/event")
+	public String vroomEvent() {
+		return "vroom/vroomEvent";
+
 	}
 	
 	

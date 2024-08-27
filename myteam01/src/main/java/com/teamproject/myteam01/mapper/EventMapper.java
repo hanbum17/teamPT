@@ -18,7 +18,6 @@ public interface EventMapper {
 	public List<String> selectEHOST();
 	public void updateEventCoord(EventVO event);
 
-	
 	//희준
 	//행사 목록
 	public List<EventVO> selectEventList();

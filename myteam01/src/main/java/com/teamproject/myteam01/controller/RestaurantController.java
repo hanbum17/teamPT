@@ -27,13 +27,6 @@ public class RestaurantController {
 
 	private final RestaurantService restaurantService ;
 	
-
-	//테스트
-	@GetMapping("/test")
-	public String test() {
-		return "test" ;
-	}
-
 	
 	//록귀 파트
 	@GetMapping("/detail")
@@ -72,7 +65,6 @@ public class RestaurantController {
 		
 		
 		@PostMapping("/rest_register")
-
 		public String restaurantRegister(RestaurantVO rest, RedirectAttributes redirectAttr, Model model) {
 		    System.out.println("식당 등록 컨트롤러: " + rest);
 		    List<AttachFileDTO> attachFileList = rest.getAttachFileList();
@@ -96,6 +88,7 @@ public class RestaurantController {
 
 		    return "redirect:/restaurant/rest_register";
 		}
+
 
 	
 	

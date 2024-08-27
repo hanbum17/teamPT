@@ -24,4 +24,5 @@ public class AttachFileDTO {
 
 	private String repoPath = "C:/yourupload" ;
 
+
 }
