@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -29,5 +28,16 @@
     </div>
 
     <script src="/js/vroomEvent.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const events = ${eventsJson}; // Ensure this is a valid JSON string
+            window.eventData = events; // Store data in a global variable for use in vroomEvent.js
+
+            // Initialize events with the fetched data
+            if (typeof initializeEvents === 'function') {
+                initializeEvents(events); // Call the function to initialize events
+            }
+        });
+    </script>
 </body>
 </html>

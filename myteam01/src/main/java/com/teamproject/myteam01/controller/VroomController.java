@@ -1,27 +1,21 @@
 package com.teamproject.myteam01.controller;
 
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import java.util.List;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.teamproject.myteam01.domain.EventVO;
+import com.teamproject.myteam01.service.EventService;
 import com.teamproject.myteam01.service.RestaurantService;
 
-import com.teamproject.myteam01.domain.EventVO;
-
 import lombok.RequiredArgsConstructor;
+
+
 
 @Controller
 @RequiredArgsConstructor
@@ -29,7 +23,8 @@ import lombok.RequiredArgsConstructor;
 public class VroomController {
 	
 	public final RestaurantService restService;
-
+	public final EventService eventService;
+	
 	//Vroom의 메인페이지
 	@GetMapping("/main")
 	public String main() {
@@ -45,18 +40,20 @@ public class VroomController {
 		return "main_restaurant";
 	}
 	
-	@GetMapping("/event")
-	public String vroomEvent() {
-		return "vroom/vroomEvent";
-
-	}
+	 @GetMapping("/event")
+	    public String vroomEvent(Model model) {
+	        List<EventVO> events = eventService.eventList();
+	        model.addAttribute("eventsJson", new ObjectMapper().writeValueAsString(events));
+	        return "vroom/vroomEvent";
+	    }
 	
-	@PostMapping("/event/data")
-	public List<EventVO> vroomEventData(){
-		
-		
-		
-		return null;
-	}
+
+	
+//    @GetMapping("/event/data")
+//    public String getEventData(Model model) {
+//        List<EventVO> events = eventService.eventList();
+//        model.addAttribute("events", events);
+//        return "eventData"; // eventData.jsp (또는 Thymeleaf 템플릿)
+//    }
 	
 }

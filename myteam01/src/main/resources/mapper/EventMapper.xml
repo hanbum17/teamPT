@@ -25,12 +25,6 @@
 	]]>
 	</select>
 	
-	<select id="selectEventList" resultType="com.teamproject.myteam01.domain.EventVO"> 
-	SELECT ENO, ENAME, EPERIOD, ECOST, EADDRESS, EPLACE, ESITE, EHOST, ECONTENT, UNO, EVIEWSCNT, ERATING, EXCOORD, EYCOORD, ETYPE 
-	FROM teampj.event 
-	ORDER BY ENO DESC 
-	</select>
-	
 	<!--  행사리뷰조회  -->
 	<select id="selectReviews" resultType="com.teamproject.myteam01.domain.EventReviewVO"> 
 
