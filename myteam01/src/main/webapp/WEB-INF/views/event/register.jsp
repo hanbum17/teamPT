@@ -88,7 +88,7 @@ label {
 </style>
 </head>
 <body>
-<%@ include file="/jsp/admin_main/header.jsp" %>
+<%@ include file="/WEB-INF/views/admin_main/header.jsp" %>
 <h3 style="text-align: center;">행사 등록</h3>
 <form role="form" action="${contextPath}/event/register" method="post" id="frmRegister" enctype="multipart/form-data">
     <div class="form-group">
@@ -254,7 +254,7 @@ $('#fileInput').on('change', function() {
 });
 </script>
 
-<%@ include file="/jsp/admin_main/footer.jsp" %>
+<%@ include file="/WEB-INF/views/admin_main/footer.jsp" %>
 </body>
 <!-- <input type="text" placeholder="주소입력" id="address"> -->
 

@@ -88,7 +88,7 @@ label {
 </style>
 </head>
 <body>
-<%@ include file="/jsp/admin_main/header.jsp" %>
+<%@ include file="/WEB-INF/views/admin_main/header.jsp" %>
 
  <body>
  <h1>고객의 소리</h1>

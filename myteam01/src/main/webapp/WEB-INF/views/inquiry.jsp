@@ -88,7 +88,7 @@ label {
 </style>
 </head>
 <body>
-<%@ include file="/jsp/admin_main/header.jsp" %>
+<%@ include file="/WEB-INF/views/admin_main/header.jsp" %>
 
     <h1>문의사항</h1>
     <p>문의사항 내용을 여기에 작성합니다.</p>

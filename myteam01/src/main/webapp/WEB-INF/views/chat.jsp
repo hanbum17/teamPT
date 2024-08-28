@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="/css/chat.css" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
 </head>
 <body>
 
@@ -49,5 +50,17 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 <script src="/js/app.js"></script>
+<script>
+function getRandomColor() {
+	  let red = Math.floor(Math.random() * 256);
+	  let green = Math.floor(Math.random() * 256);
+	  let blue = Math.floor(Math.random() * 256);
+	  return 'rgb(' + red + ',' + green + ',' +blue + ')';
+	}
+
+	document.body.style.backgroundColor = getRandomColor();
+	
+	
+</script>
 </body>
 </html>
