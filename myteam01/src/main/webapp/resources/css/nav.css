@@ -8,6 +8,9 @@ body, html {
 
 /* 네비게이션 바 스타일 */
 .navbar {
+	position: fixed;
+	width : 100%;
+	top: 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -23,6 +26,7 @@ body, html {
     font-size: 28px;
     color: #007bff;
     text-decoration: none;
+    margin-left: 20px;
 }
 
 /* 메뉴 스타일 */
@@ -119,6 +123,7 @@ body, html {
     display: flex;
     align-items: center;
     gap: 15px;
+    margin-right: 20px;
 }
 
 .username {

@@ -77,25 +77,41 @@
             </tr>
         </thead>
         <tbody>
-            <c:forEach var="item" items="${combinedList}">
-                <tr>
-                    <td>${item.LNUMBER}</td>
-                    <td>${item.LDICTIONARY}</td>
-                    <td>${item.LNAME}</td>
-                    <td>${item.LADDRESS}</td>
-                    <td>${item.LRATING}</td>
-                    <td>${item.LVIEWSCNT}</td>
-                    <td>${item.LTYPE}</td>
-                </tr>
-            </c:forEach>
-            <c:if test="${empty combinedList}">
-                <tr>
-                    <td colspan="7">
-                        <div class="no_data_msg">검색된 결과가 없습니다.</div>
-                    </td>
-                </tr>
-            </c:if>
-        </tbody>
+		    <c:forEach var="item" items="${combinedList}">
+		        <tr>
+		            <td>${item.LNUMBER}</td>
+		            <td>${item.LDICTIONARY}</td>
+		            <td>
+		                <!-- 이름에 링크 추가 -->
+		                <c:choose>
+		                    <c:when test="${item.LDICTIONARY == '축제'}">
+		                        <form id="eventForm${item.LNUMBER}" action="${pageContext.request.contextPath}/event/detail" method="get" style="display:inline;">
+		                            <input type="hidden" name="eno" value="${item.REALNO}" />
+		                            <a href="javascript:document.getElementById('eventForm${item.LNUMBER}').submit();" class="no-link-style">${item.LNAME}</a>
+		                        </form>
+		                    </c:when>
+		                    <c:when test="${item.LDICTIONARY == '음식점'}">
+		                        <form id="restaurantForm${item.LNUMBER}" action="${pageContext.request.contextPath}/restaurant/detail" method="get" style="display:inline;">
+		                            <input type="hidden" name="fno" value="${item.REALNO}" />
+		                            <a href="javascript:document.getElementById('restaurantForm${item.LNUMBER}').submit();" class="no-link-style">${item.LNAME}</a>
+		                        </form>
+		                    </c:when>
+		                </c:choose>
+		            </td>
+		            <td>${item.LADDRESS}</td>
+		            <td>${item.LRATING}</td>
+		            <td>${item.LVIEWSCNT}</td>
+		            <td>${item.LTYPE}</td>
+		        </tr>
+		    </c:forEach>
+		    <c:if test="${empty combinedList}">
+		        <tr>
+		            <td colspan="7">
+		                <div class="no_data_msg">검색된 결과가 없습니다.</div>
+		            </td>
+		        </tr>
+		    </c:if>
+		</tbody>
     </table>
 
     <!-- Pagination Controls -->

@@ -3,6 +3,8 @@ package com.teamproject.myteam01.controller;
 import com.teamproject.myteam01.domain.UserVO;
 import com.teamproject.myteam01.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -51,5 +53,14 @@ public class UserController {
         return "user/login";
     }
     
+    
+    @GetMapping("/user/userPage")
+    public String userPage(@AuthenticationPrincipal UserDetails userDetails, Model model) {
+        // 현재 로그인된 사용자 정보를 모델에 추가할 수 있습니다.
+        model.addAttribute("username", userDetails.getUsername());
+        
+        // userPage.jsp로 이동
+        return "user_main/userPage";
+    }
 
 }

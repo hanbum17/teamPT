@@ -33,6 +33,7 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(authz -> authz
                 .requestMatchers("/WEB-INF/views/user/**", "/user/**", "/resources/**").permitAll()
+                .requestMatchers("/admin_main/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
             )
             .formLogin(form -> form
@@ -40,7 +41,7 @@ public class SecurityConfig {
                 .loginProcessingUrl("/login")
                 .usernameParameter("userId")
                 .passwordParameter("password")
-                .defaultSuccessUrl("/list", true)
+                .successHandler(successHandler)
                 .permitAll()
             )
             .rememberMe(rememberMe -> rememberMe

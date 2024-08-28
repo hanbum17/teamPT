@@ -17,7 +17,12 @@
                 LADDRESS,
                 LRATING,
                 LVIEWSCNT,
-                LTYPE
+                LTYPE,
+                -- LDICTIONARY에 따라 REALNO를 설정
+                CASE 
+                    WHEN LDICTIONARY = '축제' THEN ENO
+                    WHEN LDICTIONARY = '음식점' THEN FNO
+                END AS REALNO
             FROM (
                 SELECT 
                     '축제' AS LDICTIONARY,
@@ -25,7 +30,9 @@
                     EADDRESS AS LADDRESS,
                     ERATING AS LRATING,
                     EVIEWSCNT AS LVIEWSCNT,
-                    ETYPE AS LTYPE
+                    ETYPE AS LTYPE,
+                    ENO,  -- 행사에서는 ENO가 필요
+                    NULL AS FNO  -- 음식점과 구분하기 위해 FNO는 NULL로 설정
                 FROM 
                     EVENT
                 <where>
@@ -48,7 +55,9 @@
                     FADDRESS AS LADDRESS,
                     FRATING AS LRATING,
                     FVIEWSCNT AS LVIEWSCNT,
-                    FTYPE AS LTYPE
+                    FTYPE AS LTYPE,
+                    NULL AS ENO,  -- 행사와 구분하기 위해 ENO는 NULL로 설정
+                    FNO  -- 음식점에서는 FNO가 필요
                 FROM 
                     RESTAURANTS
                 <where>
@@ -80,7 +89,8 @@
                 EADDRESS AS LADDRESS,
                 ERATING AS LRATING,
                 EVIEWSCNT AS LVIEWSCNT,
-                ETYPE AS LTYPE
+                ETYPE AS LTYPE,
+                ENO AS REALNO  -- 이벤트일 경우 ENO를 REALNO로 설정
             FROM 
                 EVENT
             <where>
@@ -103,7 +113,8 @@
                 FADDRESS AS LADDRESS,
                 FRATING AS LRATING,
                 FVIEWSCNT AS LVIEWSCNT,
-                FTYPE AS LTYPE
+                FTYPE AS LTYPE,
+                FNO AS REALNO  -- 음식점일 경우 FNO를 REALNO로 설정
             FROM 
                 RESTAURANTS
             <where>
