@@ -10,13 +10,14 @@ public interface EventMapper {
 
 	//록귀
 	public EventVO eventDetail(Long eno);
+
 	public List<EventReviewVO> selectReviews(Long eno, int pageNum);
 	public int registerReview(EventReviewVO eventReviewVO);
 	public int copyReview(Long erno);
 	public int deleteReview(Long erno);
 	public List<String> selectEHOST();
 	public void updateEventCoord(EventVO event);
-	
+
 	//희준
 	//행사 목록
 	public List<EventVO> selectEventList();

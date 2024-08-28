@@ -16,5 +16,6 @@ public interface RestaurantMapper {
 	
 	//윤정
 	public void insertRestaurant(RestaurantVO rest);
+	public List<RestaurantVO> selectRestList();
 	
 }
