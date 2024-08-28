@@ -17,7 +17,8 @@ public interface EventService {
 	public List<String> selectEHOST();
 	public void updateEventCoord(EventVO event);
 
-
+	//영범
+	public List<EventReviewVO> selectReviews2 (Long rno);
 	
 	//희준
 	//행사 목록

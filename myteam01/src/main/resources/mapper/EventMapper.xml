@@ -40,6 +40,12 @@
 	</select>
 	
 	
+	<select id="selectReviews2" resultType="com.teamproject.myteam01.domain.EventReviewVO">
+		SELECT ERNO, ERTITLE, ERCONTENT, ERWRITER, ERREGDATE, ERMODDATE, ERRATING, UNO, ENO
+		FROM Event_Reviews
+		WHERE ENO = #{eno}
+	</select>
+	
 	
 	<!--  행사리뷰등록  -->
 	<insert id="registerReview" parameterType="com.teamproject.myteam01.domain.EventReviewVO"> 

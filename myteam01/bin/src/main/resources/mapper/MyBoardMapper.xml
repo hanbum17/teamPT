@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.teamproject.myteam01.mapper.MyBoardMapper">
+	
+	<select id="selectBaordList" resultType="com.teamproject.myteam01.domain.BoardVO">
+	<![CDATA[
+		SELECT * FROM tbl_myboard WHERE rownum <= 10
+	]]>
+	</select>
+	
+	<select id="getCombinedList" resultType="map" parameterType="map">
+        SELECT * FROM (
+            SELECT 
+                ROW_NUMBER() OVER (ORDER BY LNAME) AS LNUMBER,
+                LDICTIONARY,
+                LNAME,
+                LADDRESS,
+                LRATING,
+                LVIEWSCNT,
+                LTYPE
+            FROM (
+                SELECT 
+                    '축제' AS LDICTIONARY,
+                    ENAME AS LNAME,
+                    EADDRESS AS LADDRESS,
+                    ERATING AS LRATING,
+                    EVIEWSCNT AS LVIEWSCNT,
+                    ETYPE AS LTYPE
+                FROM 
+                    EVENT
+                <where>
+                    <if test="searchType != null and searchType == 'name' and searchKeyword != null and !searchKeyword.isEmpty()">
+                        AND ENAME LIKE '%' || #{searchKeyword} || '%'
+                    </if>
+                    <if test="searchType != null and searchType == 'address' and searchKeyword != null and !searchKeyword.isEmpty()">
+                        AND EADDRESS LIKE '%' || #{searchKeyword} || '%'
+                    </if>
+                    <if test="eventType != null and eventType != ''">
+                        AND ETYPE = #{eventType}
+                    </if>
+                </where>
+
+                UNION ALL
+
+                SELECT 
+                    '음식점' AS LDICTIONARY,
+                    FNAME AS LNAME,
+                    FADDRESS AS LADDRESS,
+                    FRATING AS LRATING,
+                    FVIEWSCNT AS LVIEWSCNT,
+                    FTYPE AS LTYPE
+                FROM 
+                    RESTAURANTS
+                <where>
+                    <if test="searchType != null and searchType == 'name' and searchKeyword != null and !searchKeyword.isEmpty()">
+                        AND FNAME LIKE '%' || #{searchKeyword} || '%'
+                    </if>
+                    <if test="searchType != null and searchType == 'address' and searchKeyword != null and !searchKeyword.isEmpty()">
+                        AND FADDRESS LIKE '%' || #{searchKeyword} || '%'
+                    </if>
+                    <if test="eventType != null and eventType != ''">
+                        AND FTYPE = #{eventType}
+                    </if>
+                </where>
+            ) COMBINED
+            <where>
+                <if test="filterType != null and filterType != '' and filterType != '전체'">
+                    AND LDICTIONARY = #{filterType}
+                </if>
+            </where>
+        )
+        WHERE LNUMBER BETWEEN #{startRow} AND #{endRow}
+    </select>
+
+    <select id="getTotalCount" resultType="int" parameterType="map">
+        SELECT COUNT(*) FROM (
+            SELECT 
+                '축제' AS LDICTIONARY,
+                ENAME AS LNAME,
+                EADDRESS AS LADDRESS,
+                ERATING AS LRATING,
+                EVIEWSCNT AS LVIEWSCNT,
+                ETYPE AS LTYPE
+            FROM 
+                EVENT
+            <where>
+                <if test="searchType != null and searchType == 'name' and searchKeyword != null and !searchKeyword.isEmpty()">
+                    AND ENAME LIKE '%' || #{searchKeyword} || '%'
+                </if>
+                <if test="searchType != null and searchType == 'address' and searchKeyword != null and !searchKeyword.isEmpty()">
+                    AND EADDRESS LIKE '%' || #{searchKeyword} || '%'
+                </if>
+                <if test="eventType != null and eventType != ''">
+                    AND ETYPE = #{eventType}
+                </if>
+            </where>
+
+            UNION ALL
+
+            SELECT 
+                '음식점' AS LDICTIONARY,
+                FNAME AS LNAME,
+                FADDRESS AS LADDRESS,
+                FRATING AS LRATING,
+                FVIEWSCNT AS LVIEWSCNT,
+                FTYPE AS LTYPE
+            FROM 
+                RESTAURANTS
+            <where>
+                <if test="searchType != null and searchType == 'name' and searchKeyword != null and !searchKeyword.isEmpty()">
+                    AND FNAME LIKE '%' || #{searchKeyword} || '%'
+                </if>
+                <if test="searchType != null and searchType == 'address' and searchKeyword != null and !searchKeyword.isEmpty()">
+                    AND FADDRESS LIKE '%' || #{searchKeyword} || '%'
+                </if>
+                <if test="eventType != null and eventType != ''">
+                    AND FTYPE = #{eventType}
+                </if>
+            </where>
+        ) COMBINED
+        <where>
+            <if test="filterType != null and filterType != '' and filterType != '전체'">
+                AND LDICTIONARY = #{filterType}
+            </if>
+        </where>
+    </select>
+	
+</mapper>

@@ -31,6 +31,12 @@ public class EventServiceImpl implements EventService{
 	}
 	
 	@Override
+	public List<EventReviewVO> selectReviews2(Long eno) {
+		return eventMapper.selectReviews2(eno);
+	}
+	
+	
+	@Override
 	public int registerReview(EventReviewVO eventReviewVO) {
 		return eventMapper.registerReview(eventReviewVO);
 	}
@@ -61,8 +67,9 @@ public class EventServiceImpl implements EventService{
 	//행사 목록
 	@Override
 	public List<EventVO> eventList(){
-		System.out.println("서비스: 행사목록");
-		return eventMapper.selectEventList();
+		List<EventVO> event = eventMapper.selectEventList();
+		System.out.println("서비스: 행사목록" + event);
+		return event;
 	}
 	
 	//행사 등록

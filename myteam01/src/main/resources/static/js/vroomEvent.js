@@ -1,11 +1,46 @@
-// vroomEvent.js
+// 서버에서 이벤트 데이터를 받아오는 함수
+function fetchEvents() {
+    fetch('/api/events')
+        .then(response => response.json())
+        .then(data => {
+            initializeEvents(data);
+        })
+        .catch(error => {
+            console.error('Error fetching events:', error);
+        });
+}
 
+// 이벤트의 상세 정보를 가져오는 함수
+function fetchEventDetails(eventId) {
+    return fetch(`/api/events/${eventId}`)
+        .then(response => response.json())
+        .catch(error => {
+            console.error('Error fetching event details:', error);
+        });
+}
+
+// 이벤트의 리뷰를 가져오는 함수
+function fetchEventReviews(eventId) {
+    return fetch(`/api/events/${eventId}/reviews`)
+        .then(response => response.json())
+        .catch(error => {
+            console.error('Error fetching event reviews:', error);
+        });
+}
+
+// 페이지가 로드될 때 이벤트 데이터 가져오기
+document.addEventListener('DOMContentLoaded', () => {
+    fetchEvents();
+});
+
+// 이벤트 데이터를 초기화하는 함수
 function initializeEvents(data) {
-    // Initialize events with the fetched data
     console.log('Initializing events with data:', data);
 
-    let leftEvents = data.slice(0, 5);
-    let rightEvents = data.slice(5, 10);
+    const leftEvents = data.slice(0, 5);
+    const rightEvents = data.slice(5, 10);
+
+    const defaultImage = '/image/event.jpg';
 
     function renderEvents() {
         const leftContainer = document.getElementById('left');
@@ -15,26 +50,28 @@ function initializeEvents(data) {
         rightContainer.innerHTML = '';
 
         leftEvents.forEach(event => {
+            const imageUrl = event.img ? event.img : defaultImage;
             leftContainer.innerHTML += `
-                <div class="box" data-id="${event.id}">
-                    <img src="${event.img}" alt="${event.title}">
+                <div class="box" data-id="${event.eno}">
+                    <img src="${imageUrl}" alt="${event.ename}">
                     <div class="text-container">
-                        <h3>${event.title}</h3>
-                        <div>위치: ${event.address}</div>
-                        <div>기간: ${event.period}</div>
+                        <h3>${event.ename}</h3>
+                        <div>위치: ${event.eaddress}</div>
+                        <div>기간: ${event.eperiod}</div>
                     </div>
                 </div>
             `;
         });
 
         rightEvents.forEach(event => {
+            const imageUrl = event.img ? event.img : defaultImage;
             rightContainer.innerHTML += `
-                <div class="box" data-id="${event.id}">
-                    <img src="${event.img}" alt="${event.title}">
+                <div class="box" data-id="${event.eno}">
+                    <img src="${imageUrl}" alt="${event.ename}">
                     <div class="text-container">
-                        <h3>${event.title}</h3>
-                        <div>위치: ${event.address}</div>
-                        <div>기간: ${event.period}</div>
+                        <h3>${event.ename}</h3>
+                        <div>위치: ${event.eaddress}</div>
+                        <div>기간: ${event.eperiod}</div>
                     </div>
                 </div>
             `;
@@ -42,35 +79,40 @@ function initializeEvents(data) {
     }
 
     function showDetails(eventId) {
-        const event = data.find(e => e.id === eventId);
-        if (!event) return;
+        Promise.all([
+            fetchEventDetails(eventId),
+            fetchEventReviews(eventId)
+        ]).then(([event, reviews]) => {
+            const leftDetail = document.getElementById('left-detail');
+            const rightDetail = document.getElementById('right-detail');
 
-        const leftDetail = document.getElementById('left-detail');
-        const rightDetail = document.getElementById('right-detail');
+            leftDetail.innerHTML = `
+                <img src="${event.img || defaultImage}" alt="${event.ename}">
+                <h2>${event.ename}</h2>
+                <p>위치: ${event.eaddress}</p>
+                <p>기간: ${event.eperiod}</p>
+                <p>Rating: ${event.erating}</p>
+                <p>Comments: <span>${reviews.length}</span></p>
+                <button>Favorite</button>
+                <p>Description: ${event.econtent}</p>
+                <p>Location: ${event.eplace || 'N/A'}</p>
+                <p>Operating Hours: N/A</p>
+                <p>Phone: N/A</p>
+                <p>Parking: N/A</p>
+            `;
 
-        leftDetail.innerHTML = `
-            <img src="${event.img}" alt="${event.title}">
-            <h2>${event.title}</h2>
-            <p>위치: ${event.address}</p>
-            <p>기간: ${event.period}</p>
-            <p>Rating: ${event.rating}</p>
-            <p>Comments: <span>0</span></p>
-            <button>Favorite</button>
-            <p>Description: ${event.description}</p>
-            <p>Location: N/A</p>
-            <p>Operating Hours: N/A</p>
-            <p>Phone: N/A</p>
-            <p>Parking: N/A</p>
-        `;
+            rightDetail.innerHTML = `
+                <h2>Reviews for ${event.ename}</h2>
+                <div id="review-summary"></div>
+                <div id="review-list"></div>
+            `;
 
-        rightDetail.innerHTML = `
-            <p>Overall Rating: ${event.rating}</p>
-            <p>Total Reviews: 0</p>
-        `;
+            updateReviewSection(event, reviews);
 
-        document.getElementById('left').style.display = 'none';
-        document.getElementById('right').style.display = 'none';
-        document.getElementById('detail-view').style.display = 'flex';
+            document.getElementById('left').style.display = 'none';
+            document.getElementById('right').style.display = 'none';
+            document.getElementById('detail-view').style.display = 'flex';
+        });
     }
 
     function showEvents() {
@@ -96,4 +138,65 @@ function initializeEvents(data) {
     document.getElementById('back-button').addEventListener('click', handleBackButtonClick);
 
     renderEvents();
+}
+
+function updateReviewSection(event, reviews) {
+    const rightDetail = document.getElementById('right-detail');
+    const ratingValue = document.getElementById('rating-value');
+    const starsDisplay = document.getElementById('stars-display');
+    const totalReviews = document.getElementById('total-reviews');
+    const ratingDistribution = document.getElementById('rating-distribution');
+    const reviewList = document.getElementById('review-list');
+
+    const rating = event.erating || 0;
+    ratingValue.textContent = rating.toFixed(1);
+
+    const stars = starsDisplay.getElementsByClassName('star');
+    for (let i = 0; i < stars.length; i++) {
+        stars[i].style.color = i < Math.round(rating) ? 'gold' : 'lightgray';
+    }
+
+    totalReviews.textContent = reviews.length;
+
+    const distribution = [0, 0, 0, 0, 0];
+    reviews.forEach(review => {
+        if (review.errating >= 1 && review.errating <= 5) {
+            distribution[5 - review.errating]++;
+        }
+    });
+
+    const bars = ratingDistribution.getElementsByClassName('bar');
+    distribution.forEach((count, index) => {
+        bars[index].style.width = (count * 20) + '%';
+    });
+
+    reviewList.innerHTML = '';
+    reviews.forEach(review => {
+        reviewList.innerHTML += `
+            <div class="review-item">
+                <p><strong>${review.erwriter}</strong> - ${review.errating} stars</p>
+                <p>${review.ercontent}</p>
+                <p><small>${new Date(review.erregDate).toLocaleDateString()}</small></p>
+                <hr>
+            </div>
+        `;
+    });
+
+    const writeReviewButton = document.getElementById('write-review-button');
+    const reviewForm = document.getElementById('review-form');
+
+    writeReviewButton.addEventListener('click', () => {
+        reviewForm.classList.toggle('hidden');
+    });
+
+    const submitReviewButton = document.getElementById('submit-review-button');
+    submitReviewButton.addEventListener('click', () => {
+        const reviewText = document.getElementById('review-text').value;
+        if (reviewText) {
+            // Add review submission logic here
+            console.log('Review submitted:', reviewText);
+            reviewText.value = '';
+            reviewForm.classList.add('hidden');
+        }
+    });
 }
