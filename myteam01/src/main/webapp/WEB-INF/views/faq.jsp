@@ -7,7 +7,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>피드백 페이지</title>
+<title>자주 묻는 질문 (FAQ)</title>
 <style>
 body {
     font-family: Arial, sans-serif;
@@ -88,15 +88,125 @@ label {
 </style>
 </head>
 <body>
-<%@ include file="/WEB-INF/views/admin_main/header.jsp" %>
+<%@ include file="/jsp/admin_main/header.jsp" %>
+<h3 style="text-align: center;">FAQ 등록</h3>
+<form role="form" action="${contextPath}/cs/faq" method="post" id="frmRegister" enctype="multipart/form-data">
+    <div class="form-group">
+        <label>FAQ 카테고리</label>
+        <input class="form-control" name="faqcategory" id="faqcategory">
+    </div>
+    
+    <div class="form-group">
+        <label>FAQ 제목(질문)</label>
+        <textarea class="form-control" rows="3" name="faqtitle" id="faqtitle"></textarea>
+    </div>
+    
+    <div class="form-group">
+        <label>FAQ 내용(답변)</label>
+        <textarea class="form-control" rows="10" name="faqcontent" id="faqcontent"></textarea>
+    </div>
+    
 
-    <h1>문의사항</h1>
-    <p>문의사항 내용을 여기에 작성합니다.</p>
-    <button onclick="location.href='/csCenter'">고객센터로 돌아가기</button>
+    
 
+    
+<!--     파일 첨부 버튼
+    <label class="custom-file-upload">
+        파일 선택
+        <input type="file" class="fileInput" id="fileInput" name="fileInput" multiple="multiple">
+    </label>
+    <div class="form-group fileUploadResult">
+        <ul>
+        </ul>
+    </div> -->
+
+    <button type="submit" class="btnRegister" id="btnRegister">등록</button>
+    <button type="button" class="btnCancel" id="btnCancel" data-oper="list"
+             onclick="location.href='${contextPath}/cs/Center'">취소</button>
+</form>
+
+<script>
+/* function checkUploadFile(fileName, fileSize) {
+    var allowedMaxSize = 1048576; // 1MB
+    var regExpForbiddenFileExtension = /((\.(exe|dll|sh|c|zip|alz|tar)$)|^[^.]+$|(^\.[^.]{1,}$))/i;
+
+    if (fileSize > allowedMaxSize) {
+        alert("업로드 파일의 크기는 1MB 보다 작아야 합니다.");
+        return false;
+    }
+
+    if (regExpForbiddenFileExtension.test(fileName)) {
+        alert("선택하신 파일은 업로드 하실 수 없는 유형입니다.");
+        return false;
+    }
+    return true;
+} */
+
+function checkFAQValue() {
+    var faqcategory = document.getElementById("faqcategory").value;
+    var faqtitle = document.getElementById("faqtitle").value;
+    var faqcontent = document.getElementById("faqcontent").value;
+
+    var regExp = /^\s+$/;
+
+    if (!faqcategory || !faqtitle || !faqcontent ||
+        regExp.test(faqcategory) || regExp.test(faqtitle) || 
+        regExp.test(faqcontent)) {
+        return false;
+    } else {
+        return true;
+    }
+}
+
+$("#btnRegister").on("click", function() {
+    if (!checkFAQValue()) {
+        alert("모든 필드를 유효한 값으로 입력해야 합니다.");
+        return;
+    }
+
+    var frmRegister = $("#frmRegister");
+/*     var attachFileInputHTML = "";
+
+    $("div.fileUploadResult ul li").each(function(i, objLi) { 
+        var attachLi = $(objLi);
+
+        attachFileInputHTML
+            += "<input type='hidden' name='attachFileList[" + i + "].uuid' value='" + attachLi.data("uuid") + "'>"
+            + "<input type='hidden' name='attachFileList[" + i + "].uploadPath' value='" + attachLi.data("uploadpath") + "'>"
+            + "<input type='hidden' name='attachFileList[" + i + "].fileName' value='" + attachLi.data("filename") + "'>"
+            + "<input type='hidden' name='attachFileList[" + i + "].fileType' value='" + attachLi.data("filetype") + "'>";
+    });
+
+    if (attachFileInputHTML) {
+        frmRegister.append(attachFileInputHTML);
+    }
+ */
+    frmRegister.submit();
+});
+
+/* //파일 첨부 시 선택된 파일 이름 표시
+$('#fileInput').on('change', function() {
+    var files = $(this).prop('files');
+    var validFiles = true;
+
+    $('.fileUploadResult ul').empty(); // 기존 목록 초기화
+
+    $.each(files, function(i, file) {
+        if (!checkUploadFile(file.name, file.size)) {
+            validFiles = false;
+            return false; // 루프 중단
+        }
+        $('.fileUploadResult ul').append('<li>' + file.name + '</li>'); // 파일 목록에 추가
+    });
+
+    if (!validFiles) {
+        $(this).val(''); // 입력 필드 초기화
+    }
+}); */
+</script>
+
+<%@ include file="/jsp/admin_main/footer.jsp" %>
 </body>
-	
 
-
-
+</script>
 </html>

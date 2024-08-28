@@ -1,8 +1,11 @@
 package com.teamproject.myteam01.controller;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.teamproject.myteam01.service.CsService;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -12,11 +15,22 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/cs")
 @Tag(name = "CsController", description = "Customer Service")
 public class CsController {
-
-    @GetMapping("/Center")
-    public String csCenter() {
-        return "csCenter"; // 고객센터 메인 페이지
-    }
+	
+	private final CsService csService ;
+	
+	/*
+	 * @GetMapping("/Center") 
+	 * public String CsCenter() { return "csCenter"; }
+	 */
+	
+	
+	  @GetMapping("/Center") 
+	  public String csList(Model model) {
+		  System.out.println("컨트롤러: 고객센터 메인 페이지"); 
+		  model.addAttribute("CsList", csService.csList()); 
+		  return "csCenter";
+	  }
+	 
 
     @GetMapping("/inquiry")
     public String inquiry() {

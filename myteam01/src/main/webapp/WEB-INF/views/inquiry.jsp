@@ -7,7 +7,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>피드백 페이지</title>
+<title>문의사항</title>
 <style>
 body {
     font-family: Arial, sans-serif;
@@ -92,7 +92,7 @@ label {
 
     <h1>문의사항</h1>
     <p>문의사항 내용을 여기에 작성합니다.</p>
-    <button onclick="location.href='/csCenter'">고객센터로 돌아가기</button>
+    <button onclick="location.href='/cs/Center'">고객센터로 돌아가기</button>
 		
 </body>	
 

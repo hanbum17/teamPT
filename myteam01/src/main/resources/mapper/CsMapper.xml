@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.teamproject.myteam01.mapper.EventMapper">
+<mapper namespace="com.teamproject.myteam01.mapper.CsMapper">
 
 	<!-- 희준 -->
 	<!-- FAQ 조회-->
 	<select id="selectFAQList" resultType="com.teamproject.myteam01.domain.CsVO">
-			SELECT FAQNO, FAQCATEGORY, FAQTITLE, FAQCONTENT, FAQREGDATE, FAQMODDATE
+			SELECT FAQNO, FAQCATEGORY, FAQTITLE, FAQCONTENT, FAQREGDATE, FAQMODDATE, FAQDELFLAG
 			FROM teampj.FAQ
 			ORDER BY FAQNO DESC
 	</select>
@@ -18,11 +18,11 @@
 		
 		INSERT INTO teampj.FAQ
 	
-		VALUES (#{faqno}, #{faqcategory}, #{faqtitle}, #{faqcontent}, DEFAULT, DEFAULT)
+		VALUES (#{faqno}, #{faqcategory}, #{faqtitle}, #{faqcontent}, DEFAULT, DEFAULT, DEFAULT)
 	</insert>
 
 	<!-- FAQ 조회 -->
-	<select id="selectFAQ" resultType="com.teamproject.myteam01.domain.EventVO">
+	<select id="selectFAQ" resultType="com.teamproject.myteam01.domain.CsVO">
 		SELECT FAQNO, FAQCATEGORY, FAQTITLE, FAQCONTENT, FAQREGDATE, FAQMODDATE
 		FROM teampj.FAQ
 		WHERE FAQNO = #{faqno}
