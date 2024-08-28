@@ -175,6 +175,15 @@ html, body {
     background-color: #f7fbff;
 }
 
+.no-link-style {
+    color: inherit; /* 부모 요소의 색상을 따르게 설정 */
+    text-decoration: none; /* 밑줄 제거 */
+}
+
+.no-link-style:hover {
+    text-decoration: underline; /* 마우스 호버 시 밑줄 추가 (선택 사항) */
+}
+
 /* 페이징 스타일 */
 .pagination {
     display: flex;

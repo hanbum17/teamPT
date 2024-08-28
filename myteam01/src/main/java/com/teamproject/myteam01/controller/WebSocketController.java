@@ -39,7 +39,6 @@ public class WebSocketController {
 		
 		SimpleDateFormat smpDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String fmtDate = smpDate.format(chat.getDate());
-		
 		System.out.println("sender: " + chat.getUsername() + " content: " + chat.getContent() + " date: " + fmtDate);
 
 		messagingTemplate.convertAndSend("/sub/chat/room/1", chat);
@@ -52,7 +51,6 @@ public class WebSocketController {
 
 		SimpleDateFormat smpDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String fmtDate = smpDate.format(chat.getDate());
-		
 		System.out.println("sender: " + chat.getUsername() + " content: " + chat.getContent() + " date: " + fmtDate);
 
 		messagingTemplate.convertAndSend("/sub/chat/room/1", chat);
