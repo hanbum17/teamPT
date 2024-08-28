@@ -6,11 +6,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/list.css">
-    <title>행사 & 음식점 리스트</title>
+    <title>행사 & 음식점 목록</title>
 </head>
+
 <body>
     <header class="header">
-        <h2 class="title">행사 & 음식점 리스트</h2>
+        <h2 class="title">행사 & 음식점 목록</h2>
         <div class="top-bar">
             <a href="<c:url value='/logout'/>" class="logout-link">로그아웃</a>
             <button type="button" id="btnToEveRegister" class="register-button">행사 등록</button>

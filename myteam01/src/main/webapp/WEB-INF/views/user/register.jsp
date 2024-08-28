@@ -6,6 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Registration</title>
+    <%@ include file="../user_main/nav.jsp" %>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/register.css">
     <style>
         .form-step {
