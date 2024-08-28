@@ -85,6 +85,21 @@ label {
     height: 350px;
 }
 
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+th {
+    background-color: #f2f2f2;
+}
 </style>
 </head>
 <body>
@@ -94,9 +109,29 @@ label {
         <button onclick="location.href='/cs/faq'">자주 묻는 질문(FAQ)</button>
         <button onclick="location.href='/cs/feedback'">고객의 소리</button>
     </div>
+
+    <table>
+        <tr>
+            <th>번호</th>
+            <th>카테고리</th>
+            <th>Q.</th>
+        </tr>
+
+<c:forEach items="${CsList}" var="cs">
+            <c:if test="${cs.faqdelflag == 1}">
+                <tr>
+                    <td><c:out value="${cs.faqno}" /></td>
+                    <td colspan="2"><em>삭제된 게시글입니다.</em></td>
+                </tr>
+            </c:if>
+            <c:if test="${cs.faqdelflag == 0}">
+                <tr>
+                    <td><c:out value="${cs.faqno}" /></td>
+                    <td><c:out value="${cs.faqcategory}" /></td>
+                    <td><c:out value="${cs.faqtitle}" /></td>
+                </tr>
+            </c:if>
+        </c:forEach>
+    </table>
 </body>
-	
-
-
-
 </html>

@@ -26,7 +26,7 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(authz -> authz
-                .requestMatchers("/user/login", "/user/register", "/jsp/user/login.jsp", "/jsp/user/register.jsp" ).permitAll()
+                .requestMatchers("/jsp/cs/**", "/user/login", "/user/register", "/jsp/user/login.jsp", "/jsp/user/register.jsp" ).permitAll()
                 .anyRequest().authenticated()
             )
             .formLogin(form -> form
