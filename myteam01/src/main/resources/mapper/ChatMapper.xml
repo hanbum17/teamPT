@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.teamproject.myteam01.mapper.ChatMapper">
+
+	<select id="selectChatList" resultType="com.teamproject.myteam01.domain.ChatMessageDTO">
+		select * from chatMessage where roomId = 1
+	</select>
+	
+	<insert id="insertChat">
+		insert into chatMessage
+		values(seq_cno.nextval, 1, #{username}, #{content}, #{date})
+	</insert>
+	
+	<select id="selectChatRoomList" resultType="com.teamproject.myteam01.domain.ChatRoomDTO">
+		SELECT cr.roomId, cr.uno, cr.userId1, cr.userId2, r.FNAME AS title
+		FROM chatroom cr 
+		JOIN RESTAURANTS r ON cr.uno = r.UNO
+		WHERE cr.userId1 = #{username}
+	</select>
+</mapper>

@@ -88,13 +88,15 @@ label {
 </style>
 </head>
 <body>
-<%@ include file="/jsp/admin_main/header.jsp" %>
+<%@ include file="/WEB-INF/views/admin_main/header.jsp" %>
 
-    <h1>문의사항</h1>
-    <p>문의사항 내용을 여기에 작성합니다.</p>
-    <button onclick="location.href='/csCenter'">고객센터로 돌아가기</button>
-
+ <body>
+ <h1>고객의 소리</h1>
+    <p>고객의 소리 내용을 여기에 작성합니다.</p>
+    <button onclick="location.href='/cs/Center'">고객센터로 돌아가기</button>
+    
 </body>
+		
 	
 
 

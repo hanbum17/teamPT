@@ -22,7 +22,9 @@ public class CsServiceImpl implements CsService{
 	//FAQ 목록
 	@Override
 	public List<CsVO> csList(){
-		System.out.println("서비스: 행사목록");
+		System.out.println("서비스: FAQ 목록");
+		
+		System.out.println(csMapper.selectFAQList());
 		return csMapper.selectFAQList();
 	}
 	

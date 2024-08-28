@@ -14,7 +14,7 @@ public interface RestaurantService {
 	public int registerReview(RestaurantsReviewVO restReviewVO);
 	public int copyReview(Long frno);
 	public int deleteReview(Long frno);
-	
+	public String selectTitle(Long uno);
 	//윤정
 	public Long registerRest(RestaurantVO rest, AttachFileDTO attach);
 	public List<RestaurantVO> getRestList();
