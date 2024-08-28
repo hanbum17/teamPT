@@ -9,7 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VROOM Navigation</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/nav.css">
-
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
     <!-- NAVIGATION BAR -->
@@ -76,6 +76,7 @@
         <div class="nav-right">
 
             <sec:authorize access="isAuthenticated()">
+            	<a id="chat_room" href="#">단체채팅방</a>
                 <span class="username"><sec:authentication property="name" /></span>
                 <a href="${pageContext.request.contextPath}/user/userPage" class="mypage">마이페이지</a>
                 <a href="${pageContext.request.contextPath}/logout" class="logout">로그아웃</a>
@@ -86,5 +87,12 @@
 
         </div>
     </nav>
+    <script>
+	$("#chat_room").on("click", function(){
+		
+		window.open("http://195.168.9.110:8080/chat/chat", "_blank", "width=500, height=500") ;
+		
+	});
+	</script>
 </body>
 </html>

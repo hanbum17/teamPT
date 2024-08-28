@@ -31,6 +31,9 @@ body, html {
 
 /* 메뉴 스타일 */
 .nav-menu {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
     list-style: none;
     display: flex;
     margin: 0;
@@ -146,9 +149,25 @@ body, html {
     color: #0047ab;
 }
 
+/* 단체채팅방 링크 스타일 */
+#chat_room {
+    color: #ffffff; /* 텍스트 색상 */
+    background-color: #00d535; /* 배경 색상 (튀는 색상으로 설정) */
+    margin-right: 13px;
+    padding: 7px 13px; /* 패딩 추가 */
+    border-radius: 5px; /* 모서리를 둥글게 */
+    text-decoration: none; /* 밑줄 제거 */
+    font-weight: bold; /* 글씨를 두껍게 */
+    transition: background-color 0.3s, color 0.3s; /* 색상 전환 효과 */
+}
+
+#chat_room:hover {
+    background-color: #ff8000; /* 호버 시 배경 색상 변경 */
+    color: #ffffff; /* 호버 시 텍스트 색상 유지 */
+}
 
 /* 반응형 스타일 */
-@media (max-width: 768px) {
+@media (max-width: 1150px) {
     .nav-menu {
         flex-direction: column;
         gap: 10px;

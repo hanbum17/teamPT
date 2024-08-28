@@ -60,7 +60,7 @@
         <main class="content-box">
             <div class="content">
                 <div class="content-header">
-                    <h2>개설교과목 조회</h2>
+                    <h2>상세정보</h2>
                 </div>
                 <div class="content-body">
                     <!-- 예시 내용 -->
