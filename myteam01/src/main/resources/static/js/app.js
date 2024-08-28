@@ -33,9 +33,7 @@ function disconnect() {
     if (stompClient) {
         stompClient.send("/pub/chat/leave",
             {},
-
-            JSON.stringify({ sender: username, content: 'LEAVE', date: new Date()})
-
+            JSON.stringify({ username: username, content: 'LEAVE', date: new Date()})
         );
         stompClient.disconnect();
     }
@@ -46,8 +44,7 @@ function onConnected() {
 	stompClient.subscribe('/sub/chat/userCnt', onUserCntReceived);
     stompClient.send("/pub/chat/enter",
         {},
-        JSON.stringify({ sender: username, content: 'JOIN', date: new Date() })
-
+        JSON.stringify({ username: username, content: 'JOIN', date: new Date() })
     );
 	
     connectingElement.classList.add('hidden');
@@ -85,8 +82,6 @@ function formatDate(){
 function onUserCntReceived(payload) {
     userCnt = JSON.parse(payload.body);
     $("#chat-title").text("☆★☆902강의장 임시 채팅방☆★☆ 참여인원: " + userCnt);
-    console.log("userCnt: " + userCnt);
-
 }
 
 function onMessageReceived(payload) {

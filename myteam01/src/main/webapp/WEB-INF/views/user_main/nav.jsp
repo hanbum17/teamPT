@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VROOM Navigation</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/nav.css">
-
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 </head>
 <body>
     <!-- NAVIGATION BAR -->
@@ -62,6 +62,7 @@
         <!-- USER SECTION -->
         <div class="nav-right">
             <span class="username">유저이름</span>
+            <a href="/chat/chatPage" class="myChat">나의 채팅방</a>
             <a href="#" class="mypage">마이페이지</a>
             <a href="#" class="login">로그인</a>
             <a href="#" class="logout">로그아웃</a>

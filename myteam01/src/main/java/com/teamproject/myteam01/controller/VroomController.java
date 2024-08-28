@@ -31,7 +31,6 @@ public class VroomController {
 	public String main() {
 
 		return "vroom/vroomMain" ; //테스트(삭제안되어있으면 해당 주석 삭제해주세용22)
-
 	}
 	
 
