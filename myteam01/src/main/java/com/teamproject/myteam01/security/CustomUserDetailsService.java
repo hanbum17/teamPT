@@ -37,7 +37,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         // UserVO의 roles를 GrantedAuthority 리스트로 변환
         List<GrantedAuthority> authorities = roles.stream()
-                .map(SimpleGrantedAuthority::new)
+                .map(role -> new SimpleGrantedAuthority("ROLE_" + role)) 
                 .collect(Collectors.toList());
 
         // UserDetails 객체로 변환하여 반환
