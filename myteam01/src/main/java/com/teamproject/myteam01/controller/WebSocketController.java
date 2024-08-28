@@ -23,8 +23,7 @@ public class WebSocketController {
 	private final ChatService chatService;
 	private final SimpMessagingTemplate messagingTemplate ;
 	private int userCnt = 0;
-	
-	private int userCnt = 0;
+
 	
 	@GetMapping("/chat/chat")
 	public String chat() {
@@ -39,7 +38,7 @@ public class WebSocketController {
 
 		SimpleDateFormat smpDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String fmtDate = smpDate.format(chat.getDate());
-		System.out.println("sender: " + chat.getSender() + " content: " + chat.getContent() + " date: " + fmtDate);
+		System.out.println("sender: " + chat.getUsername() + " content: " + chat.getContent() + " date: " + fmtDate);
 
 		messagingTemplate.convertAndSend("/sub/chat/room/1", chat);
 	}
@@ -51,7 +50,7 @@ public class WebSocketController {
 
 		SimpleDateFormat smpDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String fmtDate = smpDate.format(chat.getDate());
-		System.out.println("sender: " + chat.getSender() + " content: " + chat.getContent() + " date: " + fmtDate);
+		System.out.println("sender: " + chat.getUsername() + " content: " + chat.getContent() + " date: " + fmtDate);
 
 		messagingTemplate.convertAndSend("/sub/chat/room/1", chat);
 	}
@@ -61,7 +60,7 @@ public class WebSocketController {
 		SimpleDateFormat smpDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String fmtDate = smpDate.format(chat.getDate());
 
-		System.out.println("sender: " + chat.getSender() + " content: " + chat.getContent() + " date: " + fmtDate);
+		System.out.println("sender: " + chat.getUsername() + " content: " + chat.getContent() + " date: " + fmtDate);
 
 		messagingTemplate.convertAndSend("/sub/chat/room/1", chat);
     }
@@ -76,8 +75,6 @@ public class WebSocketController {
 		messagingTemplate.convertAndSend("/sub/chat/userCnt", userCnt);
 	}
 	
-	private void updateUserCnt() {
-		messagingTemplate.convertAndSend("/sub/chat/userCnt", userCnt);
-	}
+
 	
 }
