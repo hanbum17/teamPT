@@ -3,6 +3,10 @@
 <mapper namespace="com.teamproject.myteam01.mapper.RestaurantMapper">
 
 	<!--  록귀 파트  -->
+	<!-- UNO로 정보 조회 -->
+	<select id="selectTitle" resultType="String">
+		SELECT FNAME FROM RESTAURANTS WHERE UNO = #{uno}
+	</select>
 	<!--  식당 디테일  -->
 	<select id="restaurantDetail" resultType="com.teamproject.myteam01.domain.RestaurantVO">
 	<![CDATA[

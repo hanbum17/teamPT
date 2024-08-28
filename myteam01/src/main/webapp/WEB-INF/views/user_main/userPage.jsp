@@ -58,4 +58,10 @@
     </div>
 </body>
 
+<script>
+	$(".myChat").on("click", function(){
+		alert("하기싫다.");
+	});
+</script>
+
 </html>

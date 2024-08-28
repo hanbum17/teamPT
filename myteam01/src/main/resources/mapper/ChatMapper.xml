@@ -11,4 +11,10 @@
 		values(seq_cno.nextval, 1, #{username}, #{content}, #{date})
 	</insert>
 	
+	<select id="selectChatRoomList" resultType="com.teamproject.myteam01.domain.ChatRoomDTO">
+		SELECT cr.roomId, cr.uno, cr.userId1, cr.userId2, r.FNAME AS title
+		FROM chatroom cr 
+		JOIN RESTAURANTS r ON cr.uno = r.UNO
+		WHERE cr.userId1 = #{username}
+	</select>
 </mapper>

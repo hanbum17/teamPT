@@ -22,6 +22,11 @@ public class RestaurantServiceImpl implements RestaurantService{
 	
 	//록귀 파트
 	@Override
+	public String selectTitle(Long uno) {
+		return restaurantMapper.selectTitle(uno);
+	}
+	
+	@Override
 	public RestaurantVO restaurantDetail(Long fno) {
 		return restaurantMapper.restaurantDetail(fno);
 	}
@@ -73,6 +78,8 @@ public class RestaurantServiceImpl implements RestaurantService{
 		public List<RestaurantVO> getRestList(){
 			return restaurantMapper.selectRestList();
 		}
+
+	
 
 	
 }

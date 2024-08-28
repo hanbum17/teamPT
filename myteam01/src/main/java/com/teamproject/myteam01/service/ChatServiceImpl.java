@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.teamproject.myteam01.domain.ChatMessageDTO;
+import com.teamproject.myteam01.domain.ChatRoomDTO;
 import com.teamproject.myteam01.domain.EventReviewVO;
 import com.teamproject.myteam01.domain.EventVO;
 import com.teamproject.myteam01.domain.RestaurantsReviewVO;
@@ -29,7 +30,11 @@ public class ChatServiceImpl implements ChatService{
 	public List<ChatMessageDTO> selectChatList(int roomId) {
 		return chatMapper.selectChatList(roomId);
 	}
-	
-	//록귀
+
+	@Override
+	public List<ChatRoomDTO> selectChatRoomList(String username) {
+		
+		return chatMapper.selectChatRoomList(username);
+	}
 	
 }

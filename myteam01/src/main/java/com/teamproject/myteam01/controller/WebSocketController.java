@@ -1,17 +1,21 @@
 package com.teamproject.myteam01.controller;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.teamproject.myteam01.domain.ChatMessageDTO;
+import com.teamproject.myteam01.domain.ChatRoomDTO;
 import com.teamproject.myteam01.service.ChatService;
+import com.teamproject.myteam01.service.RestaurantService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -20,12 +24,23 @@ import lombok.RequiredArgsConstructor;
 public class WebSocketController {
 
 	private final ChatService chatService;
+	private final RestaurantService restService;
 	private final SimpMessagingTemplate messagingTemplate ;
 	private int userCnt = 0;
 	
 	@GetMapping("/chat/chat")
 	public String chat() {
-		return "chat" ;
+		return "chat";
+	}
+	
+	@GetMapping("/chat/chatPage")
+	public String chatPage(String username, Model model) {
+		username = "user4";
+		List<ChatRoomDTO> chatList = chatService.selectChatRoomList(username) ;
+		System.out.println(chatList);
+		model.addAttribute("chatList", chatList);
+		
+		return "chatPage";
 	}
 	
 	//입장

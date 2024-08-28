@@ -1,4 +1,4 @@
-package com.teamproject.myteam01.websocket;
+package com.teamproject.myteam01.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,8 +14,8 @@ import lombok.ToString;
 public class ChatRoomDTO {
 
 	private int roomId; //방번호(PK)
-	private int uno; //글번호(FK)
+	private Long uno; //글번호(FK)
 	private String userId1;
 	private String userId2;
-	
+	private String title; 
 }
