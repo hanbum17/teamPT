@@ -132,7 +132,6 @@
         }
 
         #reviews_wrap {
-            display: none;
             margin-top: 20px;
         }
     </style>
@@ -205,23 +204,10 @@
             <button id="review_register_btn" type="submit">리뷰등록</button>
         </form>
         
-        <!-- 기존 리뷰 목록 -->
-        <c:forEach items="${details.reivewsList}" var="detail">
-		    <div class="review_div">
-		        <ul class="review_ul" data-frno="${detail.frno}" data-uno="${detail.uno}" data-fno="${detail.fno}">
-		            <li>frno: ${detail.frno}</li>
-		            <li>frtitle: ${detail.frtitle}</li>
-		            <li>frcontent: ${detail.frcontent}</li>
-		            <li>frwriter: ${detail.frwriter}</li>
-		            <li>frregDate: ${detail.frregDate}</li>
-		            <li>frrating: ${detail.frrating}</li>
-		            <li>uno: ${detail.uno}</li>
-		            <li>fno: ${detail.fno}</li>
-		        </ul>
-		        <button class="review_blind_btn">블라인드처리</button>
-		    </div>
-		</c:forEach>
+        
     </div>
+    <!-- 기존 리뷰 목록 -->
+        <div id="reviews-container"></div>
 </div>
 
 <script>
@@ -255,7 +241,8 @@
     const rightPanel = document.getElementById('right-panel');
 
     function showDetailView(fno) {
-        fetch(${contextPath}/vroom/getRestaurantDetails?fno= + fno)
+        // 식당 정보 가져오기
+        fetch(`${contextPath}/vroom/getRestaurantDetails?fno=` + fno)
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
@@ -264,7 +251,8 @@
             })
             .then(data => {
                 if (data) {
-                    document.getElementById('panel-image').src = contextPath + "/images/bibimbab.jpg";
+                    // 식당 정보 표시
+                    document.getElementById('panel-image').src = `${contextPath}/images/bibimbab.jpg`; // 이미지 URL 수정 필요
                     document.getElementById('panel-name').textContent = data.fname;
                     document.getElementById('panel-rating').textContent = data.frating;
                     document.getElementById('panel-category').textContent = data.fcategory;
@@ -273,16 +261,50 @@
                     // fno 값을 리뷰 등록 폼에 설정
                     document.getElementById('fno').value = fno;
 
+                    // 식당 정보 패널 보이기
                     container.style.display = 'none';
                     leftPanel.style.display = 'block';
                     rightPanel.style.display = 'block';
+
+                    // 리뷰 정보 가져오기
+                    return fetch(`${contextPath}/vroom/getRestaurantReviews?fno=` + fno);
                 } else {
                     alert('식당 정보를 찾을 수 없습니다.');
+                    throw new Error('No restaurant data');
                 }
             })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(reviews => {
+                // 리뷰 정보 표시
+                const reviewsContainer = document.getElementById('reviews-container');
+                reviewsContainer.innerHTML = ''; // 기존 내용 지우기
+
+                reviews.forEach(review => {
+                    reviewsContainer.innerHTML += `
+                        <div class="review_div">
+                            <ul class="review_ul" data-frno="${review.frno}" data-uno="${review.uno}" data-fno="${review.fno}">
+                                <li>frno: ${review.frno}</li>
+                                <li>frtitle: ${review.frtitle}</li>
+                                <li>frcontent: ${review.frcontent}</li>
+                                <li>frwriter: ${review.frwriter}</li>
+                                <li>frregDate: ${review.frregDate}</li>
+                                <li>frrating: ${review.frrating}</li>
+                                <li>uno: ${review.uno}</li>
+                                <li>fno: ${review.fno}</li>
+                            </ul>
+                            <button class="review_blind_btn">블라인드처리</button>
+                        </div>
+                    `;
+                });
+            })
             .catch(error => {
-                console.error('Error fetching restaurant data:', error);
-                alert('식당 정보를 가져오는 데 실패했습니다.');
+                console.error('Error fetching data:', error);
+                alert('데이터를 가져오는 데 실패했습니다.');
             });
     }
 

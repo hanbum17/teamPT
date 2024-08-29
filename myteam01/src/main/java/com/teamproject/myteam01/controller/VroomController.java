@@ -3,6 +3,7 @@ package com.teamproject.myteam01.controller;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.List;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -54,6 +55,14 @@ public class VroomController {
 	    return detail;
 	}
 	
+	@GetMapping("/getRestaurantReviews")
+	@ResponseBody
+	public List<RestaurantsReviewVO> getRestaurantReviews(@RequestParam("fno") Long fno , Model model) {
+	    List<RestaurantsReviewVO> review = restService.selectReviews(fno);
+	    System.out.println("리뷰리스트 fno: "+fno);
+	    model.addAttribute("review", review);
+	    return review;
+	}
 	
 	@PostMapping("/restregisterReview")
 	public String restregisterReview(Model model, RestaurantsReviewVO restReviewVO) {
