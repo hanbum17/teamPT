@@ -1,6 +1,6 @@
 // 서버에서 이벤트 데이터를 받아오는 함수
 function fetchEvents() {
-    fetch('/api/events')
+    fetch('/vroom/api/events')
         .then(response => response.json())
         .then(data => {
             initializeEvents(data);
@@ -12,7 +12,7 @@ function fetchEvents() {
 
 // 이벤트의 상세 정보를 가져오는 함수
 function fetchEventDetails(eventId) {
-    return fetch(`/api/events/${eventId}`)
+    return fetch(`/vroom/api/events/${eventId}`)
         .then(response => response.json())
         .catch(error => {
             console.error('Error fetching event details:', error);
@@ -21,7 +21,7 @@ function fetchEventDetails(eventId) {
 
 // 이벤트의 리뷰를 가져오는 함수
 function fetchEventReviews(eventId) {
-    return fetch(`/api/events/${eventId}/reviews`)
+    return fetch(`/vroom/api/events/${eventId}/reviews`)
         .then(response => response.json())
         .catch(error => {
             console.error('Error fetching event reviews:', error);

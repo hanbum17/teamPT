@@ -26,7 +26,7 @@
         </div>
         <div id="right-detail" class="detail-box">
             <!-- Right detail box -->
-            <h2>Reviews for ${event.ename}</h2>
+            <h2>Reviews for <span id="event-name"></span></h2>
             <div id="review-summary">
                 <div id="rating-display">
                     <span id="rating-value">4.7</span> <!-- 별점 값 -->
@@ -76,16 +76,14 @@
     </div>
 
     <script>
-    // 서버에서 전달한 JSON 데이터
     const eventData = JSON.parse('${fn:escapeXml(eventsJson)}');
-    console.log('Parsed Event Data:', eventData); // JSON으로 변환된 데이터 로그
+    console.log('Parsed Event Data:', eventData);
 
     if (eventData) {
         try {
-            // 데이터 초기화
             initializeEvents(eventData);
         } catch (error) {
-            console.error('Error initializing events:', error); // 데이터 초기화 오류 로그
+            console.error('Error initializing events:', error);
         }
     } else {
         console.error('Event data is empty or undefined.');
