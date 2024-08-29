@@ -53,7 +53,7 @@
 					</div>
                     <div class="signup-wrapper">
                         <!-- 회원가입 버튼 클릭 시 registerSelect.jsp로 이동 -->
-                        <form action="${pageContext.request.contextPath}/user/registerSelect" method="get">
+                        <form action="/user/registerSelect" method="get">
                             <button class="signup-link" type="submit">회원가입</button>
                         </form>
                     </div>
