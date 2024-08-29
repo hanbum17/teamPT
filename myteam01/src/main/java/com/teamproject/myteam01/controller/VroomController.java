@@ -46,13 +46,14 @@ public class VroomController {
 	
 	@GetMapping("/getRestaurantDetails")
 	@ResponseBody
-	public RestaurantVO getRestaurantDetail(@RequestParam("fno") Long fno,Model model) {
+	public RestaurantVO getRestaurantDetail(@RequestParam("fno") Long fno) {
 	    System.out.println("전달된 fno 값: " + fno); 
 	    RestaurantVO detail = restService.restaurantDetail(fno);
-	    model.addAttribute("Reviews", restService.selectReviews(fno));
-	    System.out.println("컨트롤러 값 확인"+ detail);
+	    detail.setReivewsList(restService.selectReviews(fno)); // 리뷰 리스트를 세팅
+	    System.out.println("컨트롤러 값 확인: " + detail);
 	    return detail;
 	}
+	
 	
 	@PostMapping("/restregisterReview")
 	public String restregisterReview(Model model, RestaurantsReviewVO restReviewVO) {

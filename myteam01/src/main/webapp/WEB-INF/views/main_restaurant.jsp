@@ -206,21 +206,21 @@
         </form>
         
         <!-- 기존 리뷰 목록 -->
-        <c:forEach items="${Reviews }" var="review">
-            <div class="review_div">
-                <ul class="review_ul" data-frno="${review.frno }" data-uno="${review.uno }" data-fno="${review.fno }">
-                    <li>frno: ${review.frno }</li>
-                    <li>frtitle: ${review.frtitle }</li>
-                    <li>frcontent: ${review.frcontent }</li>
-                    <li>frwriter: ${review.frwriter }</li>
-                    <li>frregDate: ${review.frregDate }</li>
-                    <li>frrating: ${review.frrating }</li>
-                    <li>uno: ${review.uno }</li>
-                    <li>fno: ${review.fno }</li>
-                </ul>
-                <button class="review_blind_btn">블라인드처리</button>
-            </div>
-        </c:forEach>
+        <c:forEach items="${details.reivewsList}" var="detail">
+		    <div class="review_div">
+		        <ul class="review_ul" data-frno="${detail.frno}" data-uno="${detail.uno}" data-fno="${detail.fno}">
+		            <li>frno: ${detail.frno}</li>
+		            <li>frtitle: ${detail.frtitle}</li>
+		            <li>frcontent: ${detail.frcontent}</li>
+		            <li>frwriter: ${detail.frwriter}</li>
+		            <li>frregDate: ${detail.frregDate}</li>
+		            <li>frrating: ${detail.frrating}</li>
+		            <li>uno: ${detail.uno}</li>
+		            <li>fno: ${detail.fno}</li>
+		        </ul>
+		        <button class="review_blind_btn">블라인드처리</button>
+		    </div>
+		</c:forEach>
     </div>
 </div>
 
@@ -255,7 +255,7 @@
     const rightPanel = document.getElementById('right-panel');
 
     function showDetailView(fno) {
-        fetch(`${contextPath}/vroom/getRestaurantDetails?fno=` + fno)
+        fetch(${contextPath}/vroom/getRestaurantDetails?fno= + fno)
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
@@ -300,4 +300,3 @@
 
 </body>
 </html>
-ㄴ
