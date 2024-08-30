@@ -78,7 +78,7 @@
             <sec:authorize access="isAuthenticated()">
             	<a id="chat_room" href="#">단체채팅방</a>
                 <span class="username"><sec:authentication property="name" /></span>
-                <a href="${pageContext.request.contextPath}/user/userPage" class="mypage">마이페이지</a>
+                <a href="${pageContext.request.contextPath}/user/userMain" class="mypage">마이페이지</a>
                 <a href="${pageContext.request.contextPath}/logout" class="logout">로그아웃</a>
             </sec:authorize>
             <sec:authorize access="!isAuthenticated()">

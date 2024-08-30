@@ -15,11 +15,13 @@ public class SecurityConfig {
 
     private final CustomUserDetailsService customUserDetailsService;
     private final CustomAuthenticationSuccessHandler successHandler;
+    private final CustomAuthenticationFailureHandler failureHandler;
 
     @Autowired
-    public SecurityConfig(CustomUserDetailsService customUserDetailsService, CustomAuthenticationSuccessHandler successHandler) {
+    public SecurityConfig(CustomUserDetailsService customUserDetailsService, CustomAuthenticationSuccessHandler successHandler, CustomAuthenticationFailureHandler failureHandler ) {
         this.customUserDetailsService = customUserDetailsService;
         this.successHandler = successHandler;
+        this.failureHandler = failureHandler;
     }
 
     @Bean
@@ -32,10 +34,8 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(authz -> authz
-
                 .requestMatchers("/WEB-INF/views/user/**", "/user/**", "/resources/**", "/images/**").permitAll()
                 .requestMatchers("/admin_main/**").hasRole("ADMIN")
-
                 .anyRequest().authenticated()
             )
             .formLogin(form -> form
@@ -44,6 +44,7 @@ public class SecurityConfig {
                 .usernameParameter("userId")
                 .passwordParameter("password")
                 .successHandler(successHandler)
+                .failureHandler(failureHandler) 
                 .permitAll()
             )
             .rememberMe(rememberMe -> rememberMe
@@ -60,4 +61,5 @@ public class SecurityConfig {
 
         return http.build();
     }
+
 }

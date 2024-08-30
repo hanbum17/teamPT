@@ -1,0 +1,63 @@
+.content-box {
+        margin: 0 auto;
+        max-width: 800px;
+        background-color: #f9f9f9;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .content-header h2 {
+        font-size: 24px;
+
+        color: #00a2ff;
+    }
+
+    .user-details p {
+        font-size: 18px;
+        color: #555;
+        margin-bottom: 10px;
+    }
+
+    .user-details p span {
+        font-weight: bold;
+        color: #333;
+    }
+
+    .account-settings, .notification-settings {
+        margin-top: 30px;
+    }
+
+    .account-settings h3, .notification-settings h3 {
+        font-size: 20px;
+        color: #333;
+        margin-bottom: 15px;
+        border-bottom: 1px solid #ddd;
+        padding-bottom: 5px;
+    }
+
+    .account-settings a, .notification-settings label {
+        display: block;
+        font-size: 16px;
+        color: #00a2ff;
+        text-decoration: none;
+        margin-bottom: 10px;
+    }
+
+    .account-settings a:hover, .notification-settings label:hover {
+        text-decoration: underline;
+    }
+
+    .notification-settings button {
+        background-color: #00a2ff;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .notification-settings button:hover {
+        background-color: #008ecc;
+    }

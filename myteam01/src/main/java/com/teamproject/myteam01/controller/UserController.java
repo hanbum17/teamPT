@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class UserController {
@@ -31,11 +32,11 @@ public class UserController {
     }
 
     @PostMapping("/user/register")
-    public String registerUser(UserVO user, @RequestParam("role") String role, Model model) {
+    public String registerUser(UserVO user, @RequestParam("role") String role, RedirectAttributes redirectAttributes) {
         // 사용자 ID 중복 확인
         if (userService.isUserIdDuplicate(user.getUserId())) {
-            model.addAttribute("error", "이미 사용 중인 ID입니다.");
-            return "user/register";  // 회원가입 페이지로 다시 이동
+            redirectAttributes.addFlashAttribute("error", "이미 사용 중인 ID입니다.");
+            return "redirect:/user/register?role="+ role;  // 로그인 페이지로 이동
         }
 
         // 사용자 등록
@@ -44,7 +45,7 @@ public class UserController {
         // 사용자 역할 설정
         userService.registerUserRole(user.getUserId(), role);
         
-        model.addAttribute("message", "회원가입이 성공적으로 완료되었습니다.");
+        redirectAttributes.addFlashAttribute("message", "회원가입이 성공적으로 완료되었습니다.");
         return "redirect:/user/login";
     }
 
@@ -59,13 +60,16 @@ public class UserController {
         // 현재 로그인된 사용자 정보를 모델에 추가할 수 있습니다.
         model.addAttribute("username", userDetails.getUsername());
         
-        return "user_main/user_menu/user_detail";
+        return "redirect:/user/user_detail";
     }
     
- // 사용자 상세 정보 페이지로 이동
+    // 사용자 상세 정보 페이지로 이동
     @GetMapping("/user/user_detail")
-    public String userDetailPage() {
-        return "user_main/user_menu/user_detail";
+    public String userDetailPage(@AuthenticationPrincipal UserDetails userDetails, Model model) {
+        // UserDetails에서 username을 가져와서 UserVO 객체를 가져옵니다.
+        UserVO user = userService.findByUsername(userDetails.getUsername());
+        model.addAttribute("user", user);
+        return "user_main/user_menu/user_detail"; // 해당 JSP 페이지로 이동
     }
 
     // 즐겨찾기 목록 페이지로 이동
@@ -120,10 +124,11 @@ public class UserController {
         return "redirect:/accessDenied"; // 권한이 없는 경우 접근 불가 페이지로 리다이렉트
     }
 
-    // 회원탈퇴 페이지로 이동 (또는 실제 회원탈퇴 처리)
-    @GetMapping("/user/deleteAccount")
-    public String deleteAccountPage() {
-        return "user_main/user_menu/deleteAccount"; // 실제 회원탈퇴 로직은 서비스에서 처리
+    @PostMapping("/user/deleteAccount")
+    public String deleteAccount(@AuthenticationPrincipal UserDetails userDetails) {
+        String userId = userDetails.getUsername();
+        userService.deactivateAccount(userId);
+        return "redirect:/logout"; // 로그아웃 처리 후 메인 페이지로 리다이렉트
     }
 
 }
