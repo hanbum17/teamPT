@@ -207,7 +207,9 @@
         
     </div>
     <!-- 기존 리뷰 목록 -->
-        <div id="reviews-container"></div>
+        <div id="reviews-container">
+        	
+        </div>
 </div>
 
 <script>
@@ -241,7 +243,6 @@
     const rightPanel = document.getElementById('right-panel');
 
     function showDetailView(fno) {
-        // 식당 정보 가져오기
         fetch(`${contextPath}/vroom/getRestaurantDetails?fno=` + fno)
             .then(response => {
                 if (!response.ok) {
@@ -251,17 +252,14 @@
             })
             .then(data => {
                 if (data) {
-                    // 식당 정보 표시
-                    document.getElementById('panel-image').src = `${contextPath}/images/bibimbab.jpg`; // 이미지 URL 수정 필요
+                    document.getElementById('panel-image').src = `${contextPath}/images/bibimbab.jpg`;
                     document.getElementById('panel-name').textContent = data.fname;
                     document.getElementById('panel-rating').textContent = data.frating;
                     document.getElementById('panel-category').textContent = data.fcategory;
                     document.getElementById('panel-location').textContent = data.faddress;
 
-                    // fno 값을 리뷰 등록 폼에 설정
                     document.getElementById('fno').value = fno;
 
-                    // 식당 정보 패널 보이기
                     container.style.display = 'none';
                     leftPanel.style.display = 'block';
                     rightPanel.style.display = 'block';
@@ -280,13 +278,20 @@
                 return response.json();
             })
             .then(reviews => {
-                // 리뷰 정보 표시
+                console.log(reviews); // 리뷰 데이터 확인
+
                 const reviewsContainer = document.getElementById('reviews-container');
                 reviewsContainer.innerHTML = ''; // 기존 내용 지우기
 
-                reviews.forEach(review => {
-                    reviewsContainer.innerHTML += `
-                        <div class="review_div">
+                if (reviews.length === 0) {
+                    reviewsContainer.innerHTML = '<p>No reviews available.</p>';
+                } else {
+                    reviews.forEach(review => {
+                        console.log('Review:', review); // 각 리뷰 데이터 확인
+                        
+                        const reviewElement = document.createElement('div');
+                        reviewElement.className = 'review_div';
+                        reviewElement.innerHTML = `
                             <ul class="review_ul" data-frno="${review.frno}" data-uno="${review.uno}" data-fno="${review.fno}">
                                 <li>frno: ${review.frno}</li>
                                 <li>frtitle: ${review.frtitle}</li>
@@ -298,15 +303,18 @@
                                 <li>fno: ${review.fno}</li>
                             </ul>
                             <button class="review_blind_btn">블라인드처리</button>
-                        </div>
-                    `;
-                });
+                        `;
+                        reviewsContainer.appendChild(reviewElement);
+                    });
+                }
             })
             .catch(error => {
                 console.error('Error fetching data:', error);
                 alert('데이터를 가져오는 데 실패했습니다.');
             });
     }
+
+
 
     function goBack() {
         container.style.display = 'flex';
