@@ -144,7 +144,6 @@
         <div class="restaurant-card" data-fno="${restaurant.fno}" onclick="showDetailView(this.dataset.fno)">
             <img src="${contextPath}/images/bibimbab.jpg" alt="${restaurant.fname} Image">
             <div class="restaurant-info">
-            	<h3>${restaurant.fno}</h3>
                 <h3>${restaurant.fname}</h3>
                 <p>Location: ${restaurant.faddress}</p>
                 <p>Rating: ${restaurant.frating}</p>
@@ -211,10 +210,10 @@
 
         if (reviewsWrap.style.display === 'none' || reviewsWrap.style.display === '') {
             reviewsWrap.style.display = 'block'; // reviews_wrap을 표시
-            reviewButton.style.display = 'none';
+            reviewButton.style.display = 'none'; // 리뷰 입력 버튼 숨기기
         } else {
             reviewsWrap.style.display = 'none'; // reviews_wrap을 숨김
-            reviewButton.style.display = 'block';
+            reviewButton.style.display = 'block'; // 리뷰 입력 버튼 표시
         }
     }
 
@@ -265,32 +264,25 @@
                 return response.json();
             })
             .then(reviews => {
-                console.log(reviews); // 리뷰 데이터 확인
-
                 const reviewsContainer = document.getElementById('reviews-container');
                 reviewsContainer.innerHTML = ''; // 기존 내용 지우기
 
                 if (reviews.length === 0) {
                     reviewsContainer.innerHTML = '<p>No reviews available.</p>';
                 } else {
-                    reviews.forEach(review => {
-                        console.log('Review:', review); // 각 리뷰 데이터 확인
-                        
+                	reviews.forEach(review => {
+                		console.log(review.frno);
                         const reviewElement = document.createElement('div');
                         reviewElement.className = 'review_div';
-                        reviewElement.innerHTML = `
-                            <ul class="review_ul" data-frno="${review.frno}" data-uno="${review.uno}" data-fno="${review.fno}">
-                                <li>frno: ${review.frno}</li>
-                                <li>frtitle: ${review.frtitle}</li>
-                                <li>frcontent: ${review.frcontent}</li>
-                                <li>frwriter: ${review.frwriter}</li>
-                                <li>frregDate: ${review.frregDate}</li>
-                                <li>frrating: ${review.frrating}</li>
-                                <li>uno: ${review.uno}</li>
-                                <li>fno: ${review.fno}</li>
-                            </ul>
-                            <button class="review_blind_btn">블라인드처리</button>
-                        `;
+                        reviewElement.innerHTML = 
+                            "<ul class='review_ul' data-frno="+review.frno+" data-uno="+review.uno+" data-fno="+review.fno+">"
+                               + "<li>frtitle: "+review.frtitle+"</li>"
+                               + "<li>frcontent: "+review.frcontent+"</li>"
+                               + "<li>frwriter: "+review.frwriter+"</li>"
+                               + "<li>frregDate: "+review.frregDate+"</li>"
+                               + "<li>frrating: "+review.frrating+"</li>"
+                           + "</ul>"
+                        ; 
                         reviewsContainer.appendChild(reviewElement);
                     });
                 }
@@ -305,6 +297,7 @@
         container.style.display = 'flex';
         leftPanel.style.display = 'none';
         rightPanel.style.display = 'none';
+        toggleReviewForm(); // 리뷰 입력 버튼을 다시 보이도록 설정
     }
 
     container.addEventListener('wheel', (event) => {

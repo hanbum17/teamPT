@@ -57,8 +57,9 @@ public class VroomController {
 	
 	@GetMapping("/getRestaurantReviews")
 	@ResponseBody
-	public List<RestaurantsReviewVO> getRestaurantReviews(@RequestParam("fno") Long fno) {
+	public List<RestaurantsReviewVO> getRestaurantReviews(@RequestParam("fno") Long fno, Model model) {
 	    List<RestaurantsReviewVO> reviews = restService.selectReviews(fno);
+//	    model.addAttribute("rereviews", reviews);
 	    System.out.println("리뷰리스트 : "+reviews);
 	    return reviews;
 	}
