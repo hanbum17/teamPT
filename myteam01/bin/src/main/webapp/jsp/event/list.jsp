@@ -56,7 +56,7 @@
     </style>
 </head>
 <body>
-<%@ include file="/jsp/admin_main/header.jsp" %>
+<%-- <%@ include file="/jsp/admin_main/header.jsp" %> --%>
 <h2>리스트</h2>
 <button type="button" id="btnToEveRegister">행사 등록</button>
 
@@ -161,7 +161,7 @@
         </li>
     </ul>
 </div>
-<%@ include file="/jsp/admin_main/footer.jsp" %>
+<%-- <%@ include file="/jsp/admin_main/footer.jsp" %> --%>
 <script>
 <%-- 행사 등록 버튼--%>
 document.getElementById("btnToEveRegister").addEventListener("click", function(){

@@ -64,10 +64,6 @@ public class VroomController {
 
 	
 	
-	
-	@GetMapping("/event")
-	public String vroomEvent() {
-		return "vroom/vroomEvent";
 
     @GetMapping("/event")
     public String vroomEvent(Model model) {
