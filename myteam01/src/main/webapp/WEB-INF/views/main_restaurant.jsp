@@ -185,8 +185,6 @@
         리뷰 입력
     </button>
 
-    
-
     <!-- 리뷰 등록 폼 -->
     <div id="reviews_wrap" style="display: none; margin-top: 20px;">
         <form action="${contextPath }/vroom/restregisterReview" method="post">
@@ -197,13 +195,11 @@
             <input type="text" id="fno" name="fno" readonly> <!-- 여기에 fno를 동적으로 설정 -->
             <button id="review_register_btn" type="submit">리뷰등록</button>
         </form>
-        
-        
     </div>
+    
     <!-- 기존 리뷰 목록 -->
-        <div id="reviews-container">
-        	
-        </div>
+    <div id="reviews-container">
+    </div>
 </div>
 
 <script>
@@ -213,14 +209,12 @@
         const reviewButton = document.getElementById('review-button');
         const reviewsWrap = document.getElementById('reviews_wrap');
 
-        if (reviewForm.style.display === 'none') {
-            reviewForm.style.display = 'none';
-            reviewButton.style.display = 'none';
+        if (reviewsWrap.style.display === 'none' || reviewsWrap.style.display === '') {
             reviewsWrap.style.display = 'block'; // reviews_wrap을 표시
+            reviewButton.style.display = 'none';
         } else {
-            reviewForm.style.display = 'block';
-            reviewButton.style.display = 'block';
             reviewsWrap.style.display = 'none'; // reviews_wrap을 숨김
+            reviewButton.style.display = 'block';
         }
     }
 
@@ -306,8 +300,6 @@
                 alert('데이터를 가져오는 데 실패했습니다.');
             });
     }
-
-
 
     function goBack() {
         container.style.display = 'flex';
