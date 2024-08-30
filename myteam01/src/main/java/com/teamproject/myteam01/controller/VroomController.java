@@ -71,6 +71,7 @@ public class VroomController {
 	    try {
 	        String eventsJson = new ObjectMapper().writeValueAsString(events);
 	        model.addAttribute("eventsJson", eventsJson);
+	        System.out.println(eventsJson);
 	        return "vroom/vroomEvent";
 	    } catch (JsonProcessingException e) {
 	        e.printStackTrace();

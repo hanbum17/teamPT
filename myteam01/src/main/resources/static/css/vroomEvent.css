@@ -21,7 +21,7 @@
     flex-direction: column; /* 상자들을 세로로 배치 */
     align-items: center; /* 상자를 중앙 정렬 */
     justify-content: center; /* 상자를 세로로 중앙 정렬 */
-    overflow-y: hidden; /* 세로 스크롤바를 감춤 */
+    overflow-y: auto; /* 세로 스크롤바를 감춤 */
     height: 100%; /* 영역의 전체 높이 설정 */
     max-height: 100%; /* 최대 높이를 100%로 설정하여 스크롤 영역 제한 */
     padding: 10px; /* 내부 여백 추가 */
