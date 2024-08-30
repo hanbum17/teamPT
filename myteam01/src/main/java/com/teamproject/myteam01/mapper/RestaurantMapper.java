@@ -13,7 +13,7 @@ public interface RestaurantMapper {
 	public int registerReview(RestaurantsReviewVO restReviewVO);
 	public int copyReview(Long frno);
 	public int deleteReview(Long frno);
-	
+	public String selectTitle(Long uno);
 	//윤정
 	public void insertRestaurant(RestaurantVO rest);
 	public List<RestaurantVO> selectRestList();

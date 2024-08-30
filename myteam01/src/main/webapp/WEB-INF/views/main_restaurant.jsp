@@ -1,7 +1,7 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="jakarta.tags.core" prefix="c" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath }"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -34,20 +34,19 @@
         }
 
         .restaurant-card {
-		    display: inline-block;
-		    width: 200px; 
-		    height: 280px;
-		    margin-right: 20px;
-		    background-color: #f0f0f0;
-		    border-radius: 10px;
-		    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-		    text-align: center;
-		    padding: 10px;
-		    box-sizing: border-box;
-		    cursor: pointer;
-		    flex-shrink: 0; 
-		}
-
+            display: inline-block;
+            width: 200px; 
+            height: 280px;
+            margin-right: 20px;
+            background-color: #f0f0f0;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            padding: 10px;
+            box-sizing: border-box;
+            cursor: pointer;
+            flex-shrink: 0; 
+        }
 
         .restaurant-card img {
             width: 100%;
@@ -131,6 +130,11 @@
         .back-button:hover {
             background-color: #0056b3;
         }
+
+        #reviews_wrap {
+            display: none;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
@@ -138,9 +142,10 @@
 <div class="container" id="restaurant-container">
     <!-- 레스토랑 카드 반복문으로 생성 -->
     <c:forEach var="restaurant" items="${restList}">
-        <div class="restaurant-card" onclick="showDetailView(${restaurant.fno})">
+        <div class="restaurant-card" data-fno="${restaurant.fno}" onclick="showDetailView(this.dataset.fno)">
             <img src="${contextPath}/images/bibimbab.jpg" alt="${restaurant.fname} Image">
             <div class="restaurant-info">
+            	<h3>${restaurant.fno}</h3>
                 <h3>${restaurant.fname}</h3>
                 <p>Location: ${restaurant.faddress}</p>
                 <p>Rating: ${restaurant.frating}</p>
@@ -163,19 +168,18 @@
 
 <!-- 왼쪽 패널: 식당 정보 -->
 <div class="panel left-panel" id="left-panel">
-    <img src="${contextPath}/images/bibimbab.jpg" alt="Detail Image" style="width: 100%; height: auto; border-radius: 10px; margin-bottom: 20px;">
-    <p><strong>전주MZ비빔밥 홍대점</strong></p>
-    <p><strong>4.3</strong>  ★★★★☆ </p>
-    <p><strong>위치:</strong> 전라북도 전주시 가나동 16-53</p>
-    <p><strong>운영시간:</strong> 오전 11시 ~ 오후 10시</p>
-    <p><strong>비빔밥~ 츄베릅^^</p>
+    <img id="panel-image" src="" alt="Detail Image" style="width: 100%; height: auto; border-radius: 10px; margin-bottom: 20px;">
+    <p><strong id="panel-name"></strong></p>
+    <p><strong>Rating:</strong> <span id="panel-rating"></span></p>
+    <p><strong>Category:</strong> <span id="panel-category"></span></p>
+    <p><strong>Location:</strong> <span id="panel-location"></span></p>
     <button class="back-button" onclick="goBack()">Back</button>
 </div>
 
 <!-- 오른쪽 패널: 리뷰/별점 -->
 <div class="panel right-panel" id="right-panel">
     <!-- 별점 부분 -->
-    <p><strong>4.3</strong>  ★★★★☆ </p>
+    <p><strong>Rating:</strong> <span id="panel-rating"></span></p>
 
     <!-- 리뷰 입력 버튼 -->
     <button id="review-button" onclick="toggleReviewForm()" style="display: block; width: 100%; padding: 10px; border: none; border-radius: 5px; background-color: #007bff; color: #fff; cursor: pointer;">
@@ -190,65 +194,104 @@
         </button>
     </div>
 
-    <!-- 공간을 분리하는 긴 줄 -->
-    <hr style="margin: 20px 0; border: 1px solid #ddd;">
-
-    <!-- 리뷰 목록 -->
-    <div class="review">
-        <p><strong>김민수</strong></p>
-        <p style="font-weight: normal;">비빔밥 마쉿다~!</p>
-        <hr style="border: 1px solid #ddd; margin: 10px 0;">
-    </div>
-    <div class="review">
-        <p><strong>이지연</strong></p>
-        <p style="font-weight: normal;">야채 비린맛 개심함 ㅡㅡ;</p>
-        <hr style="border: 1px solid #ddd; margin: 10px 0;">
-    </div>
-    <div class="review">
-        <p><strong>박태호</strong></p>
-        <p style="font-weight: normal;">라떼 비빔밥 계란은 완숙이였는데...</p>
-        <hr style="border: 1px solid #ddd; margin: 10px 0;">
+    <!-- 리뷰 등록 폼 -->
+    <div id="reviews_wrap" style="display: none; margin-top: 20px;">
+        <form action="${contextPath }/vroom/restregisterReview" method="post">
+            <input type="text" id="frtitle" name="frtitle" placeholder="제목"><br>
+            <textarea id="frcontent" name="frcontent" placeholder="내용"></textarea><br>
+            <input type="text" id="frwriter" name="frwriter" placeholder="작성자"><br>
+            <input type="text" id="frrating" name="frrating" placeholder="별점 0~5"><br>
+            <input type="text" id="fno" name="fno" readonly> <!-- 여기에 fno를 동적으로 설정 -->
+            <button id="review_register_btn" type="submit">리뷰등록</button>
+        </form>
+        
+        <!-- 기존 리뷰 목록 -->
+        <c:forEach items="${Reviews }" var="review">
+            <div class="review_div">
+                <ul class="review_ul" data-frno="${review.frno }" data-uno="${review.uno }" data-fno="${review.fno }">
+                    <li>frno: ${review.frno }</li>
+                    <li>frtitle: ${review.frtitle }</li>
+                    <li>frcontent: ${review.frcontent }</li>
+                    <li>frwriter: ${review.frwriter }</li>
+                    <li>frregDate: ${review.frregDate }</li>
+                    <li>frrating: ${review.frrating }</li>
+                    <li>uno: ${review.uno }</li>
+                    <li>fno: ${review.fno }</li>
+                </ul>
+                <button class="review_blind_btn">블라인드처리</button>
+            </div>
+        </c:forEach>
     </div>
 </div>
 
 <script>
+    const contextPath = "${contextPath}";
+
     function toggleReviewForm() {
         const reviewForm = document.getElementById('review-form');
         const reviewButton = document.getElementById('review-button');
-        
+        const reviewsWrap = document.getElementById('reviews_wrap');
+
         if (reviewForm.style.display === 'none') {
-            reviewForm.style.display = 'block';
-            reviewButton.style.display = 'none';
-        } else {
             reviewForm.style.display = 'none';
+            reviewButton.style.display = 'none';
+            reviewsWrap.style.display = 'block'; // reviews_wrap을 표시
+        } else {
+            reviewForm.style.display = 'block';
             reviewButton.style.display = 'block';
+            reviewsWrap.style.display = 'none'; // reviews_wrap을 숨김
         }
     }
 
     function submitReview() {
-        alert('리뷰가 제출되었습니다!');
-        toggleReviewForm(); // 리뷰 제출 후 폼 숨기고 입력 버튼 다시 표시
+        const form = document.querySelector('#reviews_wrap form');
+        if (form) {
+            form.submit(); // 폼 제출
+        }
     }
 
     const container = document.getElementById('restaurant-container');
     const leftPanel = document.getElementById('left-panel');
     const rightPanel = document.getElementById('right-panel');
 
-    // 레스토랑 세부 정보를 보여주는 함수
-    function showDetailView(id) {
-        container.style.display = 'none'; // 레스토랑 카드 컨테이너 숨기기
-        leftPanel.style.display = 'block'; // 패널들 표시
-        rightPanel.style.display = 'block';
+    function showDetailView(fno) {
+        fetch(`${contextPath}/vroom/getRestaurantDetails?fno=` + fno)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data) {
+                    document.getElementById('panel-image').src = contextPath + "/images/bibimbab.jpg";
+                    document.getElementById('panel-name').textContent = data.fname;
+                    document.getElementById('panel-rating').textContent = data.frating;
+                    document.getElementById('panel-category').textContent = data.fcategory;
+                    document.getElementById('panel-location').textContent = data.faddress;
+
+                    // fno 값을 리뷰 등록 폼에 설정
+                    document.getElementById('fno').value = fno;
+
+                    container.style.display = 'none';
+                    leftPanel.style.display = 'block';
+                    rightPanel.style.display = 'block';
+                } else {
+                    alert('식당 정보를 찾을 수 없습니다.');
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching restaurant data:', error);
+                alert('식당 정보를 가져오는 데 실패했습니다.');
+            });
     }
 
-    // 레스토랑 목록으로 돌아가는 함수
     function goBack() {
-        container.style.display = 'flex'; // 레스토랑 카드 컨테이너 표시
-        leftPanel.style.display = 'none'; // 패널들 숨기기
+        container.style.display = 'flex';
+        leftPanel.style.display = 'none';
         rightPanel.style.display = 'none';
     }
 
-    // 수직 휠을 수평 스크롤로 변환
     container.addEventListener('wheel', (event) => {
         event.preventDefault();
         container.scrollLeft += event.deltaY;
@@ -257,10 +300,4 @@
 
 </body>
 </html>
-
-
-</script>
-
-</body>
-</html>
-
+ㄴ

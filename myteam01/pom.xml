@@ -9,33 +9,22 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.teamproject</groupId>
-	<artifactId>myteam0814</artifactId>
+	<artifactId>myteam01</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
-	<name>myteam0814</name>
+	<name>myteam01</name>
 	<description>test project for Spring Boot</description>
-	<url/>
-	<licenses>
-		<license/>
-	</licenses>
-	<developers>
-		<developer/>
-	</developers>
-	<scm>
-		<connection/>
-		<developerConnection/>
-		<tag/>
-		<url/>
-	</scm>
+
 	<properties>
 		<java.version>17</java.version>
 	</properties>
+
 	<dependencies>
+		<!-- Spring Boot Starter Dependencies -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-tomcat</artifactId>
@@ -46,102 +35,76 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-		
-		
-<dependency>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-starter-security</artifactId>
-</dependency>	
-		
-		<!-- https://mvnrepository.com/artifact/jakarta.servlet/jakarta.servlet-api -->
-<dependency>
-    <groupId>jakarta.servlet</groupId>
-    <artifactId>jakarta.servlet-api</artifactId>
-    <scope>provided</scope>
-</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
 
-		<!-- https://mvnrepository.com/artifact/jakarta.servlet.jsp/jakarta.servlet.jsp-api -->
-<dependency>
-    <groupId>jakarta.servlet.jsp</groupId>
-    <artifactId>jakarta.servlet.jsp-api</artifactId>
-    <version>3.1.1</version>
-    <scope>provided</scope>
-</dependency>
+		<!-- Spring Security Taglibs -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-taglibs</artifactId>
+		</dependency>
 
-		<!-- https://mvnrepository.com/artifact/jakarta.servlet.jsp.jstl/jakarta.servlet.jsp.jstl-api -->
-<dependency>
-    <groupId>jakarta.servlet.jsp.jstl</groupId>
-    <artifactId>jakarta.servlet.jsp.jstl-api</artifactId>
-</dependency>
-<!-- https://mvnrepository.com/artifact/org.apache.tomcat.embed/tomcat-embed-jasper -->
-<dependency>
-    <groupId>org.apache.tomcat.embed</groupId>
-    <artifactId>tomcat-embed-jasper</artifactId>
-</dependency>
-<!-- https://mvnrepository.com/artifact/org.glassfish.web/jakarta.servlet.jsp.jstl -->
+		<!-- Servlet & JSP Dependencies -->
+		<dependency>
+			<groupId>jakarta.servlet</groupId>
+			<artifactId>jakarta.servlet-api</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>jakarta.servlet.jsp</groupId>
+			<artifactId>jakarta.servlet.jsp-api</artifactId>
+			<version>3.1.1</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>jakarta.servlet.jsp.jstl</groupId>
+			<artifactId>jakarta.servlet.jsp.jstl-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.glassfish.web</groupId>
+			<artifactId>jakarta.servlet.jsp.jstl</artifactId>
+		</dependency>
 
-<dependency>
-    <groupId>org.glassfish.web</groupId>
-    <artifactId>jakarta.servlet.jsp.jstl</artifactId>
-</dependency>
+		<!-- Tomcat Embed Jasper for JSP Compilation -->
+		<dependency>
+			<groupId>org.apache.tomcat.embed</groupId>
+			<artifactId>tomcat-embed-jasper</artifactId>
+		</dependency>
 
-		<!-- https://mvnrepository.com/artifact/com.oracle.database.jdbc/ojdbc10 -->
-<dependency>
-    <groupId>com.oracle.database.jdbc</groupId>
-    <artifactId>ojdbc10</artifactId>
-    <version>19.23.0.0</version>
-</dependency>
+		<!-- Oracle JDBC Driver -->
+		<dependency>
+			<groupId>com.oracle.database.jdbc</groupId>
+			<artifactId>ojdbc10</artifactId>
+			<version>19.23.0.0</version>
+		</dependency>
 
-<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-jdbc -->
-<dependency>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-starter-jdbc</artifactId>
-</dependency>
+		<!-- Spring Boot Starter JDBC -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-jdbc</artifactId>
+		</dependency>
 
-<!-- https://mvnrepository.com/artifact/org.mybatis.spring.boot/mybatis-spring-boot-starter -->
-<dependency>
-    <groupId>org.mybatis.spring.boot</groupId>
-    <artifactId>mybatis-spring-boot-starter</artifactId>
-    <version>3.0.3</version>
-</dependency>
-<!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
-<dependency>
-    <groupId>org.projectlombok</groupId>
-    <artifactId>lombok</artifactId>
-    <scope>provided</scope>
-</dependency>
-<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-devtools -->
-<dependency>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-devtools</artifactId>
-</dependency>
-<!-- https://mvnrepository.com/artifact/net.coobird/thumbnailator -->
-<dependency>
-    <groupId>net.coobird</groupId>
-    <artifactId>thumbnailator</artifactId>
-    <version>0.4.20</version>
-</dependency>
-<!--<dependency>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-starter-security</artifactId>
-</dependency>-->
-<!-- https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-starter-webmvc-ui -->
-<dependency>
-    <groupId>org.springdoc</groupId>
-    <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-    <version>2.6.0</version>
-</dependency>
+		<!-- MyBatis Starter -->
+		<dependency>
+			<groupId>org.mybatis.spring.boot</groupId>
+			<artifactId>mybatis-spring-boot-starter</artifactId>
+			<version>3.0.3</version>
+		</dependency>
 
-<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-json -->
-<dependency>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-starter-json</artifactId>
-</dependency>
-<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-websocket -->
-<dependency>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-starter-websocket</artifactId>
-</dependency>
+		<!-- Lombok for reducing boilerplate code -->
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- Spring Boot DevTools -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+		</dependency>
 
 
 <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
@@ -150,8 +113,34 @@
     <artifactId>jackson-databind</artifactId>
 </dependency>
 
+		<!-- Thumbnailator for image resizing -->
+		<dependency>
+			<groupId>net.coobird</groupId>
+			<artifactId>thumbnailator</artifactId>
+			<version>0.4.20</version>
+		</dependency>
 
 
+		<!-- SpringDoc OpenAPI for API Documentation -->
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+			<version>2.6.0</version>
+		</dependency>
+
+		<!-- Spring Boot Starter JSON -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-json</artifactId>
+		</dependency>
+
+		<!-- Spring Boot Starter WebSocket -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-websocket</artifactId>
+		</dependency>
+
+		<!-- Spring Boot Configuration Processor -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-configuration-processor</artifactId>
@@ -167,5 +156,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
 </project>

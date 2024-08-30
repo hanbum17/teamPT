@@ -13,12 +13,18 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfig {
 
+    private final CustomUserDetailsService customUserDetailsService;
+    private final CustomAuthenticationSuccessHandler successHandler;
+
     @Autowired
-    private CustomUserDetailsService customUserDetailsService;
+    public SecurityConfig(CustomUserDetailsService customUserDetailsService, CustomAuthenticationSuccessHandler successHandler) {
+        this.customUserDetailsService = customUserDetailsService;
+        this.successHandler = successHandler;
+    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+        return new BCryptPasswordEncoder(); 
     }
 
     @Bean
@@ -26,19 +32,29 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(authz -> authz
-                .requestMatchers("/user/login", "/user/register", "/jsp/user/login.jsp", "/jsp/user/register.jsp" ).permitAll()
+
+                .requestMatchers("/WEB-INF/views/user/**", "/user/**", "/resources/**", "/images/**").permitAll()
+                .requestMatchers("/admin_main/**").hasRole("ADMIN")
+
                 .anyRequest().authenticated()
             )
             .formLogin(form -> form
                 .loginPage("/user/login")
                 .loginProcessingUrl("/login")
-                .usernameParameter("userId")  // 로그인 폼에서의 username 필드 이름을 userId로 변경
+                .usernameParameter("userId")
                 .passwordParameter("password")
-                .defaultSuccessUrl("/list", true)
+                .successHandler(successHandler)
                 .permitAll()
             )
+            .rememberMe(rememberMe -> rememberMe
+                .tokenValiditySeconds(86400) // 1일 동안 유지
+                .userDetailsService(customUserDetailsService)
+            )
             .logout(logout -> logout
+                .logoutUrl("/logout")
                 .logoutSuccessUrl("/user/login?logout")
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID", "remember-me")
                 .permitAll()
             );
 
