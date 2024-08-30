@@ -59,19 +59,22 @@ public class VroomController {
 		return "redirect:/vroom/restaurant";
 	}
 
+0144c60222cc8ec2e10ce15489fcca90411c1e6a
 
-    @GetMapping("/event")
-    public String vroomEvent(Model model) {
-        List<EventVO> events = eventService.eventList();
-        try {
-            String eventsJson = new ObjectMapper().writeValueAsString(events);
-            model.addAttribute("eventsJson", eventsJson);
-            return "vroom/vroomEvent";
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-            return "error";
-        }
-    }
+	@GetMapping("/event")
+	public String vroomEvent(Model model) {
+	    List<EventVO> events = eventService.eventList();
+	    try {
+	        String eventsJson = new ObjectMapper().writeValueAsString(events);
+	        model.addAttribute("eventsJson", eventsJson);
+	        System.out.println(eventsJson);
+	        return "vroom/vroomEvent";
+	    } catch (JsonProcessingException e) {
+	        e.printStackTrace();
+	        return "error";
+	    }
+	}
+
 
     @GetMapping("/api/events")
     @ResponseBody
