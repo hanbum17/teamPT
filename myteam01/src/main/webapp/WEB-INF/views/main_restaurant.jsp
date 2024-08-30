@@ -185,13 +185,7 @@
         리뷰 입력
     </button>
 
-    <!-- 리뷰 입력 폼 (처음에는 숨겨짐) -->
-    <div id="review-form" style="display: none; margin-top: 20px;">
-        <textarea rows="4" cols="50" placeholder="리뷰를 입력하세요..." style="width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ddd;"></textarea>
-        <button onclick="submitReview()" style="display: block; width: 100%; padding: 10px; border: none; border-radius: 5px; background-color: #28a745; color: #fff; cursor: pointer; margin-top: 10px;">
-            리뷰 제출
-        </button>
-    </div>
+    
 
     <!-- 리뷰 등록 폼 -->
     <div id="reviews_wrap" style="display: none; margin-top: 20px;">
@@ -216,7 +210,6 @@
     const contextPath = "${contextPath}";
 
     function toggleReviewForm() {
-        const reviewForm = document.getElementById('review-form');
         const reviewButton = document.getElementById('review-button');
         const reviewsWrap = document.getElementById('reviews_wrap');
 
