@@ -65,18 +65,19 @@ public class VroomController {
 	
 	
 
-    @GetMapping("/event")
-    public String vroomEvent(Model model) {
-        List<EventVO> events = eventService.eventList();
-        try {
-            String eventsJson = new ObjectMapper().writeValueAsString(events);
-            model.addAttribute("eventsJson", eventsJson);
-            return "vroom/vroomEvent";
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-            return "error";
-        }
-    }
+	@GetMapping("/event")
+	public String vroomEvent(Model model) {
+	    List<EventVO> events = eventService.eventList();
+	    try {
+	        String eventsJson = new ObjectMapper().writeValueAsString(events);
+	        model.addAttribute("eventsJson", eventsJson);
+	        return "vroom/vroomEvent";
+	    } catch (JsonProcessingException e) {
+	        e.printStackTrace();
+	        return "error";
+	    }
+	}
+
 
     @GetMapping("/api/events")
     @ResponseBody
