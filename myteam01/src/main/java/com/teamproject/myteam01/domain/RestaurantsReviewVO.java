@@ -23,7 +23,7 @@ public class RestaurantsReviewVO {
 	private String frwriter ;
 	private Date frregDate ;
 	private Date frmodDate ;
-	private Long frrating ;
+	private Double frrating ;
 	private Long uno ;
 	private Long fno ;
 
