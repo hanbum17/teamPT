@@ -34,5 +34,6 @@ public class RestaurantVO {
     
     private Long ftype;
     private List<AttachFileDTO> attachFileList;
+    private List<RestaurantsReviewVO> reivewsList;
 
 }
