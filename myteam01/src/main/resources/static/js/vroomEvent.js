@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // 서버에서 이벤트 데이터를 받아오는 함수
 function fetchEvents() {
     // 서버의 이벤트 API를 호출하여 데이터를 받아옴
@@ -10,6 +11,9 @@ function fetchEvents() {
             console.error('Error fetching events:', error); // 에러 발생 시 콘솔에 로그 출력
         });
 }
+=======
+
+>>>>>>> 8ade9d9b36dfbe7ec1f6a7815875a7ed22968870
 
 // 이벤트의 상세 정보를 가져오는 함수
 function fetchEventDetails(eno) {
@@ -33,8 +37,87 @@ function fetchEventReviews(eno) {
 
 // 페이지가 로드될 때 이벤트 데이터 가져오기
 document.addEventListener('DOMContentLoaded', () => {
+<<<<<<< HEAD
     fetchEvents(); // 페이지 로드 후 이벤트 데이터를 가져옴
+=======
+    const leftContainer = document.getElementById('left');
+    const rightContainer = document.getElementById('right');
+    let leftEvents = [];
+    let rightEvents = [];
+
+    function fetchEventData(start, limit) {
+        return fetch(`/vroom/api/events?start=${start}&limit=${limit}`)
+            .then(response => response.json())
+            .catch(error => console.error('Error fetching event data:', error));
+    }
+
+    function renderEvents() {
+        // Render the visible events for both containers
+        const renderContainer = (container, events) => {
+            container.innerHTML = '';
+            events.forEach(event => {
+                const imageUrl = event.img || '/image/event.jpg';
+                container.innerHTML += `
+                    <div class="box" data-id="${event.eno}">
+                        <img src="${imageUrl}" alt="${event.ename}">
+                        <div class="text-container">
+                            <h3>${event.ename}</h3>
+                            <div>위치: ${event.eaddress}</div>
+                            <div>기간: ${event.eperiod}</div>
+                        </div>
+                    </div>
+                `;
+            });
+        };
+
+        renderContainer(leftContainer, leftEvents.slice(0, 5));
+        renderContainer(rightContainer, rightEvents.slice(0, 5));
+    }
+
+    function updateContainers() {
+        fetchEventData(0, 10).then(data => {
+            // Split data into left and right
+            leftEvents = data.slice(0, 10);
+            rightEvents = data.slice(10, 20);
+            renderEvents();
+        });
+    }
+
+    function handleScroll(e) {
+        const container = e.target;
+        const isLeft = container.id === 'left';
+        const otherContainer = isLeft ? rightContainer : leftContainer;
+
+		console.log(`Scroll Event on ${container.id}: ${container.scrollTop}`);
+        if (container.scrollTop === container.scrollHeight - container.clientHeight) {
+            // Load more events when scrolled to the bottom
+            const start = isLeft ? leftEvents.length : rightEvents.length;
+            fetchEventData(start, 10).then(data => {
+                if (isLeft) {
+                    leftEvents = [...leftEvents, ...data];
+                } else {
+                    rightEvents = [...rightEvents, ...data];
+                }
+                renderEvents();
+            });
+        }
+
+        // Scroll the other container in the opposite direction
+        otherContainer.scrollTop = container.scrollTop * -1;
+    }
+
+    function setupScrollSync() {
+        leftContainer.addEventListener('scroll', handleScroll);
+        rightContainer.addEventListener('scroll', handleScroll);
+    }
+
+    updateContainers();
+    setupScrollSync();
+>>>>>>> 8ade9d9b36dfbe7ec1f6a7815875a7ed22968870
 });
+
+
+
 
 // 이벤트 데이터를 초기화하는 함수
 function initializeEvents(data) {

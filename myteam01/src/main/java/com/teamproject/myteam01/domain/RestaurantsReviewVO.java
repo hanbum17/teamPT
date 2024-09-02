@@ -27,4 +27,7 @@ public class RestaurantsReviewVO {
 	private Long uno ;
 	private Long fno ;
 
+	private Double ratingAverage ;
+	private Long frCount;
+	
 }

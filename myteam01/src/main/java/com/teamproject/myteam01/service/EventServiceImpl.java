@@ -85,23 +85,19 @@ public class EventServiceImpl implements EventService{
 	@Override
 	public List<EventVO> eventList(){
 		List<EventVO> event = eventMapper.selectEventList();
-		System.out.println("서비스: 행사목록" + event);
 		return event;
 	}
 	
 	//행사 등록
 	@Override
 	public Long regiEvent(EventVO event) {
-		System.out.println("서비스 : 행사 등록" + event);
 		eventMapper.registerEvent(event);
-		System.out.println("서비스 : 행사 등록 후" + event);
 		return event.getEno();
 	}
 	
 	//행사 조회
 	@Override
 	public EventVO getEvent(Long eno) {
-		System.out.println("서비스 : 행사 조회");
 		EventVO event = eventMapper.selectEvent(eno);
 		eventMapper.updateEviewsCnt(eno);
 		return event ;
@@ -111,14 +107,12 @@ public class EventServiceImpl implements EventService{
 	//행사 수정
 	@Override
 	public boolean modifyEvent(EventVO event) {
-		System.out.println("서비스 : 행사 수정");
 		return eventMapper.updateEvent(event) == 1;
 	}
 	
 	//행사 삭제
 	@Override
 	public boolean removeEvent(Long eno) {
-		System.out.println("서비스 : 행사 삭제");
 		return eventMapper.delEvent(eno) == 1;
 		
 	}

@@ -1,21 +1,72 @@
 /* 전체 컨테이너 스타일 */
 #container {
-    display: flex; /* flexbox 레이아웃 사용 */
-    justify-content: space-between; /* 왼쪽과 오른쪽 구역을 공간을 균등하게 배치 */
-    padding: 0; /* 패딩을 제거하여 상자가 딱 맞게 배치되도록 설정 */
-    box-sizing: border-box; /* 패딩과 테두리를 포함한 전체 너비 및 높이 계산 */
-    height: 100vh; /* 화면 전체 높이 설정 */
-    width: 90%; /* 화면의 90% 너비 설정 */
-    position: absolute; /* 절대 위치 설정 */
-    top: 50%; /* 화면의 50% 높이에 위치 */
-    left: 50%; /* 화면의 50% 너비에 위치 */
-    transform: translate(-50%, -50%); /* 컨테이너를 중앙으로 이동 */
-    overflow: hidden; /* 전체 컨테이너의 오버플로우를 숨김 */
-    background-color: #FFFFFF; /* 아이보리 배경 색상 추가 */
+    display: flex;
+    justify-content: space-between;
+    padding: 0;
+    box-sizing: border-box;
+    height: 100vh;
+    width: 90%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    overflow: hidden;
+    background-color: #FFFFFF;
 }
 
 /* 왼쪽과 오른쪽 구역 스타일 */
 #left, #right {
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow-y: auto;
+    height: 100%;
+    max-height: 100%;
+    padding: 10px;
+    background-color: #FFFFFF;
+    position: relative; /* Positioning relative for hidden containers */
+}
+
+/* 숨겨진 상자 컨테이너 */
+.hidden-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+/* 왼쪽 상단 숨겨진 상자 */
+#hidden-top-left {
+    top: -100px;
+    left: 0;
+}
+
+/* 왼쪽 하단 숨겨진 상자 */
+#hidden-bottom-left {
+    bottom: -100px;
+    left: 0;
+}
+
+/* 오른쪽 상단 숨겨진 상자 */
+#hidden-top-right {
+    top: -100px;
+    right: 0;
+}
+
+/* 오른쪽 하단 숨겨진 상자 */
+#hidden-bottom-right {
+    bottom: -100px;
+    right: 0;
+}
+
+/* 보이는 상자의 스타일 */
+#visible-left, #visible-right {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     width: 30%; /* 각 영역이 화면의 30% 너비를 차지하도록 설정 */
     display: flex; /* flexbox 레이아웃 사용 */
     flex-direction: column; /* 상자들을 세로로 배치 */
@@ -30,73 +81,64 @@
 
 /* 상자의 스타일 */
 .box {
-    border: 1px solid #ddd; /* 상자 테두리 스타일 */
-    padding: 15px; /* 상자 내부 여백 */
-    cursor: pointer; /* 마우스 포인터 모양 변경 */
-    position: relative; /* 상자의 상대적 위치 설정 */
-    display: flex; /* flexbox 레이아웃 사용 */
-    flex-direction: row; /* 이미지와 텍스트를 나란히 배치 */
-    align-items: center; /* 콘텐츠를 중앙 정렬 */
-    background-color: #E0E0E0; /* 상자 배경 색상 */
-    box-sizing: border-box; /* 패딩과 테두리를 포함한 전체 너비 및 높이 계산 */
-    width: calc(100% - 40px); /* 상자의 너비에서 여백(40px) 제외 */
-    margin-bottom: 20px; /* 상자 간의 하단 여백 설정 */
-    border-radius: 10px; /* 모서리 둥글게 설정 */
-    transition: transform 0.3s ease; /* 크기 변화를 부드럽게 조정 */
+    border: 1px solid #ddd;
+    padding: 15px;
+    cursor: pointer;
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background-color: #E0E0E0;
+    box-sizing: border-box;
+    width: calc(100% - 40px);
+    margin-bottom: 20px;
+    border-radius: 10px;
+    transition: transform 0.3s ease;
 }
 
 /* 상자에 마우스를 올렸을 때의 스타일 */
 .box:hover {
-    transform: scale(1.05); /* 상자를 5% 확대 */
-}
-
-/* 왼쪽 상자와 오른쪽 상자 간의 여백 설정 */
-#left .box {
-    margin-right: 20px; /* 왼쪽 상자와 오른쪽 상자 간의 여백 설정 */
-}
-
-#right .box {
-    margin-left: 20px; /* 오른쪽 상자와 왼쪽 상자 간의 여백 설정 */
+    transform: scale(1.05);
 }
 
 /* 이미지 스타일 */
 .box img {
-    width: 100px; /* 이미지의 너비를 고정 */
-    height: auto; /* 이미지의 높이는 자동 조정 */
-    display: block; /* 이미지 블록 요소로 설정 */
-    margin-right: 20px; /* 이미지와 텍스트 사이의 여백 설정 */
+    width: 100px;
+    height: auto;
+    display: block;
+    margin-right: 20px;
 }
 
 /* 텍스트 컨테이너 스타일 */
 .text-container {
-    display: flex; /* flexbox 레이아웃 사용 */
-    flex-direction: column; /* 텍스트를 세로로 배치 */
-    justify-content: center; /* 텍스트를 중앙 정렬 */
-    width: calc(100% - 140px); /* 이미지 너비(100px) + 여백(40px) 고려 */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: calc(100% - 140px);
 }
 
 /* 제목 스타일 */
 .text-container h3 {
-    font-size: 16px; /* 제목 폰트 크기 */
-    margin: 0 0 10px; /* 제목의 여백 설정 */
-    text-align: left; /* 제목 텍스트 왼쪽 정렬 */
-    width: 100%; /* 제목이 상자의 전체 너비를 차지하도록 설정 */
-    white-space: normal; /* 제목의 줄 바꿈 허용 */
-    word-wrap: break-word; /* 긴 단어를 자동으로 줄 바꿈 */
+    font-size: 16px;
+    margin: 0 0 10px;
+    text-align: left;
+    width: 100%;
+    white-space: normal;
+    word-wrap: break-word;
 }
 
 /* 각 문구 스타일 */
 .text-container div {
-    font-size: 14px; /* 문구 폰트 크기 */
-    margin-bottom: 5px; /* 문구 간의 간격 설정 */
-    text-align: left; /* 문구 텍스트 왼쪽 정렬 */
-    width: 100%; /* 문구가 상자의 전체 너비를 차지하도록 설정 */
-    overflow-wrap: break-word; /* 긴 단어를 자동으로 줄 바꿈 */
+    font-size: 14px;
+    margin-bottom: 5px;
+    text-align: left;
+    width: 100%;
+    overflow-wrap: break-word;
 }
 
 /* 상세보기 뷰 스타일 */
 #detail-view {
-    display: none; /* 숨김 상태로 시작 */
+    display: none;
     flex-direction: row;
     justify-content: space-between;
     padding: 20px;
@@ -123,121 +165,15 @@
 #back-button {
     position: absolute;
     bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
+    right: 20px;
     padding: 10px 20px;
     background-color: #007bff;
-    color: #fff;
+    color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-
 }
 
-
-/* 상세보기의 왼쪽과 오른쪽 박스 간의 간격 조정 */
-#left-detail {
-    left: 5%;
-    border: 1px solid #ddd;
-    padding: 20px;
-    box-sizing: border-box;
- /* 오른쪽 박스와의 간격 */
+#back-button:hover {
+    background-color: #0056b3;
 }
-
-#right-detail {
-    right: 5%;
-     border: 1px solid #ddd;
-     padding: 20px;
-     box-sizing: border-box;
- /* 왼쪽 박스와의 간격 */
-}
-
-/* /css/vroomEvent.css 파일에 추가 */
-#rating-display {
-    font-size: 2rem;
-    font-weight: bold;
-}
-
-#stars-display {
-    display: flex;
-    margin-top: 0.5rem;
-}
-
-.star {
-    font-size: 1.5rem;
-    color: gold;
-    margin-right: 0.1rem;
-}
-
-#review-count {
-    margin-top: 0.5rem;
-}
-
-#rating-distribution {
-    display: flex;
-    flex-direction: column;
-    margin-top: 1rem;
-}
-
-.rating-bar {
-    display: flex;
-    align-items: center;
-    margin-bottom: 0.5rem;
-}
-
-.rating-label {
-    width: 1.5rem;
-    text-align: right;
-    margin-right: 0.5rem;
-}
-
-.bar {
-    flex-grow: 1;
-    height: 0.8rem;
-    background-color: lightgray;
-    border-radius: 0.5rem;
-}
-
-#write-review-button {
-    margin-top: 1rem;
-    padding: 0.5rem 1rem;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 0.3rem;
-    cursor: pointer;
-}
-
-#review-form {
-    margin-top: 1rem;
-}
-
-.hidden {
-    display: none;
-}
-
-#review-text {
-    width: 100%;
-    height: 5rem;
-    margin-bottom: 0.5rem;
-    padding: 0.5rem;
-}
-
-#submit-review-button {
-    padding: 0.5rem 1rem;
-    background-color: #28a745;
-    color: white;
-    border: none;
-    border-radius: 0.3rem;
-    cursor: pointer;
-}
-
-.review-item {
-    padding: 1rem;
-    border-bottom: 1px solid lightgray;
-}
-
-.review-item:last-child {
-    border-bottom: none;
-}
-
