@@ -237,26 +237,31 @@
                 return response.json();
             })
             .then(data => {
-                if (data) {
-                    document.getElementById('panel-image').src = `${contextPath}/images/bibimbab.jpg`;
-                    document.getElementById('panel-name').textContent = data.fname;
-                    document.getElementById('panel-rating').textContent = data.frating;
-                    document.getElementById('panel-category').textContent = data.fcategory;
-                    document.getElementById('panel-location').textContent = data.faddress;
+		    if (data) {
+		        // 왼쪽 패널 설정
+		        document.getElementById('panel-image').src = `${contextPath}/images/bibimbab.jpg`;
+		        document.getElementById('panel-name').textContent = data.fname;
+		        document.getElementById('panel-rating').textContent = data.frating;
+		        document.getElementById('panel-category').textContent = data.fcategory;
+		        document.getElementById('panel-location').textContent = data.faddress;
+		
+		        // 오른쪽 패널의 Rating 값을 설정합니다.
+		        document.querySelector('#right-panel #panel-rating').textContent = data.frating;
+		
+		        document.getElementById('fno').value = fno;
+		
+		        container.style.display = 'none';
+		        leftPanel.style.display = 'block';
+		        rightPanel.style.display = 'block';
+		
+		        // 리뷰 정보 가져오기
+		        return fetch(`${contextPath}/vroom/getRestaurantReviews?fno=` + fno);
+		    } else {
+		        alert('식당 정보를 찾을 수 없습니다.');
+		        throw new Error('No restaurant data');
+		    }
+		})
 
-                    document.getElementById('fno').value = fno;
-
-                    container.style.display = 'none';
-                    leftPanel.style.display = 'block';
-                    rightPanel.style.display = 'block';
-
-                    // 리뷰 정보 가져오기
-                    return fetch(`${contextPath}/vroom/getRestaurantReviews?fno=` + fno);
-                } else {
-                    alert('식당 정보를 찾을 수 없습니다.');
-                    throw new Error('No restaurant data');
-                }
-            })
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
@@ -264,29 +269,33 @@
                 return response.json();
             })
             .then(reviews => {
-                const reviewsContainer = document.getElementById('reviews-container');
-                reviewsContainer.innerHTML = ''; // 기존 내용 지우기
-
-                if (reviews.length === 0) {
-                    reviewsContainer.innerHTML = '<p>No reviews available.</p>';
-                } else {
-                	reviews.forEach(review => {
-                		console.log(review.frno);
-                        const reviewElement = document.createElement('div');
-                        reviewElement.className = 'review_div';
-                        reviewElement.innerHTML = 
-                            "<ul class='review_ul' data-frno="+review.frno+" data-uno="+review.uno+" data-fno="+review.fno+">"
-                               + "<li>frtitle: "+review.frtitle+"</li>"
-                               + "<li>frcontent: "+review.frcontent+"</li>"
-                               + "<li>frwriter: "+review.frwriter+"</li>"
-                               + "<li>frregDate: "+review.frregDate+"</li>"
-                               + "<li>frrating: "+review.frrating+"</li>"
-                           + "</ul>"
-                        ; 
-                        reviewsContainer.appendChild(reviewElement);
-                    });
-                }
-            })
+			    const reviewsContainer = document.getElementById('reviews-container');
+			    reviewsContainer.innerHTML = ''; // 기존 내용 지우기
+			
+			    if (reviews.length === 0) {
+			        reviewsContainer.innerHTML = '<p>No reviews available.</p>';
+			    } else {
+			        reviews.forEach(review => {
+			            console.log(review.frno);
+			
+			            // frregDate에서 날짜 부분만 추출
+			            const formattedDate = review.frregDate.split('T')[0];
+			
+			            const reviewElement = document.createElement('div');
+			            reviewElement.className = 'review_div';
+			            reviewElement.innerHTML = 
+			                "<ul class='review_ul' data-frno="+review.frno+" data-uno="+review.uno+" data-fno="+review.fno+">"
+			                   + "<li>frtitle: "+review.frtitle+"</li>"
+			                   + "<li>frcontent: "+review.frcontent+"</li>"
+			                   + "<li>frwriter: "+review.frwriter+"</li>"
+			                   + "<li>frregDate: "+formattedDate+"</li>" 
+			                   + "<li>frrating: "+review.frrating+"</li>"
+			               + "</ul>"
+			            ; 
+			            reviewsContainer.appendChild(reviewElement);
+			        });
+			    }
+			})
             .catch(error => {
                 console.error('Error fetching data:', error);
                 alert('데이터를 가져오는 데 실패했습니다.');
@@ -297,7 +306,10 @@
         container.style.display = 'flex';
         leftPanel.style.display = 'none';
         rightPanel.style.display = 'none';
-        toggleReviewForm(); // 리뷰 입력 버튼을 다시 보이도록 설정
+
+        // 리뷰 입력 버튼을 보이게 하고, 리뷰 등록 폼을 숨깁니다.
+        document.getElementById('review-button').style.display = 'block';
+        document.getElementById('reviews_wrap').style.display = 'none';
     }
 
     container.addEventListener('wheel', (event) => {
