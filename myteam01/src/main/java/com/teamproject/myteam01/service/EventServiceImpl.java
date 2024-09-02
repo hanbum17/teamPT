@@ -30,9 +30,26 @@ public class EventServiceImpl implements EventService{
 
 	}
 	
+	//리뷰 가져오기 및 리뷰 갯수와 평균점수 구하기
 	@Override
 	public List<EventReviewVO> selectReviews2(Long eno) {
-		return eventMapper.selectReviews2(eno);
+		List<EventReviewVO> reviews = eventMapper.selectReviews2(eno);
+		Long count =0L;
+		Long erRating = 0L;
+		EventReviewVO setRatingAverage = new EventReviewVO();
+		if(reviews != null) {
+			for(int i = 0 ; i <= reviews.size(); i++) {
+				EventReviewVO getReviews = reviews.get(i);
+				erRating += getReviews.getErrating();
+				count += i ;
+			}
+			float ratingAverage = erRating/count;
+			setRatingAverage.setErCount(count);
+			setRatingAverage.setRatingAverage(ratingAverage);
+			
+		}
+		
+		return reviews;
 	}
 	
 	

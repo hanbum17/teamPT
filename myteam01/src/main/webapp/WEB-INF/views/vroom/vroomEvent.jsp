@@ -24,55 +24,59 @@
         <div id="left-detail" class="detail-box">
             <!-- Left detail box -->
         </div>
+        
+        
         <div id="right-detail" class="detail-box">
-            <!-- Right detail box -->
-            <h2>Reviews for <span id="event-name"></span></h2>
-            <div id="review-summary">
-                <div id="rating-display">
-                    <span id="rating-value">4.7</span> <!-- 별점 값 -->
-                </div>
-                <div id="stars-display">
-                    <span class="star">&#9733;</span>
-                    <span class="star">&#9733;</span>
-                    <span class="star">&#9733;</span>
-                    <span class="star">&#9733;</span>
-                    <span class="star">&#9733;</span>
-                </div>
-                <div id="review-count">
-                    <p>Total Reviews: <span id="total-reviews">0</span></p>
-                </div>
-                <div id="rating-distribution">
-                    <div class="rating-bar">
-                        <span class="rating-label">5</span>
-                        <div class="bar"></div>
-                    </div>
-                    <div class="rating-bar">
-                        <span class="rating-label">4</span>
-                        <div class="bar"></div>
-                    </div>
-                    <div class="rating-bar">
-                        <span class="rating-label">3</span>
-                        <div class="bar"></div>
-                    </div>
-                    <div class="rating-bar">
-                        <span class="rating-label">2</span>
-                        <div class="bar"></div>
-                    </div>
-                    <div class="rating-bar">
-                        <span class="rating-label">1</span>
-                        <div class="bar"></div>
-                    </div>
-                </div>
-                <button id="write-review-button">Write a Review</button>
-                <div id="review-form" class="hidden">
-                    <textarea id="review-text" placeholder="Write your review here..."></textarea>
-                    <button id="submit-review-button">Submit Review</button>
-                </div>
+    <h2>Reviews for <span id="event-name"></span></h2>
+    <div id="review-summary">
+        <div id="rating-display">
+            <span id="rating-value">4.7</span> <!-- 별점 값 -->
+        </div>
+        <div id="stars-display">
+            <span class="star">&#9733;</span>
+            <span class="star">&#9733;</span>
+            <span class="star">&#9733;</span>
+            <span class="star">&#9733;</span>
+            <span class="star">&#9733;</span>
+        </div>
+        <div id="review-count">
+            <p>Total Reviews: <span id="total-reviews">0</span></p>
+        </div>
+        <div id="rating-distribution">
+            <div class="rating-bar">
+                <span class="rating-label">5</span>
+                <div class="bar"></div>
             </div>
-            <div id="review-list">
-                <!-- Review items will be appended here -->
+            <div class="rating-bar">
+                <span class="rating-label">4</span>
+                <div class="bar"></div>
+            </div>
+            <div class="rating-bar">
+                <span class="rating-label">3</span>
+                <div class="bar"></div>
+            </div>
+            <div class="rating-bar">
+                <span class="rating-label">2</span>
+                <div class="bar"></div>
+            </div>
+            <div class="rating-bar">
+                <span class="rating-label">1</span>
+                <div class="bar"></div>
             </div>
         </div>
+        <button id="write-review-button">Write a Review</button>
+        <div id="review-form" class="hidden">
+            <textarea id="review-text" placeholder="Write your review here..."></textarea>
+            <button id="submit-review-button">Submit Review</button>
+        </div>
+    </div>
+    <div id="review-list">
+        <!-- Review items will be appended here -->
+    </div>
+</div>
+        
+        
+        
     </div>
 
     <script>

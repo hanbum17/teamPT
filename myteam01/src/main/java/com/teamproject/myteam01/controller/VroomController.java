@@ -95,6 +95,7 @@ public class VroomController {
     @GetMapping("/api/events/{eno}/reviews")
     @ResponseBody
     public List<EventReviewVO> getEventReviews(@PathVariable Long eno) {
+    	System.out.println("리뷰 관련 정보"+eventService.selectReviews2(eno));
         return eventService.selectReviews2(eno);
     }
 }
