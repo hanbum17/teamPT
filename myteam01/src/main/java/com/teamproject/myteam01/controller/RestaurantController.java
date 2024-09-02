@@ -2,6 +2,8 @@ package com.teamproject.myteam01.controller;
 
 import java.util.List;
 
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +17,7 @@ import com.teamproject.myteam01.domain.AttachFileDTO;
 import com.teamproject.myteam01.domain.RestaurantVO;
 import com.teamproject.myteam01.domain.RestaurantsReviewVO;
 import com.teamproject.myteam01.service.RestaurantService;
+import com.teamproject.myteam01.service.UserRegistrationService;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -26,9 +29,10 @@ import lombok.RequiredArgsConstructor;
 public class RestaurantController {
 
 	private final RestaurantService restaurantService ;
+    private final UserRegistrationService userRegistrationService;
+
 	
-	
-	//록귀 파트
+
 	@GetMapping("/detail")
 	public String eventDetail(@RequestParam("fno")Long fno, Model model) {
 		RestaurantVO restaurantVO = restaurantService.restaurantDetail(fno);
@@ -58,36 +62,35 @@ public class RestaurantController {
     }
 	
 	//윤정 파트
-		@GetMapping("/rest_register")
-	    public String restaurantRegister() {
-	        return "rest_register"; // JSP 페이지로 이동
-	    }
-		
-		
-		@PostMapping("/rest_register")
-		public String restaurantRegister(RestaurantVO rest, RedirectAttributes redirectAttr, Model model) {
-		    System.out.println("식당 등록 컨트롤러: " + rest);
-		    List<AttachFileDTO> attachFileList = rest.getAttachFileList();
-		    model.addAttribute("attachFileList", attachFileList);
-
-		    if (attachFileList != null && !attachFileList.isEmpty()) {
-		        attachFileList.forEach(attachFile -> System.out.println("첨부파일 확인: " + attachFile.toString()));
-		        
-		        // 첨부파일이 있을 경우 첫 번째 파일을 사용
-		        Long fno = restaurantService.registerRest(rest, attachFileList.get(0));
-		        System.out.println("등록된 식당 번호: " + fno);
-		        redirectAttr.addFlashAttribute("result", fno);
-		    } else {
-		        System.out.println("controller:첨부파일 없음 ");
-		        
-		        // 첨부파일이 없는 경우 처리
-		        Long fno = restaurantService.registerRest(rest, null); // 첨부파일 없음
-		        System.out.println("등록된 식당 번호: " + fno);
-		        redirectAttr.addFlashAttribute("result", fno);
+			@GetMapping("/rest_register")
+		    public String restaurantRegister() {
+		        return "rest_register"; // JSP 페이지로 이동
 		    }
-
-		    return "redirect:/restaurant/rest_register";
-		}
+			
+			
+			@PostMapping("/rest_register")
+		    public String restaurantRegister(RestaurantVO rest, RedirectAttributes redirectAttr, Model model, @AuthenticationPrincipal UserDetails userDetails) {
+		        System.out.println("식당 등록 컨트롤러: " + rest);
+		        List<AttachFileDTO> attachFileList = rest.getAttachFileList();
+		        model.addAttribute("attachFileList", attachFileList);
+	
+		        Long fno = null;
+		        if (attachFileList != null && !attachFileList.isEmpty()) {
+		            attachFileList.forEach(attachFile -> System.out.println("첨부파일 확인: " + attachFile.toString()));
+		            fno = restaurantService.registerRest(rest, attachFileList.get(0));
+		        } else {
+		            System.out.println("controller:첨부파일 없음 ");
+		            fno = restaurantService.registerRest(rest, null); // 첨부파일 없음
+		        }
+	
+		        System.out.println("등록된 식당 번호: " + fno);
+		        redirectAttr.addFlashAttribute("result", fno);
+	
+		        // USER_REGISTRATIONS 테이블에 등록
+		        userRegistrationService.registerUserRestaurant(userDetails.getUsername(), fno);
+	
+		        return "redirect:/restaurant/rest_register";
+		    }
 
 
 	

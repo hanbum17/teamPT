@@ -55,17 +55,25 @@ body, html {
     margin-bottom: 15px;
 }
 
-.menu-item a {
+/* 공통 스타일로 a, button 모두에 적용 */
+.menu-item a, 
+.menu-item button {
     text-decoration: none;
     color: #333;
     font-size: 13px;
     padding: 10px 15px;
     display: block;
+    width: 100%;
+    text-align: left;
     border-radius: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
     transition: background-color 0.3s, color 0.3s;
 }
 
-.menu-item a:hover {
+.menu-item a:hover,
+.menu-item button:hover {
     background-color: #007bff;
     color: #fff;
 }
@@ -77,13 +85,15 @@ body, html {
     background-color: #ffcccc; /* Optional: 강조를 위한 배경색 */
 }
 
-.menu-item.delete-account a {
+.menu-item.delete-account a, 
+.menu-item.delete-account button {
     color: #ff0000; /* Optional: 위험 요소를 강조하는 색상 */
     border-radius: 5px;
     font-weight: bold;
 }
 
-.menu-item.delete-account a:hover {
+.menu-item.delete-account a:hover,
+.menu-item.delete-account button:hover {
 	background-color: #fff;
 }
 

@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/login.css?v=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <title>Login</title>
     <%@ include file="../user_main/nav.jsp" %>
 </head>
@@ -15,6 +16,7 @@
             <div id="overlay" class="overlay"></div>
             <img id="slideshow" src="${pageContext.request.contextPath}/resources/img/여행1.jpg" alt="Slideshow Image" class="photo">
         </div>
+
         <!-- Login Area -->
         <div class="login-container">
             <div class="flex-center logo-wrapper">
@@ -53,7 +55,7 @@
 					</div>
                     <div class="signup-wrapper">
                         <!-- 회원가입 버튼 클릭 시 registerSelect.jsp로 이동 -->
-                        <form action="${pageContext.request.contextPath}/user/registerSelect" method="get">
+                        <form action="/user/registerSelect" method="get">
                             <button class="signup-link" type="submit">회원가입</button>
                         </form>
                     </div>
@@ -64,6 +66,21 @@
             </div>
         </div>
     </div>
+    
+
+
+    <c:if test="${not empty error}">
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: '로그인 실패',
+                text: '${error}',
+                confirmButtonText: '확인'
+            });
+        </script>
+        <c:remove var="error" scope="session"/>
+    </c:if>
+
 
     <script>
 	    document.addEventListener("DOMContentLoaded", function() {
@@ -76,7 +93,7 @@
 	                loginButton.style.backgroundColor = "rgba(0, 162, 255, 1)"; // 진한 파란색
 	                loginButton.style.cursor = "pointer"; // 클릭 가능한 커서
 	            } else {
-	                loginButton.style.backgroundColor = "rgba(0, 162, 255, 0.3)"; // 기존 연한 파란색
+	                loginButton.style.backgroundColor = "rgba(0, 162, 255, 0.3)"; // 연한 파란색
 	                loginButton.style.cursor = "not-allowed"; // 비활성화된 커서
 	            }
 	        }
