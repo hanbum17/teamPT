@@ -12,13 +12,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.teamproject.myteam01.domain.RestaurantVO;
-import com.teamproject.myteam01.domain.RestaurantsReviewVO;
 import com.teamproject.myteam01.service.RestaurantService;
 
 import lombok.RequiredArgsConstructor;
@@ -46,6 +43,7 @@ public class VroomController {
 	}
 	
 	@GetMapping("/getRestaurantDetails")
+<<<<<<< Updated upstream
 	@ResponseBody
 	public RestaurantVO getRestaurantDetail(@RequestParam("fno") Long fno) {
 	    System.out.println("전달된 fno 값: " + fno); 
@@ -70,6 +68,13 @@ public class VroomController {
 		System.out.println("리뷰컨트롤러에 전달된 값: "+restReviewVO);
 		return "redirect:/vroom/restaurant";
 	}
+=======
+	public RestaurantVO getRestaurantDetail(@RequestParam("fno") Long fno) {
+	    System.out.println("전달된 fno 값: " + fno); 
+	    RestaurantVO detail = restService.restaurantDetail(fno);
+	    return detail;
+	}
+>>>>>>> Stashed changes
 
 	
 	

@@ -177,16 +177,21 @@
 <!-- 오른쪽 패널: 리뷰/별점 -->
 <div class="panel right-panel" id="right-panel">
     <!-- 별점 부분 -->
-    <p><strong>Rating:</strong> <span id="panel-rating"></span></p>
+    <p><strong>4.3</strong>  ★★★★☆ </p>
 
     <!-- 리뷰 입력 버튼 -->
     <button id="review-button" onclick="toggleReviewForm()" style="display: block; width: 100%; padding: 10px; border: none; border-radius: 5px; background-color: #007bff; color: #fff; cursor: pointer;">
         리뷰 입력
     </button>
 
+<<<<<<< Updated upstream:myteam01/src/main/webapp/WEB-INF/views/main_restaurant.jsp
+=======
+    <!-- 리뷰 입력 폼 (삭제됨) -->
+
+>>>>>>> Stashed changes:myteam01/src/main/webapp/jsp/main_restaurant.jsp
     <!-- 리뷰 등록 폼 -->
     <div id="reviews_wrap" style="display: none; margin-top: 20px;">
-        <form action="${contextPath }/vroom/restregisterReview" method="post">
+        <form action="${contextPath }/restaurant/registerReview" method="post">
             <input type="text" id="frtitle" name="frtitle" placeholder="제목"><br>
             <textarea id="frcontent" name="frcontent" placeholder="내용"></textarea><br>
             <input type="text" id="frwriter" name="frwriter" placeholder="작성자"><br>
@@ -205,15 +210,28 @@
     const contextPath = "${contextPath}";
 
     function toggleReviewForm() {
+<<<<<<< Updated upstream:myteam01/src/main/webapp/WEB-INF/views/main_restaurant.jsp
         const reviewButton = document.getElementById('review-button');
+=======
+>>>>>>> Stashed changes:myteam01/src/main/webapp/jsp/main_restaurant.jsp
         const reviewsWrap = document.getElementById('reviews_wrap');
+        const reviewButton = document.getElementById('review-button');
 
+<<<<<<< Updated upstream:myteam01/src/main/webapp/WEB-INF/views/main_restaurant.jsp
         if (reviewsWrap.style.display === 'none' || reviewsWrap.style.display === '') {
             reviewsWrap.style.display = 'block'; // reviews_wrap을 표시
             reviewButton.style.display = 'none'; // 리뷰 입력 버튼 숨기기
         } else {
             reviewsWrap.style.display = 'none'; // reviews_wrap을 숨김
             reviewButton.style.display = 'block'; // 리뷰 입력 버튼 표시
+=======
+        if (reviewsWrap.style.display === 'none') {
+            reviewsWrap.style.display = 'block'; // reviews_wrap을 표시
+            reviewButton.style.display = 'none';
+        } else {
+            reviewsWrap.style.display = 'none'; // reviews_wrap을 숨김
+            reviewButton.style.display = 'block';
+>>>>>>> Stashed changes:myteam01/src/main/webapp/jsp/main_restaurant.jsp
         }
     }
 
@@ -319,4 +337,8 @@
 </script>
 
 </body>
+<<<<<<< Updated upstream:myteam01/src/main/webapp/WEB-INF/views/main_restaurant.jsp
 </html>
+=======
+</html>
+>>>>>>> Stashed changes:myteam01/src/main/webapp/jsp/main_restaurant.jsp
