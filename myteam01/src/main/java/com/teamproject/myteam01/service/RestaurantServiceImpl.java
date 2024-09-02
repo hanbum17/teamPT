@@ -32,9 +32,30 @@ public class RestaurantServiceImpl implements RestaurantService{
 	}
 	
 	@Override
-	public List<RestaurantsReviewVO> selectReviews(Long fno) {
-		return restaurantMapper.selectReviews(fno);
-	}
+	   public List<RestaurantsReviewVO> selectReviews(Long fno) {
+	       List<RestaurantsReviewVO> reviews = restaurantMapper.selectReviews(fno);
+	       Double frRating = 0.0;
+	       Long count = 0L;
+
+	       if (reviews != null && !reviews.isEmpty()) {
+	           for (RestaurantsReviewVO review : reviews) {
+	               frRating += review.getFrrating();
+	               count++;
+	           }
+	           Double ratingAverage = frRating / count;
+	           Double finalRatingAverage = Math.round(ratingAverage * 10) / 10.0;
+
+	           // 모든 리뷰 객체에 평균 평점과 리뷰 개수를 설정하기
+	           for (RestaurantsReviewVO review : reviews) {
+	               review.setRatingAverage(finalRatingAverage);
+	               review.setFrCount(count);
+	           }
+
+	           return reviews;
+	       }
+
+	       return reviews; // 빈 리스트를 반환
+	   }
 	
 	@Override
 	public int registerReview(RestaurantsReviewVO restReviewVO) {
@@ -74,10 +95,11 @@ public class RestaurantServiceImpl implements RestaurantService{
 
 	      return rest.getFno();
 	   }
-	
+		@Override
 		public List<RestaurantVO> getRestList(){
 			return restaurantMapper.selectRestList();
 		}
+		
 
 	
 

@@ -1,23 +1,23 @@
 package com.teamproject.myteam01.controller;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.util.List;
 
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.teamproject.myteam01.domain.RestaurantVO;
+import com.teamproject.myteam01.domain.RestaurantsReviewVO;
+import com.teamproject.myteam01.domain.UserVO;
 import com.teamproject.myteam01.service.RestaurantService;
+import com.teamproject.myteam01.service.UserService;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
 @Controller
@@ -26,6 +26,7 @@ import lombok.RequiredArgsConstructor;
 public class VroomController {
 	
 	public final RestaurantService restService;
+	public final UserService userService;
 
 	//Vroom의 메인페이지
 	@GetMapping("/main")
@@ -37,13 +38,27 @@ public class VroomController {
 
 	
 	@GetMapping("/restaurant")
-	public String restMain(Model model) {
-		model.addAttribute("restList", restService.getRestList());
-		return "main_restaurant";
+	public String restMain(HttpSession session, Model model) {
+	    // 세션에서 현재 로그인한 사용자 정보 가져오기
+	    UserVO loggedInUser = (UserVO) session.getAttribute("loggedInUser");
+
+	    // 로그인한 사용자 정보가 세션에 없다면 (로그인되지 않은 상태)
+	    if (loggedInUser == null) {
+	        // 로그인 페이지로 리다이렉트하거나 적절한 처리를 합니다.
+	        return "redirect:/login";
+	    }
+
+	    // 레스토랑 목록을 가져와서 모델에 추가
+	    model.addAttribute("restList", restService.getRestList());
+
+	    // 로그인한 사용자 정보를 모델에 추가
+	    model.addAttribute("loggedInUser", loggedInUser);
+
+	    // JSP 페이지로 이동
+	    return "main_restaurant";
 	}
 	
 	@GetMapping("/getRestaurantDetails")
-<<<<<<< Updated upstream
 	@ResponseBody
 	public RestaurantVO getRestaurantDetail(@RequestParam("fno") Long fno) {
 	    System.out.println("전달된 fno 값: " + fno); 
@@ -57,7 +72,6 @@ public class VroomController {
 	@ResponseBody
 	public List<RestaurantsReviewVO> getRestaurantReviews(@RequestParam("fno") Long fno, Model model) {
 	    List<RestaurantsReviewVO> reviews = restService.selectReviews(fno);
-//	    model.addAttribute("rereviews", reviews);
 	    System.out.println("리뷰리스트 : "+reviews);
 	    return reviews;
 	}
@@ -68,13 +82,13 @@ public class VroomController {
 		System.out.println("리뷰컨트롤러에 전달된 값: "+restReviewVO);
 		return "redirect:/vroom/restaurant";
 	}
-=======
-	public RestaurantVO getRestaurantDetail(@RequestParam("fno") Long fno) {
-	    System.out.println("전달된 fno 값: " + fno); 
-	    RestaurantVO detail = restService.restaurantDetail(fno);
-	    return detail;
-	}
->>>>>>> Stashed changes
+	
+	
+	
+
+
+	 
+
 
 	
 	
