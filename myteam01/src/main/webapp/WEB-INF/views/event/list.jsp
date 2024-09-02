@@ -102,7 +102,16 @@
 		            <td>${item.LADDRESS}</td>
 		            <td>${item.LRATING}</td>
 		            <td>${item.LVIEWSCNT}</td>
-		            <td>${item.LTYPE}</td>
+		            <td>
+					    <c:choose>
+					        <c:when test="${item.LTYPE == 1}">
+					            유저
+					        </c:when>
+					        <c:otherwise>
+					            관리자
+					        </c:otherwise>
+					    </c:choose>
+					</td>
 		        </tr>
 		    </c:forEach>
 		    <c:if test="${empty combinedList}">

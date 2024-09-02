@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,7 +19,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.teamproject.myteam01.domain.EventReviewVO;
 import com.teamproject.myteam01.domain.EventVO;
 import com.teamproject.myteam01.service.EventService;
-
+import com.teamproject.myteam01.service.UserRegistrationService;
 
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -30,6 +32,7 @@ import lombok.RequiredArgsConstructor;
 public class EventController {
 
 	private final EventService eventService ;
+    private final UserRegistrationService userRegistrationService;
 	
 	//테스트
 	@GetMapping("/test")
@@ -109,18 +112,21 @@ public class EventController {
 		System.out.println("컨트롤러 : 이벤트 등록 페이지 호출");
 	}
 	
-	//행사 등록 - 처리
-	@PostMapping("/register")
-	public String regiEvent(EventVO event, RedirectAttributes redirAttr) {
-		System.out.println("컨트롤러 : 이벤트 등록 처리" + event);
-		
-		Long eno = eventService.regiEvent(event);
-		System.out.println("등록된 이벤트 eno : " + eno);
-		
-		redirAttr.addAttribute("result", eno);
-		
-		return "redirect:/event/list" ;
-	}
+    // 행사 등록 - 처리
+    @PostMapping("/register")
+    public String regiEvent(EventVO event, RedirectAttributes redirAttr, @AuthenticationPrincipal UserDetails userDetails) {
+        System.out.println("컨트롤러 : 이벤트 등록 처리" + event);
+
+        Long eno = eventService.regiEvent(event);
+        System.out.println("등록된 이벤트 eno : " + eno);
+
+        // USER_REGISTRATIONS 테이블에 등록
+        userRegistrationService.registerUserEvent(userDetails.getUsername(), eno);
+
+        redirAttr.addAttribute("result", eno);
+
+        return "redirect:/event/list";
+    }
 	
 	//행사 수정 - 호출
 	@GetMapping("/modify")

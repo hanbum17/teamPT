@@ -1,7 +1,12 @@
 package com.teamproject.myteam01.controller;
 
 import com.teamproject.myteam01.domain.UserVO;
+import com.teamproject.myteam01.service.UserRegistrationService;
 import com.teamproject.myteam01.service.UserService;
+
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,6 +23,9 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+    
+    @Autowired
+    private UserRegistrationService userRegistrationService;
 
     @GetMapping("/user/registerSelect")
     public String showRegisterSelectPage() {
@@ -55,7 +63,7 @@ public class UserController {
     }
     
     
-    @GetMapping("/user/userMain")
+    @GetMapping("/user/main")
     public String userPage(@AuthenticationPrincipal UserDetails userDetails, Model model) {
         // 현재 로그인된 사용자 정보를 모델에 추가할 수 있습니다.
         model.addAttribute("username", userDetails.getUsername());
@@ -86,7 +94,13 @@ public class UserController {
 
     // 등록한 행사 및 음식점 페이지로 이동
     @GetMapping("/user/user_register")
-    public String userRegisterPage() {
+    public String getRegisteredItems(@AuthenticationPrincipal UserDetails userDetails, Model model) {
+        String userId = userDetails.getUsername();
+        List<Map<String, Object>> registeredItems = userRegistrationService.getUserRegistrations(userId);
+        
+     // 디버깅을 위해 출력해봅시다.
+        System.out.println("등록된 항목: " + registeredItems);
+        model.addAttribute("registeredItems", registeredItems);
         return "user_main/user_menu/user_register";
     }
 
