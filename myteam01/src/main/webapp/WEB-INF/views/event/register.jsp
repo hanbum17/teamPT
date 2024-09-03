@@ -143,13 +143,13 @@ label {
     </div>
     
     <div class="form-group">
-        <label>행사 y좌표</label>
-        <input class="form-control" name="eycoord" id="eycoord" readonly>
+        <!-- <label>행사 y좌표</label> -->
+        <input type="hidden" class="form-control" name="eycoord" id="eycoord" readonly>
     </div>
     
     <div class="form-group">
-        <label>행사 x좌표</label>
-        <input class="form-control" name="excoord" id="excoord" readonly>
+        <!--  <label>행사 x좌표</label> -->
+        <input type="hidden" class="form-control" name="excoord" id="excoord" readonly>
     </div>
     
     <!-- 파일 첨부 버튼 -->
@@ -159,6 +159,7 @@ label {
     </label>
     <div class="form-group fileUploadResult">
         <ul>
+         <%-- 업로드 후, 업로드 처리결과가 표시될 영역  --%>
         </ul>
     </div>
 
@@ -168,6 +169,7 @@ label {
 </form>
 
 <script>
+//파일 업로드 및 결과 표시
 function checkUploadFile(fileName, fileSize) {
     var allowedMaxSize = 1048576; // 1MB
     var regExpForbiddenFileExtension = /((\.(exe|dll|sh|c|zip|alz|tar)$)|^[^.]+$|(^\.[^.]{1,}$))/i;
@@ -183,6 +185,83 @@ function checkUploadFile(fileName, fileSize) {
     }
     return true;
 }
+
+function showUploadResult(uploadResult) {
+    var fileUploadResultUL = $(".fileUploadResult ul");
+    var htmlStr = "";
+
+    $(uploadResult).each(function(i, attachFile) {
+        var fullFileName = encodeURI(attachFile.repoPath + "/" +
+                                     attachFile.uploadPath + "/" +
+                                     attachFile.uuid + "_" +
+                                     attachFile.fileName);
+        htmlStr += "<li data-repopath='" + attachFile.repoPath + "'"  
+                  + " data-uploadpath='" + attachFile.uploadPath + "'"
+                  + " data-uuid='" + attachFile.uuid + "'"
+                  + " data-filename='" + attachFile.fileName + "'"
+                  + " data-filetype='I'>"
+                  + "   " + attachFile.fileName
+                  + "   <span class='custom-delete'>삭제</span>"
+                  + "</li>";
+    });
+    fileUploadResultUL.append(htmlStr);
+}
+
+var cloneFileInput = $(".uploadDiv").clone();
+
+$(".uploadDiv").on("change", "input[type='file']", function() {
+    var fileInputs = $("input[name='fileInput']");
+    var uploadFiles = fileInputs[0].files;
+    var formData = new FormData();
+    
+    for (var i = 0; i < uploadFiles.length; i++) {
+        if (!checkUploadFile(uploadFiles[i].name, uploadFiles[i].size)) {
+            $("#fileInput").val("");
+            return;
+        }
+        formData.append("uploadFiles", uploadFiles[i]);
+    }
+    
+    $.ajax({
+        type: "post",
+        url: "${contextPath}/doFileUploadByAjax",
+        data: formData,
+        contentType: false,
+        processData: false,
+        dataType: "json",
+        success: function(uploadResult, status) {
+            $(".uploadDiv").html(cloneFileInput.html());
+            showUploadResult(uploadResult);
+        }
+    });
+});
+
+$(".fileUploadResult ul").on("click", ".custom-delete", function() {
+    var fileLi = $(this).closest('li'); // 부모 li 요소 선택
+    var fileName = fileLi.data("repopath") + "/" + 
+                   fileLi.data("uploadpath") + "/" +
+                   fileLi.data("uuid") + "_" +
+                   fileLi.data("filename");
+    var fileType = 'I'; 
+
+    $.ajax({
+        type: "post",
+        url: "${contextPath}/deleteFile",
+        data: {fileName: fileName, fileType: fileType},
+        dataType: "text",
+        success: function(result) { 
+            if (result == "DelSuccess") {
+                alert("파일이 삭제되었습니다.");
+                fileLi.remove();
+            } else {
+                if (confirm("파일이 존재하지 않습니다. 해당 항목을 삭제하시겠습니까?")) {
+                    fileLi.remove();
+                }
+            } 
+        }
+    });
+});
+
 
 function checkEventValue() {
     var ename = document.getElementById("ename").value;
@@ -220,10 +299,11 @@ $("#btnRegister").on("click", function() {
         var attachLi = $(objLi);
 
         attachFileInputHTML
-            += "<input type='hidden' name='attachFileList[" + i + "].uuid' value='" + attachLi.data("uuid") + "'>"
-            + "<input type='hidden' name='attachFileList[" + i + "].uploadPath' value='" + attachLi.data("uploadpath") + "'>"
-            + "<input type='hidden' name='attachFileList[" + i + "].fileName' value='" + attachLi.data("filename") + "'>"
-            + "<input type='hidden' name='attachFileList[" + i + "].fileType' value='" + attachLi.data("filetype") + "'>";
+        += "<input type='hidden' name='attachFileList[" + i + "].repoPath' value='" + attachLi.data("repoPath") + "'>"
+        + "<input type='hidden' name='attachFileList[" + i + "].uuid' value='" + attachLi.data("uuid") + "'>"
+        + "<input type='hidden' name='attachFileList[" + i + "].uploadPath' value='" + attachLi.data("uploadpath") + "'>"
+        + "<input type='hidden' name='attachFileList[" + i + "].fileName' value='" + attachLi.data("filename") + "'>"
+        + "<input type='hidden' name='attachFileList[" + i + "].fileType' value='" + attachLi.data("filetype") + "'>";
     });
 
     if (attachFileInputHTML) {
@@ -338,6 +418,7 @@ function sample4_execDaumPostcode() {
     }).open();
 }
 
+// 주소 입력 함수 = 도로명주소 + 상세주소 + 참고주소
 function combineAddress() {
     var roadAddress = document.getElementById("sample4_roadAddress").value;
     var detailAddress = document.getElementById("sample4_detailAddress").value;
