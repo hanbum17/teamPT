@@ -51,13 +51,13 @@ button:hover {
 
 .section-header {
     display: flex;
-    justify-content: center; /* 중앙 정렬 */
+    justify-content: center;
     align-items: center;
     margin-bottom: 10px;
 }
 
 .section-header h3 {
-    margin-right: 20px; /* 제목과 버튼 간격 조정 */
+    margin-right: 20px;
 }
 
 .register-btn {
@@ -106,29 +106,29 @@ function showSection(sectionId) {
 }
 
 window.onload = function() {
-    showSection('faqSection'); // 기본적으로 FAQ 섹션을 보여줌
+    showSection('faq'); // 기본적으로 FAQ 섹션을 보여줌
 };
 </script>
 </head>
 <body>
     <h1>고객센터</h1>
     <div>
-        <button class="btnFAQ" onclick="showSection('faqSection')">자주 묻는 질문(FAQ)</button>
-        <button class="btnFeedback" onclick="showSection('feedbackSection')">고객의 소리</button>
-        <button class="btnInquiry" onclick="showSection('inquirySection')">문의사항</button>
+        <button class="btnFAQ" onclick="showSection('faq')">자주 묻는 질문(FAQ)</button>
+        <button class="btnFeedback" onclick="showSection('feedback')">고객의 소리(건의사항)</button>
+        <button class="btnInquiry" onclick="showSection('inquiry')">1:1 문의</button>
     </div>
 
-    <div id="faqSection" class="section">
+    <div id="faq" class="section">
         <div class="section-header">
             <h3>자주 묻는 질문 (FAQ)</h3>
-            <button class="register-btn" onclick="location.href='${contextPath}/cs/faq/register'">FAQ 등록</button>
+            <button class="register-btn" onclick="location.href='${contextPath}/cs/register?type=faq'">FAQ 등록</button>
         </div>
         <div class="table-container">
             <table>
                 <tr>
                     <th>번호</th>
                     <th>카테고리</th>
-                    <th>Q.</th>
+                    <th>제목</th>
                 </tr>
                 <c:forEach items="${CsList}" var="cs">
                     <c:if test="${cs.faqdelflag == 1}">
@@ -149,18 +149,18 @@ window.onload = function() {
         </div>
     </div>
 
-    <div id="feedbackSection" class="section">
+    <div id="feedback" class="section">
         <div class="section-header">
             <h3>고객의 소리</h3>
-            <button class="register-btn" onclick="location.href='${contextPath}/cs/feedback/register'">고객의 소리 등록</button>
+            <button class="register-btn" onclick="location.href='${contextPath}/cs/register?type=feedback'">고객의 소리 등록</button>
         </div>
         <p>고객의 소리 내용을 여기에 작성합니다.</p>
     </div>
 
-    <div id="inquirySection" class="section">
+    <div id="inquiry" class="section">
         <div class="section-header">
-            <h3>문의사항</h3>
-            <button class="register-btn" onclick="location.href='${contextPath}/cs/inquiry/register'">문의사항 등록</button>
+            <h3>1:1 문의내역</h3>
+            <button class="register-btn" onclick="location.href='${contextPath}/cs/register?type=inquiry'">1:1 문의 등록</button>
         </div>
         <p>문의사항 내용을 여기에 작성합니다.</p>
     </div>

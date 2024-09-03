@@ -31,7 +31,7 @@ public class CsVO {
 	private String faqtitle; // FAQ 제목(질문)
 	private String faqcontent; // FAQ 내용(답변)
 	private Date faqregdate; // FAQ 등록일
-	private Timestamp TimeStamfaqmoddate; // FAQ 수정일
+	private Timestamp faqmoddate; // FAQ 수정일
 	private Integer faqdelflag; // FAQ 상태 0 = 존재,  1 = 삭제
 	
 }//end
