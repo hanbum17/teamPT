@@ -14,7 +14,14 @@ html, body {
     display: flex;
     justify-content: center;
     align-items: center;
+	position: fixed; /* 고정된 위치 */
+	top: 26%;
+}
 
+@media (max-height: 800px) { /* 창의 높이가 800px 이하일 때 적용 */
+    .container {
+        top: 100px; /* 컨테이너가 200px 위로 올라가지 않도록 제한 */
+    }
 }
 
 .photo-area {
@@ -159,3 +166,5 @@ html, body {
     font-size: 13px;
     color: rgb(86, 96, 235);
 }
+
+

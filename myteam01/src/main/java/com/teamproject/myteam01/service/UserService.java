@@ -41,5 +41,9 @@ public class UserService {
     public void updateLastLoginDate(String userId) {
         userMapper.updateLastLoginDate(userId);
     }
+    
+    public void deactivateAccount(String userId) {
+        userMapper.updateAccountStatus(userId, 1); // 1로 업데이트하여 계정을 비활성화
+    }
 }
 

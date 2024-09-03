@@ -1,0 +1,116 @@
+/* 전체 콘텐츠 스타일 */
+.content {
+    height: 98%; /* 전체 높이 설정 */
+    display: flex;
+    flex-direction: column; /* 세로 방향 정렬 */
+}
+
+/* 등록된 항목 리스트 스타일 */
+.registered-items {
+    background-color: #fff;
+    overflow-y: auto; /* 세로 스크롤 허용 */
+    flex: 1; /* 남은 공간을 차지 */
+    max-height: calc(100vh - 60px); /* 상단 영역의 높이를 제외한 최대 높이 */
+	padding : 0px 10px ;
+}
+
+/* 항목 리스트 스타일 */
+.registered-items ul {
+    list-style-type: none; /* 기본 목록 스타일 제거 */
+    padding: 0; /* 기본 여백 제거 */
+    margin: 0; /* 기본 여백 제거 */
+}
+
+/* 각 항목 스타일 */
+.registered-items li {
+    border-bottom: 1px solid #ddd; /* 하단 테두리 색상 */
+    padding: 15px 20px; /* 내부 여백 */
+    margin: 10px 0; /* 항목 간 여백 */
+    border: 1px solid #ddd; /* 테두리 색상 */
+    border-radius: 4px; /* 테두리 둥글기 */
+    display: flex; /* 플렉스 박스 사용 */
+    justify-content: space-between; /* 좌우 정렬 */
+}
+
+/* 행사 항목 배경색 */
+.registered-items li[data-type='EVENT'] {
+    background-color: #f4fcfd; /* 연한 블루 */
+}
+
+/* 음식점 항목 배경색 */
+.registered-items li[data-type='RESTAURANT'] {
+    background-color: #f5fff0; /* 연한 오렌지 */
+}
+
+/* 제목과 버튼 스타일 */
+.content-header {
+    display: flex; /* 플렉스 박스 사용 */
+    justify-content: space-between; /* 좌우 정렬 */
+    align-items: center; /* 중앙 정렬 */
+    margin-bottom: 15px; /* 제목과 내용 간 여백 */
+    position: sticky; /* 스크롤 시 고정 */
+    top: 0; /* 상단 고정 */
+    background-color: #fff; /* 배경 색상 */
+    border-bottom: 1px solid #ddd; /* 하단 테두리 색상 */
+    z-index: 5; /* 다른 요소 위에 표시 */
+
+}
+
+/* 필터 버튼 스타일 */
+.filter-button {
+    background-color: #007bff; /* 버튼 배경 색상 */
+    color: #fff; /* 버튼 텍스트 색상 */
+    border: none; /* 기본 테두리 제거 */
+    border-radius: 4px; /* 테두리 둥글기 */
+    padding: 8px 16px; /* 내부 여백 */
+    font-size: 14px; /* 폰트 크기 */
+    cursor: pointer; /* 커서 변경 */
+}
+
+.filter-button:hover {
+    background-color: #0056b3; /* 호버 시 배경 색상 변경 */
+}
+
+/* 항목 내용 스타일 */
+.item-left {
+    display: flex; /* 플렉스 박스 사용 */
+    flex-direction: column; /* 세로 방향 정렬 */
+}
+
+.item-right {
+    display: flex; /* 플렉스 박스 사용 */
+    flex-direction: column; /* 세로 방향 정렬 */
+    align-items: flex-end; /* 오른쪽 정렬 */
+}
+
+/* 항목 이름 스타일 */
+.item-left a {
+    font-size: 18px; /* 항목 이름 폰트 크기 */
+    font-weight: bold; /* 항목 이름 폰트 굵기 */
+    color: #333; /* 항목 이름 색상 */
+    text-decoration: none; /* 링크 밑줄 제거 */
+}
+
+/* 주소 스타일 */
+.item-address {
+    font-size: 14px; /* 주소 폰트 크기 */
+    color: #666; /* 주소 색상 */
+}
+
+/* 평점 스타일 */
+.item-rating {
+    font-size: 14px; /* 평점 폰트 크기 */
+    color: #ffcc00; /* 별 색상 */
+}
+
+/* 별 아이콘 스타일 */
+.star {
+    color: #ffcc00; /* 별 색상 */
+    font-size: 16px; /* 별 크기 조정 */
+}
+
+/* 등록일 스타일 */
+.item-date {
+    font-size: 14px; /* 등록일 폰트 크기 */
+    color: #999; /* 등록일 색상 */
+}

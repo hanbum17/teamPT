@@ -3,6 +3,7 @@ package com.teamproject.myteam01.controller;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.List;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -45,13 +46,23 @@ public class VroomController {
 	}
 	
 	@GetMapping("/getRestaurantDetails")
+
 	@ResponseBody
-	public RestaurantVO getRestaurantDetail(@RequestParam("fno") Long fno,Model model) {
+	public RestaurantVO getRestaurantDetail(@RequestParam("fno") Long fno) {
 	    System.out.println("전달된 fno 값: " + fno); 
 	    RestaurantVO detail = restService.restaurantDetail(fno);
-	    model.addAttribute("Reviews", restService.selectReviews(fno));
-	    System.out.println("컨트롤러 값 확인"+ detail);
+	    detail.setReivewsList(restService.selectReviews(fno)); // 리뷰 리스트를 세팅
+	    System.out.println("컨트롤러 값 확인: " + detail);
 	    return detail;
+	}
+	
+	@GetMapping("/getRestaurantReviews")
+	@ResponseBody
+	public List<RestaurantsReviewVO> getRestaurantReviews(@RequestParam("fno") Long fno, Model model) {
+	    List<RestaurantsReviewVO> reviews = restService.selectReviews(fno);
+//	    model.addAttribute("rereviews", reviews);
+	    System.out.println("리뷰리스트 : "+reviews);
+	    return reviews;
 	}
 	
 	@PostMapping("/restregisterReview")
