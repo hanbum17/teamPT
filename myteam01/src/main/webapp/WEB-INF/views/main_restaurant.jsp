@@ -278,31 +278,30 @@ let page = 1;
 const pageSize = 5;
 
 function submitEditReview() {
-        const form = document.getElementById('reviewEditForm');
-        const formData = new FormData(form);
+    const form = document.getElementById('reviewEditForm');
+    const formData = new FormData(form);
 
-        fetch(`${contextPath}/vroom/updateReview`, {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.json())
-        .then(result => {
-            if (result.success) {
-                alert(result.message);
-                // 수정된 리뷰가 속한 식당의 패널 업데이트
-                showDetailView(document.getElementById('fno').value);
-                // 수정 후에도 패널 유지
-            } else {
-                alert(result.message);
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('리뷰 수정 중 오류가 발생했습니다.');
-        });
-    }
-
-
+    fetch(${contextPath}/vroom/updateReview, {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(result => {
+        if (result.success) {
+            alert(result.message);
+            // 수정된 리뷰가 속한 식당의 패널 업데이트
+            showDetailView(document.getElementById('fno').value);
+            // 수정 후에도 패널 유지
+            document.getElementById('editReviewForm').style.display = 'none'; // 수정 완료 후 폼 숨기기
+        } else {
+            alert(result.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('리뷰 수정 중 오류가 발생했습니다.');
+    });
+}
 
 
 
@@ -311,7 +310,7 @@ function showDetailView(fno) {
     currentFno = fno;
     page = 1; // 페이지 초기화
 
-    fetch(`/vroom/getRestaurantDetails?fno=` + fno)
+    fetch(/vroom/getRestaurantDetails?fno= + fno)
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
@@ -323,7 +322,7 @@ function showDetailView(fno) {
             reviewsContainer.innerHTML = ''; // 기존 내용 지우기
             if (data) {
                 // 왼쪽 패널 설정
-                document.getElementById('panel-image').src = `/images/bibimbab.jpg`;
+                document.getElementById('panel-image').src = /images/bibimbab.jpg;
                 document.getElementById('panel-name').textContent = data.fname;
                 document.getElementById('panel-category').textContent = data.fcategory;
                 document.getElementById('panel-location').textContent = data.faddress;
@@ -516,7 +515,7 @@ function editReview(frno, frtitle, frcontent) {
 
 function deleteReview(frno) {
     if (confirm("정말로 이 리뷰를 삭제하시겠습니까?")) {
-        fetch(`${contextPath}/vroom/deleteReview`, {
+        fetch(${contextPath}/vroom/deleteReview, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
