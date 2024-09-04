@@ -97,33 +97,42 @@ public class VroomController {
 
 	
 	@PostMapping("/updateReview")
-    public String updateReview(RestaurantsReviewVO review, RedirectAttributes redirectAttributes) {
-        int result = restService.modifyreview(review);
-
-        return "redirect:/vroom/restaurant"; 
-    }
-
-
-
-	 
-	 @PostMapping("/deleteReview")
-	    @ResponseBody
-	    public Map<String, Object> deleteReview(@RequestParam Long frno) {
-	        Map<String, Object> result = new HashMap<>();
-	        try {
-	            int deleteResult = restService.deleteReview(frno);
-	            if (deleteResult > 0) {
-	                result.put("success", true);
-	            } else {
-	                result.put("success", false);
-	            }
-	        } catch (Exception e) {
-	            result.put("success", false);
-	            result.put("message", e.getMessage());
-	        }
-	        return result;
+	@ResponseBody
+	public Map<String, Object> updateReview(RestaurantsReviewVO review) {
+	    Map<String, Object> response = new HashMap<>();
+	    try {
+	        List<RestaurantsReviewVO> result = restService.modifyreview(review);
+	        response.put("success", true);
+	        response.put("message", "리뷰가 성공적으로 수정되었습니다.");
+	        response.put("data", result);
+	    } catch (Exception e) {
+	        response.put("success", false);
+	        response.put("message", "리뷰 수정에 실패했습니다.");
+	        e.printStackTrace(); // 로그에 에러 출력
 	    }
+	    return response;
+	}
+
+
+
 	 
+	@PostMapping("/deleteReview")
+	@ResponseBody
+	public Map<String, Object> deleteReview(@RequestParam Long frno) {
+	    Map<String, Object> result = new HashMap<>();
+	    try {
+	        int deleteResult = restService.deleteReview(frno);
+	        if (deleteResult > 0) {
+	            result.put("success", true);
+	        } else {
+	            result.put("success", false);
+	        }
+	    } catch (Exception e) {
+	        result.put("success", false);
+	        result.put("message", e.getMessage());
+	    }
+	    return result;
+	}
 	 @GetMapping("/reviews/{fno}")
 	 public String getReviews(@PathVariable("fno") Long fno, Model model, @AuthenticationPrincipal UserDetails userDetails) {
 	     List<RestaurantsReviewVO> reviews = restService.selectReviews(fno);

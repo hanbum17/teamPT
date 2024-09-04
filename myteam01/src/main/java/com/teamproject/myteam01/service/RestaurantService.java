@@ -18,7 +18,7 @@ public interface RestaurantService {
 	//윤정
 	public Long registerRest(RestaurantVO rest, AttachFileDTO attach);
 	public List<RestaurantVO> getRestList();
-	public int modifyreview(RestaurantsReviewVO restReviewVO);
+	public List<RestaurantsReviewVO> modifyreview(RestaurantsReviewVO restReviewVO);
 	
 	
 
