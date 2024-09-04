@@ -9,6 +9,9 @@
 <meta charset="UTF-8">
 <title>Event Detail Page</title>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <style>
     .wrap {position: absolute;left: 0;bottom: 40px;width: 288px;height: 132px;margin-left: -144px;text-align: left;overflow: hidden;font-size: 12px;font-family: 'Malgun Gothic', dotum, '돋움', sans-serif;line-height: 1.5;}
     .wrap * {padding: 0;margin: 0;}
@@ -39,7 +42,7 @@
 	<p>eviewscnt: ${Event.eviewsCnt }</p>
 	<p>excoord: ${Event.excoord }</p>
 	<p>eycoord: ${Event.eycoord }</p>
-	
+	<button id="addFavoriteBtn" class="add-fav-btn">즐겨찾기 추가</button>
 	<div id="imgDiv">
 		<ul>
 			
@@ -285,6 +288,121 @@ function closeOverlay() {
     overlay.setMap(null);     
 }
 	
+//-------즐찾
+<c:set var="contextPath" value="${pageContext.request.contextPath }"/>
+var userId = "user2";
+
+document.addEventListener('DOMContentLoaded', function() {
+    const addFavoriteBtn = document.getElementById('addFavoriteBtn');
+
+    if (addFavoriteBtn) {
+        addFavoriteBtn.onclick = function() {
+            $.ajax({
+                url: '/user/getFavoriteLists',  // 즐겨찾기 목록을 가져오는 API 엔드포인트
+                method: 'GET',
+                success: function(favoriteLists) {
+                    let optionsHtml = '';
+
+                    if (favoriteLists.length === 0) {
+                        optionsHtml = '<option value="">목록이 없습니다. 새로 추가해주세요.</option>';
+                    } else {
+                        favoriteLists.forEach(list => {
+                            optionsHtml += `<option value="${list.listId}">${list.listName}</option>`;
+                        });
+                    }
+
+                    Swal.fire({
+                        title: '즐겨찾기 목록 선택',
+                        html: `
+                            <label>즐겨찾기 목록:</label>
+                            <select id="favoriteListSelect" class="swal2-input">
+                                ${optionsHtml}
+                            </select>
+                            <input type="text" id="itemName" class="swal2-input" placeholder="항목 이름" required>
+                            <button type="button" id="addNewListBtn" class="swal2-confirm swal2-styled" style="margin-top: 10px;">새 목록 추가</button>
+                        `,
+                        showCancelButton: true,
+                        confirmButtonText: '저장',
+                        cancelButtonText: '취소',
+                        preConfirm: () => {
+                            const listId = Swal.getPopup().querySelector('#favoriteListSelect').value;
+                            const itemName = Swal.getPopup().querySelector('#itemName').value;
+                            const pageUrl = window.location.href;
+                            const eno = urlParams.get('eno');
+                            const fno = urlParams.get('fno');
+                            const date = new Date().toISOString().slice(0, 10);
+
+                            if (!itemName || !listId) {
+                                Swal.showValidationMessage('모든 필드를 입력해주세요.');
+                            }
+
+                            return { listId, itemName, pageUrl, eno, fno, date };
+                        }
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            const { listId, itemName, pageUrl, eno, fno, date } = result.value;
+                            const form = document.createElement('form');
+                            form.method = 'POST';
+                            form.action = '/user/addFavoriteItem';
+
+                            form.appendChild(createHiddenInput('listId', listId));
+                            form.appendChild(createHiddenInput('itemName', itemName));
+                            form.appendChild(createHiddenInput('link', pageUrl));
+                            form.appendChild(createHiddenInput('eno', eno || ''));
+                            form.appendChild(createHiddenInput('fno', fno || ''));
+                            form.appendChild(createHiddenInput('createdDate', date));
+
+                            document.body.appendChild(form);
+                            form.submit();
+                        }
+                    });
+
+                    $(document).on('click', '#addNewListBtn', function() {
+                        Swal.fire({
+                            title: '새 즐겨찾기 목록 추가',
+                            html: `<input type="text" id="newListName" class="swal2-input" placeholder="목록 이름">`,
+                            confirmButtonText: '추가',
+                            showCancelButton: true,
+                            preConfirm: () => {
+                                const newListName = Swal.getPopup().querySelector('#newListName').value;
+                                if (!newListName) {
+                                    Swal.showValidationMessage('목록 이름을 입력해주세요.');
+                                }
+                                return { newListName };
+                            }
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                $.ajax({
+                                    url: '/user/addFavoriteList',
+                                    method: 'POST',
+                                    data: { listName: result.value.newListName },
+                                    success: function(response) {
+                                        const newOption = `<option value="${response.listId}">${response.listName}</option>`;
+                                        $('#favoriteListSelect').append(newOption).val(response.listId);
+                                    }
+                                });
+                            }
+                        });
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error fetching favorite lists:', xhr.responseText);
+                    Swal.fire('오류', '즐겨찾기 목록을 불러오는 중 오류가 발생했습니다.', 'error');
+                }
+            });
+        };
+    }
+});
+
+const urlParams = new URLSearchParams(window.location.search);
+
+function createHiddenInput(name, value) {
+    const input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = name;
+    input.value = value;
+    return input;
+}
 </script>
 
 </body>

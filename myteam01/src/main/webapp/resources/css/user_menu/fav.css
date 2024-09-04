@@ -40,7 +40,7 @@
     grid-template-columns: repeat(3, 1fr);
     gap: 20px;
     margin-top: 10px;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
     padding-right: 10px; /* For scroll bar space */
 }
 
@@ -57,6 +57,8 @@
     flex-direction: column;
     justify-content: space-between;
     height: 150px; /* Reduced height */
+    position: relative;
+    overflow: hidden;
 }
 
 .favorite-list-item:hover {
@@ -77,32 +79,70 @@
     justify-content: space-between;
 }
 
+/* Style for the color bar */
+.color-bar {
+    height: 9px;
+    width: 100%;
+    border-radius: 5px 5px 0 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: #007bff;
+}
+
 .favorite-list-item .edit-btn,
 .favorite-list-item .delete-btn {
     padding: 5px 10px;
     font-size: 0.9em;
-    border: none;
+    border: 1px #000000 dashed;
     border-radius: 5px;
     cursor: pointer;
+     transition: background-color 0.3s, color 0.3s, border 0.3s;
 }
 
 .favorite-list-item .edit-btn {
-    background-color: #28a745;
-    color: #fff;
+    background-color: #fff;
+    color: #000000;
 }
 
 .favorite-list-item .edit-btn:hover {
-    background-color: #218838;
+    background-color: #007bff;
+    color: #fff;
+    border: 1px #007bff solid;
 }
 
 .favorite-list-item .delete-btn {
-    background-color: #dc3545;
-    color: #fff;
+    background-color: #fff;
+    color: #000000;
 }
 
 .favorite-list-item .delete-btn:hover {
     background-color: #c82333;
+    color: #fff;
+    border: 1px #c82333 solid;
 }
+
+.color-picker-label {
+    display: block;
+
+    font-weight: bold;
+}
+
+.color-picker-input {
+    width: 60%;
+    height: 40px;
+    padding: 0;
+    border: none;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+.swal2-input {
+    margin-bottom: 15px;
+}
+
+
+
 
 /* -----------------------------------------------------------------------------------------
  */
@@ -133,6 +173,7 @@
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    right:0;
 }
 
 .back-btn:hover,
@@ -146,14 +187,7 @@
     overflow-y: auto;
 }
 
-.favorite-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    padding-right: 10px; /* For scroll bar space */
-}
+
 
 .favorite-item {
     background-color: #f8f9fa;

@@ -25,6 +25,10 @@ public class FavoriteService {
         return favoriteMapper.getFavoritesByListId(listId);
     }
 
+    public FavoriteListVO getFavoriteListById(Long listId) {
+        return favoriteMapper.getFavoriteListById(listId);
+    }
+
     public void addFavoriteItem(FavoriteItemVO favoriteItemVO) {
         favoriteMapper.insertFavoriteItem(favoriteItemVO);
     }

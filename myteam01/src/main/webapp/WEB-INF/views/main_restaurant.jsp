@@ -1,5 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="jakarta.tags.core" prefix="c" %>
+
+<!-- SweetAlert2와 jQuery CDN 추가 -->
+
+
 <c:set var="contextPath" value="${pageContext.request.contextPath }"/>
 <!DOCTYPE html>
 <html lang="ko">
@@ -166,9 +170,13 @@
 		
         
     </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 </head>
 <body>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
 <div class="container" id="restaurant-container">
     <!-- 레스토랑 카드 반복문으로 생성 -->
     <c:forEach var="restaurant" items="${restList}">
@@ -180,6 +188,7 @@
                 <p>Rating: ${restaurant.frating}</p>
             </div>
         </div>
+        
     </c:forEach>
 
     <!-- 데이터가 없는 경우 표시할 카드 -->
@@ -206,6 +215,7 @@
     </p>
     <p><strong>Category:</strong> <span id="panel-category"></span></p>
     <p><strong>Location:</strong> <span id="panel-location"></span></p>
+    <button id="addFavoriteBtn" class="add-fav-btn">즐겨찾기 추가</button>
     <button class="back-button" onclick="goBack()">Back</button>
 </div>
 
@@ -426,10 +436,151 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
     
+//...................즐찾....................................................//
+document.addEventListener('DOMContentLoaded', function() {
+    // 즐겨찾기 버튼이 로드되었는지 콘솔에서 확인
+    console.log('DOM fully loaded and parsed');
+    
+    // jQuery 및 SweetAlert이 로드되었는지 확인
+    console.log('jQuery version:', $.fn.jquery);
+    console.log('SweetAlert2 loaded:', typeof Swal !== 'undefined');
 
+    // ID가 정확한지 확인하고 이벤트 리스너 추가
+    const addFavoriteBtn = document.getElementById('addFavoriteBtn');
+    
+    if (addFavoriteBtn) {  // 버튼이 존재할 경우에만 이벤트 추가
+        console.log('addFavoriteBtn found, adding click event.');
+        
+        addFavoriteBtn.onclick = function() {
+            // 즐겨찾기 목록을 불러오기 위한 Ajax 호출
+            $.ajax({
+                url: '/user/getFavoriteLists', // 사용자 즐겨찾기 목록을 불러오는 API 엔드포인트
+                method: 'GET',
+                success: function(favoriteLists) {
+                    let optionsHtml = '';
 
+                    // 즐겨찾기 목록을 option으로 구성
+                    favoriteLists.forEach(list => {
+                        optionsHtml += `<option value="${list.listId}">${list.listName}</option>`;
+                    });
 
+                    Swal.fire({
+                        title: '즐겨찾기 목록 선택',
+                        html: `
+                            <label>즐겨찾기 목록:</label>
+                            <select id="favoriteListSelect" class="swal2-input">
+                                ${optionsHtml}
+                            </select>
+                            <input type="text" id="itemName" class="swal2-input" placeholder="항목 이름" required>
+                            <button type="button" id="addNewListBtn" class="swal2-confirm swal2-styled" style="margin-top: 10px;">새 목록 추가</button>
+                        `,
+                        showCancelButton: true,
+                        confirmButtonText: '저장',
+                        cancelButtonText: '취소',
+                        preConfirm: () => {
+                            const listId = Swal.getPopup().querySelector('#favoriteListSelect').value;
+                            const itemName = Swal.getPopup().querySelector('#itemName').value;
+                            const pageUrl = window.location.href; // 현재 페이지 URL
+                            const eno = urlParams.get('eno'); // URL에서 eno 추출
+                            const fno = urlParams.get('fno'); // URL에서 fno 추출
+                            const date = new Date().toISOString().slice(0, 10); // 오늘 날짜
+
+                            if (!itemName || !listId) {
+                                Swal.showValidationMessage('모든 필드를 입력해주세요.');
+                            }
+
+                            return { listId, itemName, pageUrl, eno, fno, date };
+                        }
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // 서버로 전송하기 위한 POST 요청 생성
+                            const { listId, itemName, pageUrl, eno, fno, date } = result.value;
+                            const form = document.createElement('form');
+                            form.method = 'POST';
+                            form.action = '/user/addFavoriteItem'; // 서버로 전송할 URL
+
+                            const inputListId = document.createElement('input');
+                            inputListId.type = 'hidden';
+                            inputListId.name = 'listId';
+                            inputListId.value = listId;
+
+                            const inputItemName = document.createElement('input');
+                            inputItemName.type = 'hidden';
+                            inputItemName.name = 'itemName';
+                            inputItemName.value = itemName;
+
+                            const inputLink = document.createElement('input');
+                            inputLink.type = 'hidden';
+                            inputLink.name = 'link';
+                            inputLink.value = pageUrl;
+
+                            const inputEno = document.createElement('input');
+                            inputEno.type = 'hidden';
+                            inputEno.name = 'eno';
+                            inputEno.value = eno || ''; // 행사 ID가 있으면 사용, 없으면 빈 문자열
+
+                            const inputFno = document.createElement('input');
+                            inputFno.type = 'hidden';
+                            inputFno.name = 'fno';
+                            inputFno.value = fno || ''; // 음식점 ID가 있으면 사용, 없으면 빈 문자열
+
+                            const inputDate = document.createElement('input');
+                            inputDate.type = 'hidden';
+                            inputDate.name = 'createdDate';
+                            inputDate.value = date;
+
+                            form.appendChild(inputListId);
+                            form.appendChild(inputItemName);
+                            form.appendChild(inputLink);
+                            form.appendChild(inputEno);
+                            form.appendChild(inputFno);
+                            form.appendChild(inputDate);
+
+                            document.body.appendChild(form);
+                            form.submit();
+                        }
+                    });
+
+                    // **새 목록 추가 버튼**의 이벤트 리스너는 모달 내에서 별도로 다시 바인딩해야 함
+                    $(document).on('click', '#addNewListBtn', function() {
+                        Swal.fire({
+                            title: '새 즐겨찾기 목록 추가',
+                            html: `<input type="text" id="newListName" class="swal2-input" placeholder="목록 이름">`,
+                            confirmButtonText: '추가',
+                            showCancelButton: true,
+                            preConfirm: () => {
+                                const newListName = Swal.getPopup().querySelector('#newListName').value;
+                                if (!newListName) {
+                                    Swal.showValidationMessage('목록 이름을 입력해주세요.');
+                                }
+                                return { newListName };
+                            }
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                // 새로운 목록 추가 요청을 서버에 보냄
+                                $.ajax({
+                                    url: '/user/addFavoriteList',
+                                    method: 'POST',
+                                    data: { listName: result.value.newListName },
+                                    success: function(response) {
+                                        // 추가된 목록을 선택 가능한 목록에 추가
+                                        const newOption = `<option value="${response.listId}">${response.listName}</option>`;
+                                        $('#favoriteListSelect').append(newOption).val(response.listId);
+                                    }
+                                });
+                            }
+                        });
+                    });
+                }
+            });
+        };
+    } else {
+        console.log('addFavoriteBtn not found');
+    }
+});
+
+// URL에서 query parameter 추출
+const urlParams = new URLSearchParams(window.location.search);
 </script>
-
 </body>
 </html>

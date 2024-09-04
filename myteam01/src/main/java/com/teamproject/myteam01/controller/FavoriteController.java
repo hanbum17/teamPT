@@ -9,6 +9,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
 import com.teamproject.myteam01.domain.FavoriteItemVO;
 import com.teamproject.myteam01.domain.FavoriteListVO;
 import com.teamproject.myteam01.service.FavoriteService;
@@ -29,11 +31,13 @@ public class FavoriteController {
 
     @PostMapping("/user/addFavoriteList")
     public String addFavoriteList(@RequestParam("listName") String listName,
+                                  @RequestParam("listColor") String listColor,
                                   @AuthenticationPrincipal UserDetails userDetails) {
         String userId = userDetails.getUsername();
         FavoriteListVO favoriteListVO = new FavoriteListVO();
         favoriteListVO.setUserId(userId);
         favoriteListVO.setListName(listName);
+        favoriteListVO.setColor(listColor); // 사용자가 선택한 색상 설정
 
         // 디버깅 로그 추가
         System.out.println("Before Insert - FavoriteListVO: " + favoriteListVO);
@@ -45,6 +49,8 @@ public class FavoriteController {
 
         return "redirect:/user/user_fav_lists"; // 목록 페이지로 리다이렉트
     }
+
+
     
     @PostMapping("/user/updateFavoriteList")
     public String updateFavoriteList(@RequestParam("listId") Long listId, 
@@ -62,15 +68,33 @@ public class FavoriteController {
         return "redirect:/user/user_fav_lists"; // 삭제 후 목록 페이지로 리다이렉트
     }
 
+    @GetMapping("/user/getFavoriteLists")
+    @ResponseBody
+    public List<FavoriteListVO> getFavoriteLists(@AuthenticationPrincipal UserDetails userDetails) {
+        String userId = userDetails.getUsername();
+        List<FavoriteListVO> favoriteLists = favoriteService.getFavoriteListsByUserId(userId);
 
+        // 디버깅용 로그 출력
+        System.out.println("Favorite Lists for user: " + userId + " -> " + favoriteLists);
+
+        return favoriteLists;
+    }
 
 
     @GetMapping("/user/user_fav_items")
     public String getFavoriteItems(@RequestParam("listId") Long listId, Model model) {
         List<FavoriteItemVO> favoriteItems = favoriteService.getFavoritesByListId(listId);
+        FavoriteListVO favoriteList = favoriteService.getFavoriteListById(listId); // 목록 정보도 함께 조회
+
+        // 디버깅 로그 추가
+        System.out.println("Favorite Items for List ID: " + listId + " -> " + favoriteItems);
+        System.out.println("Favorite List: " + favoriteList);
+
         model.addAttribute("favoriteItems", favoriteItems);
+        model.addAttribute("favoriteList", favoriteList); // 목록 정보 추가
         return "user_main/user_menu/user_fav_items";
     }
+
 
     @PostMapping("/user/addFavoriteItem")
     public String addFavoriteItem(@RequestParam("listId") Long listId,

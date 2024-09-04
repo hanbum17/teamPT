@@ -10,7 +10,6 @@
     <div class="content">
         <div class="content-header">
             <h2>즐겨찾기 목록</h2>
-            <!-- Add Favorite List Button (moved to the header) -->
             <button id="addFavoriteListBtn" class="add-list-btn">즐겨찾기 목록 추가</button>
         </div>
         <div class="favorite-list">
@@ -18,6 +17,7 @@
             <div id="favoriteList" class="favorite-grid">
                 <c:forEach var="favoriteList" items="${favoriteLists}">
                     <a href="/user/user_fav_items?listId=${favoriteList.listId}" class="favorite-list-item">
+                    	<div class="color-bar" style="background-color: ${favoriteList.color};"></div>
                         <h4>${favoriteList.listName} </h4>
                         <h5>${favoriteList.items.size()} items</h5>
                         <div class="actions">
@@ -32,40 +32,57 @@
 </main>
 
 <script>
-    // 즐겨찾기 목록 추가 버튼 클릭 시 SweetAlert2 사용
-    document.getElementById('addFavoriteListBtn').onclick = function() {
-        Swal.fire({
-            title: '즐겨찾기 목록 추가',
-            html: '<input type="text" id="listName" class="swal2-input" placeholder="목록 이름" required>',
-            showCancelButton: true,
-            confirmButtonText: '추가',
-            cancelButtonText: '취소',
-            preConfirm: () => {
-                const listName = Swal.getPopup().querySelector('#listName').value;
-                if (!listName) {
-                    Swal.showValidationMessage(`목록 이름을 입력해주세요.`);
-                }
-                return { listName: listName };
-            }
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // AJAX or form submission to add the favorite list
-                const listName = result.value.listName;
-                const form = document.createElement('form');
-                form.method = 'POST';
-                form.action = '/user/addFavoriteList';
 
-                const input = document.createElement('input');
-                input.type = 'hidden';
-                input.name = 'listName';
-                input.value = listName;
-                form.appendChild(input);
+document.getElementById('addFavoriteListBtn').onclick = function() {
+    Swal.fire({
+        title: '즐겨찾기 목록 추가',
+        html: `
 
-                document.body.appendChild(form);
-                form.submit();
+            <input type="text" id="listName" class="swal2-input" placeholder="목록 이름" required>
+
+            <label class="color-picker-label" for="listColor">목록 색상 선택</label>
+            <input type="color" id="listColor" class="color-picker-input" value="#007bff" required>
+        `,
+        showCancelButton: true,
+        confirmButtonText: '추가',
+        cancelButtonText: '취소',
+        preConfirm: () => {
+            const listName = Swal.getPopup().querySelector('#listName').value;
+            const listColor = Swal.getPopup().querySelector('#listColor').value;
+            if (!listName || !listColor) {
+                Swal.showValidationMessage(`목록 이름과 색상을 입력해주세요.`);
             }
-        });
-    };
+            return { listName: listName, listColor: listColor };
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // 서버로 전송하기 위한 POST 요청 생성
+            const { listName, listColor } = result.value;
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '/user/addFavoriteList';
+
+            const inputName = document.createElement('input');
+            inputName.type = 'hidden';
+            inputName.name = 'listName';
+            inputName.value = listName;
+
+            const inputColor = document.createElement('input');
+            inputColor.type = 'hidden';
+            inputColor.name = 'listColor';
+            inputColor.value = listColor;
+
+            form.appendChild(inputName);
+            form.appendChild(inputColor);
+
+            document.body.appendChild(form);
+            form.submit();
+        }
+    });
+};
+
+
+
 
     document.querySelectorAll('.edit-btn').forEach(function(button) {
         button.addEventListener('click', function(event) {
@@ -156,4 +173,3 @@
     });
 
 </script>
-s

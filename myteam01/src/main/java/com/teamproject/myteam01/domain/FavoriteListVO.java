@@ -16,6 +16,7 @@ import lombok.ToString;
 public class FavoriteListVO {
     private Long listId;           // 즐겨찾기 목록의 고유 ID
     private String userId;        // 목록을 소유한 사용자 ID
-    private String listName;      // 즐겨찾기 목록의 이름
+    private String listName;	// 즐겨찾기 목록의 이름
+    private String color;          // 사용자 정의 색상 추가
     private List<FavoriteItemVO> items; // 이 목록에 포함된 즐겨찾기 항목들
 }

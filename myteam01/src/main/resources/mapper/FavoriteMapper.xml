@@ -7,8 +7,8 @@
 	    <selectKey keyProperty="listId" order="BEFORE" resultType="Long">
 	        SELECT FAVORITELIST_SEQ.NEXTVAL FROM DUAL
 	    </selectKey>
-	    INSERT INTO FAVORITELIST (LIST_ID, USERID, LIST_NAME)
-	    VALUES (#{listId}, #{userId}, #{listName})
+	    INSERT INTO FAVORITELIST (LIST_ID, USERID, LIST_NAME, COLOR)
+	    VALUES (#{listId}, #{userId}, #{listName}, #{color})  <!-- 색상 값 추가 -->
 	</insert>
 
 
@@ -27,10 +27,17 @@
 
     <!-- 사용자 ID로 즐겨찾기 목록 조회 -->
     <select id="getFavoriteListsByUserId" parameterType="String" resultType="com.teamproject.myteam01.domain.FavoriteListVO">
-        SELECT LIST_ID, USERID, LIST_NAME 
+        SELECT LIST_ID, USERID, LIST_NAME, COLOR
         FROM FAVORITELIST
         WHERE USERID = #{userid}
         ORDER BY LIST_ID DESC
+    </select>
+    
+    <!-- 즐겨찾기 목록 ID로 목록 정보 조회 -->
+    <select id="getFavoriteListById" parameterType="Long" resultType="com.teamproject.myteam01.domain.FavoriteListVO">
+        SELECT LIST_ID, USERID, LIST_NAME, COLOR
+        FROM FAVORITELIST
+        WHERE LIST_ID = #{listId}
     </select>
 
     <!-- 즐겨찾기 목록 ID로 즐겨찾기 항목 조회 -->
