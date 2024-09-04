@@ -46,31 +46,40 @@ public class VroomController {
         return "vroom/vroomMain";
     }
 
-
-
-	
-	@GetMapping("/restaurant")
-    public String restMain(@AuthenticationPrincipal UserDetails userDetails, Model model) {
-        // 현재 로그인된 사용자의 ID를 이용해 사용자 정보 조회
+    @GetMapping("/restaurant/details")
+    public String restaurantDetails(@RequestParam("fno") Long fno, Model model, @AuthenticationPrincipal UserDetails userDetails) {
+        RestaurantVO restaurant = restService.restaurantDetail(fno);
+        restaurant.setReivewsList(restService.selectReviews(fno));
+        model.addAttribute("restaurant", restaurant);
         if (userDetails != null) {
             String userId = userDetails.getUsername();
             UserVO user = userService.findByUsername(userId);
             model.addAttribute("user", user);
         }
-        
-        // 식당 목록 추가
-        model.addAttribute("restList", restService.getRestList());
+        return "restaurantDetails";
+    }
 
-        return "main_restaurant";
+
+
+	
+    @GetMapping("/restaurant")
+    public String restMain(@AuthenticationPrincipal UserDetails userDetails, Model model) {
+        if (userDetails != null) {
+            String userId = userDetails.getUsername();
+            UserVO user = userService.findByUsername(userId);
+            model.addAttribute("user", user);
+        }
+        model.addAttribute("restList", restService.getRestList());
+        return "restaurantList";
     }
 	
-	@GetMapping("/getRestaurantDetails")
-	@ResponseBody
-	public RestaurantVO getRestaurantDetail(@RequestParam("fno") Long fno) {
-	    RestaurantVO detail = restService.restaurantDetail(fno);
-	    detail.setReivewsList(restService.selectReviews(fno)); // 리뷰 리스트를 세팅
-	    return detail;
-	}
+    @GetMapping("/getRestaurantDetails")
+    @ResponseBody
+    public RestaurantVO getRestaurantDetail(@RequestParam("fno") Long fno) {
+        RestaurantVO detail = restService.restaurantDetail(fno);
+        detail.setReivewsList(restService.selectReviews(fno));
+        return detail;
+    }
 
 //삭제예정
 //	@GetMapping("/getRestaurantReviews")
