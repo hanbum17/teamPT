@@ -39,12 +39,7 @@
 		INSERT INTO EVENT_reviews 
 		VALUES(seq_EVENT_reviews.nextval, #{ertitle}, #{ercontent}, #{erwriter}, DEFAULT, DEFAULT, #{errating}, seq_uno.nextval, #{eno}) 
 	</insert>
-	<!--  행사리뷰삭제시 DEL_REVIEWS 테이블로 옮기기  -->
-	<insert id="copyReview" parameterType="com.teamproject.myteam01.domain.EventReviewVO"> 
-		INSERT INTO DEL_REVIEWS (DRNO, DRTITLE, DRCONTENT, DRWRITER, DRREGDATE, DRMODDATE, DRRATING, DTYPE) 
-		SELECT ERNO, ERTITLE, ERCONTENT, ERWRITER, ERREGDATE, ERMODDATE, ERRATING, 4 AS DTYPE FROM EVENT_REVIEWS
-		WHERE ERNO = #{erno} 
-	</insert>
+
 	<!--  행사리뷰삭제  -->
 	<delete id="deleteReview"> DELETE EVENT_REVIEWS WHERE ERNO = #{erno} </delete>
 	

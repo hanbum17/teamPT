@@ -36,7 +36,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         if (roles.contains("ROLE_ADMIN")) {
             response.sendRedirect("/admin/main");
         } else if (roles.contains("ROLE_USER") || roles.contains("ROLE_BUSINESS")) {
-            response.sendRedirect("/user/userMain");
+            response.sendRedirect("/user/main");
         } else {
             // 기본 성공 페이지로 리다이렉트 (혹은 에러 페이지로 보낼 수 있음)
             response.sendRedirect("/vroom/main");

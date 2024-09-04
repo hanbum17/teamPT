@@ -3,22 +3,34 @@
 <mapper namespace="com.teamproject.myteam01.mapper.FavoriteMapper">
 
     <!-- 즐겨찾기 목록 삽입 -->
-    <insert id="insertFavoriteList" parameterType="com.teamproject.myteam01.domain.FavoriteListVO" useGeneratedKeys="true" keyProperty="listId">
-	    INSERT INTO FAVORITELIST (USERID, LIST_NAME)
-	    VALUES (#{userId}, #{listName})
+	<insert id="insertFavoriteList" parameterType="com.teamproject.myteam01.domain.FavoriteListVO">
+	    <selectKey keyProperty="listId" order="BEFORE" resultType="Long">
+	        SELECT FAVORITELIST_SEQ.NEXTVAL FROM DUAL
+	    </selectKey>
+	    INSERT INTO FAVORITELIST (LIST_ID, USERID, LIST_NAME)
+	    VALUES (#{listId}, #{userId}, #{listName})
 	</insert>
+
+
 
     <!-- 즐겨찾기 항목 삽입 -->
     <insert id="insertFavoriteItem" parameterType="com.teamproject.myteam01.domain.FavoriteItemVO">
-        INSERT INTO FAVORITES (FAVORITE_ID, LIST_ID, USERID, ITEM_NAME, LINK, ENO, FNO)
-        VALUES (#{favoriteId}, #{listId}, #{userid}, #{itemName}, #{link}, #{eno}, #{fno})
-    </insert>
+
+	    <selectKey keyProperty="favoriteId" order="BEFORE" resultType="Long">
+	        SELECT FAVORITES_SEQ.NEXTVAL FROM DUAL
+	    </selectKey>
+	    
+	    INSERT INTO FAVORITES (FAVORITE_ID, LIST_ID, USERID, ITEM_NAME, LINK, ENO, FNO)
+	    VALUES (#{favoriteId}, #{listId}, #{userid}, #{itemName}, #{link}, #{eno}, #{fno})
+	</insert>
+
 
     <!-- 사용자 ID로 즐겨찾기 목록 조회 -->
     <select id="getFavoriteListsByUserId" parameterType="String" resultType="com.teamproject.myteam01.domain.FavoriteListVO">
-        SELECT LIST_ID, USERID, LIST_NAME
+        SELECT LIST_ID, USERID, LIST_NAME 
         FROM FAVORITELIST
         WHERE USERID = #{userid}
+        ORDER BY LIST_ID DESC
     </select>
 
     <!-- 즐겨찾기 목록 ID로 즐겨찾기 항목 조회 -->
@@ -30,10 +42,17 @@
 
     <!-- 즐겨찾기 목록 이름 업데이트 -->
     <update id="updateFavoriteListName" parameterType="com.teamproject.myteam01.domain.FavoriteListVO">
-        UPDATE FAVORITELIST
-        SET LIST_NAME = #{listName}
-        WHERE LIST_ID = #{listId}
-    </update>
+	    UPDATE FAVORITELIST
+	    SET LIST_NAME = #{listName}
+	    WHERE LIST_ID = #{listId}
+	</update>
+	
+	<!-- 즐겨찾기 목록 삭제 -->
+	<delete id="deleteFavoriteList" parameterType="Long">
+	    DELETE FROM FAVORITELIST WHERE LIST_ID = #{listId}
+	</delete>
+	
+
 
     <!-- 즐겨찾기 항목 삭제 -->
     <delete id="deleteFavoriteItem" parameterType="Long">
