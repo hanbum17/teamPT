@@ -173,27 +173,11 @@
 		    background-color: #fff;
 		    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 		}
-		
-		.review_ul {
-            list-style-type: none; /* 리스트의 기본 점을 제거합니다 */
-            padding: 0;
-        }
-        
-       .rating {
-		    display: inline-flex;
-		    font-size: 24px;
-		    color: #d3d3d3; /* 기본 회색 별 */
-		}
-		
-		.rating .star {
-		    color: #d3d3d3; /* 비활성 상태 별 */
-		}
-		
-		.rating .star.active {
-		    color: #ffc107; /* 활성 상태 별 */
-		}
 
-
+	 .review_ul {
+	            list-style-type: none; /* 리스트의 기본 점을 제거합니다 */
+	            padding: 0;
+	        }
 
     </style>
 </head>
@@ -238,7 +222,7 @@
     <p><strong id="panel-name"></strong></p>
     <p>
        <strong>Rating:</strong>
-       <span id="panel-rating" class="rating"></span> 
+       <span id="panel-rating"></span>
        <span id="rating-extra" class="small-text"></span>
     </p>
     <p><strong>Category:</strong> <span id="panel-category"></span></p>
@@ -252,26 +236,25 @@
     <p>
        <strong>Rating:</strong>
        <span id="panel-rating"></span>
-       <span id="right-panel-rating" class="rating"></span>
        <span id="rating-extra" class="small-text"></span>
     </p>
 
     <!-- 리뷰 입력 버튼 -->
-	<button id="review-button" onclick="toggleReviewForm()" style="display: block; width: 100%; padding: 10px; border: none; border-radius: 5px; background-color: #007bff; color: #fff; cursor: pointer;">
-	    리뷰 입력
-	</button>
-	
-	<!-- 리뷰 등록 폼 -->
-	<div id="reviews_wrap" style="display: none; margin-top: 20px;">
-	    <form action="${contextPath}/vroom/restregisterReview" method="post">
-	        <input type="text" id="frtitle" name="frtitle" placeholder="제목"><br>
-	        <textarea id="frcontent" name="frcontent" placeholder="내용"></textarea><br>
-	        <input type="text" id="frwriter" name="frwriter" placeholder="작성자" readonly><br>
-	        <input type="text" id="frrating" name="frrating" placeholder="별점 0~5"><br>
-	        <input type="hidden" id="fno" name="fno"> <!-- 여기에 fno를 동적으로 설정 -->
-	        <button id="review_register_btn" type="submit">리뷰등록</button>
-	    </form>
-</div>
+    <button id="review-button" onclick="toggleReviewForm()" style="display: block; width: 100%; padding: 10px; border: none; border-radius: 5px; background-color: #007bff; color: #fff; cursor: pointer;">
+        리뷰 입력
+    </button>
+
+    <!-- 리뷰 등록 폼 -->
+    <div id="reviews_wrap" style="display: none; margin-top: 20px;">
+        <form action="/vroom/restregisterReview" method="post">
+            <input type="text" id="frtitle" name="frtitle" placeholder="제목"><br>
+            <textarea id="frcontent" name="frcontent" placeholder="내용"></textarea><br>
+            <input type="text" id="frwriter" name="frwriter" placeholder="작성자" readonly><br>
+            <input type="text" id="frrating" name="frrating" placeholder="별점 0~5"><br>
+            <input type="text" id="fno" name="fno" readonly> <!-- 여기에 fno를 동적으로 설정 -->
+            <button id="review_register_btn" type="submit">리뷰등록</button>
+        </form>
+    </div>
 
     <!-- 리뷰 수정 폼 -->
 	<div id="editReviewForm" style="display:none;">
@@ -292,45 +275,6 @@
 
 <script>
 
-$(document).ready(function() {
-    // 리뷰 등록 폼의 제출 이벤트 핸들러
-    $('#reviews_wrap form').on('submit', function(event) {
-        event.preventDefault(); // 기본 폼 제출 동작 방지
-
-        // 폼 데이터 가져오기
-        const formData = $(this).serialize(); // 폼 데이터를 쿼리 문자열로 변환
-
-        $.ajax({
-            url: `${contextPath}/vroom/restregisterReview`,
-            method: 'POST',
-            data: formData,
-            dataType: 'json',
-            success: function(response) {
-                if (response.success) {
-                    alert(response.message);
-                    // 리뷰 등록 폼 숨기기
-                    $('#reviews_wrap').hide();
-                    $('#review-button').show();
-                    // 리뷰 목록 업데이트
-                    showDetailView($('#fno').val());
-                } else {
-                    alert(response.message);
-                }
-            },
-            error: function(xhr, status, error) {
-                console.error('Error:', error);
-                alert('리뷰 등록 중 오류가 발생했습니다.');
-            }
-        });
-    });
-
-    // 리뷰 입력 버튼 클릭 시 폼을 토글
-    $('#review-button').on('click', function() {
-        toggleReviewForm();
-    });
-});
-
-
 const contextPath = "${contextPath}";
 const currentUserId = "${user.userId}";
 const isAdmin = "${isAdmin}";
@@ -339,31 +283,29 @@ let page = 1;
 const pageSize = 5;
 
 function submitEditReview() {
-    const form = document.getElementById('reviewEditForm');
-    const formData = new FormData(form);
+        const form = document.getElementById('reviewEditForm');
+        const formData = new FormData(form);
 
-    fetch(`${contextPath}/vroom/updateReview`, {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => response.json())
-    .then(result => {
-        if (result.success) {
-            alert(result.message);
-            // 수정된 리뷰가 속한 식당의 패널 업데이트
-            showDetailView(document.getElementById('fno').value);
-            // 수정 완료 후 수정 폼 숨기기
-            document.getElementById('editReviewForm').style.display = 'none';
-        } else {
-            alert(result.message);
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('리뷰 수정 중 오류가 발생했습니다.');
-    });
-}
-
+        fetch(`${contextPath}/vroom/updateReview`, {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(result => {
+            if (result.success) {
+                alert(result.message);
+                // 수정된 리뷰가 속한 식당의 패널 업데이트
+                showDetailView(document.getElementById('fno').value);
+                // 수정 후에도 패널 유지
+            } else {
+                alert(result.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('리뷰 수정 중 오류가 발생했습니다.');
+        });
+    }
 
 
 
@@ -382,7 +324,7 @@ function showDetailView(fno) {
             return response.json();
         })
         .then(data => {
-            const reviewsContainer = document.getElementById('reviews-container');
+        	const reviewsContainer = document.getElementById('reviews-container');
             reviewsContainer.innerHTML = ''; // 기존 내용 지우기
             if (data) {
                 // 왼쪽 패널 설정
@@ -392,18 +334,12 @@ function showDetailView(fno) {
                 document.getElementById('panel-location').textContent = data.faddress;
                 document.getElementById('fno').value = fno;
 
-                // 별점 업데이트
-                updateRatingDisplay('panel-rating', data.frating); // 서버에서 받은 식당 별점 데이터
-                document.querySelector('#right-panel #panel-rating').innerHTML = getStarRatingHtml(data.frating);
-                document.querySelector('#rating-extra').textContent = `(${data.frCount})`;
-                document.querySelector('#right-panel #rating-extra').textContent = `(${data.frCount})`;
-
                 document.getElementById('restaurant-container').style.display = 'none';
                 document.getElementById('left-panel').style.display = 'block';
                 document.getElementById('right-panel').style.display = 'block';
 
                 // 리뷰 정보 가져오기
-                return fetch('/api/getRestaurantReviews?fno=' + fno + '&page=' + page + '&pageSize=' + pageSize);
+                return fetch('/api/getRestaurantReviews?fno=' + fno + '&page='+page+'&pageSize='+pageSize);
             } else {
                 alert('식당 정보를 찾을 수 없습니다.');
                 throw new Error('No restaurant data');
@@ -420,10 +356,10 @@ function showDetailView(fno) {
         })
         .catch(error => {
             console.error('Error fetching data:', error);
-            alert('데이터를 가져오는 데 실패했습니다.');
+              alert(error);
+            alert('데이터를 가져오는 데 실패했습니다.2');
         });
 }
-
 
 
 
@@ -505,8 +441,7 @@ function displayReviews(reviews) {
                 + "</li>"
             + "</ul>"
         + "</div>";
-    });
-
+	});
     // 새로 추가된 리뷰들을 컨테이너에 추가
     reviewsContainer.innerHTML += newReviewsHTML;
 
@@ -535,19 +470,19 @@ function displayReviews(reviews) {
 
 //___________________________________리뷰 입력 화면 나타내기, 숨김___________________________________//
     function toggleReviewForm() {
-	    const reviewButton = document.getElementById('review-button');
-	    const reviewsWrap = document.getElementById('reviews_wrap');
-	    const frwriterField = document.getElementById('frwriter');
-	
-	    if (reviewsWrap.style.display === 'none' || reviewsWrap.style.display === '') {
-	        reviewsWrap.style.display = 'block'; // 리뷰 폼을 표시
-	        reviewButton.style.display = 'none'; // 리뷰 입력 버튼 숨기기
-	        frwriterField.value = currentUserId; // 현재 로그인 사용자 ID 설정
-	    } else {
-	        reviewsWrap.style.display = 'none'; // 리뷰 폼을 숨김
-	        reviewButton.style.display = 'block'; // 리뷰 입력 버튼 표시
-	    }
-	}
+        const reviewButton = document.getElementById('review-button');
+        const reviewsWrap = document.getElementById('reviews_wrap');
+        const frwriterField = document.getElementById('frwriter');
+
+        if (reviewsWrap.style.display === 'none' || reviewsWrap.style.display === '') {
+            reviewsWrap.style.display = 'block'; // reviews_wrap을 표시
+            reviewButton.style.display = 'none'; // 리뷰 입력 버튼 숨기기
+            frwriterField.value = currentUserId; // frwriter에 현재 로그인 사용자 ID를 설정
+        } else {
+            reviewsWrap.style.display = 'none'; // reviews_wrap을 숨김
+            reviewButton.style.display = 'block'; // 리뷰 입력 버튼 표시
+        }
+    }
 
 
 //___________________________________뒤로가기 버튼___________________________________//
@@ -564,9 +499,9 @@ function goBack() {
 
 //___________________________________더보기 버튼 클릭시 리뷰추가___________________________________//
 document.addEventListener('DOMContentLoaded', () => {
-    const reviewButton = document.getElementById('review-button');
-    if (reviewButton) {
-        reviewButton.addEventListener('click', toggleReviewForm);
+    const loadMoreBtn = document.getElementById('load-more-btn');
+    if (loadMoreBtn) {
+        loadMoreBtn.addEventListener('click', loadMoreReviews);
     }
 });
 
@@ -610,19 +545,6 @@ function deleteReview(frno) {
             console.error('Error:', error);
             alert('리뷰 삭제 중 오류가 발생했습니다.');
         });
-    }
-}
-
-function getStarRatingHtml(rating) {
-    return Array.from({ length: 5 }, (_, index) =>
-        `<span class="star ${index < rating ? 'active' : ''}">&#9733;</span>`
-    ).join('');
-}
-
-function updateRatingDisplay(ratingElementId, rating) {
-    const ratingElement = document.getElementById(ratingElementId);
-    if (ratingElement) {
-        ratingElement.innerHTML = getStarRatingHtml(rating);
     }
 }
 
