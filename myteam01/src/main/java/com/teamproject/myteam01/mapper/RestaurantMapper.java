@@ -19,5 +19,5 @@ public interface RestaurantMapper {
 	//윤정
 	public void insertRestaurant(RestaurantVO rest);
 	public List<RestaurantVO> selectRestList();
-	public List<RestaurantVO> findRestaurantsWithOffset(@Param("offset") int offset, @Param("limit") int limit);
+	public int updaterestreview(RestaurantsReviewVO restReviewVO);
 }

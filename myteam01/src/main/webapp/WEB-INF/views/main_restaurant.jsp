@@ -156,11 +156,27 @@
           width: 0; /* 스크롤바의 너비를 0으로 설정하여 숨김 */
           background: transparent; /* 스크롤바의 배경색을 투명하게 설정 */
       }
+      
+		#editReviewForm {
+		    display: none;
+		    margin-top: 20px; /* 위치 조정 */
+		    padding: 10px;
+		    border: 1px solid #ddd;
+		    border-radius: 10px;
+		    background-color: #fff;
+		    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+		}
         
         
     </style>
 </head>
 <body>
+
+<div style="position: absolute; top: 10px; left: 10px; font-size: 16px;">
+    <c:if test="${not empty user}">
+        현재 로그인: <strong>${user.userId}</strong>
+    </c:if>
+</div>
 
 <div class="container" id="restaurant-container">
     <!-- 레스토랑 카드 반복문으로 생성 -->
@@ -169,8 +185,8 @@
             <img src="${contextPath}/images/bibimbab.jpg" alt="${restaurant.fname} Image">
             <div class="restaurant-info">
                 <h3>${restaurant.fname}</h3>
-                <p>Location: ${restaurant.faddress}</p>
-                <p>Rating: ${restaurant.frating}</p>
+                <p>위치: ${restaurant.faddress}</p>
+                <p>별점: ${restaurant.frating}</p>
             </div>
         </div>
     </c:forEach>
@@ -180,9 +196,9 @@
         <div class="restaurant-card">
             <img src="${contextPath}/images/bibimbab.jpg" alt="No Data Image">
             <div class="restaurant-info">
-                <h3>No Restaurants Available</h3>
-                <p>Location: N/A</p>
-                <p>Rating: N/A</p>
+                <h3>식당데이터 없음</h3>
+                <p>위치: N/A</p>
+                <p>별점: N/A</p>
             </div>
         </div>
     </c:if>
@@ -193,13 +209,13 @@
     <img id="panel-image" src="" alt="Detail Image" style="width: 100%; height: auto; border-radius: 10px; margin-bottom: 20px;">
     <p><strong id="panel-name"></strong></p>
     <p>
-       <strong>Rating:</strong> 
+       <strong>분류:</strong> 
        <span id="panel-rating"></span>
        <span id="rating-extra" class="small-text"></span>
     </p>
 
-    <p><strong>Category:</strong> <span id="panel-category"></span></p>
-    <p><strong>Location:</strong> <span id="panel-location"></span></p>
+    <p><strong>식종:</strong> <span id="panel-category"></span></p>
+    <p><strong>위치:</strong> <span id="panel-location"></span></p>
     <button class="back-button" onclick="goBack()">Back</button>
 </div>
 
@@ -207,7 +223,7 @@
 <div class="panel right-panel" id="right-panel">
     <!-- 별점 부분 -->
    <p>
-       <strong>Rating:</strong> 
+       <strong>별점:</strong> 
        <span id="panel-rating"></span>
        <span id="rating-extra" class="small-text"></span>
     </p>
@@ -223,40 +239,144 @@
         <form action="${contextPath }/vroom/restregisterReview" method="post">
             <input type="text" id="frtitle" name="frtitle" placeholder="제목"><br>
             <textarea id="frcontent" name="frcontent" placeholder="내용"></textarea><br>
-            <input type="text" id="frwriter" name="frwriter" placeholder="작성자"><br>
+            <input type="text" id="frwriter" name="frwriter" placeholder="작성자" readonly><br>
             <input type="text" id="frrating" name="frrating" placeholder="별점 0~5"><br>
             <input type="text" id="fno" name="fno" readonly> <!-- 여기에 fno를 동적으로 설정 -->
             <button id="review_register_btn" type="submit">리뷰등록</button>
         </form>
     </div>
     
+    
+	    <!-- 리뷰 수정 폼 -->
+	<div id="editReviewForm" style="display:none;">
+	    <form id="reviewEditForm" action="${contextPath}/vroom/updateReview" method="post">
+	        <input type="hidden" id="editFrno" name="frno">
+	        <input type="text" id="editFrtitle" name="frtitle" placeholder="제목"><br>
+	        <textarea id="editFrcontent" name="frcontent" placeholder="내용"></textarea><br>
+	        <button type="button" onclick="submitEditReview()">수정 완료</button>
+	    </form>
+	</div>
+    
     <!-- 기존 리뷰 목록 -->
     <div id="reviews-container">
     </div>
+    
+    <!--  -->
+    
+  
 </div>
 
 <script>
     const contextPath = "${contextPath}";
+    const currentUserId = "${user.userId}";
+    const isAdmin = "${isAdmin}";
+    
+    function submitEditReview() {
+        const form = document.getElementById('reviewEditForm');
+        const formData = new FormData(form);
+
+        fetch(`${contextPath}/vroom/updateReview`, {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(result => {
+            if (result.success) {
+                alert(result.message);
+                // 수정된 리뷰가 속한 식당의 패널 업데이트
+                updateReviews(document.getElementById('fno').value); 
+                // 수정 후에도 패널 유지
+            } else {
+                alert(result.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('리뷰 수정 중 오류가 발생했습니다.');
+        });
+    }
+
+    
+    function updateReviews(fno) {
+        fetch(`${contextPath}/vroom/getRestaurantReviews?fno=` + fno)
+            .then(response => response.json())
+            .then(reviews => {
+                const reviewsContainer = document.getElementById('reviews-container');
+                reviewsContainer.innerHTML = ''; // 기존 내용 지우기
+
+                if (reviews.length === 0) {
+                    reviewsContainer.innerHTML = '<p>No reviews available.</p>';
+                } else {
+                    reviews.forEach(review => {
+                        const formattedDate = review.frregDate.split('T')[0];
+                        const reviewElement = document.createElement('div');
+                        reviewElement.className = 'review_div';
+                        reviewElement.innerHTML = 
+                            "<ul class='review_ul' data-frno=" + review.frno + " data-uno=" + review.uno + " data-fno=" + review.fno + ">"
+                            + "<li>frtitle: " + review.frtitle + "</li>"
+                            + "<li>frcontent: " + review.frcontent + "</li>"
+                            + "<li>frwriter: " + review.frwriter + "</li>"
+                            + "<li>frregDate: " + formattedDate + "</li>"
+                            + "<li>frrating: " + review.frrating + "</li>"
+                            + "<li>" +
+                            (currentUserId === review.frwriter ? "<button onclick=\"editReview('" + review.frno + "', '" + review.frtitle + "', '" + review.frcontent + "')\">수정</button>" : "") +
+                            "</li>"
+                            + "<li>" +
+                            (currentUserId === review.frwriter ? "<button onclick=\"deleteReview('" + review.frno + "')\">삭제</button>" : "") +
+                            "</li>"
+                            + "</ul>"
+                        ; 
+                        reviewsContainer.appendChild(reviewElement);
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching reviews:', error);
+                alert('리뷰를 가져오는 데 실패했습니다.');
+            });
+    }
+
 
     function toggleReviewForm() {
         const reviewButton = document.getElementById('review-button');
         const reviewsWrap = document.getElementById('reviews_wrap');
+        const frwriterField = document.getElementById('frwriter');
 
         if (reviewsWrap.style.display === 'none' || reviewsWrap.style.display === '') {
             reviewsWrap.style.display = 'block'; // reviews_wrap을 표시
             reviewButton.style.display = 'none'; // 리뷰 입력 버튼 숨기기
+            frwriterField.value = currentUserId; // frwriter에 현재 로그인 사용자 ID를 설정
         } else {
             reviewsWrap.style.display = 'none'; // reviews_wrap을 숨김
             reviewButton.style.display = 'block'; // 리뷰 입력 버튼 표시
         }
     }
 
-    function submitReview() {
-        const form = document.querySelector('#reviews_wrap form');
-        if (form) {
-            form.submit(); // 폼 제출
-        }
+    function submitEditReview() {
+        const form = document.getElementById('reviewEditForm');
+        const formData = new FormData(form);
+
+        fetch(`${contextPath}/vroom/updateReview`, {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(result => {
+            if (result.success) {
+                alert(result.message);
+                // 수정된 리뷰가 속한 식당의 패널 업데이트
+                updateReviews(document.getElementById('fno').value); 
+                // 수정 후에도 패널 유지
+            } else {
+                alert(result.message || '리뷰 수정에 실패했습니다.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('리뷰 수정 중 오류가 발생했습니다.');
+        });
     }
+
 
     const container = document.getElementById('restaurant-container');
     const leftPanel = document.getElementById('left-panel');
@@ -277,8 +397,6 @@
               document.getElementById('panel-name').textContent = data.fname;
               document.getElementById('panel-category').textContent = data.fcategory;
               document.getElementById('panel-location').textContent = data.faddress;
-      
-              
       
               document.getElementById('fno').value = fno;
       
@@ -301,43 +419,47 @@
                 return response.json();
             })
             .then(reviews => {
-       const reviewsContainer = document.getElementById('reviews-container');
-       reviewsContainer.innerHTML = ''; // 기존 내용 지우기
+		       const reviewsContainer = document.getElementById('reviews-container');
+		       reviewsContainer.innerHTML = ''; // 기존 내용 지우기
    
-       if (reviews.length === 0) {
-           reviewsContainer.innerHTML = '<p>No reviews available.</p>';
-       } else {
-           reviews.forEach(review => {
-               console.log(review.frno);
-               // 왼쪽 패널의 Rating 값을 설정합니다.
-               document.getElementById('panel-rating').textContent = review.ratingAverage;
-               // 오른쪽 패널의 Rating 값을 설정합니다.
-               document.querySelector('#right-panel #panel-rating').textContent =review.ratingAverage;
-               // 왼쪽 패널의 리뷰 개수 표시
-               document.querySelector('#rating-extra').textContent ="("+review.frCount+")";
-               // 오른쪽 패널의 리뷰 개수 표시
-               document.querySelector('#right-panel #rating-extra').textContent ="("+review.frCount+")";
-
-              
-               
-               // frregDate에서 날짜 부분만 추출
-               const formattedDate = review.frregDate.split('T')[0];
-   
-               const reviewElement = document.createElement('div');
-               reviewElement.className = 'review_div';
-               reviewElement.innerHTML = 
-                   "<ul class='review_ul' data-frno="+review.frno+" data-uno="+review.uno+" data-fno="+review.fno+">"
-                      + "<li>frtitle: "+review.frtitle+"</li>"
-                      + "<li>frcontent: "+review.frcontent+"</li>"
-                      + "<li>frwriter: "+review.frwriter+"</li>"
-                      + "<li>frregDate: "+formattedDate+"</li>" // 여기서 날짜 부분만 출력
-                      + "<li>frrating: "+review.frrating+"</li>"
-                  + "</ul>"
-               ; 
-               reviewsContainer.appendChild(reviewElement);
-           });
-       }
-   })
+		       if (reviews.length === 0) {
+		           reviewsContainer.innerHTML = '<p>No reviews available.</p>';
+		       } else {
+		           reviews.forEach(review => {
+		               console.log(review.frno);
+		               // 왼쪽 패널의 Rating 값을 설정합니다.
+		               document.getElementById('panel-rating').textContent = review.ratingAverage;
+		               // 오른쪽 패널의 Rating 값을 설정합니다.
+		               document.querySelector('#right-panel #panel-rating').textContent =review.ratingAverage;
+		               // 왼쪽 패널의 리뷰 개수 표시
+		               document.querySelector('#rating-extra').textContent ="("+review.frCount+")";
+		               // 오른쪽 패널의 리뷰 개수 표시
+		               document.querySelector('#right-panel #rating-extra').textContent ="("+review.frCount+")";
+		
+		               // frregDate에서 날짜 부분만 추출
+		               const formattedDate = review.frregDate.split('T')[0];
+		   
+		               const reviewElement = document.createElement('div');
+		               reviewElement.className = 'review_div';
+		               reviewElement.innerHTML = 
+		            	   "<ul class='review_ul' data-frno=" + review.frno + " data-uno=" + review.uno + " data-fno=" + review.fno + ">"
+	                        + "<li>frtitle: " + review.frtitle + "</li>"
+	                        + "<li>frcontent: " + review.frcontent + "</li>"
+	                        + "<li>frwriter: " + review.frwriter + "</li>"
+	                        + "<li>frregDate: " + formattedDate + "</li>" // 여기서 날짜 부분만 출력
+	                        + "<li>frrating: " + review.frrating + "</li>"
+	                        + "<li>" +
+	                        (currentUserId === review.frwriter ? "<button onclick=\"editReview('" + review.frno + "', '" + review.frtitle + "', '" + review.frcontent + "')\">수정</button>" : "") +
+	                        "</li>"
+	                        + "<li>" +
+	                        (currentUserId === review.frwriter ? "<button onclick=\"deleteReview('" + review.frno + "')\">삭제</button>" : "") +
+	                        "</li>"
+	                        + "</ul>"
+		               ; 
+		               reviewsContainer.appendChild(reviewElement);
+		           });
+		       }
+		   })
             .catch(error => {
                 console.error('Error fetching data:', error);
                 alert('데이터를 가져오는 데 실패했습니다.');
@@ -358,6 +480,37 @@
         event.preventDefault();
         container.scrollLeft += event.deltaY;
     });
+    
+    function editReview(frno, frtitle, frcontent) {
+        // 폼을 표시하고 기존 리뷰 데이터를 폼에 설정
+    	 document.getElementById('editFrno').value = frno;
+    	 document.getElementById('editFrtitle').value = frtitle;
+    	 document.getElementById('editFrcontent').value = frcontent;
+    	 document.getElementById('editReviewForm').style.display = 'block'
+    }
+    
+    function deleteReview(frno) {
+        if (confirm("정말로 이 리뷰를 삭제하시겠습니까?")) {
+            fetch(`${contextPath}/vroom/deleteReview?frno=` + frno, {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (result.success) {
+                    alert("리뷰가 삭제되었습니다.");
+                    // 삭제 후 패널 업데이트
+                    updateReviews(document.getElementById('fno').value);
+                } else {
+                    alert("리뷰 삭제에 실패했습니다.");
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('리뷰 삭제 중 오류가 발생했습니다.');
+            });
+        }
+    }
+
 </script>
 
 </body>

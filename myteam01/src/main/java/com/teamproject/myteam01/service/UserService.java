@@ -41,5 +41,14 @@ public class UserService {
     public void updateLastLoginDate(String userId) {
         userMapper.updateLastLoginDate(userId);
     }
+    
+    public Integer findUserRoleId(String userId) {
+        return userMapper.findUserRoleId(userId);
+    }
+    
+    public boolean isUserAdmin(String userId) {
+        Integer roleId = userMapper.findUserRoleId(userId);
+        return roleId != null && roleId == 1;
+    }
 }
 

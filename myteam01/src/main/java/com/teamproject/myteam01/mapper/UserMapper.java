@@ -17,5 +17,8 @@ public interface UserMapper {
     
     List<String> findRolesByUserId(String userId);
     
+    Integer findUserRoleId(String userId);
+    
+    
     
 }

@@ -100,6 +100,12 @@ public class RestaurantServiceImpl implements RestaurantService{
 			return restaurantMapper.selectRestList();
 		}
 		
+		@Override
+		public int modifyreview(RestaurantsReviewVO restReviewVO) {
+			System.out.println("리뷰 수정 서비스 값: "+restReviewVO);
+			return restaurantMapper.updaterestreview(restReviewVO);
+		}
+		
 
 	
 

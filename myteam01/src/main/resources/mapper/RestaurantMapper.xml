@@ -46,13 +46,16 @@
 		FROM teampj.RESTAURANTS ORDER BY FNO DESC
     </select>
     
-      <!-- 식당 목록을 offset과 limit에 따라 조회하는 쿼리 -->
-    <select id="findRestaurantsWithOffset" parameterType="map" resultType="com.teamproject.myteam01.domain.RestaurantVO">
-        SELECT * FROM restaurants
-        ORDER BY fno
-        LIMIT #{limit}
-        OFFSET #{offset}
-    </select>
+    <update id="updaterestreview">
+	    UPDATE restaurants_reviews 
+	    SET FRTITLE = #{frtitle},
+	        FRCONTENT = #{frcontent},
+	        FRMODDATE = DEFAULT
+	    WHERE frno = #{frno}
+	</update>
+    
+
+
 
 	
 </mapper>
