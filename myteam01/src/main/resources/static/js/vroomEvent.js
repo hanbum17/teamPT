@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 // 서버에서 이벤트 데이터를 받아오는 함수
 function fetchEvents() {
     // 서버의 이벤트 API를 호출하여 데이터를 받아옴
@@ -11,9 +11,7 @@ function fetchEvents() {
             console.error('Error fetching events:', error); // 에러 발생 시 콘솔에 로그 출력
         });
 }
-=======
 
->>>>>>> 8ade9d9b36dfbe7ec1f6a7815875a7ed22968870
 
 // 이벤트의 상세 정보를 가져오는 함수
 function fetchEventDetails(eno) {
@@ -37,9 +35,7 @@ function fetchEventReviews(eno) {
 
 // 페이지가 로드될 때 이벤트 데이터 가져오기
 document.addEventListener('DOMContentLoaded', () => {
-<<<<<<< HEAD
-    fetchEvents(); // 페이지 로드 후 이벤트 데이터를 가져옴
-=======
+
     const leftContainer = document.getElementById('left');
     const rightContainer = document.getElementById('right');
     let leftEvents = [];
@@ -113,7 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     updateContainers();
     setupScrollSync();
->>>>>>> 8ade9d9b36dfbe7ec1f6a7815875a7ed22968870
+
 });
 
 
