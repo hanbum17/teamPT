@@ -173,6 +173,27 @@
 		    background-color: #fff;
 		    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 		}
+		
+		.review_ul {
+            list-style-type: none; /* 리스트의 기본 점을 제거합니다 */
+            padding: 0;
+        }
+        
+       .rating {
+		    display: inline-flex;
+		    font-size: 24px;
+		    color: #d3d3d3; /* 기본 회색 별 */
+		}
+		
+		.rating .star {
+		    color: #d3d3d3; /* 비활성 상태 별 */
+		}
+		
+		.rating .star.active {
+		    color: #ffc107; /* 활성 상태 별 */
+		}
+
+
 
     </style>
 </head>
@@ -217,7 +238,7 @@
     <p><strong id="panel-name"></strong></p>
     <p>
        <strong>Rating:</strong>
-       <span id="panel-rating"></span>
+       <span id="panel-rating" class="rating"></span> 
        <span id="rating-extra" class="small-text"></span>
     </p>
     <p><strong>Category:</strong> <span id="panel-category"></span></p>
@@ -231,6 +252,7 @@
     <p>
        <strong>Rating:</strong>
        <span id="panel-rating"></span>
+       <span id="right-panel-rating" class="rating"></span>
        <span id="rating-extra" class="small-text"></span>
     </p>
 
@@ -360,7 +382,7 @@ function showDetailView(fno) {
             return response.json();
         })
         .then(data => {
-        	const reviewsContainer = document.getElementById('reviews-container');
+            const reviewsContainer = document.getElementById('reviews-container');
             reviewsContainer.innerHTML = ''; // 기존 내용 지우기
             if (data) {
                 // 왼쪽 패널 설정
@@ -370,12 +392,18 @@ function showDetailView(fno) {
                 document.getElementById('panel-location').textContent = data.faddress;
                 document.getElementById('fno').value = fno;
 
+                // 별점 업데이트
+                updateRatingDisplay('panel-rating', data.frating); // 서버에서 받은 식당 별점 데이터
+                document.querySelector('#right-panel #panel-rating').innerHTML = getStarRatingHtml(data.frating);
+                document.querySelector('#rating-extra').textContent = `(${data.frCount})`;
+                document.querySelector('#right-panel #rating-extra').textContent = `(${data.frCount})`;
+
                 document.getElementById('restaurant-container').style.display = 'none';
                 document.getElementById('left-panel').style.display = 'block';
                 document.getElementById('right-panel').style.display = 'block';
 
                 // 리뷰 정보 가져오기
-                return fetch('/api/getRestaurantReviews?fno=' + fno + '&page='+page+'&pageSize='+pageSize);
+                return fetch('/api/getRestaurantReviews?fno=' + fno + '&page=' + page + '&pageSize=' + pageSize);
             } else {
                 alert('식당 정보를 찾을 수 없습니다.');
                 throw new Error('No restaurant data');
@@ -392,10 +420,10 @@ function showDetailView(fno) {
         })
         .catch(error => {
             console.error('Error fetching data:', error);
-              alert(error);
-            alert('데이터를 가져오는 데 실패했습니다.2');
+            alert('데이터를 가져오는 데 실패했습니다.');
         });
 }
+
 
 
 
@@ -464,17 +492,19 @@ function displayReviews(reviews) {
         const formattedDate = review.frregDate.split('T')[0];
         // 동적 HTML 추가
         newReviewsHTML +=
-            "<div class='review_div'>"
-                + "<ul class='review_ul' data-frno="+review.frno+" data-uno="+review.uno+" data-fno="+review.fno+">"
-                    + "<li>제목: "+review.frtitle+"</li>"
-                    + "<li>내용: "+review.frcontent+"</li>"
-                    + "<li>작성자: "+review.frwriter+"</li>"
-                    + "<li>등록일: "+formattedDate+"</li>" // 날짜 부분만 출력
-                    + "<li>별점: "+review.frrating+"</li>"
-                    + "<li>" +(currentUserId === review.frwriter ? "<button onclick=\"editReview('" + review.frno + "', '" + review.frtitle + "', '" + review.frcontent + "')\">수정</button>" : "") + "</li>"
-                    + "<li>" +(currentUserId === review.frwriter ? "<button onclick=\"deleteReview('" + review.frno + "')\">삭제</button>" : "") + "</li>"
-                + "</ul>"
-            + "</div>";
+        	"<div class='review_div'>"
+            + "<ul class='review_ul' data-frno="+review.frno+" data-uno="+review.uno+" data-fno="+review.fno+">"
+                + "<li>제목: "+review.frtitle+"</li>"
+                + "<li>내용: "+review.frcontent+"</li>"
+                + "<li>작성자: "+review.frwriter+"</li>"
+                + "<li>등록일: "+formattedDate+"</li>" // 날짜 부분만 출력
+                + "<li>별점: "+review.frrating+"</li>"
+                + "<li>" 
+                    + (currentUserId === review.frwriter ? "<button onclick=\"editReview('" + review.frno + "', '" + review.frtitle + "', '" + review.frcontent + "')\">수정</button>" : "")
+                    + (currentUserId === review.frwriter ? "<button onclick=\"deleteReview('" + review.frno + "')\">삭제</button>" : "")
+                + "</li>"
+            + "</ul>"
+        + "</div>";
     });
 
     // 새로 추가된 리뷰들을 컨테이너에 추가
@@ -580,6 +610,19 @@ function deleteReview(frno) {
             console.error('Error:', error);
             alert('리뷰 삭제 중 오류가 발생했습니다.');
         });
+    }
+}
+
+function getStarRatingHtml(rating) {
+    return Array.from({ length: 5 }, (_, index) =>
+        `<span class="star ${index < rating ? 'active' : ''}">&#9733;</span>`
+    ).join('');
+}
+
+function updateRatingDisplay(ratingElementId, rating) {
+    const ratingElement = document.getElementById(ratingElementId);
+    if (ratingElement) {
+        ratingElement.innerHTML = getStarRatingHtml(rating);
     }
 }
 
