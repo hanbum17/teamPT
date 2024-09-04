@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="jakarta.tags.core" prefix="c" %>
 <%@ taglib uri="jakarta.tags.fmt" prefix="fmt" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath }"/>
@@ -16,46 +15,9 @@ body {
     overflow-x: hidden;
 }
 
-form {
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 600px;
-    margin: 0 auto;
-    position: relative;
-    z-index: 1;
-}
-
-.form-group {
-    margin-bottom: 15px;
-}
-
-label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
-}
-
-.form-control {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-}
-
-.fileUploadResult ul {
-    list-style: none;
-    padding: 0;
-}
-
-.fileUploadResult li {
-    margin: 5px 0;
-}
-
-.btnRegister, .btnCancel {
+button {
     padding: 10px 20px;
+    margin: 5px;
     border: none;
     border-radius: 4px;
     color: #fff;
@@ -63,32 +25,61 @@ label {
     cursor: pointer;
 }
 
-.btnRegister {
+.btnFAQ {
     background-color: #28a745;
 }
 
-.btnCancel {
+.btnFeedback {
+    background-color: #007bff;
+}
+
+.btnInquiry {
     background-color: #dc3545;
 }
 
-.btnRegister:hover, .btnCancel:hover {
+button:hover {
     opacity: 0.9;
 }
 
-.btnCancel {
-    margin-left: 10px;
+.section {
+    display: none;
 }
 
-#map {
+.section.active {
+    display: block;
+}
+
+.section-header {
+    display: flex;
+    justify-content: center; /* 중앙 정렬 */
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.section-header h3 {
+    margin-right: 20px; /* 제목과 버튼 간격 조정 */
+}
+
+.register-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    background-color: #28a745;
+    cursor: pointer;
+}
+
+.register-btn:hover {
+    opacity: 0.9;
+}
+
+.table-container {
     margin-top: 20px;
-    width: 100%;
-    height: 350px;
 }
 
 table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 20px;
 }
 
 th, td {
@@ -101,37 +92,77 @@ th {
     background-color: #f2f2f2;
 }
 </style>
+<script>
+function showSection(sectionId) {
+    var sections = document.querySelectorAll('.section');
+    sections.forEach(function(section) {
+        section.classList.remove('active');
+    });
+    
+    var selectedSection = document.getElementById(sectionId);
+    if (selectedSection) {
+        selectedSection.classList.add('active');
+    }
+}
+
+window.onload = function() {
+    showSection('faqSection'); // 기본적으로 FAQ 섹션을 보여줌
+};
+</script>
 </head>
 <body>
     <h1>고객센터</h1>
     <div>
-        <button onclick="location.href='/cs/inquiry'">문의내역</button>
-        <button onclick="location.href='/cs/faq'">자주 묻는 질문(FAQ)</button>
-        <button onclick="location.href='/cs/feedback'">고객의 소리</button>
+        <button class="btnFAQ" onclick="showSection('faqSection')">자주 묻는 질문(FAQ)</button>
+        <button class="btnFeedback" onclick="showSection('feedbackSection')">고객의 소리</button>
+        <button class="btnInquiry" onclick="showSection('inquirySection')">문의사항</button>
     </div>
 
-    <table>
-        <tr>
-            <th>번호</th>
-            <th>카테고리</th>
-            <th>Q.</th>
-        </tr>
+    <div id="faqSection" class="section">
+        <div class="section-header">
+            <h3>자주 묻는 질문 (FAQ)</h3>
+            <button class="register-btn" onclick="location.href='${contextPath}/cs/faq/register'">FAQ 등록</button>
+        </div>
+        <div class="table-container">
+            <table>
+                <tr>
+                    <th>번호</th>
+                    <th>카테고리</th>
+                    <th>Q.</th>
+                </tr>
+                <c:forEach items="${CsList}" var="cs">
+                    <c:if test="${cs.faqdelflag == 1}">
+                        <tr>
+                            <td><c:out value="${cs.faqno}" /></td>
+                            <td colspan="2"><em>삭제된 게시글입니다.</em></td>
+                        </tr>
+                    </c:if>
+                    <c:if test="${cs.faqdelflag == 0}">
+                        <tr>
+                            <td><c:out value="${cs.faqno}" /></td>
+                            <td><c:out value="${cs.faqcategory}" /></td>
+                            <td><c:out value="${cs.faqtitle}" /></td>
+                        </tr>
+                    </c:if>
+                </c:forEach>
+            </table>
+        </div>
+    </div>
 
-<c:forEach items="${CsList}" var="cs">
-            <c:if test="${cs.faqdelflag == 1}">
-                <tr>
-                    <td><c:out value="${cs.faqno}" /></td>
-                    <td colspan="2"><em>삭제된 게시글입니다.</em></td>
-                </tr>
-            </c:if>
-            <c:if test="${cs.faqdelflag == 0}">
-                <tr>
-                    <td><c:out value="${cs.faqno}" /></td>
-                    <td><c:out value="${cs.faqcategory}" /></td>
-                    <td><c:out value="${cs.faqtitle}" /></td>
-                </tr>
-            </c:if>
-        </c:forEach>
-    </table>
+    <div id="feedbackSection" class="section">
+        <div class="section-header">
+            <h3>고객의 소리</h3>
+            <button class="register-btn" onclick="location.href='${contextPath}/cs/feedback/register'">고객의 소리 등록</button>
+        </div>
+        <p>고객의 소리 내용을 여기에 작성합니다.</p>
+    </div>
+
+    <div id="inquirySection" class="section">
+        <div class="section-header">
+            <h3>문의사항</h3>
+            <button class="register-btn" onclick="location.href='${contextPath}/cs/inquiry/register'">문의사항 등록</button>
+        </div>
+        <p>문의사항 내용을 여기에 작성합니다.</p>
+    </div>
 </body>
 </html>

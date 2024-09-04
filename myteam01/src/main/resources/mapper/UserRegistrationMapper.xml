@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.teamproject.myteam01.mapper.UserRegistrationMapper">
+
+    <!-- 사용자 등록 정보를 삽입하는 쿼리 -->
+    <insert id="insertUserRegistration">
+        INSERT INTO USER_REGISTRATIONS (ID, USERID, ITEM_ID, ITEM_TYPE, REGISTER_DATE)
+        VALUES (USER_REGISTRATIONS_SEQ.NEXTVAL, #{userId}, #{itemId}, #{itemType}, SYSDATE)
+    </insert>
+
+    <!-- 특정 사용자의 등록된 행사 및 음식점 정보를 조회하는 쿼리 -->
+    <select id="findUserRegistrationsByUserId" resultType="map">
+        SELECT 
+            ur.ID as id,
+            ur.ITEM_ID as itemId,
+            ur.ITEM_TYPE as itemType,
+            CASE 
+                WHEN ur.ITEM_TYPE = 'EVENT' THEN (SELECT ENAME FROM EVENT WHERE ENO = ur.ITEM_ID)
+                ELSE (SELECT FNAME FROM RESTAURANTS WHERE FNO = ur.ITEM_ID)
+            END AS itemName,
+            CASE 
+                WHEN ur.ITEM_TYPE = 'EVENT' THEN (SELECT EADDRESS FROM EVENT WHERE ENO = ur.ITEM_ID)
+                ELSE (SELECT FADDRESS FROM RESTAURANTS WHERE FNO = ur.ITEM_ID)
+            END AS itemAddress,
+            CASE 
+                WHEN ur.ITEM_TYPE = 'EVENT' THEN (SELECT ERATING FROM EVENT WHERE ENO = ur.ITEM_ID)
+                ELSE (SELECT FRATING FROM RESTAURANTS WHERE FNO = ur.ITEM_ID)
+            END AS itemRating,
+            ur.REGISTER_DATE as registerDate
+        FROM USER_REGISTRATIONS ur
+        WHERE ur.USERID = #{userId}
+    </select>
+
+</mapper>
