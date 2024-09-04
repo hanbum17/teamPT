@@ -18,6 +18,9 @@ public interface EventMapper {
 	public List<String> selectEHOST();
 	public void updateEventCoord(EventVO event);
 
+	//영범
+	public List<EventReviewVO> selectReviews2(Long eno);
+	
 	//희준
 	//행사 목록
 	public List<EventVO> selectEventList();
