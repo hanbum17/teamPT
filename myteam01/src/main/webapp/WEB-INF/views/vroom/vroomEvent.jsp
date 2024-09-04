@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="jakarta.tags.core" prefix="c" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath }"/>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -137,7 +136,7 @@
     </style>
 </head>
 <body>
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <div class="container" id="restaurant-container">
     <!-- 레스토랑 카드 반복문으로 생성 -->
     <c:forEach var="restaurant" items="${restList}">

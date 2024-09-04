@@ -125,7 +125,7 @@
     </style>
 </head>
 <body>
-<%@ include file="/jsp/admin_main/header.jsp" %>
+<%-- <%@ include file="/jsp/admin_main/header.jsp" %> --%>
         #map {
             width: 100%;
             height: 350px;
