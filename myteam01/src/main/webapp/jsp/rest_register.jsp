@@ -338,7 +338,7 @@ $("#btnRegister").on("click", function() {
 
     frmRegister.submit();
 });
-<%@ include file="/jsp/admin_main/footer.jsp" %>
+<%-- <%@ include file="/jsp/admin_main/footer.jsp" %> --%>
 </script>
     <div id="map"></div>
     <p><em>핀을 클릭하여 위치를 조정하세요.</em></p>
