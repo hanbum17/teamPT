@@ -28,6 +28,7 @@ import com.teamproject.myteam01.service.EventService;
 import com.teamproject.myteam01.service.RestaurantService;
 import com.teamproject.myteam01.service.UserService;
 
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import lombok.RequiredArgsConstructor;
 
 @Controller
@@ -90,10 +91,20 @@ public class VroomController {
 
 	
 	@PostMapping("/restregisterReview")
-	public String restregisterReview(Model model, RestaurantsReviewVO restReviewVO) {
-		restService.registerReview(restReviewVO);
-		return "redirect:/vroom/restaurant";
+	@ResponseBody
+	public Map<String, Object> restregisterReview(@RequestBody RestaurantsReviewVO restReviewVO) {
+	    Map<String, Object> response = new HashMap<>();
+	    try {
+	        restService.registerReview(restReviewVO);
+	        response.put("success", true);
+	        response.put("message", "리뷰가 성공적으로 등록되었습니다.");
+	    } catch (Exception e) {
+	        response.put("success", false);
+	        response.put("message", "리뷰 등록 중 오류가 발생했습니다.");
+	    }
+	    return response;
 	}
+
 
 	
 	@PostMapping("/updateReview")
