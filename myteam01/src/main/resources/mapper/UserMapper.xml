@@ -12,29 +12,30 @@
         INSERT INTO users (userNo, userId, userPw, userName, userGender, userCall, userAddress, userEmail, userType, joinDate)
         VALUES (#{userNo}, #{userId}, #{userPw}, #{userName}, #{userGender}, #{userCall}, #{userAddress}, #{userEmail}, #{userType}, SYSDATE)
     </insert>
-    
-    <insert id="insertUserRole" flushCache="true">
-	    INSERT INTO user_roles (userId, role_id)
-	    VALUES (
-	        #{userId},
-	        (SELECT role_id FROM roles WHERE role_name = #{roleName})
-	    )
-	</insert>
 
+    <!-- 사용자 역할 등록 -->
+    <insert id="insertUserRole" flushCache="true">
+        INSERT INTO user_roles (userId, role_id)
+        VALUES (
+            #{userId},
+            (SELECT role_id FROM roles WHERE role_name = #{roleName})
+        )
+    </insert>
 
     <!-- 사용자명으로 사용자 정보 조회 -->
     <select id="findByUsername" parameterType="String" resultType="com.teamproject.myteam01.domain.UserVO">
-        SELECT userNo, userId, userPw, userName, userGender, userCall, userAddress, userEmail, userType, joinDate, lastLoginDate
-        FROM users
-        WHERE userId = #{userId}
-    </select>
-    
-    <select id="findRolesByUserId" resultType="String">
-	    SELECT r.ROLE_NAME
-	    FROM ROLES r
-	    JOIN USER_ROLES ur ON r.ROLE_ID = ur.ROLE_ID
-	    WHERE ur.USERID = #{userId}
+	    SELECT userNo, userId, userPw, userName, userGender, userCall, userAddress, userEmail, userType, joinDate, lastLoginDate, account_status
+	    FROM users
+	    WHERE userId = #{userId}
 	</select>
+
+    <!-- 사용자 ID로 역할 조회 -->
+    <select id="findRolesByUserId" resultType="String">
+        SELECT r.ROLE_NAME
+        FROM ROLES r
+        JOIN USER_ROLES ur ON r.ROLE_ID = ur.ROLE_ID
+        WHERE ur.USERID = #{userId}
+    </select>
 
     <!-- 마지막 로그인 날짜 업데이트 -->
     <update id="updateLastLoginDate" parameterType="com.teamproject.myteam01.domain.UserVO">
@@ -42,7 +43,6 @@
         SET lastLoginDate = CURRENT_TIMESTAMP
         WHERE userId = #{userId}
     </update>
-
 
     <!-- 사용자 정보 업데이트 -->
     <update id="updateUser" parameterType="com.teamproject.myteam01.domain.UserVO">
@@ -57,6 +57,7 @@
         WHERE userId = #{userId}
     </update>
 
+
     <!-- 사용자 삭제 -->
     <delete id="deleteUser" parameterType="String">
         DELETE FROM users WHERE userId = #{userId}
@@ -68,5 +69,13 @@
 	    WHERE userId = #{userId}
 	</select>
     
+
+    <!-- 회원 탈퇴 기능: ACCOUNT_STATUS를 1로 업데이트 -->
+    <update id="updateAccountStatus" parameterType="map">
+        UPDATE USERS
+        SET ACCOUNT_STATUS = #{accountStatus}
+        WHERE USERID = #{userId}
+    </update>
+
 
 </mapper>

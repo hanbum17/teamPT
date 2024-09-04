@@ -6,7 +6,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Registration</title>
+    <%@ include file="../user_main/nav.jsp" %>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/register.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         .form-step {
             display: none;
@@ -97,6 +99,17 @@
             </div>
         </form>
     </div>
+
+	<c:if test="${not empty error}">
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: '${error}',
+                confirmButtonText: 'OK'
+            });
+        </script>
+    </c:if>
 
     <script>
         let currentStep = 1;

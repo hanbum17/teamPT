@@ -12,7 +12,6 @@ html, body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background: linear-gradient(120deg, #84fab0, #8fd3f4); /* 그라데이션 배경 */
 }
 
 /* Flexbox settings */

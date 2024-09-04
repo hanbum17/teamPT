@@ -250,7 +250,7 @@ main {
             <nav>
                 <ul>
                 	<li id="enter_chat"><a href="#">단체채팅방 입장</a></li>
-                    <li><a href="/user/login">Login</a></li>
+                    <li><a href="/logout">Logout</a></li>
                     <li><a href="#aboutus">About Us</a></li>
                     <li><a href="#contactus">Contact Us</a></li>
                 </ul>
@@ -277,7 +277,7 @@ $("#enter_chat").on("click", function(){
   	<li>
       <a href="#"><i class="fa-solid fa-cat"></i> 글관리</a>
       <ul>
-        <li><a href="/event/list">행사,식당목록</a></li>
+        <li><a href="/list">행사,식당목록</a></li>
         <li><a href="/event/register">행사등록</a></li>
         <li><a href="/restaurant/rest_register">식당등록</a></li>
       </ul>
