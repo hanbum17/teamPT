@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class FileDownloadAjaxController {
 
+
     @GetMapping(value = "/doFileDownloadByAjax")
     public ResponseEntity<Resource> doFileDownloadByAjax(@RequestParam("fileName") String fileName) {
         try {

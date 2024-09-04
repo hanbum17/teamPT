@@ -26,6 +26,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/vroom")
 public class VroomController {
 
+
     private final RestaurantService restService;
     private final EventService eventService;
 
@@ -33,7 +34,6 @@ public class VroomController {
     public String main() {
         return "vroom/vroomMain";
     }
-
 
 
 	

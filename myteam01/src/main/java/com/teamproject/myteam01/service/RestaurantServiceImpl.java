@@ -110,7 +110,6 @@ public class RestaurantServiceImpl implements RestaurantService{
 
 	
 	//윤정 파트
-
 	@Override
 	   public Long registerRest(RestaurantVO rest, AttachFileDTO attach) {
 	      System.out.println("서비스에 전달된 레스토랑 값: "+rest);
@@ -137,6 +136,5 @@ public class RestaurantServiceImpl implements RestaurantService{
 		}
 
 	
-
 	
 }
