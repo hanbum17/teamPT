@@ -49,13 +49,15 @@ public class VroomController {
 	    detail.setReivewsList(restService.selectReviews(fno)); // 리뷰 리스트를 세팅
 	    return detail;
 	}
+
+//삭제예정
+//	@GetMapping("/getRestaurantReviews")
+//	@ResponseBody
+//	public List<RestaurantsReviewVO> getRestaurantReviews(@RequestParam("fno") Long fno, Model model) {
+//	    List<RestaurantsReviewVO> reviews = restService.selectReviews(fno);
+//	    return reviews;
+//	}
 	
-	@GetMapping("/getRestaurantReviews")
-	@ResponseBody
-	public List<RestaurantsReviewVO> getRestaurantReviews(@RequestParam("fno") Long fno, Model model) {
-	    List<RestaurantsReviewVO> reviews = restService.selectReviews(fno);
-	    return reviews;
-	}
 	
 	@PostMapping("/restregisterReview")
 	public String restregisterReview(Model model, RestaurantsReviewVO restReviewVO) {
@@ -63,7 +65,7 @@ public class VroomController {
 		return "redirect:/vroom/restaurant";
 	}
 
-0144c60222cc8ec2e10ce15489fcca90411c1e6a
+
 
 	@GetMapping("/event")
 	public String vroomEvent(Model model) {

@@ -46,5 +46,20 @@
 		FROM teampj.RESTAURANTS ORDER BY FNO DESC
     </select>
    
+   <!-- 영범  -->
+	<select id="selectMoreReviews" resultType="com.teamproject.myteam01.domain.RestaurantsReviewVO">
+		SELECT *
+		FROM (
+		    SELECT restaurants_reviews.*, 
+		           ROW_NUMBER() OVER (ORDER BY FRNO DESC) AS rn
+		    FROM restaurants_reviews
+		    WHERE fno = #{fno}
+		) subquery
+		WHERE rn BETWEEN #{offset} + 1 AND #{offset} + #{pageSize}
+	</select>
+	<select id="selectReviewsForStar" resultType="Long"> 
+		SELECT FRRATING FROM restaurants_reviews WHERE FNO = #{fno} ORDER BY FRNO DESC 
+	</select>
+	
 	
 </mapper>
