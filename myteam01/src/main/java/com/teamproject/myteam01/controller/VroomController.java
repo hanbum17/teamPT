@@ -2,22 +2,15 @@ package com.teamproject.myteam01.controller;
 
 
 import java.util.HashMap;
-
 import java.util.List;
 import java.util.Map;
 
-
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
-
-
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -30,17 +23,11 @@ import com.teamproject.myteam01.domain.EventReviewVO;
 import com.teamproject.myteam01.domain.EventVO;
 import com.teamproject.myteam01.domain.RestaurantVO;
 import com.teamproject.myteam01.domain.RestaurantsReviewVO;
-
 import com.teamproject.myteam01.domain.UserVO;
-
-
-import com.teamproject.myteam01.service.RestaurantService;
-
-
+import com.teamproject.myteam01.service.EventService;
 import com.teamproject.myteam01.service.RestaurantService;
 import com.teamproject.myteam01.service.UserService;
 
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
 @Controller
@@ -51,8 +38,6 @@ public class VroomController {
 
 	public final RestaurantService restService;
 	public final UserService userService;
-
-    private final RestaurantService restService;
     private final EventService eventService;
 
     @GetMapping("/main")
@@ -154,9 +139,10 @@ public class VroomController {
 	
 
 	
-	@GetMapping("/event")
-	public String vroomEvent() {
-		return "vroom/vroomEvent";
+//	@GetMapping("/event")
+//	public String vroomEvent() {
+//		return "vroom/vroomEvent";
+//	}
 
 
 
