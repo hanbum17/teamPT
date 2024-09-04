@@ -260,6 +260,8 @@ function showDetailView(fno) {
             return response.json();
         })
         .then(data => {
+        	const reviewsContainer = document.getElementById('reviews-container');
+            reviewsContainer.innerHTML = ''; // 기존 내용 지우기
             if (data) {
                 // 왼쪽 패널 설정
                 document.getElementById('panel-image').src = `${contextPath}/images/bibimbab.jpg`;
