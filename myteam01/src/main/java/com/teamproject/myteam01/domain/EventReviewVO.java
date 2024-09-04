@@ -26,5 +26,7 @@ public class EventReviewVO {
 	private Long errating ;
 	private Long uno ;
 	private Long eno ;
-
+	
+	private float ratingAverage ;
+	private Long erCount;
 }

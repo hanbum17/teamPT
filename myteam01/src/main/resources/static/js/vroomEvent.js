@@ -1,109 +1,323 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const events = [
-        { id: 1, title: 'Event 1', date: '2024-08-26', rating: 4.5, description: 'Description 1', img: 'https://via.placeholder.com/150' },
-        { id: 2, title: 'Event 2', date: '2024-08-27', rating: 4.0, description: 'Description 2', img: 'https://via.placeholder.com/150' },
-        { id: 3, title: 'Event 3', date: '2024-08-28', rating: 3.5, description: 'Description 3', img: 'https://via.placeholder.com/150' },
-        { id: 4, title: 'Event 4', date: '2024-08-29', rating: 4.2, description: 'Description 4', img: 'https://via.placeholder.com/150' },
-        { id: 5, title: 'Event 5', date: '2024-08-30', rating: 4.7, description: 'Description 5', img: 'https://via.placeholder.com/150' },
-        { id: 6, title: 'Event 6', date: '2024-08-31', rating: 4.1, description: 'Description 6', img: 'https://via.placeholder.com/150' },
-        { id: 7, title: 'Event 7', date: '2024-09-01', rating: 4.3, description: 'Description 7', img: 'https://via.placeholder.com/150' },
-        { id: 8, title: 'Event 8', date: '2024-09-02', rating: 4.0, description: 'Description 8', img: 'https://via.placeholder.com/150' },
-        { id: 9, title: 'Event 9', date: '2024-09-03', rating: 3.9, description: 'Description 9', img: 'https://via.placeholder.com/150' },
-        { id: 10, title: 'Event 10', date: '2024-09-04', rating: 4.6, description: 'Description 10', img: 'https://via.placeholder.com/150' }
-    ];
 
-    let leftEvents = events.slice(0, 3);
-    let rightEvents = events.slice(3, 6);
+// 서버에서 이벤트 데이터를 받아오는 함수
+function fetchEvents() {
+    // 서버의 이벤트 API를 호출하여 데이터를 받아옴
+    fetch('/vroom/api/events')
+        .then(response => response.json()) // 응답을 JSON 형식으로 파싱
+        .then(data => {
+            initializeEvents(data); // 데이터를 사용하여 이벤트 초기화
+        })
+        .catch(error => {
+            console.error('Error fetching events:', error); // 에러 발생 시 콘솔에 로그 출력
+        });
+}
+
+
+// 이벤트의 상세 정보를 가져오는 함수
+function fetchEventDetails(eno) {
+    // 특정 이벤트의 상세 정보를 가져오는 API를 호출
+    return fetch(`/vroom/api/events/${eno}`)
+        .then(response => response.json()) // 응답을 JSON 형식으로 파싱
+        .catch(error => {
+            console.error('Error fetching event details:', error); // 에러 발생 시 콘솔에 로그 출력
+        });
+}
+
+// 이벤트의 리뷰를 가져오는 함수
+function fetchEventReviews(eno) {
+    // 특정 이벤트의 리뷰를 가져오는 API를 호출
+    return fetch(`/vroom/api/events/${eno}/reviews`)
+        .then(response => response.json()) // 응답을 JSON 형식으로 파싱
+        .catch(error => {
+            console.error('Error fetching event reviews:', error); // 에러 발생 시 콘솔에 로그 출력
+        });
+}
+
+// 페이지가 로드될 때 이벤트 데이터 가져오기
+document.addEventListener('DOMContentLoaded', () => {
+
+    const leftContainer = document.getElementById('left');
+    const rightContainer = document.getElementById('right');
+    let leftEvents = [];
+    let rightEvents = [];
+
+    function fetchEventData(start, limit) {
+        return fetch(`/vroom/api/events?start=${start}&limit=${limit}`)
+            .then(response => response.json())
+            .catch(error => console.error('Error fetching event data:', error));
+    }
 
     function renderEvents() {
-        const leftContainer = document.getElementById('left');
-        const rightContainer = document.getElementById('right');
+        // Render the visible events for both containers
+        const renderContainer = (container, events) => {
+            container.innerHTML = '';
+            events.forEach(event => {
+                const imageUrl = event.img || '/image/event.jpg';
+                container.innerHTML += `
+                    <div class="box" data-id="${event.eno}">
+                        <img src="${imageUrl}" alt="${event.ename}">
+                        <div class="text-container">
+                            <h3>${event.ename}</h3>
+                            <div>위치: ${event.eaddress}</div>
+                            <div>기간: ${event.eperiod}</div>
+                        </div>
+                    </div>
+                `;
+            });
+        };
 
-        leftContainer.innerHTML = '';
-        rightContainer.innerHTML = '';
+        renderContainer(leftContainer, leftEvents.slice(0, 5));
+        renderContainer(rightContainer, rightEvents.slice(0, 5));
+    }
 
+    function updateContainers() {
+        fetchEventData(0, 10).then(data => {
+            // Split data into left and right
+            leftEvents = data.slice(0, 10);
+            rightEvents = data.slice(10, 20);
+            renderEvents();
+        });
+    }
+
+    function handleScroll(e) {
+        const container = e.target;
+        const isLeft = container.id === 'left';
+        const otherContainer = isLeft ? rightContainer : leftContainer;
+
+		console.log(`Scroll Event on ${container.id}: ${container.scrollTop}`);
+        if (container.scrollTop === container.scrollHeight - container.clientHeight) {
+            // Load more events when scrolled to the bottom
+            const start = isLeft ? leftEvents.length : rightEvents.length;
+            fetchEventData(start, 10).then(data => {
+                if (isLeft) {
+                    leftEvents = [...leftEvents, ...data];
+                } else {
+                    rightEvents = [...rightEvents, ...data];
+                }
+                renderEvents();
+            });
+        }
+
+        // Scroll the other container in the opposite direction
+        otherContainer.scrollTop = container.scrollTop * -1;
+    }
+
+    function setupScrollSync() {
+        leftContainer.addEventListener('scroll', handleScroll);
+        rightContainer.addEventListener('scroll', handleScroll);
+    }
+
+    updateContainers();
+    setupScrollSync();
+
+});
+
+
+
+
+// 이벤트 데이터를 초기화하는 함수
+function initializeEvents(data) {
+    console.log('Initializing events with data:', data); // 데이터를 콘솔에 출력
+
+    // 이벤트 데이터를 왼쪽과 오른쪽에 표시할 항목으로 분리
+    const leftEvents = data.slice(0, 5);
+    const rightEvents = data.slice(5, 10);
+
+    // 기본 이미지 URL
+    const defaultImage = '/image/event.jpg';
+
+    // 이벤트를 렌더링하는 함수
+    function renderEvents() {
+        const leftContainer = document.getElementById('left'); // 왼쪽 컨테이너 요소
+        const rightContainer = document.getElementById('right'); // 오른쪽 컨테이너 요소
+
+        leftContainer.innerHTML = ''; // 왼쪽 컨테이너 초기화
+        rightContainer.innerHTML = ''; // 오른쪽 컨테이너 초기화
+
+        // 왼쪽 이벤트 항목 렌더링
         leftEvents.forEach(event => {
+            const imageUrl = event.img ? event.img : defaultImage; // 이벤트 이미지 또는 기본 이미지 사용
             leftContainer.innerHTML += `
-                <div class="box" data-id="${event.id}">
-                    <img src="${event.img}" alt="${event.title}">
-                    <h3>${event.title}</h3>
-                    <p>${event.date}</p>
-                    <p>Rating: ${event.rating}</p>
-                    <p>${event.description}</p>
+                <div class="box" data-id="${event.eno}">
+                    <img src="${imageUrl}" alt="${event.ename}">
+                    <div class="text-container">
+                        <h3>${event.ename}</h3>
+                        <div>위치: ${event.eaddress}</div>
+                        <div>기간: ${event.eperiod}</div>
+                    </div>
                 </div>
             `;
         });
 
+        // 오른쪽 이벤트 항목 렌더링
         rightEvents.forEach(event => {
+            const imageUrl = event.img ? event.img : defaultImage; // 이벤트 이미지 또는 기본 이미지 사용
             rightContainer.innerHTML += `
-                <div class="box" data-id="${event.id}">
-                    <img src="${event.img}" alt="${event.title}">
-                    <h3>${event.title}</h3>
-                    <p>${event.date}</p>
-                    <p>Rating: ${event.rating}</p>
-                    <p>${event.description}</p>
+                <div class="box" data-id="${event.eno}">
+                    <img src="${imageUrl}" alt="${event.ename}">
+                    <div class="text-container">
+                        <h3>${event.ename}</h3>
+                        <div>위치: ${event.eaddress}</div>
+                        <div>기간: ${event.eperiod}</div>
+                    </div>
                 </div>
             `;
         });
     }
 
-    function showDetails(eventId) {
-        const event = events.find(e => e.id === eventId);
-        if (!event) return;
+    // 이벤트 세부 정보를 표시하는 함수
+    function showDetails(eno) {
+        // 상세 정보와 리뷰를 비동기로 가져옴
+        Promise.all([
+            fetchEventDetails(eno),
+            fetchEventReviews(eno)
+        ]).then(([event, reviews]) => {
+            const leftDetail = document.getElementById('left-detail'); // 왼쪽 상세 보기 요소
+            const rightDetail = document.getElementById('right-detail'); // 오른쪽 상세 보기 요소
 
-        const leftDetail = document.getElementById('left-detail');
-        const rightDetail = document.getElementById('right-detail');
+            // 이벤트 상세 정보 렌더링
+            leftDetail.innerHTML = `
+                <img src="${event.img || defaultImage}" alt="${event.ename}">
+                <h2>${event.ename}</h2>
+                <p>위치: ${event.eaddress}</p>
+                <p>기간: ${event.eperiod}</p>
+                <p>Rating: ${event.erating}</p>
+                <p>Comments: <span>${reviews.length}</span></p>
+                <button>Favorite</button>
+                <p>Description: ${event.econtent}</p>
+                <p>Location: ${event.eplace || 'N/A'}</p>
+                <p>Operating Hours: N/A</p>
+                <p>Phone: N/A</p>
+                <p>Parking: N/A</p>
+            `;
 
-        leftDetail.innerHTML = `
-            <img src="${event.img}" alt="${event.title}">
-            <h2>${event.title}</h2>
-            <p>Rating: ${event.rating}</p>
-            <p>Comments: <span>0</span></p>
-            <button>Favorite</button>
-            <p>Location: N/A</p>
-            <p>Operating Hours: N/A</p>
-            <p>Phone: N/A</p>
-            <p>Parking: N/A</p>
-        `;
+            // 리뷰 요약과 리스트 렌더링
+            rightDetail.innerHTML = `
+                <h2>Reviews for ${event.ename}</h2>
+                <div id="review-summary"></div>
+                <div id="review-list"></div>
+            `;
 
-        rightDetail.innerHTML = `
-            <p>Overall Rating: ${event.rating}</p>
-            <p>Total Reviews: 0</p>
-        `;
+            updateReviewSection(event, reviews); // 리뷰 섹션 업데이트
 
-        // Hide the existing events
-        document.getElementById('left').style.display = 'none';
-        document.getElementById('right').style.display = 'none';
-
-        // Show the detail view
-        document.getElementById('detail-view').style.display = 'flex';
+            // 상세 보기 모드로 전환
+            document.getElementById('left').style.display = 'none';
+            document.getElementById('right').style.display = 'none';
+            document.getElementById('detail-view').style.display = 'flex';
+        });
     }
 
+    // 이벤트 목록을 다시 표시하는 함수
     function showEvents() {
-        // Show the existing events
-        document.getElementById('left').style.display = 'flex';
-        document.getElementById('right').style.display = 'flex';
-
-        // Hide the detail view
-        document.getElementById('detail-view').style.display = 'none';
+        document.getElementById('left').style.display = 'flex'; // 왼쪽 컨테이너 표시
+        document.getElementById('right').style.display = 'flex'; // 오른쪽 컨테이너 표시
+        document.getElementById('detail-view').style.display = 'none'; // 상세 보기 숨김
     }
 
+    // 클릭 이벤트 핸들러
     function handleClick(e) {
-        const box = e.target.closest('.box');
+        const box = e.target.closest('.box'); // 클릭한 요소의 가장 가까운 '.box' 클래스 찾기
         if (box) {
-            const eventId = parseInt(box.dataset.id, 10);
-            console.log(`Clicked event ID: ${eventId}`); // Debugging
-            showDetails(eventId);
+            const eno = parseInt(box.dataset.id, 10); // 데이터에서 이벤트 ID 추출
+            showDetails(eno); // 이벤트 상세 정보 표시
         }
     }
 
+    // 뒤로 가기 버튼 클릭 이벤트 핸들러
     function handleBackButtonClick() {
-        showEvents();
+        showEvents(); // 이벤트 목록 표시
     }
 
+    // 이벤트 리스너 추가
     document.getElementById('left').addEventListener('click', handleClick);
     document.getElementById('right').addEventListener('click', handleClick);
     document.getElementById('back-button').addEventListener('click', handleBackButtonClick);
 
-    renderEvents();
-});
+    renderEvents(); // 이벤트 렌더링 호출
+}
+
+// 리뷰 섹션을 업데이트하는 함수
+function updateReviewSection(event, reviews) {
+    const rightDetail = document.getElementById('right-detail');
+    if (!rightDetail) {
+        console.error('Element with id "right-detail" not found.');
+        return;
+    }
+
+    const ratingValue = document.getElementById('rating-value');
+    const starsDisplay = document.getElementById('stars-display');
+    const totalReviews = document.getElementById('total-reviews');
+    const ratingDistribution = document.getElementById('rating-distribution');
+    const reviewList = document.getElementById('review-list');
+
+    if (!ratingValue || !starsDisplay || !totalReviews || !ratingDistribution || !reviewList) {
+        console.error('One or more review section elements are missing.');
+        return;
+    }
+
+    const rating = event.erating || 0;
+
+    // Update rating value
+    ratingValue.textContent = rating.toFixed(1);
+
+    // Update stars display
+    const stars = starsDisplay.getElementsByClassName('star');
+    for (let i = 0; i < stars.length; i++) {
+        stars[i].style.color = i < Math.round(rating) ? 'gold' : 'lightgray';
+    }
+
+    // Update total reviews count
+    totalReviews.textContent = reviews.length;
+
+    // Update rating distribution
+    const distribution = [0, 0, 0, 0, 0];
+    reviews.forEach(review => {
+        if (review.errating >= 1 && review.errating <= 5) {
+            distribution[5 - review.errating]++;
+        }
+    });
+
+    const bars = ratingDistribution.getElementsByClassName('bar');
+    distribution.forEach((count, index) => {
+        bars[index].style.width = (count * 20) + '%';
+    });
+
+    // Update review list
+    reviewList.innerHTML = '';
+    reviews.forEach(review => {
+        reviewList.innerHTML += `
+            <div class="review-item">
+                <p><strong>${review.erwriter}</strong> - ${review.errating} stars</p>
+                <p>${review.ercontent}</p>
+                <p><small>${new Date(review.erregDate).toLocaleDateString()}</small></p>
+                <hr>
+            </div>
+        `;
+    });
+
+    // Handle review form visibility
+    const writeReviewButton = document.getElementById('write-review-button');
+    const reviewForm = document.getElementById('review-form');
+
+    if (writeReviewButton && reviewForm) {
+        writeReviewButton.addEventListener('click', () => {
+            reviewForm.classList.toggle('hidden');
+        });
+
+        const submitReviewButton = document.getElementById('submit-review-button');
+        if (submitReviewButton) {
+            submitReviewButton.addEventListener('click', () => {
+                const reviewText = document.getElementById('review-text').value;
+                if (reviewText) {
+                    console.log('Review submitted:', reviewText);
+                    document.getElementById('review-text').value = '';
+                    reviewForm.classList.add('hidden');
+                }
+            });
+        }
+    } else {
+        console.error('Review form elements are missing.');
+    }
+}
+
+

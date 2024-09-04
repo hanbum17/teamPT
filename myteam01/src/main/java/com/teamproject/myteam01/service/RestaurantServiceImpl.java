@@ -31,32 +31,67 @@ public class RestaurantServiceImpl implements RestaurantService{
 		return restaurantMapper.restaurantDetail(fno);
 	}
 	
+//삭제예정
+//	@Override
+//	public List<RestaurantsReviewVO> selectReviews(Long fno) {
+//		return restaurantMapper.selectReviews(fno);
+//	}
+	//영범추가
 	@Override
-	   public List<RestaurantsReviewVO> selectReviews(Long fno) {
-	       List<RestaurantsReviewVO> reviews = restaurantMapper.selectReviews(fno);
-	       Double frRating = 0.0;
-	       Long count = 0L;
-
-	       if (reviews != null && !reviews.isEmpty()) {
-	           for (RestaurantsReviewVO review : reviews) {
-	               frRating += review.getFrrating();
-	               count++;
-	           }
-	           Double ratingAverage = frRating / count;
-	           Double finalRatingAverage = Math.round(ratingAverage * 10) / 10.0;
-
-	           // 모든 리뷰 객체에 평균 평점과 리뷰 개수를 설정하기
-	           for (RestaurantsReviewVO review : reviews) {
-	               review.setRatingAverage(finalRatingAverage);
-	               review.setFrCount(count);
-	           }
-
-	           return reviews;
-	       }
-
-	       return reviews; // 빈 리스트를 반환
-	   }
+	public List<RestaurantsReviewVO> selectMoreReviews(RestaurantsReviewVO restReviewVO){
+		Long offSet = (restReviewVO.getPage()- 1 ) * restReviewVO.getPageSize();
+		restReviewVO.setOffset(offSet);
+		List<RestaurantsReviewVO> reviews = restaurantMapper.selectMoreReviews(restReviewVO);
+		List<Long> forStars = restaurantMapper.selectReviewsForStar(restReviewVO.getFno());
+		
+		Double frRating = 0.0;
+		Long count = 0L;
+		if (forStars != null && !forStars.isEmpty()) {
+			for (Long forStar : forStars) {
+	            frRating += forStar;
+	            count++;
+	        }
+			Double ratingAverage = frRating / count;
+	        Double finalRatingAverage = Math.round(ratingAverage * 10) / 10.0;
+	        
+	     // 모든 리뷰 객체에 평균 평점과 리뷰 개수를 설정하기
+	        for (RestaurantsReviewVO review : reviews) {
+	            review.setRatingAverage(finalRatingAverage);
+	            review.setFrCount(count);
+	        }
+			
+		}
+		return reviews;
+		
+	}
 	
+	
+	@Override
+	public List<RestaurantsReviewVO> selectReviews(Long fno) {
+	    List<RestaurantsReviewVO> reviews = restaurantMapper.selectReviews(fno);
+	    Double frRating = 0.0;
+	    Long count = 0L;
+
+	    if (reviews != null && !reviews.isEmpty()) {
+	        for (RestaurantsReviewVO review : reviews) {
+	            frRating += review.getFrrating();
+	            count++;
+	        }
+	        Double ratingAverage = frRating / count;
+	        Double finalRatingAverage = Math.round(ratingAverage * 10) / 10.0;
+
+	        // 모든 리뷰 객체에 평균 평점과 리뷰 개수를 설정하기
+	        for (RestaurantsReviewVO review : reviews) {
+	            review.setRatingAverage(finalRatingAverage);
+	            review.setFrCount(count);
+	        }
+
+	        return reviews;
+	    }
+
+	    return reviews; // 빈 리스트를 반환
+	}
+
 	@Override
 	public int registerReview(RestaurantsReviewVO restReviewVO) {
 		return restaurantMapper.registerReview(restReviewVO);

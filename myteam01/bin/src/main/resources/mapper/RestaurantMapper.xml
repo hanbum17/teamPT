@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.teamproject.myteam01.mapper.RestaurantMapper">
+
+	<!--  록귀 파트  -->
+	<!--  식당 디테일  -->
+	<select id="restaurantDetail" resultType="com.teamproject.myteam01.domain.RestaurantVO">
+	<![CDATA[
+		SELECT * FROM RESTAURANTS WHERE FNO = #{fno}
+	]]>
+	</select>
+	<!--  식당리뷰조회  -->
+	<select id="selectReviews" resultType="com.teamproject.myteam01.domain.RestaurantsReviewVO"> 
+		SELECT * FROM restaurants_reviews WHERE FNO = #{fno} ORDER BY FRNO DESC 
+	</select>
+	<!--  식당리뷰등록  -->
+	<insert id="registerReview" parameterType="com.teamproject.myteam01.domain.RestaurantsReviewVO"> 
+		INSERT INTO restaurants_reviews 
+		VALUES(seq_restaurants_reviews.nextval, #{frtitle}, #{frcontent}, #{frwriter}, DEFAULT, DEFAULT, #{frrating}, seq_uno.nextval, #{fno}) 
+	</insert>
+	<!--  식당리뷰삭제시 DEL_REVIEWS 테이블로 옮기기  -->
+	<insert id="copyReview" parameterType="com.teamproject.myteam01.domain.RestaurantsReviewVO"> 
+		INSERT INTO DEL_REVIEWS (DRNO, DRTITLE, DRCONTENT, DRWRITER, DRREGDATE, DRMODDATE, DRRATING, DTYPE) 
+		SELECT FRNO, FRTITLE, FRCONTENT, FRWRITER, FRREGDATE, FRMODDATE, FRRATING,  4 AS DTYPE FROM RESTAURANTS_REVIEWS
+		WHERE FRNO = #{frno} 
+	</insert>
+	<!--  식당리뷰삭제  -->
+	<delete id="deleteReview"> DELETE RESTAURANTS_REVIEWS WHERE FRNO = #{frno} </delete>
+	
+	
+	<!-- 윤정 파트 --> 
+	<insert id="insertRestaurant" >
+      <selectKey keyProperty="fno,uno" order="BEFORE" resultType="com.teamproject.myteam01.domain.RestaurantVO">
+          SELECT teampj.SEQ_RESTAURANTS.nextval AS fno, teampj.SEQ_UNO.nextval AS uno FROM DUAL
+       </selectKey>
+       INSERT INTO teampj.RESTAURANTS(fno,fcategory,fname,faddress,uno,fviewscnt,frating,fxcoord,fycoord,ftype)
+      VALUES (#{fno}, #{fcategory},#{fname}, #{faddress}, #{uno},DEFAULT,#{frating},#{fxcoord}, #{fycoord},#{ftype})
+   </insert>
+   
+   <select id="selectRestList" resultType="com.teamproject.myteam01.domain.RestaurantVO">
+        SELECT FNO, FCATEGORY, FNAME, FADDRESS, UNO, FVIEWSCNT, FRATING, FXCOORD, FYCOORD, FTYPE
+		FROM teampj.RESTAURANTS ORDER BY FNO DESC
+    </select>
+   
+	
+</mapper>

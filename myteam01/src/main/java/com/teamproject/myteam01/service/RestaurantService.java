@@ -21,4 +21,8 @@ public interface RestaurantService {
 	public int modifyreview(RestaurantsReviewVO restReviewVO);
 	
 	
+
+	//영범
+	public List<RestaurantsReviewVO> selectMoreReviews(RestaurantsReviewVO restReviewVO);
+
 }
