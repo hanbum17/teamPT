@@ -84,6 +84,7 @@ public class WebSocketController {
 		messagingTemplate.convertAndSend("/sub/chat/room/1", chat);
     }
 	//이전채팅목록 불러오기
+	@GetMapping("/chat/chatHistory")
 	private List<ChatMessageDTO> chatMessageList(int roomId) {
 		messagingTemplate.convertAndSend("/sub/chat/chatList", chatService.selectChatList(roomId));
 		return chatService.selectChatList(roomId);

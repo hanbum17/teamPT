@@ -2,19 +2,26 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.teamproject.myteam01.mapper.ChatMapper">
 
+	<!-- 채팅기록불러오기 -->
 	<select id="selectChatList" resultType="com.teamproject.myteam01.domain.ChatMessageDTO">
-		select * from chatMessage where roomId = 1
+		select * from chatMessage where roomId = #{roomId}
 	</select>
 	
+	<!-- 채팅입력시DB저장 -->
 	<insert id="insertChat">
 		insert into chatMessage
 		values(seq_cno.nextval, 1, #{username}, #{content}, #{date})
 	</insert>
 	
+	<!-- 채팅방목록조회 -->
 	<select id="selectChatRoomList" resultType="com.teamproject.myteam01.domain.ChatRoomDTO">
 		SELECT cr.roomId, cr.uno, cr.userId1, cr.userId2, r.FNAME AS title
 		FROM chatroom cr 
 		JOIN RESTAURANTS r ON cr.uno = r.UNO
 		WHERE cr.userId1 = #{username}
 	</select>
+	
+	
+	
+	
 </mapper>
