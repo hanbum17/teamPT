@@ -165,14 +165,20 @@
       }
 
       #editReviewForm {
-		    display: none;
-		    margin-top: 20px; /* 위치 조정 */
-		    padding: 10px;
-		    border: 1px solid #ddd;
-		    border-radius: 10px;
-		    background-color: #fff;
-		    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-		}
+          display: none;
+          margin-top: 20px; /* 위치 조정 */
+          padding: 10px;
+          border: 1px solid #ddd;
+          border-radius: 10px;
+          background-color: #fff;
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+
+    .review_ul {
+               list-style-type: none; /* 리스트의 기본 점을 제거합니다 */
+               padding: 0;
+           }
+
 
 	 .review_ul {
 	            list-style-type: none; /* 리스트의 기본 점을 제거합니다 */
@@ -185,26 +191,18 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
 <div style="position: absolute; top: 10px; left: 10px; font-size: 16px;">
-    <c:if test="${not empty user}">
-        현재 로그인: <strong>${user.userId}</strong>
-    </c:if>
+  <c:if test="${not empty user}">
+      현재 로그인: <strong>${user.userId}</strong>
+  </c:if>
 </div>
 
 
-
-
 <script>
-
-const contextPath = "${contextPath}";
-const currentUserId = "${user.userId}";
-const isAdmin = "${isAdmin}";
-let currentFno = null;
-let page = 1;
-const pageSize = 5;
-
 let isLoading = false;
-let restPage = 1;
+let restPage = 2; // 전역 변수로 설정
 const restPageSize = 10;
+const contextPath = "${contextPath}";
+
 
 function loadMoreRestaurants() {
     if (isLoading) return; // 이미 로딩 중인 경우 중복 요청 방지
@@ -467,73 +465,78 @@ function goBack() {
 }
 
 //___________________________________더보기 버튼 클릭시 리뷰추가___________________________________//
+
 document.addEventListener('DOMContentLoaded', () => {
-	const container = document.getElementById('restaurant-container');
+    const container = document.getElementById('restaurant-container');
+
+    function loadMoreRestaurants() {
+        if (isLoading) return; // Avoid duplicate requests while loading
+        isLoading = true;
+
+        fetch("${contextPath}/api/restaurant?page="+restPage+"&pageSize="+restPageSize)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.length > 0) {
+                    appendRestaurants(data);
+                    restPage++; // Increment restPage here
+                }
+                isLoading = false;
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+                isLoading = false;
+            });
+    }
+
+    function appendRestaurants(restaurants) {
+        restaurants.forEach(restaurant => {
+            const restaurantCard = document.createElement('div');
+            restaurantCard.className = 'restaurant-card';
+            restaurantCard.dataset.fno = restaurant.fno;
+            restaurantCard.onclick = () => showDetailView(restaurant.fno);
+
+           restaurantCard.innerHTML = 
+           	    "<img src=${contextPath}/images/bibimbab.jpg alt='" + restaurant.fname + " Image'>" +
+           	    "<div class=\"restaurant-info\">" +
+           	    "   <h3>" + restaurant.fname + "</h3>" +
+           	    "   <p>Location: " + restaurant.faddress + "</p>" +
+           	    "   <p>Rating: " + restaurant.frating + "</p>" +
+           	    "</div>";
+
+
+            container.appendChild(restaurantCard);
+        });
+    }
 
     container.addEventListener('scroll', () => {
         if (container.scrollWidth - container.scrollLeft <= container.clientWidth + 50) {
-            // 스크롤이 끝에 가까워지면 더 많은 데이터를 로드
+            // Load more data when scrolling close to the end
             loadMoreRestaurants();
         }
     });
 
-    // 초기 데이터 로드
+    container.addEventListener('wheel', (event) => {
+        event.preventDefault();
+        container.scrollLeft += event.deltaY;
+    });
+
+    // Initial data load
     loadMoreRestaurants();
-	
+
     const loadMoreBtn = document.getElementById('load-more-btn');
     if (loadMoreBtn) {
         loadMoreBtn.addEventListener('click', loadMoreReviews);
     }
 });
 
-const container = document.getElementById('restaurant-container');
-
-container.addEventListener('wheel', (event) => {
-       event.preventDefault();
-       container.scrollLeft += event.deltaY;
-   });
-
-function editReview(frno, frtitle, frcontent) {
-        // 폼을 표시하고 기존 리뷰 데이터를 폼에 설정
-    	 document.getElementById('editFrno').value = frno;
-    	 document.getElementById('editFrtitle').value = frtitle;
-    	 document.getElementById('editFrcontent').value = frcontent;
-    	 document.getElementById('editReviewForm').style.display = 'block'
-    }
-
-function deleteReview(frno) {
-    if (confirm("정말로 이 리뷰를 삭제하시겠습니까?")) {
-        fetch(`${contextPath}/vroom/deleteReview`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            body: new URLSearchParams({
-                'frno': frno
-            })
-        })
-        .then(response => response.json())
-        .then(result => {
-            if (result.success) {
-                alert("리뷰가 삭제되었습니다.");
-                // 삭제 후 패널 업데이트
-                showDetailView(document.getElementById('fno').value);
-            } else {
-                alert("리뷰 삭제에 실패했습니다.");
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('리뷰 삭제 중 오류가 발생했습니다.');
-        });
-    }
-}
-
-
 
 
 
 </script>
-
 </body>
 </html>
