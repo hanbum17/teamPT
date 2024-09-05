@@ -249,6 +249,7 @@
     </div>
 
     <script>
+        const reviewsContainer = document.getElementById('reviews-container');
         const contextPath = "${contextPath}";
         const currentUserId = "${user.userId}"
         const isAdmin = "${isAdmin}";
@@ -257,6 +258,7 @@
         const pageSize = 5;
 
         function submitEditReview() {
+        	reviewsContainer.innerHTML = '';
             const form = document.getElementById('reviewEditForm');
             const formData = new FormData(form);
 
@@ -264,6 +266,7 @@
                 method: 'POST',
                 body: formData
             })
+            // 기존 리뷰를 지웁니다.
             .then(response => response.json())
             .then(result => {
                 if (result.success) {
@@ -334,13 +337,13 @@
 
         
         function displayReviews(reviews) {
-            const reviewsContainer = document.getElementById('reviews-container');
+            //const reviewsContainer = document.getElementById('reviews-container');
 
             // 새로 추가된 리뷰를 저장할 배열
             let newReviewsHTML = '';
 
             if (reviews.length === 0) {
-                if (reviewsContainer.children.length === 0) {
+                if (reviewsContainer.childElementCount === 0) {
                     reviewsContainer.innerHTML = '<p>리뷰가 없습니다.</p>';
                 }
                 return;
@@ -359,7 +362,10 @@
                 // 날짜형식 전환
                 const formattedDate = review.frregDate.split('T')[0];
                 // 동적 HTML 추가
-                newReviewsHTML +=
+                const reviewDiv = document.createElement('div');
+                reviewDiv.className = 'review_div';
+
+                reviewDiv.innerHTML +=
                     "<div class='review_div'>"
                     + "<ul class='review_ul' data-frno="+review.frno+" data-uno="+review.uno+" data-fno="+review.fno+">"
                         + "<li>제목: "+review.frtitle+"</li>"
@@ -373,17 +379,15 @@
                         + "</li>"
                     + "</ul>"
                 + "</div>";
-            });
             
-            // 새로 추가된 리뷰들을 기존 리뷰 컨테이너에 추가
-            reviewsContainer.insertAdjacentHTML('beforeend', newReviewsHTML);
-
+			 reviewsContainer.appendChild(reviewDiv);
+            });
             // 더보기 버튼 처리
             const existingMoreButton = document.getElementById('load-more-btn');
             if (existingMoreButton) {
                 existingMoreButton.parentElement.removeChild(existingMoreButton);
             }
-            if (reviews.length > pageSize) {
+            if (reviews.length >= pageSize) {
                 const seeMoreElement = document.createElement('div');
                 seeMoreElement.className = 'more-review-btn';
                 seeMoreElement.innerHTML = `<button id='load-more-btn' style='display: block;'>더보기</button>`;
@@ -395,6 +399,7 @@
                 }
             }
         }
+
 
 
 
@@ -463,6 +468,7 @@
         });
         
         function submitReview() {
+        	reviewsContainer.innerHTML = '';
             const form = document.getElementById('reviewForm');
             const formData = new FormData(form);
 
