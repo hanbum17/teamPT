@@ -18,7 +18,7 @@ public interface RestaurantMapper {
 	public String selectTitle(Long uno);
 	//윤정
 	public void insertRestaurant(RestaurantVO rest);
-	public List<RestaurantVO> selectRestList();
+	public List<RestaurantVO> selectRestList(RestaurantVO restVO);
 
 	public int updaterestreview(RestaurantsReviewVO restReviewVO);
 

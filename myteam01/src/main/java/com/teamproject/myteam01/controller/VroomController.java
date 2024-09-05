@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -40,16 +39,20 @@ public class VroomController {
 	public final UserService userService;
     private final EventService eventService;
 
-    @GetMapping("/main")
-    public String main() {
-        return "vroom/vroomMain";
+    @GetMapping("/restaurantDetail")
+    @ResponseBody
+    public String restaurantDetail(@RequestParam("fno") Long fno , Model model) {
+    	System.out.println("fno" + fno);
+    	RestaurantVO detail = restService.restaurantDetail(fno);
+    	System.out.println("detail"+detail);
+    	model.addAttribute("detail", detail);
+        return "restaurantDetail";
     }
 
-
-
-	
-	@GetMapping("/restaurant")
-    public String restMain(@AuthenticationPrincipal UserDetails userDetails, Model model) {
+    //수정완료
+    @GetMapping("/restaurant")
+    public String restMain(@AuthenticationPrincipal UserDetails userDetails, 
+                           Model model) {
         // 현재 로그인된 사용자의 ID를 이용해 사용자 정보 조회
         if (userDetails != null) {
             String userId = userDetails.getUsername();
@@ -58,10 +61,29 @@ public class VroomController {
         }
         
         // 식당 목록 추가
-        model.addAttribute("restList", restService.getRestList());
+        Long restPage = 1L;
+        Long restPageSize = 10L;
+        List<RestaurantVO> restList = restService.getRestList(restPage, restPageSize);
+        model.addAttribute("restList", restList);
 
         return "main_restaurant";
     }
+
+	
+//	@GetMapping("/restaurant")
+//    public String restMain(@AuthenticationPrincipal UserDetails userDetails, Model model) {
+//        // 현재 로그인된 사용자의 ID를 이용해 사용자 정보 조회
+//        if (userDetails != null) {
+//            String userId = userDetails.getUsername();
+//            UserVO user = userService.findByUsername(userId);
+//            model.addAttribute("user", user);
+//        }
+//        
+//        // 식당 목록 추가
+//        model.addAttribute("restList", restService.getRestList());
+//
+//        return "main_restaurant";
+//    }
 	
 	@GetMapping("/getRestaurantDetails")
 	@ResponseBody

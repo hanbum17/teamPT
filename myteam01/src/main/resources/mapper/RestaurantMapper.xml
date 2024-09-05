@@ -41,9 +41,17 @@
       VALUES (#{fno}, #{fcategory},#{fname}, #{faddress}, #{uno},DEFAULT,#{frating},#{fxcoord}, #{fycoord},#{ftype})
    </insert>
    
-   <select id="selectRestList" resultType="com.teamproject.myteam01.domain.RestaurantVO">
+   <!-- <select id="selectRestList" resultType="com.teamproject.myteam01.domain.RestaurantVO">
         SELECT FNO, FCATEGORY, FNAME, FADDRESS, UNO, FVIEWSCNT, FRATING, FXCOORD, FYCOORD, FTYPE
 		FROM teampj.RESTAURANTS ORDER BY FNO DESC
+    </select> -->
+    
+    <select id="selectRestList" resultType="com.teamproject.myteam01.domain.RestaurantVO">
+    	SELECT FNO, FCATEGORY, FNAME, FADDRESS, UNO, FVIEWSCNT, FRATING, FXCOORD, FYCOORD, FTYPE
+		FROM teampj.RESTAURANTS
+		ORDER BY FNO DESC
+		OFFSET #{offset} ROWS
+		FETCH NEXT #{pageSize} ROWS ONLY
     </select>
     
     <update id="updaterestreview">
