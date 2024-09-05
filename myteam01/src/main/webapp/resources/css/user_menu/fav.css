@@ -12,8 +12,7 @@
     top: 0;
     background-color: #fff;
     z-index: 100;
-    padding: 10px 0;
-    border-bottom: 2px solid #f1f1f1;
+
 }
 
 .add-list-btn {
@@ -45,8 +44,10 @@
 }
 
 .favorite-list-item {
-    background-color: #f8f9fa;
+    background-color: #ffffff;
     padding: 15px;
+    border: 1px dashed #c0c0c0;
+    border-top: none;
     border-radius: 5px;
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
     text-align: center;
@@ -62,8 +63,8 @@
 }
 
 .favorite-list-item:hover {
-    transform: translateY(-2px);
-    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+    transform: translateY(-1px);
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 .favorite-list-item h4 {
@@ -144,90 +145,5 @@
 
 
 
-/* -----------------------------------------------------------------------------------------
- */
- 
- /* General styling */
-.content-box {
-    margin: 0 auto;
-    position: relative;
-}
-
-.content-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: sticky;
-    top: 0;
-    background-color: #fff;
-    z-index: 100;
-    padding: 10px 0;
-    border-bottom: 2px solid #f1f1f1;
-}
-
-.back-btn,
-.add-fav-btn {
-    padding: 10px 15px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    right:0;
-}
-
-.back-btn:hover,
-.add-fav-btn:hover {
-    background-color: #0056b3;
-}
-
-/* Scrollable grid */
-.favorite-items {
-    max-height: 630px; /* Adjust this value as needed */
-    overflow-y: auto;
-}
-
-
-
-.favorite-item {
-    background-color: #f8f9fa;
-    padding: 15px;
-    border-radius: 5px;
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    text-decoration: none;
-    color: inherit;
-    transition: transform 0.2s, box-shadow 0.2s;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    height: 150px; /* Adjust height as needed */
-}
-
-.favorite-item:hover {
-    transform: translateY(-2px);
-    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
-}
-
-.item-name {
-    margin-bottom: 10px;
-    font-size: 1.2em;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.delete-btn {
-    padding: 5px 10px;
-    background-color: #dc3545;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.delete-btn:hover {
-    background-color: #c82333;
-}
  
  

@@ -15,13 +15,16 @@
 
     <!-- 즐겨찾기 항목 삽입 -->
     <insert id="insertFavoriteItem" parameterType="com.teamproject.myteam01.domain.FavoriteItemVO">
-
-	    <selectKey keyProperty="favoriteId" order="BEFORE" resultType="Long">
+		<selectKey keyProperty="favoriteId" order="BEFORE" resultType="Long">
 	        SELECT FAVORITES_SEQ.NEXTVAL FROM DUAL
 	    </selectKey>
-	    
-	    INSERT INTO FAVORITES (FAVORITE_ID, LIST_ID, USERID, ITEM_NAME, LINK, ENO, FNO)
-	    VALUES (#{favoriteId}, #{listId}, #{userid}, #{itemName}, #{link}, #{eno}, #{fno})
+	    INSERT INTO FAVORITES (FAVORITE_ID, LIST_ID, USERID, ITEM_NAME, LINK, ENO, FNO, REGISTRATION_DATE)
+    	VALUES (#{favoriteId}, #{listId}, #{userId}, #{itemName}, #{link}, 
+            <if test="eno != null">#{eno}</if>
+            <if test="eno == null">CAST(NULL AS NUMBER)</if>, 
+            <if test="fno != null">#{fno}</if>
+            <if test="fno == null">CAST(NULL AS NUMBER)</if>, 
+            #{registrationDate})
 	</insert>
 
 
@@ -29,7 +32,7 @@
     <select id="getFavoriteListsByUserId" parameterType="String" resultType="com.teamproject.myteam01.domain.FavoriteListVO">
         SELECT LIST_ID, USERID, LIST_NAME, COLOR
         FROM FAVORITELIST
-        WHERE USERID = #{userid}
+        WHERE USERID = #{userId}
         ORDER BY LIST_ID DESC
     </select>
     
@@ -42,15 +45,17 @@
 
     <!-- 즐겨찾기 목록 ID로 즐겨찾기 항목 조회 -->
     <select id="getFavoritesByListId" parameterType="Long" resultType="com.teamproject.myteam01.domain.FavoriteItemVO">
-        SELECT FAVORITE_ID, USERID, ITEM_NAME, LINK, ENO, FNO
-        FROM FAVORITES
-        WHERE LIST_ID = #{listId}
+        SELECT FAVORITE_ID, LIST_ID, USERID, ITEM_NAME, LINK, ENO, FNO
+	    FROM FAVORITES
+	    WHERE LIST_ID = #{listId}
     </select>
+    
+
 
     <!-- 즐겨찾기 목록 이름 업데이트 -->
     <update id="updateFavoriteListName" parameterType="com.teamproject.myteam01.domain.FavoriteListVO">
 	    UPDATE FAVORITELIST
-	    SET LIST_NAME = #{listName}
+	    SET LIST_NAME = #{listName}, COLOR = #{color}
 	    WHERE LIST_ID = #{listId}
 	</update>
 	
@@ -59,7 +64,6 @@
 	    DELETE FROM FAVORITELIST WHERE LIST_ID = #{listId}
 	</delete>
 	
-
 
     <!-- 즐겨찾기 항목 삭제 -->
     <delete id="deleteFavoriteItem" parameterType="Long">

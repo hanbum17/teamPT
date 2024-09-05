@@ -53,7 +53,7 @@ body {
 /* 리뷰 헤더 스타일 */
 .review-header {
     padding: 10px;
-    height: 45px;
+    height: 35px;
     align-content: center;
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
@@ -64,7 +64,7 @@ body {
     margin: 0px;
     margin-top: 3px;
     margin-left: 10px;
-    font-size: 29px;
+    font-size: 24px;
     font-weight: 100;
     font-family: "Jua", sans-serif;
 }
@@ -89,8 +89,8 @@ body {
 
 /* 리뷰 이미지 */
 .review-image {
-    width: 140px;
-    height: 140px;
+    width: 105px;
+    height: 105px;
     background-color: #f0f0f0;
     border-radius: 8px;
     overflow: hidden;
@@ -188,18 +188,32 @@ body {
 
     background-color: #fff;
     color: #000000;
-    border: solid 1px #c0c0c0;
+    border: none;
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
 }
 
+
+
 .toggle-button:hover {
+	background-color: #009fff; 
+    color: #fff; 
+}
+
+
+.toggle-button:hover[data-section="restaurant"] {
     background-color: #2ECC71;
     color: #fff;
 }
 
-.toggle-button.active {
-    background-color: #009fff; /* 선택된 버튼의 색상 */
-    color: #fff; /* 선택된 버튼의 텍스트 색상 */
+.toggle-button.active[data-section="event"] {
+    background-color: #009fff; 
+    color: #fff; 
+}
+
+/* 음식점 리뷰 버튼이 선택되었을 때 */
+.toggle-button.active[data-section="restaurant"] {
+    background-color: #2ECC71;
+    color: #fff;
 }

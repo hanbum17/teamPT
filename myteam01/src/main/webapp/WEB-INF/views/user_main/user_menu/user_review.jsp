@@ -12,10 +12,10 @@
 		<div class="content-header fixed-header">
 			<h2>내가 작성한 리뷰</h2>
 			<div class="review-toggle-buttons">
-				<button onclick="showSection('event-reviews', this)"
-					class="toggle-button active">행사 리뷰</button>
-				<button onclick="showSection('restaurant-reviews', this)"
-					class="toggle-button">음식점 리뷰</button>
+			    <button onclick="showSection('event-reviews', this)" 
+			            class="toggle-button active" data-section="event">행사 리뷰</button>
+			    <button onclick="showSection('restaurant-reviews', this)" 
+			            class="toggle-button" data-section="restaurant">음식점 리뷰</button>
 			</div>
 		</div>
 

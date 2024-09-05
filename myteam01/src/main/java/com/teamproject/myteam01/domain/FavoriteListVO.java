@@ -19,4 +19,6 @@ public class FavoriteListVO {
     private String listName;	// 즐겨찾기 목록의 이름
     private String color;          // 사용자 정의 색상 추가
     private List<FavoriteItemVO> items; // 이 목록에 포함된 즐겨찾기 항목들
+    
+    
 }

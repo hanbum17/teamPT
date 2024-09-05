@@ -17,7 +17,7 @@
             <div id="favoriteList" class="favorite-grid">
                 <c:forEach var="favoriteList" items="${favoriteLists}">
                     <a href="/user/user_fav_items?listId=${favoriteList.listId}" class="favorite-list-item">
-                    	<div class="color-bar" style="background-color: ${favoriteList.color};"></div>
+                    	<div class="color-bar" style="background-color: ${favoriteList.color};" data-color="${favoriteList.color}"></div>
                         <h4>${favoriteList.listName} </h4>
                         <h5>${favoriteList.items.size()} items</h5>
                         <div class="actions">
@@ -82,59 +82,72 @@ document.getElementById('addFavoriteListBtn').onclick = function() {
 };
 
 
-
-
-    document.querySelectorAll('.edit-btn').forEach(function(button) {
-        button.addEventListener('click', function(event) {
-            event.preventDefault();
-            event.stopPropagation();
-
-            const listItem = button.closest('.favorite-list-item');
-            const listId = listItem.getAttribute('href').split('=')[1]; // URL에서 listId 추출
-            const currentName = listItem.querySelector('h4').textContent.trim();
-
-            Swal.fire({
-                title: '목록 이름 수정',
-                input: 'text',
-                inputLabel: '새로운 목록 이름을 입력하세요',
-                inputValue: currentName,
-                showCancelButton: true,
-                confirmButtonText: '수정',
-                cancelButtonText: '취소',
-                preConfirm: (newName) => {
-                    if (!newName) {
-                        Swal.showValidationMessage(`목록 이름을 입력해주세요.`);
-                    }
-                    return { listId: listId, listName: newName };
-                }
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    const { listId, listName } = result.value;
-
-                    // 서버로 수정된 데이터 전송
-                    const form = document.createElement('form');
-                    form.method = 'POST';
-                    form.action = '/user/updateFavoriteList'; // 수정 요청 URL
-
-                    const inputId = document.createElement('input');
-                    inputId.type = 'hidden';
-                    inputId.name = 'listId';
-                    inputId.value = listId;
-
-                    const inputName = document.createElement('input');
-                    inputName.type = 'hidden';
-                    inputName.name = 'listName';
-                    inputName.value = listName;
-
-                    form.appendChild(inputId);
-                    form.appendChild(inputName);
-
-                    document.body.appendChild(form);
-                    form.submit();
-                }
-            });
-        });
-    });
+	document.querySelectorAll('.edit-btn').forEach(function(button) {
+	    button.addEventListener('click', function(event) {
+	        event.preventDefault();
+	        event.stopPropagation();
+	
+	        const listItem = button.closest('.favorite-list-item');
+	        const listId = listItem.getAttribute('href').split('=')[1]; // URL에서 listId 추출
+	        const nameElement = listItem.querySelector('h4');
+	        const currentName = nameElement ? nameElement.textContent.trim() : ''; // 현재 목록 이름 가져오기
+	        const currentColor = listItem.querySelector('.color-bar').dataset.color;
+	
+	        // HTML 문자열을 큰따옴표로 작성
+	        const htmlContent = "<input type='text' id='newListName' class='swal2-input' placeholder='목록 이름' value='" + currentName + "' required>" +
+	                            "<label for='listColor' class='color-picker-label'>목록 색상:</label>" +
+	                            "<input type='color' id='listColor' class='color-picker-input' value='" + currentColor + "'>";
+	
+	        Swal.fire({
+	            title: '목록 수정',
+	            html: htmlContent,
+	            showCancelButton: true,
+	            confirmButtonText: '수정',
+	            cancelButtonText: '취소',
+	            preConfirm: () => {
+	                const newName = Swal.getPopup().querySelector('#newListName').value;
+	                const newColor = Swal.getPopup().querySelector('#listColor').value;
+	
+	                if (!newName) {
+	                    Swal.showValidationMessage("목록 이름을 입력해주세요.");
+	                }
+	
+	                return { listId, newName, newColor };
+	            }
+	        }).then((result) => {
+	            if (result.isConfirmed) {
+	                const { listId, newName, newColor } = result.value;
+	
+	                // 서버로 수정된 데이터 전송
+	                const form = document.createElement('form');
+	                form.method = 'POST';
+	                form.action = '/user/updateFavoriteList'; // 수정 요청 URL
+	
+	                const inputId = document.createElement('input');
+	                inputId.type = 'hidden';
+	                inputId.name = 'listId';
+	                inputId.value = listId;
+	
+	                const inputName = document.createElement('input');
+	                inputName.type = 'hidden';
+	                inputName.name = 'listName';
+	                inputName.value = newName;
+	
+	                const inputColor = document.createElement('input');
+	                inputColor.type = 'hidden';
+	                inputColor.name = 'listColor';
+	                inputColor.value = newColor;
+	
+	                form.appendChild(inputId);
+	                form.appendChild(inputName);
+	                form.appendChild(inputColor);
+	
+	                document.body.appendChild(form);
+	                form.submit();
+	            }
+	        });
+	    });
+	});
     
     document.querySelectorAll('.delete-btn').forEach(function(button) {
         button.addEventListener('click', function(event) {
@@ -173,3 +186,4 @@ document.getElementById('addFavoriteListBtn').onclick = function() {
     });
 
 </script>
+
