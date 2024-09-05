@@ -30,6 +30,29 @@ public class EventServiceImpl implements EventService{
 
 	}
 	
+	//리뷰 가져오기 및 리뷰 갯수와 평균점수 구하기
+	@Override
+	public List<EventReviewVO> selectReviews2(Long eno) {
+		List<EventReviewVO> reviews = eventMapper.selectReviews2(eno);
+		Long count =0L;
+		Long erRating = 0L;
+		EventReviewVO setRatingAverage = new EventReviewVO();
+		if(reviews != null) {
+			for(int i = 0 ; i <= reviews.size(); i++) {
+				EventReviewVO getReviews = reviews.get(i);
+				erRating += getReviews.getErrating();
+				count += i ;
+			}
+			float ratingAverage = erRating/count;
+			setRatingAverage.setErCount(count);
+			setRatingAverage.setRatingAverage(ratingAverage);
+			
+		}
+		
+		return reviews;
+	}
+	
+	
 	@Override
 	public int registerReview(EventReviewVO eventReviewVO) {
 		return eventMapper.registerReview(eventReviewVO);
@@ -61,23 +84,20 @@ public class EventServiceImpl implements EventService{
 	//행사 목록
 	@Override
 	public List<EventVO> eventList(){
-		System.out.println("서비스: 행사목록");
-		return eventMapper.selectEventList();
+		List<EventVO> event = eventMapper.selectEventList();
+		return event;
 	}
 	
 	//행사 등록
 	@Override
 	public Long regiEvent(EventVO event) {
-		System.out.println("서비스 : 행사 등록" + event);
 		eventMapper.registerEvent(event);
-		System.out.println("서비스 : 행사 등록 후" + event);
 		return event.getEno();
 	}
 	
 	//행사 조회
 	@Override
 	public EventVO getEvent(Long eno) {
-		System.out.println("서비스 : 행사 조회");
 		EventVO event = eventMapper.selectEvent(eno);
 		eventMapper.updateEviewsCnt(eno);
 		return event ;
@@ -87,14 +107,12 @@ public class EventServiceImpl implements EventService{
 	//행사 수정
 	@Override
 	public boolean modifyEvent(EventVO event) {
-		System.out.println("서비스 : 행사 수정");
 		return eventMapper.updateEvent(event) == 1;
 	}
 	
 	//행사 삭제
 	@Override
 	public boolean removeEvent(Long eno) {
-		System.out.println("서비스 : 행사 삭제");
 		return eventMapper.delEvent(eno) == 1;
 		
 	}

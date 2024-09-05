@@ -1,7 +1,11 @@
 package com.teamproject.myteam01.controller;
 
 import com.teamproject.myteam01.service.ListService;
+import com.teamproject.myteam01.service.UserRegistrationService;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +19,8 @@ public class ListController {
 
     @Autowired
     private ListService listService;
+    
+
 
     @GetMapping("/list")
     public String getCombinedList(
@@ -44,4 +50,7 @@ public class ListController {
 
         return "event/list";
     }
+    
+
+
 }

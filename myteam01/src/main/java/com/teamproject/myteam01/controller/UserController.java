@@ -83,7 +83,7 @@ public class UserController {
     // 즐겨찾기 목록 페이지로 이동
     @GetMapping("/user/user_fav")
     public String userFavPage() {
-        return "user_main/user_menu/user_fav_lists";
+        return "redirect:/user/user_fav_lists";
     }
 
     // 여행 계획 세우기 페이지로 이동
@@ -106,7 +106,19 @@ public class UserController {
 
     // 등록한 리뷰 내역 페이지로 이동
     @GetMapping("/user/user_review")
-    public String userReviewPage() {
+    public String userReviewPage(@AuthenticationPrincipal UserDetails userDetails, Model model) {
+        String userId = userDetails.getUsername();  // userId를 가져옴
+
+        // 행사 리뷰 조회
+        List<Map<String, Object>> eventReviews = userRegistrationService.getUserEventReviewsByUserId(userId);
+        
+        // 음식점 리뷰 조회
+        List<Map<String, Object>> restaurantReviews = userRegistrationService.getUserRestaurantReviewsByUserId(userId);
+
+        // 모델에 추가
+        model.addAttribute("eventReviews", eventReviews);
+        model.addAttribute("restaurantReviews", restaurantReviews);
+
         return "user_main/user_menu/user_review";
     }
 
