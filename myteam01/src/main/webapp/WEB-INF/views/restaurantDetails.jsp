@@ -336,15 +336,16 @@
         function displayReviews(reviews) {
             const reviewsContainer = document.getElementById('reviews-container');
 
-            // 새로 추가된 리뷰를 저장할 배열
-            let newReviewsHTML = '';
+            // 기존 리뷰를 비워줍니다
+            reviewsContainer.innerHTML = '';
 
             if (reviews.length === 0) {
-                if (reviewsContainer.children.length === 0) {
-                    reviewsContainer.innerHTML = '<p>리뷰가 없습니다.</p>';
-                }
+                reviewsContainer.innerHTML = '<p>리뷰가 없습니다.</p>';
                 return;
             }
+
+            // 새로 추가된 리뷰를 저장할 배열
+            let newReviewsHTML = '';
 
             reviews.forEach(review => {
                 // 왼쪽 패널의 Rating 값을 설정합니다.
@@ -375,8 +376,8 @@
                 + "</div>";
             });
             
-            // 새로 추가된 리뷰들을 기존 리뷰 컨테이너에 추가
-            reviewsContainer.insertAdjacentHTML('beforeend', newReviewsHTML);
+            // 새로 추가된 리뷰들을 컨테이너에 추가
+            reviewsContainer.innerHTML = newReviewsHTML;
 
             // 더보기 버튼 처리
             const existingMoreButton = document.getElementById('load-more-btn');
@@ -395,7 +396,6 @@
                 }
             }
         }
-
 
 
 
@@ -521,6 +521,7 @@
         	        });
 
         	}
+
         
     </script>
 </body>
