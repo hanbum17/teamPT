@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="jakarta.tags.core" prefix="c" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath }"/>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -193,18 +192,19 @@
 
     <div class="container" id="restaurant-container">
         <!-- 레스토랑 카드 반복문으로 생성 -->
-        <c:forEach var="restaurant" items="${restList}">
-            <div class="restaurant-card" data-fno="${restaurant.fno}" onclick="window.location.href='${contextPath}/vroom/restaurant/details?fno=${restaurant.fno}'">
-			    <img src="${contextPath}/images/bibimbab.jpg" alt="${restaurant.fname} Image">
-			    <div class="restaurant-info">
-			        <h3>${restaurant.fname}</h3>
-			        <p>Location: ${restaurant.faddress}</p>
-			        <p>Rating: ${restaurant.frating}</p>
-			    </div>
-			</div>
-
-        </c:forEach>
-
+        
+        <div class="more-restaurant-card">
+	        <c:forEach var="restaurant" items="${restList}">
+	            <div class="restaurant-card" data-fno="${restaurant.fno}" onclick="window.location.href='${contextPath}/vroom/restaurant/details?fno=${restaurant.fno}'">
+				    <img src="${contextPath}/images/bibimbab.jpg" alt="${restaurant.fname} Image">
+				    <div class="restaurant-info">
+				        <h3>${restaurant.fname}</h3>
+				        <p>Location: ${restaurant.faddress}</p>
+				        <p>Rating: ${restaurant.frating}</p>
+				    </div>
+				</div>
+			</c:forEach> 
+		</div>
         <!-- 데이터가 없는 경우 표시할 카드 -->
         <c:if test="${empty restList}">
             <div class="restaurant-card">
@@ -218,4 +218,94 @@
         </c:if>
     </div>
 </body>
+<script>
+let isLoading = false;
+let restPage = 2; // 전역 변수로 설정
+const restPageSize = 10;
+const contextPath = "${contextPath}";
+
+
+//브라우저 시작되고 반응형 스크립트
+document.addEventListener('DOMContentLoaded', () => {
+	
+    const container = document.getElementById('restaurant-container'); //추가할 컨테이너
+
+    //레스토랑 추가 데이터 가져오는 스크립트 (드래그 시 10개씩 추가)
+    function loadMoreRestaurants() {
+        if (isLoading) return; // 중복 요청 방지
+        isLoading = true;
+
+        fetch("${contextPath}/api/restaurant?page="+restPage+"&pageSize="+restPageSize)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.length > 0) {
+                    appendRestaurants(data);
+                    restPage++; // Increment restPage here
+                }
+                isLoading = false;
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+                isLoading = false;
+            });
+    }
+    
+    
+    	
+
+    
+    //레스토랑 리스트 추가
+    function appendRestaurants(restaurants) {
+    restaurants.forEach(restaurant => {
+        const restaurantCard = document.createElement('div');
+        restaurantCard.className = 'restaurant-card'; // 스타일 적용
+        restaurantCard.dataset.fno = restaurant.fno;
+        restaurantCard.onclick = () => {
+            window.location.href = contextPath + '/vroom/restaurant/details?fno=' + restaurant.fno;
+        };
+
+        restaurantCard.innerHTML = 
+            "<img src='" + contextPath + "/images/bibimbab.jpg' alt='" + restaurant.fname + " Image'>" +
+            "<div class='restaurant-info'>" +
+            "    <h3>" + restaurant.fname + "</h3>" +
+            "    <p>Location: " + restaurant.faddress + "</p>" +
+            "    <p>Rating: " + restaurant.frating + "</p>" +
+            "</div>";
+
+        container.appendChild(restaurantCard);
+    });
+}
+
+
+
+    container.addEventListener('scroll', () => {
+        if (container.scrollWidth - container.scrollLeft <= container.clientWidth + 50) {
+            // Load more data when scrolling close to the end
+            loadMoreRestaurants();
+        }
+    });
+
+    container.addEventListener('wheel', (event) => {
+        event.preventDefault();
+        container.scrollLeft += event.deltaY;
+    });
+
+    // Initial data load
+    loadMoreRestaurants();
+
+    /* const loadMoreBtn = document.getElementById('load-more-btn');
+    if (loadMoreBtn) {
+        loadMoreBtn.addEventListener('click', loadMoreReviews);
+    } */
+});
+
+
+
+
+</script>
 </html>

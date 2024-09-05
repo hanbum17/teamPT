@@ -71,17 +71,18 @@
         }
 
         .panel {
-            position: absolute;
-            top: 50px;
-            width: 28%;
-            height: calc(100vh - 100px);
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-            background-color: #fff;
-            padding: 20px;
-            box-sizing: border-box;
-            display: none;
-        }
+		    position: absolute;
+		    top: 50px;
+		    width: 28%;
+		    height: calc(100vh - 100px); /* 패널의 높이 설정 */
+		    border-radius: 10px;
+		    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+		    background-color: #fff;
+		    padding: 20px;
+		    box-sizing: border-box;
+		    display: none;
+		    overflow: hidden; /* 패널 내부 콘텐츠가 넘칠 경우 숨기기 */
+		}
 
         .left-panel {
             left: 5%;
@@ -91,11 +92,12 @@
         }
 
         .right-panel {
-            right: 5%;
-            border: 1px solid #ddd;
-            padding: 20px;
-            box-sizing: border-box;
-        }
+		    right: 5%;
+		    border: 1px solid #ddd;
+		    padding: 20px;
+		    box-sizing: border-box;
+		    overflow-y: auto; /* 스크롤 활성화 */
+		}
 
         .panel h2 {
             margin-bottom: 20px;
@@ -139,22 +141,22 @@
           font-size: 0.8em; /* 작은 글씨 크기 */
           color: #555; /* 원하는 색상 */
             margin-left: 5px; /* 레이아웃에 맞게 여백 조절 */
-      }
-      #reviews-container {
-          max-height: 640px; /* 상자의 최대 높이 설정 */
-          overflow-y: scroll; /* 세로 스크롤 추가 */
-          padding: 10px; /* 여백 추가 */
-          border: 0.5px solid #ddd; /* 상자 테두리 */
-          border-radius: 10px; /* 상자 모서리 둥글게 */
-          background-color: #fff; /* 상자 배경색 */
-          box-shadow: 0 0 10px rgba(0, 0, 0, 0); /* 상자 그림자 */
-      }
+        }
+        #reviews-container {
+		    max-height: calc(100vh - 250px); /* 패널 높이에 따라 조정 */
+		    overflow-y: auto; /* 스크롤 추가 */
+		    padding: 10px;
+		    border: 0.5px solid #ddd;
+		    border-radius: 10px;
+		    background-color: #fff;
+		    box-shadow: 0 0 10px rgba(0, 0, 0, 0);
+		}
 
       /* 웹킷 기반 브라우저에서 스크롤바 숨기기 */
-      #reviews-container::-webkit-scrollbar {
-          width: 0; /* 스크롤바의 너비를 0으로 설정하여 숨김 */
-          background: transparent; /* 스크롤바의 배경색을 투명하게 설정 */
-      }
+      	#reviews-container::-webkit-scrollbar {
+		    width: 0; /* 스크롤바 숨기기 */
+		    background: transparent;
+		}
       .load-more-btn{
          width: 100%;
          padding: 10px;
@@ -334,16 +336,15 @@
         function displayReviews(reviews) {
             const reviewsContainer = document.getElementById('reviews-container');
 
-            // 기존 리뷰를 비워줍니다
-            reviewsContainer.innerHTML = '';
-
-            if (reviews.length === 0) {
-                reviewsContainer.innerHTML = '<p>리뷰가 없습니다.</p>';
-                return;
-            }
-
             // 새로 추가된 리뷰를 저장할 배열
             let newReviewsHTML = '';
+
+            if (reviews.length === 0) {
+                if (reviewsContainer.children.length === 0) {
+                    reviewsContainer.innerHTML = '<p>리뷰가 없습니다.</p>';
+                }
+                return;
+            }
 
             reviews.forEach(review => {
                 // 왼쪽 패널의 Rating 값을 설정합니다.
@@ -374,15 +375,15 @@
                 + "</div>";
             });
             
-            // 새로 추가된 리뷰들을 컨테이너에 추가
-            reviewsContainer.innerHTML = newReviewsHTML;
+            // 새로 추가된 리뷰들을 기존 리뷰 컨테이너에 추가
+            reviewsContainer.insertAdjacentHTML('beforeend', newReviewsHTML);
 
             // 더보기 버튼 처리
             const existingMoreButton = document.getElementById('load-more-btn');
             if (existingMoreButton) {
                 existingMoreButton.parentElement.removeChild(existingMoreButton);
             }
-            if (reviews.length >= pageSize) {
+            if (reviews.length > pageSize) {
                 const seeMoreElement = document.createElement('div');
                 seeMoreElement.className = 'more-review-btn';
                 seeMoreElement.innerHTML = `<button id='load-more-btn' style='display: block;'>더보기</button>`;
@@ -394,6 +395,7 @@
                 }
             }
         }
+
 
 
 
@@ -491,7 +493,34 @@
             document.getElementById('reviewForm').reset(); // Clears the form fields
         }
 
-        
+        function loadMoreReviews() {
+        	   //fno가 없으면 리턴
+        	    if (!currentFno) return;
+        	   //전역함수인 page를 하나씩 더해줌. (기존 5개씩 보여줌)
+        	    page++;
+        	   //서버에 리뷰를 가져오기 위한 요청 보냄
+        	    fetch('/api/getRestaurantReviews?fno='+currentFno+'&page='+page+'&pageSize='+pageSize)
+        	      //응답상태 확인. 응답이 실패시 에러문구 표시해주는 용도
+        	        .then(response => {
+        	            if (!response.ok) {
+        	                throw new Error('Network response was not ok');
+        	            }
+        	            //응답이 성공적일 시 json으로 받은걸 가져옴
+        	            return response.json();
+        	        })
+        	        //리뷰 처리
+        	        .then(reviews => {
+        	           //리뷰 처리 함수 실행(json으로 가져온 reviews를 함수로 넘겨줌)
+        	           displayReviews(reviews);
+
+        	        })
+        	        //에러 캐치
+        	        .catch(error => {
+        	            console.error('Error fetching data:', error);
+        	            alert('데이터를 가져오는 데 실패했습니다.1');
+        	        });
+
+        	}
         
     </script>
 </body>
