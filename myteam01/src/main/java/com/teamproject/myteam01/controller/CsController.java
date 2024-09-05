@@ -5,6 +5,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.teamproject.myteam01.domain.CsVO;
 import com.teamproject.myteam01.service.CsService;
@@ -17,37 +18,38 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/cs")
 @Tag(name = "CsController", description = "Customer Service")
 public class CsController {
-	
-	private final CsService csService ;
-	
-	/*
-	 * @GetMapping("/Center") 
-	 * public String CsCenter() { return "csCenter"; }
-	 */
-	
-	
-	  @GetMapping("/Center") 
-	  public String csList(Model model) {
-		  model.addAttribute("CsList", csService.csList()); 
-		  return "csCenter";
-	  }
-	 
-
     
-	//고객센터의 FAQ 등록 페이지를 반환하는 메서드
+    private final CsService csService;
+
+    @GetMapping("/Center")
+    public String csList(Model model) {
+        model.addAttribute("CsList", csService.csList());
+        return "csCenter";
+    }
+
     @GetMapping("/register")
     public String showFaqRegisterForm() {
-        return "CsRegister"; // 
+        return "CsRegister";
     }
 
-    // 고객센터의 FAQ 등록 요청을 처리하는 메서드
     @PostMapping("/registerProc")
     public String regiFAQ(CsVO faq) {
-    	System.out.println("컨트롤러: FAQ 등록 처리" + faq); 
         csService.regiFAQ(faq);
-        return "redirect:/cs/Center"; // 등록 후 고객센터 메인 페이지로 리다이렉트
+        return "redirect:/cs/Center";
     }
-}//end
+    
+    @GetMapping("/edit")
+    public String showFaqEditForm(@RequestParam("faqno") Long faqno, Model model) {
+        CsVO faq = csService.getFAQ(faqno);
+        model.addAttribute("faq", faq);
+        return "CsEdit";
+    }
+
+    @PostMapping("/editProc")
+    public String editFAQ(CsVO faq) {
+        boolean success = csService.modifyFAQ(faq);
+        return success ? "redirect:/cs/Center" : "redirect:/cs/edit?faqno=" + faq.getFaqno();
+    }
 
 
-
+}

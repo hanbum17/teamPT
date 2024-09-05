@@ -159,6 +159,9 @@ function showSection(sectionId) {
         selectedSection.classList.add('active');
     }
 }
+function convertNewlinesToBr(text) {
+    return text.replace(/\n/g, '<br>');
+}
 
 function checkFormValues() {
     var type = "${param.type}";
@@ -166,22 +169,27 @@ function checkFormValues() {
     if (type === "faq") {
         var category = document.getElementById("faqcategory").value;
         var title = document.getElementById("faqtitle").value;
-        var content = document.getElementById("faqcontent").value;
-        //var regExp = /^\s+$/;
-        isValid = true;
-        //isValid = category && title && content && !regExp.test(category) && !regExp.test(title) && !regExp.test(content);
+        var content = convertNewlinesToBr(document.getElementById("faqcontent").value);
+        // Form validation logic
+        isValid = category && title && content;
+        // Assign converted content back to textarea
+        document.getElementById("faqcontent").value = content;
     } else if (type === "feedback") {
         var feedbackTitle = document.getElementById("feedbackTitle").value;
-        var feedbackContent = document.getElementById("feedbackContent").value;
+        var feedbackContent = convertNewlinesToBr(document.getElementById("feedbackContent").value);
 
         var regExp = /^\s+$/;
         isValid = feedbackTitle && feedbackContent && !regExp.test(feedbackTitle) && !regExp.test(feedbackContent);
+        // Assign converted content back to textarea
+        document.getElementById("feedbackContent").value = feedbackContent;
     } else if (type === "inquiry") {
         var inquiryTitle = document.getElementById("inquiryTitle").value;
-        var inquiryContent = document.getElementById("inquiryContent").value;
+        var inquiryContent = convertNewlinesToBr(document.getElementById("inquiryContent").value);
 
         var regExp = /^\s+$/;
         isValid = inquiryTitle && inquiryContent && !regExp.test(inquiryTitle) && !regExp.test(inquiryContent);
+        // Assign converted content back to textarea
+        document.getElementById("inquiryContent").value = inquiryContent;
     }
 
     return isValid;
