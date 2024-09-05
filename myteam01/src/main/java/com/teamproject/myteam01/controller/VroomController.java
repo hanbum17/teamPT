@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -27,6 +28,7 @@ import com.teamproject.myteam01.service.EventService;
 import com.teamproject.myteam01.service.RestaurantService;
 import com.teamproject.myteam01.service.UserService;
 
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import lombok.RequiredArgsConstructor;
 
 @Controller
@@ -39,20 +41,27 @@ public class VroomController {
 	public final UserService userService;
     private final EventService eventService;
 
-    @GetMapping("/restaurantDetail")
-    @ResponseBody
-    public String restaurantDetail(@RequestParam("fno") Long fno , Model model) {
-    	System.out.println("fno" + fno);
-    	RestaurantVO detail = restService.restaurantDetail(fno);
-    	System.out.println("detail"+detail);
-    	model.addAttribute("detail", detail);
-        return "restaurantDetail";
+    @GetMapping("/main")
+    public String main() {
+        return "vroom/vroomMain";
     }
 
-    //수정완료
+    @GetMapping("/restaurant/details")
+    public String restaurantDetails(@RequestParam("fno") Long fno, Model model, @AuthenticationPrincipal UserDetails userDetails) {
+        RestaurantVO restaurant = restService.restaurantDetail(fno);
+        restaurant.setReivewsList(restService.selectReviews(fno));
+        model.addAttribute("restaurant", restaurant);
+        if (userDetails != null) {
+            String userId = userDetails.getUsername();
+            UserVO user = userService.findByUsername(userId);
+            model.addAttribute("user", user);
+        }
+        return "restaurantDetails";
+    }
+
+
     @GetMapping("/restaurant")
-    public String restMain(@AuthenticationPrincipal UserDetails userDetails, 
-                           Model model) {
+    public String restMain(@AuthenticationPrincipal UserDetails userDetails,  Model model) {
         // 현재 로그인된 사용자의 ID를 이용해 사용자 정보 조회
         if (userDetails != null) {
             String userId = userDetails.getUsername();
@@ -66,32 +75,18 @@ public class VroomController {
         List<RestaurantVO> restList = restService.getRestList(restPage, restPageSize);
         model.addAttribute("restList", restList);
 
-        return "main_restaurant";
+        return "restaurantList";
     }
 
 	
-//	@GetMapping("/restaurant")
-//    public String restMain(@AuthenticationPrincipal UserDetails userDetails, Model model) {
-//        // 현재 로그인된 사용자의 ID를 이용해 사용자 정보 조회
-//        if (userDetails != null) {
-//            String userId = userDetails.getUsername();
-//            UserVO user = userService.findByUsername(userId);
-//            model.addAttribute("user", user);
-//        }
-//        
-//        // 식당 목록 추가
-//        model.addAttribute("restList", restService.getRestList());
-//
-//        return "main_restaurant";
-//    }
 	
-	@GetMapping("/getRestaurantDetails")
-	@ResponseBody
-	public RestaurantVO getRestaurantDetail(@RequestParam("fno") Long fno) {
-	    RestaurantVO detail = restService.restaurantDetail(fno);
-	    detail.setReivewsList(restService.selectReviews(fno)); // 리뷰 리스트를 세팅
-	    return detail;
-	}
+    @GetMapping("/getRestaurantDetails")
+    @ResponseBody
+    public RestaurantVO getRestaurantDetail(@RequestParam("fno") Long fno) {
+        RestaurantVO detail = restService.restaurantDetail(fno);
+        detail.setReivewsList(restService.selectReviews(fno));
+        return detail;
+    }
 
 //삭제예정
 //	@GetMapping("/getRestaurantReviews")
@@ -112,10 +107,20 @@ public class VroomController {
 
 	
 	@PostMapping("/restregisterReview")
-	public String restregisterReview(Model model, RestaurantsReviewVO restReviewVO) {
-		restService.registerReview(restReviewVO);
-		return "redirect:/vroom/restaurant";
+	@ResponseBody
+	public Map<String, Object> restregisterReview(@RequestBody RestaurantsReviewVO restReviewVO) {
+	    Map<String, Object> response = new HashMap<>();
+	    try {
+	        restService.registerReview(restReviewVO);
+	        response.put("success", true);
+	        response.put("message", "리뷰가 성공적으로 등록되었습니다.");
+	    } catch (Exception e) {
+	        response.put("success", false);
+	        response.put("message", "리뷰 등록 중 오류가 발생했습니다.");
+	    }
+	    return response;
 	}
+
 
 	
 	@PostMapping("/updateReview")

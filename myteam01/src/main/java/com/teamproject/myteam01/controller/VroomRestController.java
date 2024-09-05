@@ -69,6 +69,7 @@ public class VroomRestController {
 //  	}
 
     @GetMapping("/getRestaurantReviews")
+
     public List<RestaurantsReviewVO> getRestaurantReviews( @RequestParam Long fno,
             												@RequestParam Long page,
             												@RequestParam Long pageSize) {
@@ -77,6 +78,7 @@ public class VroomRestController {
         restReviewVO.setFno(fno);
         restReviewVO.setPage(page);
         restReviewVO.setPageSize(pageSize);
+        
         // 데이터 조회 로직
         List<RestaurantsReviewVO> reviews = restService.selectMoreReviews(restReviewVO);
         
