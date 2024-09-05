@@ -165,137 +165,57 @@
       }
 
       #editReviewForm {
-          display: none;
-          margin-top: 20px; /* 위치 조정 */
-          padding: 10px;
-          border: 1px solid #ddd;
-          border-radius: 10px;
-          background-color: #fff;
-          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      }
+		    display: none;
+		    margin-top: 20px; /* 위치 조정 */
+		    padding: 10px;
+		    border: 1px solid #ddd;
+		    border-radius: 10px;
+		    background-color: #fff;
+		    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+		}
 
-    .review_ul {
-               list-style-type: none; /* 리스트의 기본 점을 제거합니다 */
-               padding: 0;
-           }
+	 .review_ul {
+	            list-style-type: none; /* 리스트의 기본 점을 제거합니다 */
+	            padding: 0;
+	        }
 
 
     </style>
 </head>
 <body>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
-<div style="position: absolute; top: 10px; left: 10px; font-size: 16px;">
-  <c:if test="${not empty user}">
-      현재 로그인: <strong>${user.userId}</strong>
-  </c:if>
-</div>
+    <div style="position: absolute; top: 10px; left: 10px; font-size: 16px;">
+        <c:if test="${not empty user}">
+            현재 로그인: <strong>${user.userId}</strong>
+        </c:if>
+    </div>
 
-<div class="container" id="restaurant-container">
-    <!-- 레스토랑 카드 반복문으로 생성 -->
-  <c:forEach var="restaurant" items="${restList}">
-      <div class="restaurant-card" data-fno="${restaurant.fno}" onclick="window.location.href='${contextPath}/vroom/restaurant/details?fno=${restaurant.fno}'">
-       <img src="${contextPath}/images/bibimbab.jpg" alt="${restaurant.fname} Image">
-       <div class="restaurant-info">
-           <h3>${restaurant.fname}</h3>
-           <p>Location: ${restaurant.faddress}</p>
-           <p>Rating: ${restaurant.frating}</p>
-       </div>
-   </div>
+    <div class="container" id="restaurant-container">
+        <!-- 레스토랑 카드 반복문으로 생성 -->
+        <c:forEach var="restaurant" items="${restList}">
+            <div class="restaurant-card" data-fno="${restaurant.fno}" onclick="window.location.href='${contextPath}/vroom/restaurant/details?fno=${restaurant.fno}'">
+			    <img src="${contextPath}/images/bibimbab.jpg" alt="${restaurant.fname} Image">
+			    <div class="restaurant-info">
+			        <h3>${restaurant.fname}</h3>
+			        <p>Location: ${restaurant.faddress}</p>
+			        <p>Rating: ${restaurant.frating}</p>
+			    </div>
+			</div>
 
-  </c:forEach>
+        </c:forEach>
 
-  <!-- 데이터가 없는 경우 표시할 카드 -->
-  <c:if test="${empty restList}">
-      <div class="restaurant-card">
-          <img src="${contextPath}/images/bibimbab.jpg" alt="No Data Image">
-          <div class="restaurant-info">
-              <h3>No Restaurants Available</h3>
-              <p>Location: N/A</p>
-              <p>Rating: N/A</p>
-          </div>
-      </div>
-  </c:if>
-</div>
-
-
-<script>
-let isLoading = false;
-let restPage = 1; // 전역 변수로 설정
-const restPageSize = 10;
-const contextPath = "${contextPath}";
-
-document.addEventListener('DOMContentLoaded', () => {
-    const container = document.getElementById('restaurant-container');
-
-    function loadMoreRestaurants() {
-        if (isLoading) return; // Avoid duplicate requests while loading
-        isLoading = true;
-
-        fetch("${contextPath}/api/restaurant?page="+restPage+"&pageSize="+restPageSize)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data.length > 0) {
-                    appendRestaurants(data);
-                    restPage++; // Increment restPage here
-                }
-                isLoading = false;
-            })
-            .catch(error => {
-                console.error('Error fetching data:', error);
-                isLoading = false;
-            });
-    }
-
-    function appendRestaurants(restaurants) {
-        restaurants.forEach(restaurant => {
-            const restaurantCard = document.createElement('div');
-            restaurantCard.className = 'restaurant-card';
-            restaurantCard.dataset.fno = restaurant.fno;
-            restaurantCard.onclick = () => showDetailView(restaurant.fno);
-
-           restaurantCard.innerHTML = 
-                  "<img src=${contextPath}/images/bibimbab.jpg alt='" + restaurant.fname + " Image'>" +
-                  "<div class=\"restaurant-info\">" +
-                  "   <h3>" + restaurant.fname + "</h3>" +
-                  "   <p>Location: " + restaurant.faddress + "</p>" +
-                  "   <p>Rating: " + restaurant.frating + "</p>" +
-                  "</div>";
-
-
-            container.appendChild(restaurantCard);
-        });
-    }
-
-    container.addEventListener('scroll', () => {
-        if (container.scrollWidth - container.scrollLeft <= container.clientWidth + 50) {
-            // Load more data when scrolling close to the end
-            loadMoreRestaurants();
-        }
-    });
-
-    container.addEventListener('wheel', (event) => {
-        event.preventDefault();
-        container.scrollLeft += event.deltaY;
-    });
-
-    // Initial data load
-    loadMoreRestaurants();
-
-    const loadMoreBtn = document.getElementById('load-more-btn');
-    if (loadMoreBtn) {
-        loadMoreBtn.addEventListener('click', loadMoreReviews);
-    }
-});
-
-
-
-
-</script>
+        <!-- 데이터가 없는 경우 표시할 카드 -->
+        <c:if test="${empty restList}">
+            <div class="restaurant-card">
+                <img src="${contextPath}/images/bibimbab.jpg" alt="No Data Image">
+                <div class="restaurant-info">
+                    <h3>No Restaurants Available</h3>
+                    <p>Location: N/A</p>
+                    <p>Rating: N/A</p>
+                </div>
+            </div>
+        </c:if>
+    </div>
 </body>
 </html>
