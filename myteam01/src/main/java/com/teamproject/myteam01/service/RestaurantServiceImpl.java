@@ -130,9 +130,22 @@ public class RestaurantServiceImpl implements RestaurantService{
 
 	      return rest.getFno();
 	   }
+	
+		/* 행사조회 ServiceImple , page번호와 pageSize표시할 개수를 매개변수로 받아
+		 * VO에 세팅해준다. 이후 해당 값을 매퍼로 넘겨서 리스트를 10개씩 가져온다. */
 		@Override
-		public List<RestaurantVO> getRestList(){
-			return restaurantMapper.selectRestList();
+		public List<RestaurantVO> getRestList(Long page, Long pageSize){
+			System.out.println("테스트2");
+			RestaurantVO restVO = new RestaurantVO();
+			Long offSet = (page- 1 ) * pageSize;
+			
+			restVO.setPage(page);
+			restVO.setPageSize(pageSize);
+			restVO.setOffset(offSet);
+			
+			List<RestaurantVO> restList = restaurantMapper.selectRestList(restVO);
+			System.out.println("테스트3");
+			return restList;
 		}
 		
 		@Override

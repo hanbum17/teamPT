@@ -2,6 +2,8 @@ package com.teamproject.myteam01.controller;
 
 import java.util.List;
 
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,9 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.teamproject.myteam01.domain.EventVO;
+import com.teamproject.myteam01.domain.RestaurantVO;
 import com.teamproject.myteam01.domain.RestaurantsReviewVO;
+import com.teamproject.myteam01.domain.UserVO;
 import com.teamproject.myteam01.service.EventService;
 import com.teamproject.myteam01.service.RestaurantService;
+import com.teamproject.myteam01.service.UserService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -23,7 +28,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api")
 public class VroomRestController {
 
-    
+	public final UserService userService;
     private final EventService eventService;
     private final RestaurantService restService;
     
@@ -64,9 +69,10 @@ public class VroomRestController {
 //  	}
 
     @GetMapping("/getRestaurantReviews")
-    public List<RestaurantsReviewVO> getRestaurantReviews(@RequestParam Long fno,
-                                                          @RequestParam Long page,
-                                                          @RequestParam Long pageSize) {
+
+    public List<RestaurantsReviewVO> getRestaurantReviews( @RequestParam Long fno,
+            												@RequestParam Long page,
+            												@RequestParam Long pageSize) {
         
         RestaurantsReviewVO restReviewVO = new RestaurantsReviewVO();
         restReviewVO.setFno(fno);
@@ -79,5 +85,26 @@ public class VroomRestController {
         return reviews;
     }
 
+    //스크롤시 추가 데이터 보내기
+    @GetMapping("/restaurant")
+    public List<RestaurantVO> restMain(@AuthenticationPrincipal UserDetails userDetails, 
+                           @RequestParam(value = "page", defaultValue = "1") Long page, 
+                           @RequestParam(value = "pageSize", defaultValue = "12") Long pageSize,
+                           Model model) {
+        // 현재 로그인된 사용자의 ID를 이용해 사용자 정보 조회
+        if (userDetails != null) {
+            String userId = userDetails.getUsername();
+            UserVO user = userService.findByUsername(userId);
+            model.addAttribute("user", user);
+        }
+        System.out.println("테스트1");
+        // 식당 목록 추가
+        List<RestaurantVO> restList = restService.getRestList(page, pageSize);
+        
+
+        return restList ;
+    }
+    
+    
 
 }

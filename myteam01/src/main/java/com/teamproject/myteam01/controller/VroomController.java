@@ -60,18 +60,25 @@ public class VroomController {
     }
 
 
-
-	
     @GetMapping("/restaurant")
-    public String restMain(@AuthenticationPrincipal UserDetails userDetails, Model model) {
+    public String restMain(@AuthenticationPrincipal UserDetails userDetails,  Model model) {
+        // 현재 로그인된 사용자의 ID를 이용해 사용자 정보 조회
         if (userDetails != null) {
             String userId = userDetails.getUsername();
             UserVO user = userService.findByUsername(userId);
             model.addAttribute("user", user);
         }
-        model.addAttribute("restList", restService.getRestList());
+        
+        // 식당 목록 추가
+        Long restPage = 1L;
+        Long restPageSize = 10L;
+        List<RestaurantVO> restList = restService.getRestList(restPage, restPageSize);
+        model.addAttribute("restList", restList);
+
         return "restaurantList";
     }
+
+	
 	
     @GetMapping("/getRestaurantDetails")
     @ResponseBody

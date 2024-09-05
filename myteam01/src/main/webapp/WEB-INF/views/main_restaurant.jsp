@@ -192,62 +192,6 @@
 
 
 
-<!-- 왼쪽 패널: 식당 정보 -->
-<div class="panel left-panel" id="left-panel">
-    <img id="panel-image" src="" alt="Detail Image" style="width: 100%; height: auto; border-radius: 10px; margin-bottom: 20px;">
-    <p><strong id="panel-name"></strong></p>
-    <p>
-       <strong>Rating:</strong>
-       <span id="panel-rating"></span>
-       <span id="rating-extra" class="small-text"></span>
-    </p>
-    <p><strong>Category:</strong> <span id="panel-category"></span></p>
-    <p><strong>Location:</strong> <span id="panel-location"></span></p>
-    <button class="back-button" onclick="goBack()">Back</button>
-</div>
-
-<!-- 오른쪽 패널: 리뷰/별점 -->
-<div class="panel right-panel" id="right-panel">
-    <!-- 별점 부분 -->
-    <p>
-       <strong>Rating:</strong>
-       <span id="panel-rating"></span>
-       <span id="rating-extra" class="small-text"></span>
-    </p>
-
-    <!-- 리뷰 입력 버튼 -->
-    <button id="review-button" onclick="toggleReviewForm()" style="display: block; width: 100%; padding: 10px; border: none; border-radius: 5px; background-color: #007bff; color: #fff; cursor: pointer;">
-        리뷰 입력
-    </button>
-
-    <!-- 리뷰 등록 폼 -->
-    <div id="reviews_wrap" style="display: none; margin-top: 20px;">
-        <form action="/vroom/restregisterReview" method="post">
-            <input type="text" id="frtitle" name="frtitle" placeholder="제목"><br>
-            <textarea id="frcontent" name="frcontent" placeholder="내용"></textarea><br>
-            <input type="text" id="frwriter" name="frwriter" placeholder="작성자" readonly><br>
-            <input type="text" id="frrating" name="frrating" placeholder="별점 0~5"><br>
-            <input type="text" id="fno" name="fno" readonly> <!-- 여기에 fno를 동적으로 설정 -->
-            <button id="review_register_btn" type="submit">리뷰등록</button>
-        </form>
-    </div>
-
-    <!-- 리뷰 수정 폼 -->
-	<div id="editReviewForm" style="display:none;">
-	    <form id="reviewEditForm" action="${contextPath}/vroom/updateReview" method="post">
-	        <input type="hidden" id="editFrno" name="frno">
-	        <input type="text" id="editFrtitle" name="frtitle" placeholder="제목"><br>
-	        <textarea id="editFrcontent" name="frcontent" placeholder="내용"></textarea><br>
-	        <button type="button" onclick="submitEditReview()">수정 완료</button>
-	    </form>
-	</div>
-
-
-    <!-- 기존 리뷰 목록 -->
-    <div id="reviews-container">
-
-    </div>
-</div>
 
 <script>
 
@@ -257,6 +201,55 @@ const isAdmin = "${isAdmin}";
 let currentFno = null;
 let page = 1;
 const pageSize = 5;
+
+let isLoading = false;
+let restPage = 1;
+const restPageSize = 10;
+
+function loadMoreRestaurants() {
+    if (isLoading) return; // 이미 로딩 중인 경우 중복 요청 방지
+    isLoading = true;
+
+    fetch(`${contextPath}/api/restaurant?page=${restpage + 1}&pageSize=${restPageSize}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.length > 0) {
+                appendRestaurants(data);
+                restPage++;
+            }
+            isLoading = false;
+        })
+        .catch(error => {
+            console.error('Error fetching data:', error);
+            isLoading = false;
+        });
+}
+
+function appendRestaurants(restaurants) {
+    const container = document.getElementById('restaurant-container');
+    restaurants.forEach(restaurant => {
+        const restaurantCard = document.createElement('div');
+        restaurantCard.className = 'restaurant-card';
+        restaurantCard.dataset.fno = restaurant.fno;
+        restaurantCard.onclick = () => showDetailView(restaurant.fno);
+
+        restaurantCard.innerHTML = 
+              "<img src=${contextPath}/images/bibimbab.jpg alt=" + restaurant.fname + "Image>"
+            + "<div class=restaurant-info>"
+            + "   <h3>" + restaurant.fname + "</h3>"
+            + "   <p>Location: " + restaurant.faddress + "</p>"
+            + "   <p>Rating: " + restaurant.frating + "</p>"
+            + "</div>"
+        ;
+
+        container.appendChild(restaurantCard);
+    });
+}
 
 function submitEditReview() {
         const form = document.getElementById('reviewEditForm');
@@ -304,11 +297,11 @@ function showDetailView(fno) {
             reviewsContainer.innerHTML = ''; // 기존 내용 지우기
             if (data) {
                 // 왼쪽 패널 설정
-                document.getElementById('panel-image').src = `/images/bibimbab.jpg`;
-                document.getElementById('panel-name').textContent = data.fname;
-                document.getElementById('panel-category').textContent = data.fcategory;
-                document.getElementById('panel-location').textContent = data.faddress;
-                document.getElementById('fno').value = fno;
+                //document.getElementById('panel-image').src = `/images/bibimbab.jpg`;
+                //document.getElementById('panel-name').textContent = data.fname;
+                //document.getElementById('panel-category').textContent = data.fcategory;
+                //document.getElementById('panel-location').textContent = data.faddress;
+                //document.getElementById('fno').value = fno;
 
                 document.getElementById('restaurant-container').style.display = 'none';
                 document.getElementById('left-panel').style.display = 'block';
@@ -475,6 +468,18 @@ function goBack() {
 
 //___________________________________더보기 버튼 클릭시 리뷰추가___________________________________//
 document.addEventListener('DOMContentLoaded', () => {
+	const container = document.getElementById('restaurant-container');
+
+    container.addEventListener('scroll', () => {
+        if (container.scrollWidth - container.scrollLeft <= container.clientWidth + 50) {
+            // 스크롤이 끝에 가까워지면 더 많은 데이터를 로드
+            loadMoreRestaurants();
+        }
+    });
+
+    // 초기 데이터 로드
+    loadMoreRestaurants();
+	
     const loadMoreBtn = document.getElementById('load-more-btn');
     if (loadMoreBtn) {
         loadMoreBtn.addEventListener('click', loadMoreReviews);

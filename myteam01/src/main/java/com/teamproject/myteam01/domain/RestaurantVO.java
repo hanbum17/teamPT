@@ -36,7 +36,18 @@ public class RestaurantVO {
     private List<AttachFileDTO> attachFileList;
     private List<RestaurantsReviewVO> reivewsList;
     
-    
+    private Long page;
+	private Long pageSize;
+	private Long offset;
    
-
+	public RestaurantVO(Long page, Long pageSize) {
+		
+		if(page == null || pageSize == null || page == 0L || pageSize == 0L) {
+			this.page = 1L;
+			this.pageSize = 10L;
+		} else {
+			this.page = page;
+			this.pageSize = pageSize;
+		}
+	}
 }
