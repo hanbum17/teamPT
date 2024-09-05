@@ -135,7 +135,6 @@ public class RestaurantServiceImpl implements RestaurantService{
 		 * VO에 세팅해준다. 이후 해당 값을 매퍼로 넘겨서 리스트를 10개씩 가져온다. */
 		@Override
 		public List<RestaurantVO> getRestList(Long page, Long pageSize){
-			System.out.println("테스트2");
 			RestaurantVO restVO = new RestaurantVO();
 			Long offSet = (page- 1 ) * pageSize;
 			

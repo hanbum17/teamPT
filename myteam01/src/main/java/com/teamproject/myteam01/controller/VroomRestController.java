@@ -95,11 +95,11 @@ public class VroomRestController {
             UserVO user = userService.findByUsername(userId);
             model.addAttribute("user", user);
         }
-        System.out.println("테스트1");
+        System.out.println("page"+page);
         // 식당 목록 추가
         List<RestaurantVO> restList = restService.getRestList(page, pageSize);
+        System.out.println(restList);
         
-
         return restList ;
     }
     
