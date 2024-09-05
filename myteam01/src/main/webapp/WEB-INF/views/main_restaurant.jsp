@@ -165,14 +165,19 @@
       }
 
       #editReviewForm {
-          display: none;
-          margin-top: 20px; /* 위치 조정 */
-          padding: 10px;
-          border: 1px solid #ddd;
-          border-radius: 10px;
-          background-color: #fff;
-          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      }
+		    display: none;
+		    margin-top: 20px; /* 위치 조정 */
+		    padding: 10px;
+		    border: 1px solid #ddd;
+		    border-radius: 10px;
+		    background-color: #fff;
+		    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+		}
+
+	 .review_ul {
+	            list-style-type: none; /* 리스트의 기본 점을 제거합니다 */
+	            padding: 0;
+	        }
 
     </style>
 </head>
@@ -185,31 +190,7 @@
     </c:if>
 </div>
 
-<div class="container" id="restaurant-container">
-    <!-- 레스토랑 카드 반복문으로 생성 -->
-  <c:forEach var="restaurant" items="${restList}">
-        <div class="restaurant-card" data-fno="${restaurant.fno}" onclick="showDetailView(this.dataset.fno)">
-            <img src="${contextPath}/images/bibimbab.jpg" alt="${restaurant.fname} Image">
-            <div class="restaurant-info">
-                <h3>${restaurant.fname}</h3>
-                <p>Location: ${restaurant.faddress}</p>
-                <p>Rating: ${restaurant.frating}</p>
-            </div>
-        </div>
-    </c:forEach>
 
-    <!-- 데이터가 없는 경우 표시할 카드 -->
-     <c:if test="${empty restList}">
-        <div class="restaurant-card">
-            <img src="${contextPath}/images/bibimbab.jpg" alt="No Data Image">
-            <div class="restaurant-info">
-                <h3>No Restaurants Available</h3>
-                <p>Location: N/A</p>
-                <p>Rating: N/A</p>
-            </div>
-        </div>
-    </c:if>
-</div>
 
 
 <script>
@@ -312,7 +293,7 @@ function showDetailView(fno) {
             return response.json();
         })
         .then(data => {
-           const reviewsContainer = document.getElementById('reviews-container');
+        	const reviewsContainer = document.getElementById('reviews-container');
             reviewsContainer.innerHTML = ''; // 기존 내용 지우기
             if (data) {
                 // 왼쪽 패널 설정
@@ -416,19 +397,20 @@ function displayReviews(reviews) {
         const formattedDate = review.frregDate.split('T')[0];
         // 동적 HTML 추가
         newReviewsHTML +=
-            "<div class='review_div'>"
-                + "<ul class='review_ul' data-frno="+review.frno+" data-uno="+review.uno+" data-fno="+review.fno+">"
-                    + "<li>제목: "+review.frtitle+"</li>"
-                    + "<li>내용: "+review.frcontent+"</li>"
-                    + "<li>작성자: "+review.frwriter+"</li>"
-                    + "<li>등록일: "+formattedDate+"</li>" // 날짜 부분만 출력
-                    + "<li>별점: "+review.frrating+"</li>"
-                    + "<li>" +(currentUserId === review.frwriter ? "<button onclick=\"editReview('" + review.frno + "', '" + review.frtitle + "', '" + review.frcontent + "')\">수정</button>" : "") + "</li>"
-                    + "<li>" +(currentUserId === review.frwriter ? "<button onclick=\"deleteReview('" + review.frno + "')\">삭제</button>" : "") + "</li>"
-                + "</ul>"
-            + "</div>";
-    });
-
+        	"<div class='review_div'>"
+            + "<ul class='review_ul' data-frno="+review.frno+" data-uno="+review.uno+" data-fno="+review.fno+">"
+                + "<li>제목: "+review.frtitle+"</li>"
+                + "<li>내용: "+review.frcontent+"</li>"
+                + "<li>작성자: "+review.frwriter+"</li>"
+                + "<li>등록일: "+formattedDate+"</li>" // 날짜 부분만 출력
+                + "<li>별점: "+review.frrating+"</li>"
+                + "<li>" 
+                    + (currentUserId === review.frwriter ? "<button onclick=\"editReview('" + review.frno + "', '" + review.frtitle + "', '" + review.frcontent + "')\">수정</button>" : "")
+                    + (currentUserId === review.frwriter ? "<button onclick=\"deleteReview('" + review.frno + "')\">삭제</button>" : "")
+                + "</li>"
+            + "</ul>"
+        + "</div>";
+	});
     // 새로 추가된 리뷰들을 컨테이너에 추가
     reviewsContainer.innerHTML += newReviewsHTML;
 
@@ -486,7 +468,7 @@ function goBack() {
 
 //___________________________________더보기 버튼 클릭시 리뷰추가___________________________________//
 document.addEventListener('DOMContentLoaded', () => {
-   const container = document.getElementById('restaurant-container');
+	const container = document.getElementById('restaurant-container');
 
     container.addEventListener('scroll', () => {
         if (container.scrollWidth - container.scrollLeft <= container.clientWidth + 50) {
@@ -497,7 +479,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 초기 데이터 로드
     loadMoreRestaurants();
-   
+	
     const loadMoreBtn = document.getElementById('load-more-btn');
     if (loadMoreBtn) {
         loadMoreBtn.addEventListener('click', loadMoreReviews);
@@ -513,10 +495,10 @@ container.addEventListener('wheel', (event) => {
 
 function editReview(frno, frtitle, frcontent) {
         // 폼을 표시하고 기존 리뷰 데이터를 폼에 설정
-        document.getElementById('editFrno').value = frno;
-        document.getElementById('editFrtitle').value = frtitle;
-        document.getElementById('editFrcontent').value = frcontent;
-        document.getElementById('editReviewForm').style.display = 'block'
+    	 document.getElementById('editFrno').value = frno;
+    	 document.getElementById('editFrtitle').value = frtitle;
+    	 document.getElementById('editFrcontent').value = frcontent;
+    	 document.getElementById('editReviewForm').style.display = 'block'
     }
 
 function deleteReview(frno) {
