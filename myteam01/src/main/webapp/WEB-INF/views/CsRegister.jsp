@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>고객센터 등록</title>
+<title>고객센터 등록 페이지</title>
 <style>
 body {
     font-family: Arial, sans-serif;
@@ -25,15 +25,11 @@ button {
     cursor: pointer;
 }
 
-.btnFAQ {
+.btnRegister {
     background-color: #28a745;
 }
 
-.btnFeedback {
-    background-color: #007bff;
-}
-
-.btnInquiry {
+.btnCancel {
     background-color: #dc3545;
 }
 
@@ -87,14 +83,6 @@ label {
     cursor: pointer;
 }
 
-.btnRegister {
-    background-color: #28a745;
-}
-
-.btnCancel {
-    background-color: #dc3545;
-}
-
 .btnRegister:hover, .btnCancel:hover {
     opacity: 0.9;
 }
@@ -103,6 +91,61 @@ label {
     margin-left: 10px;
 }
 </style>
+</head>
+<body>
+    <%@ include file="/WEB-INF/views/admin_main/header.jsp" %>
+    <h1 style="text-align: center;">고객센터 통합 등록</h1>
+
+    <form id="frmRegister" name="frmRegister" method="post" action="${contextPath}/cs/registerProc">
+        <div id="faqSection" class="section">
+            <div class="form-group">
+                <label>카테고리</label>
+                <select name="faqcategory" id="faqcategory" class="form-control">
+                    <option value="일반">일반</option>
+                    <option value="결제">결제</option>
+                    <option value="서비스">서비스</option>
+                    <option value="기타">기타</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>질문 제목</label>
+                <input type="text" id="faqtitle" name="faqtitle" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label>답변 내용</label>
+                <textarea id="faqcontent" name="faqcontent" rows="5" class="form-control"></textarea>
+            </div>
+        </div>
+
+        <div id="feedbackSection" class="section">
+            <div class="form-group">
+                <label for="feedbackTitle">건의 제목</label>
+                <input type="text" id="feedbackTitle" name="feedbackTitle" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label for="feedbackContent">건의 내용</label>
+                <textarea id="feedbackContent" name="feedbackContent" rows="5" class="form-control"></textarea>
+            </div>
+        </div>
+
+        <div id="inquirySection" class="section">
+            <div class="form-group">
+                <label for="inquiryTitle">문의 제목</label>
+                <input type="text" id="inquiryTitle" name="inquiryTitle" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label for="inquiryContent">문의 내용</label>
+                <textarea id="inquiryContent" name="inquiryContent" rows="5" class="form-control"></textarea>
+            </div>
+        </div>
+
+        <button type="submit" id="btnRegister" class="btnRegister">등록</button>
+        <button type="button" class="btnCancel" onclick="history.back();">취소</button>
+    </form>
+
+    <%@ include file="/WEB-INF/views/admin_main/footer.jsp" %>
+</body>
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 function showSection(sectionId) {
@@ -116,109 +159,64 @@ function showSection(sectionId) {
         selectedSection.classList.add('active');
     }
 }
-
-function checkFormValues() {
-    var category = document.getElementById("category").value;
-    var title = document.getElementById("title").value;
-    var content = document.getElementById("content").value;
-
-    var regExp = /^\s+$/;
-
-    if (!category || !title || !content ||
-        regExp.test(category) || regExp.test(title) || 
-        regExp.test(content)) {
-        return false;
-    } else {
-        return true;
-    }
+function convertNewlinesToBr(text) {
+    return text.replace(/\n/g, '<br>');
 }
 
-$("#btnRegister").on("click", function() {
-    if (!checkFormValues()) {
-        alert("모든 필드를 유효한 값으로 입력해야 합니다.");
-        return;
+function checkFormValues() {
+    var type = "${param.type}";
+    var isValid = false;
+    if (type === "faq") {
+        var category = document.getElementById("faqcategory").value;
+        var title = document.getElementById("faqtitle").value;
+        var content = convertNewlinesToBr(document.getElementById("faqcontent").value);
+        // Form validation logic
+        isValid = category && title && content;
+        // Assign converted content back to textarea
+        document.getElementById("faqcontent").value = content;
+    } else if (type === "feedback") {
+        var feedbackTitle = document.getElementById("feedbackTitle").value;
+        var feedbackContent = convertNewlinesToBr(document.getElementById("feedbackContent").value);
+
+        var regExp = /^\s+$/;
+        isValid = feedbackTitle && feedbackContent && !regExp.test(feedbackTitle) && !regExp.test(feedbackContent);
+        // Assign converted content back to textarea
+        document.getElementById("feedbackContent").value = feedbackContent;
+    } else if (type === "inquiry") {
+        var inquiryTitle = document.getElementById("inquiryTitle").value;
+        var inquiryContent = convertNewlinesToBr(document.getElementById("inquiryContent").value);
+
+        var regExp = /^\s+$/;
+        isValid = inquiryTitle && inquiryContent && !regExp.test(inquiryTitle) && !regExp.test(inquiryContent);
+        // Assign converted content back to textarea
+        document.getElementById("inquiryContent").value = inquiryContent;
     }
 
+    return isValid;
+}
+
+$("#btnRegister").on("click", function(event) {
+    if (!checkFormValues()) {
+        alert("모든 내용은 필수 작성입니다!");
+        event.preventDefault(); // 기본 폼 제출 방지\
+       
+        return;
+    }
+   
     var frmRegister = $("#frmRegister");
     frmRegister.submit();
+    
 });
 
 $(document).ready(function() {
-    showSection('faqSection'); // 기본적으로 FAQ 섹션을 보여줌
+    var type = "${param.type}";
+    if (type === "faq") {
+        showSection('faqSection');
+    } else if (type === "feedback") {
+        showSection('feedbackSection');
+    } else if (type === "inquiry") {
+        showSection('inquirySection');
+    }
 });
 </script>
-</head>
-<body>
-    <%@ include file="/WEB-INF/views/admin_main/header.jsp" %>
-    <h1 style="text-align: center;">고객센터 등록</h1>
-    <div>
-        <button class="btnFAQ" onclick="showSection('faqSection')">자주 묻는 질문(FAQ)</button>
-        <button class="btnFeedback" onclick="showSection('feedbackSection')">고객의 소리</button>
-        <button class="btnInquiry" onclick="showSection('inquirySection')">문의사항</button>
-    </div>
-
-    <div id="faqSection" class="section">
-        <h3 style="text-align: center;">FAQ 등록</h3>
-        <form role="form" action="${contextPath}/cs/faq" method="post" id="frmRegister" enctype="multipart/form-data">
-            <div class="form-group">
-                <label>FAQ 카테고리</label>
-                <input class="form-control" name="category" id="category">
-            </div>
-
-            <div class="form-group">
-                <label>FAQ 제목(질문)</label>
-                <textarea class="form-control" rows="3" name="title" id="title"></textarea>
-            </div>
-
-            <div class="form-group">
-                <label>FAQ 내용(답변)</label>
-                <textarea class="form-control" rows="10" name="content" id="content"></textarea>
-            </div>
-
-            <button type="button" class="btnRegister" id="btnRegister">등록</button>
-            <button type="button" class="btnCancel" id="btnCancel" data-oper="list"
-                    onclick="location.href='${contextPath}/cs/Center'">취소</button>
-        </form>
-    </div>
-
-    <div id="feedbackSection" class="section">
-        <h3 style="text-align: center;">고객의 소리 등록</h3>
-        <form role="form" action="${contextPath}/cs/feedback" method="post" id="frmFeedbackRegister" enctype="multipart/form-data">
-            <div class="form-group">
-                <label>피드백 제목</label>
-                <input class="form-control" name="title" id="feedbackTitle">
-            </div>
-
-            <div class="form-group">
-                <label>피드백 내용</label>
-                <textarea class="form-control" rows="10" name="content" id="feedbackContent"></textarea>
-            </div>
-
-            <button type="button" class="btnRegister" id="btnFeedbackRegister">등록</button>
-            <button type="button" class="btnCancel" id="btnFeedbackCancel" data-oper="list"
-                    onclick="location.href='${contextPath}/cs/Center'">취소</button>
-        </form>
-    </div>
-
-    <div id="inquirySection" class="section">
-        <h3 style="text-align: center;">문의사항 등록</h3>
-        <form role="form" action="${contextPath}/cs/inquiry" method="post" id="frmInquiryRegister" enctype="multipart/form-data">
-            <div class="form-group">
-                <label>문의사항 제목</label>
-                <input class="form-control" name="title" id="inquiryTitle">
-            </div>
-
-            <div class="form-group">
-                <label>문의사항 내용</label>
-                <textarea class="form-control" rows="10" name="content" id="inquiryContent"></textarea>
-            </div>
-
-            <button type="button" class="btnRegister" id="btnInquiryRegister">등록</button>
-            <button type="button" class="btnCancel" id="btnInquiryCancel" data-oper="list"
-                    onclick="location.href='${contextPath}/cs/Center'">취소</button>
-        </form>
-    </div>
-
-    <%@ include file="/WEB-INF/views/admin_main/footer.jsp" %>
-</body>
 </html>
