@@ -219,7 +219,7 @@
 </div>
 <script>
 let isLoading = false;
-let restPage = 1; // 전역 변수로 설정
+let restPage = 2; // 전역 변수로 설정
 const restPageSize = 10;
 const contextPath = "${contextPath}";
 
