@@ -18,6 +18,8 @@ public interface FavoriteMapper {
     // 특정 즐겨찾기 목록 ID로 즐겨찾기 항목을 조회하는 메서드
     List<FavoriteItemVO> getFavoritesByListId(Long listId);
 
+    FavoriteListVO getFavoriteListById(Long listId);
+    
     // 즐겨찾기 항목을 삽입하는 메서드
     void insertFavoriteItem(FavoriteItemVO favoriteItemVO);
 

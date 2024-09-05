@@ -15,21 +15,23 @@
                     <li id="item-${item.ITEMID}" data-type="${item.ITEMTYPE}">
                         <div class="item-left">
                             <a href="<c:choose>
-                                        <c:when test="${item.ITEMTYPE == 'EVENT'}">
-                                            /event/detail?eno=${item.ITEMID}
-                                        </c:when>
+                                        
                                         <c:when test="${item.ITEMTYPE == 'RESTAURANT'}">
                                             /restaurant/detail?fno=${item.ITEMID}
+                                        </c:when>
+                                        <c:when test="${item.ITEMTYPE == 'EVENT'}">
+                                            /event/detail?eno=${item.ITEMID}
                                         </c:when>
                                     </c:choose>">
                                 <c:out value="${item.ITEMNAME}"/>
                             </a>
                             <c:choose>
-                                <c:when test="${item.ITEMTYPE == 'EVENT'}">
-                                    <div class="item-address">장소: <c:out value="${item.ITEMADDRESS}"/></div>
-                                </c:when>
+                                
                                 <c:when test="${item.ITEMTYPE == 'RESTAURANT'}">
                                     <div class="item-address">주소: <c:out value="${item.ITEMADDRESS}"/></div>
+                                </c:when>
+                                <c:when test="${item.ITEMTYPE == 'EVENT'}">
+                                    <div class="item-address">장소: <c:out value="${item.ITEMADDRESS}"/></div>
                                 </c:when>
                             </c:choose>
                         </div>
