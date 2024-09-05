@@ -132,6 +132,7 @@
         }
 
         #reviews_wrap {
+       	 	display: none; 
             margin-top: 20px;
         }
         .small-text {
@@ -221,15 +222,15 @@
 
         <!-- 리뷰 등록 폼 -->
         <div id="reviews_wrap" style="display: none; margin-top: 20px;">
-            <form action="/vroom/restregisterReview" method="post">
-                <input type="text" id="frtitle" name="frtitle" placeholder="제목"><br>
-                <textarea id="frcontent" name="frcontent" placeholder="내용"></textarea><br>
-                <input type="text" id="frwriter" name="frwriter" placeholder="작성자" readonly><br>
-                <input type="text" id="frrating" name="frrating" placeholder="별점 0~5"><br>
-                <input type="text" id="fno" name="fno" readonly> <!-- 여기에 fno를 동적으로 설정 -->
-                <button id="review_register_btn" type="submit">리뷰등록</button>
-            </form>
-        </div>
+		    <form id="reviewForm">
+		        <input type="text" id="frtitle" name="frtitle" placeholder="제목"><br>
+		        <textarea id="frcontent" name="frcontent" placeholder="내용"></textarea><br>
+		        <input type="text" id="frwriter" name="frwriter" placeholder="작성자" readonly><br>
+		        <input type="text" id="frrating" name="frrating" placeholder="별점 0~5"><br>
+		        <input type="text" id="fno" name="fno" readonly> <!-- 여기에 fno를 동적으로 설정 -->
+		        <button id="review_register_btn" type="button" onclick="submitReview()">리뷰등록</button>
+		    </form>
+		</div>
 
         <!-- 리뷰 수정 폼 -->
         <div id="editReviewForm" style="display:none;">
@@ -247,7 +248,7 @@
 
     <script>
         const contextPath = "${contextPath}";
-        const currentUserId = "${user.userId}";
+        const currentUserId = "${user.userId}"
         const isAdmin = "${isAdmin}";
         let currentFno = new URLSearchParams(window.location.search).get('fno');
         let page = 1;
@@ -265,7 +266,8 @@
             .then(result => {
                 if (result.success) {
                     alert(result.message);
-                    showDetailView(currentFno); // 패널 업데이트
+                    document.getElementById('editReviewForm').style.display = 'none'; // 폼 숨기기
+                    showDetailView(document.getElementById('fno').value); // 패널 업데이트
                 } else {
                     alert(result.message);
                 }
@@ -276,19 +278,14 @@
             });
         }
 
+
         function showDetailView(fno) {
             page = 1; // 페이지 초기화
 
-            fetch(`/vroom/getRestaurantDetails?fno=` + fno)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
+            fetch(`${contextPath}/vroom/getRestaurantDetails?fno=` + fno)
+                .then(response => response.json())
                 .then(data => {
-                    const reviewsContainer = document.getElementById('reviews-container');
-                    reviewsContainer.innerHTML = ''; // 기존 내용 지우기
+                    console.log(data);
                     if (data) {
                         // 왼쪽 패널 설정
                         document.getElementById('panel-image').src = `/images/bibimbab.jpg`;
@@ -297,15 +294,25 @@
                         document.getElementById('panel-location').textContent = data.faddress;
                         document.getElementById('fno').value = fno;
 
-                        document.getElementById('restaurant-container').style.display = 'none';
-                        document.getElementById('left-panel').style.display = 'block';
-                        document.getElementById('right-panel').style.display = 'block';
+                        // 패널 표시
+                        const restaurantContainer = document.getElementById('restaurant-container');
+                        const leftPanel = document.getElementById('left-panel');
+                        const rightPanel = document.getElementById('right-panel');
+
+                        if (restaurantContainer) {
+                            restaurantContainer.style.display = 'none';
+                        }
+                        if (leftPanel) {
+                            leftPanel.style.display = 'block';
+                        }
+                        if (rightPanel) {
+                            rightPanel.style.display = 'block';
+                        }
 
                         // 리뷰 정보 가져오기
-                        return fetch('/api/getRestaurantReviews?fno=' + fno + '&page='+page+'&pageSize='+pageSize);
+                        return fetch(`${contextPath}/api/getRestaurantReviews?fno=` + fno + '&page=' + page + '&pageSize=' + pageSize);
                     } else {
                         alert('식당 정보를 찾을 수 없습니다.');
-                        throw new Error('No restaurant data');
                     }
                 })
                 .then(response => {
@@ -314,29 +321,83 @@
                     }
                     return response.json();
                 })
-                .then(reviewData => {
-                    if (reviewData && reviewData.reviews) {
-                        reviewData.reviews.forEach(review => {
-                            const reviewElement = document.createElement('div');
-                            reviewElement.innerHTML = `
-                                <p><strong>Title:</strong> ${review.frtitle}</p>
-                                <p><strong>Content:</strong> ${review.frcontent}</p>
-                                <p><strong>Rating:</strong> ${review.frrating}</p>
-                                <p><strong>Writer:</strong> ${review.frwriter}</p>
-                                ${isAdmin ? `<button onclick="editReview(${review.frno}, '${review.frtitle}', '${review.frcontent}')">Edit</button>` : ''}
-                                <hr>
-                            `;
-                            reviewsContainer.appendChild(reviewElement);
-                        });
-                    } else {
-                        reviewsContainer.innerHTML = '<p>No reviews found.</p>';
-                    }
+                .then(reviews => {
+                    displayReviews(reviews);
                 })
                 .catch(error => {
-                    console.error('Error:', error);
-                    alert('리뷰를 불러오는 중 오류가 발생했습니다.');
+                    console.error('Error fetching data:', error);
+                    alert('데이터를 가져오는 데 실패했습니다.');
                 });
         }
+
+        
+        function displayReviews(reviews) {
+            const reviewsContainer = document.getElementById('reviews-container');
+
+            // 기존 리뷰를 비워줍니다
+            reviewsContainer.innerHTML = '';
+
+            if (reviews.length === 0) {
+                reviewsContainer.innerHTML = '<p>리뷰가 없습니다.</p>';
+                return;
+            }
+
+            // 새로 추가된 리뷰를 저장할 배열
+            let newReviewsHTML = '';
+
+            reviews.forEach(review => {
+                // 왼쪽 패널의 Rating 값을 설정합니다.
+                document.getElementById('panel-rating').textContent = review.ratingAverage;
+                // 오른쪽 패널의 Rating 값을 설정합니다.
+                document.querySelector('#right-panel #panel-rating').textContent = review.ratingAverage;
+                // 왼쪽 패널의 리뷰 개수 표시
+                document.querySelector('#rating-extra').textContent = "(" + review.frCount + ")";
+                // 오른쪽 패널의 리뷰 개수 표시
+                document.querySelector('#right-panel #rating-extra').textContent = "(" + review.frCount + ")";
+
+                // 날짜형식 전환
+                const formattedDate = review.frregDate.split('T')[0];
+                // 동적 HTML 추가
+                newReviewsHTML +=
+                    "<div class='review_div'>"
+                    + "<ul class='review_ul' data-frno="+review.frno+" data-uno="+review.uno+" data-fno="+review.fno+">"
+                        + "<li>제목: "+review.frtitle+"</li>"
+                        + "<li>내용: "+review.frcontent+"</li>"
+                        + "<li>작성자: "+review.frwriter+"</li>"
+                        + "<li>등록일: "+formattedDate+"</li>" // 날짜 부분만 출력
+                        + "<li>별점: "+review.frrating+"</li>"
+                        + "<li>" 
+                            + (currentUserId === review.frwriter ? "<button onclick=\"editReview('" + review.frno + "', '" + review.frtitle + "', '" + review.frcontent + "')\">수정</button>" : "")
+                            + (currentUserId === review.frwriter ? "<button onclick=\"deleteReview('" + review.frno + "')\">삭제</button>" : "")
+                        + "</li>"
+                    + "</ul>"
+                + "</div>";
+            });
+            
+            // 새로 추가된 리뷰들을 컨테이너에 추가
+            reviewsContainer.innerHTML = newReviewsHTML;
+
+            // 더보기 버튼 처리
+            const existingMoreButton = document.getElementById('load-more-btn');
+            if (existingMoreButton) {
+                existingMoreButton.parentElement.removeChild(existingMoreButton);
+            }
+            if (reviews.length >= pageSize) {
+                const seeMoreElement = document.createElement('div');
+                seeMoreElement.className = 'more-review-btn';
+                seeMoreElement.innerHTML = `<button id='load-more-btn' style='display: block;'>더보기</button>`;
+                reviewsContainer.appendChild(seeMoreElement);
+
+                const loadMoreBtn = document.getElementById('load-more-btn');
+                if (loadMoreBtn) {
+                    loadMoreBtn.onclick = loadMoreReviews;
+                }
+            }
+        }
+
+
+
+
 
         function editReview(frno, title, content) {
             document.getElementById('editFrno').value = frno;
@@ -344,16 +405,53 @@
             document.getElementById('editFrcontent').value = content;
             document.getElementById('editReviewForm').style.display = 'block';
         }
+        
+        function deleteReview(frno) {
+            if (confirm("정말로 이 리뷰를 삭제하시겠습니까?")) {
+                fetch(`${contextPath}/vroom/deleteReview`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: new URLSearchParams({
+                        'frno': frno
+                    })
+                })
+                .then(response => response.json())
+                .then(result => {
+                    if (result.success) {
+                        alert("리뷰가 삭제되었습니다.");
+                        showDetailView(document.getElementById('fno').value); // 패널 업데이트
+                    } else {
+                        alert("리뷰 삭제에 실패했습니다.");
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('리뷰 삭제 중 오류가 발생했습니다.');
+                });
+            }
+        }
 
         function toggleReviewForm() {
             const reviewForm = document.getElementById('reviews_wrap');
-            reviewForm.style.display = reviewForm.style.display === 'none' ? 'block' : 'none';
+            const reviewButton = document.getElementById('review-button');
+            const writerField = document.getElementById('frwriter');
+
+            if (reviewForm.style.display === 'none') {
+                reviewForm.style.display = 'block';
+                writerField.value = currentUserId; 
+                reviewButton.style.display = 'none';  // 버튼 숨기기
+            } else {
+                reviewForm.style.display = 'none';
+                reviewButton.style.display = 'block'; // 버튼 보이기
+                resetReviewForm(); // 폼 필드 초기화
+            }
         }
 
+
         function goBack() {
-            document.getElementById('restaurant-container').style.display = 'block';
-            document.getElementById('left-panel').style.display = 'none';
-            document.getElementById('right-panel').style.display = 'none';
+            window.location.href = '/vroom/restaurant';  
         }
 
         document.addEventListener('DOMContentLoaded', function() {
@@ -361,6 +459,40 @@
                 showDetailView(currentFno);
             }
         });
+        
+        function submitReview() {
+            const form = document.getElementById('reviewForm');
+            const formData = new FormData(form);
+
+            fetch(`${contextPath}/vroom/restregisterReview`, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (result.success) {
+                    alert(result.message);
+                    document.getElementById('reviews_wrap').style.display = 'none'; // 폼 숨기기
+                    document.getElementById('review-button').style.display = 'block'; // 버튼 보이기
+                    showDetailView(document.getElementById('fno').value); // 패널 업데이트
+                    resetReviewForm(); // 폼 필드 초기화
+                } else {
+                    alert(result.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('리뷰 등록 중 오류가 발생했습니다.');
+            });
+        }
+
+        
+        function resetReviewForm() {
+            document.getElementById('reviewForm').reset(); // Clears the form fields
+        }
+
+        
+        
     </script>
 </body>
 </html>

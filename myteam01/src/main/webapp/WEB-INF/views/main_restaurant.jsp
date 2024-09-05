@@ -190,31 +190,7 @@
     </c:if>
 </div>
 
-<div class="container" id="restaurant-container">
-    <!-- 레스토랑 카드 반복문으로 생성 -->
-  <c:forEach var="restaurant" items="${restList}">
-        <div class="restaurant-card" data-fno="${restaurant.fno}" onclick="showDetailView(this.dataset.fno)">
-            <img src="${contextPath}/images/bibimbab.jpg" alt="${restaurant.fname} Image">
-            <div class="restaurant-info">
-                <h3>${restaurant.fname}</h3>
-                <p>Location: ${restaurant.faddress}</p>
-                <p>Rating: ${restaurant.frating}</p>
-            </div>
-        </div>
-    </c:forEach>
 
-    <!-- 데이터가 없는 경우 표시할 카드 -->
-     <c:if test="${empty restList}">
-        <div class="restaurant-card">
-            <img src="${contextPath}/images/bibimbab.jpg" alt="No Data Image">
-            <div class="restaurant-info">
-                <h3>No Restaurants Available</h3>
-                <p>Location: N/A</p>
-                <p>Rating: N/A</p>
-            </div>
-        </div>
-    </c:if>
-</div>
 
 <!-- 왼쪽 패널: 식당 정보 -->
 <div class="panel left-panel" id="left-panel">
