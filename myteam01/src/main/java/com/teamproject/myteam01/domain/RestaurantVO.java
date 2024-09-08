@@ -36,7 +36,9 @@ public class RestaurantVO {
     private List<AttachFileDTO> attachFileList;
     private List<RestaurantsReviewVO> reivewsList;
     
-    
+    private Long page;
+	private Long pageSize;
+	private Long offset;
    
 
 }

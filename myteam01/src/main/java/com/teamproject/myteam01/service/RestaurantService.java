@@ -17,7 +17,9 @@ public interface RestaurantService {
 	public String selectTitle(Long uno);
 	//윤정
 	public Long registerRest(RestaurantVO rest, AttachFileDTO attach);
-	public List<RestaurantVO> getRestList();
+	public List<RestaurantVO> getRestList(Long page, Long pageSize);
+	public List<RestaurantsReviewVO> modifyreview(RestaurantsReviewVO restReviewVO);
 	//영범
 	public List<RestaurantsReviewVO> selectMoreReviews(RestaurantsReviewVO restReviewVO);
+
 }

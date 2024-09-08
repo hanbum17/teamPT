@@ -57,11 +57,25 @@
         WHERE userId = #{userId}
     </update>
 
+
+    <!-- 사용자 삭제 -->
+    <delete id="deleteUser" parameterType="String">
+        DELETE FROM users WHERE userId = #{userId}
+    </delete>
+    
+    <select id="findUserRoleId" parameterType="String" resultType="Integer">
+	    SELECT role_id
+	    FROM user_roles
+	    WHERE userId = #{userId}
+	</select>
+    
+
     <!-- 회원 탈퇴 기능: ACCOUNT_STATUS를 1로 업데이트 -->
     <update id="updateAccountStatus" parameterType="map">
         UPDATE USERS
         SET ACCOUNT_STATUS = #{accountStatus}
         WHERE USERID = #{userId}
     </update>
+
 
 </mapper>

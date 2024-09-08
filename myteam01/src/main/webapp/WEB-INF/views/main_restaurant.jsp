@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="jakarta.tags.core" prefix="c" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath }"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -34,7 +35,7 @@
 
         .restaurant-card {
             display: inline-block;
-            width: 200px; 
+            width: 200px;
             height: 280px;
             margin-right: 20px;
             background-color: #f0f0f0;
@@ -44,7 +45,7 @@
             padding: 10px;
             box-sizing: border-box;
             cursor: pointer;
-            flex-shrink: 0; 
+            flex-shrink: 0;
         }
 
         .restaurant-card img {
@@ -134,125 +135,156 @@
             margin-top: 20px;
         }
         .small-text {
-    		font-size: 0.8em; /* 작은 글씨 크기 */
-    		color: #555; /* 원하는 색상 */
-   			margin-left: 5px; /* 레이아웃에 맞게 여백 조절 */
-		}
-		#reviews-container {
-		    max-height: 640px; /* 상자의 최대 높이 설정 */
-		    overflow-y: scroll; /* 세로 스크롤 추가 */
-		    padding: 10px; /* 여백 추가 */
-		    border: 0.5px solid #ddd; /* 상자 테두리 */
-		    border-radius: 10px; /* 상자 모서리 둥글게 */
-		    background-color: #fff; /* 상자 배경색 */
-		    box-shadow: 0 0 10px rgba(0, 0, 0, 0); /* 상자 그림자 */
-		}
+          font-size: 0.8em; /* 작은 글씨 크기 */
+          color: #555; /* 원하는 색상 */
+            margin-left: 5px; /* 레이아웃에 맞게 여백 조절 */
+      }
+      #reviews-container {
+          max-height: 640px; /* 상자의 최대 높이 설정 */
+          overflow-y: scroll; /* 세로 스크롤 추가 */
+          padding: 10px; /* 여백 추가 */
+          border: 0.5px solid #ddd; /* 상자 테두리 */
+          border-radius: 10px; /* 상자 모서리 둥글게 */
+          background-color: #fff; /* 상자 배경색 */
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0); /* 상자 그림자 */
+      }
 
-		/* 웹킷 기반 브라우저에서 스크롤바 숨기기 */
-		#reviews-container::-webkit-scrollbar {
-		    width: 0; /* 스크롤바의 너비를 0으로 설정하여 숨김 */
-		    background: transparent; /* 스크롤바의 배경색을 투명하게 설정 */
-		}
-		.load-more-btn{
-			width: 100%; 
-			padding: 10px; 
-			border: none; 
-			border-radius: 5px; 
-			background-color: #007bff; 
-			color: #fff; 
-			cursor: pointer;
-		}
+      /* 웹킷 기반 브라우저에서 스크롤바 숨기기 */
+      #reviews-container::-webkit-scrollbar {
+          width: 0; /* 스크롤바의 너비를 0으로 설정하여 숨김 */
+          background: transparent; /* 스크롤바의 배경색을 투명하게 설정 */
+      }
+      .load-more-btn{
+         width: 100%;
+         padding: 10px;
+         border: none;
+         border-radius: 5px;
+         background-color: #007bff;
+         color: #fff;
+         cursor: pointer;
+      }
 
-		
-        
+      #editReviewForm {
+          display: none;
+          margin-top: 20px; /* 위치 조정 */
+          padding: 10px;
+          border: 1px solid #ddd;
+          border-radius: 10px;
+          background-color: #fff;
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+
+    .review_ul {
+               list-style-type: none; /* 리스트의 기본 점을 제거합니다 */
+               padding: 0;
+           }
+
+
+	 .review_ul {
+	            list-style-type: none; /* 리스트의 기본 점을 제거합니다 */
+	            padding: 0;
+	        }
+
     </style>
 </head>
 <body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-<div class="container" id="restaurant-container">
-    <!-- 레스토랑 카드 반복문으로 생성 -->
-    <c:forEach var="restaurant" items="${restList}">
-        <div class="restaurant-card" data-fno="${restaurant.fno}" onclick="showDetailView(this.dataset.fno)">
-            <img src="${contextPath}/images/bibimbab.jpg" alt="${restaurant.fname} Image">
-            <div class="restaurant-info">
-                <h3>${restaurant.fname}</h3>
-                <p>Location: ${restaurant.faddress}</p>
-                <p>Rating: ${restaurant.frating}</p>
-            </div>
-        </div>
-    </c:forEach>
 
-    <!-- 데이터가 없는 경우 표시할 카드 -->
-    <c:if test="${empty restList}">
-        <div class="restaurant-card">
-            <img src="${contextPath}/images/bibimbab.jpg" alt="No Data Image">
-            <div class="restaurant-info">
-                <h3>No Restaurants Available</h3>
-                <p>Location: N/A</p>
-                <p>Rating: N/A</p>
-            </div>
-        </div>
-    </c:if>
+<div style="position: absolute; top: 10px; left: 10px; font-size: 16px;">
+  <c:if test="${not empty user}">
+      현재 로그인: <strong>${user.userId}</strong>
+  </c:if>
 </div>
 
-<!-- 왼쪽 패널: 식당 정보 -->
-<div class="panel left-panel" id="left-panel">
-    <img id="panel-image" src="" alt="Detail Image" style="width: 100%; height: auto; border-radius: 10px; margin-bottom: 20px;">
-    <p><strong id="panel-name"></strong></p>
-    <p>
-    	<strong>Rating:</strong> 
-    	<span id="panel-rating"></span>
-    	<span id="rating-extra" class="small-text"></span>
-    </p>
-    <p><strong>Category:</strong> <span id="panel-category"></span></p>
-    <p><strong>Location:</strong> <span id="panel-location"></span></p>
-    <button class="back-button" onclick="goBack()">Back</button>
-</div>
-
-<!-- 오른쪽 패널: 리뷰/별점 -->
-<div class="panel right-panel" id="right-panel">
-    <!-- 별점 부분 -->
-    <p>
-    	<strong>Rating:</strong> 
-    	<span id="panel-rating"></span>
-    	<span id="rating-extra" class="small-text"></span>
-    </p>
-
-    <!-- 리뷰 입력 버튼 -->
-    <button id="review-button" onclick="toggleReviewForm()" style="display: block; width: 100%; padding: 10px; border: none; border-radius: 5px; background-color: #007bff; color: #fff; cursor: pointer;">
-        리뷰 입력
-    </button>
-
-    <!-- 리뷰 등록 폼 -->
-    <div id="reviews_wrap" style="display: none; margin-top: 20px;">
-        <form action="${contextPath }/vroom/restregisterReview" method="post">
-            <input type="text" id="frtitle" name="frtitle" placeholder="제목"><br>
-            <textarea id="frcontent" name="frcontent" placeholder="내용"></textarea><br>
-            <input type="text" id="frwriter" name="frwriter" placeholder="작성자"><br>
-            <input type="text" id="frrating" name="frrating" placeholder="별점 0~5"><br>
-            <input type="text" id="fno" name="fno" readonly> <!-- 여기에 fno를 동적으로 설정 -->
-            <button id="review_register_btn" type="submit">리뷰등록</button>
-        </form>
-    </div>
-    
-    <!-- 기존 리뷰 목록 -->
-    <div id="reviews-container">
-        	
-    </div>
-</div>
 
 <script>
+let isLoading = false;
+let restPage = 2; // 전역 변수로 설정
+const restPageSize = 10;
 const contextPath = "${contextPath}";
-let currentFno = null;
-let page = 1;
-const pageSize = 5;
+
+
+function loadMoreRestaurants() {
+    if (isLoading) return; // 이미 로딩 중인 경우 중복 요청 방지
+    isLoading = true;
+
+    fetch(`${contextPath}/api/restaurant?page=${restpage + 1}&pageSize=${restPageSize}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+
+            if (data.length > 0) {
+                appendRestaurants(data);
+                restPage++;
+            }
+            isLoading = false;
+        })
+        .catch(error => {
+            console.error('Error fetching data:', error);
+            isLoading = false;
+        });
+}
+
+function appendRestaurants(restaurants) {
+    const container = document.getElementById('restaurant-container');
+    restaurants.forEach(restaurant => {
+        const restaurantCard = document.createElement('div');
+        restaurantCard.className = 'restaurant-card';
+        restaurantCard.dataset.fno = restaurant.fno;
+        restaurantCard.onclick = () => showDetailView(restaurant.fno);
+
+        restaurantCard.innerHTML = 
+              "<img src=${contextPath}/images/bibimbab.jpg alt=" + restaurant.fname + "Image>"
+            + "<div class=restaurant-info>"
+            + "   <h3>" + restaurant.fname + "</h3>"
+            + "   <p>Location: " + restaurant.faddress + "</p>"
+            + "   <p>Rating: " + restaurant.frating + "</p>"
+            + "</div>"
+        ;
+
+        container.appendChild(restaurantCard);
+    });
+}
+
+function submitEditReview() {
+        const form = document.getElementById('reviewEditForm');
+        const formData = new FormData(form);
+
+        fetch(`${contextPath}/vroom/updateReview`, {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(result => {
+            if (result.success) {
+                alert(result.message);
+                // 수정된 리뷰가 속한 식당의 패널 업데이트
+                showDetailView(document.getElementById('fno').value);
+                // 수정 후에도 패널 유지
+            } else {
+                alert(result.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('리뷰 수정 중 오류가 발생했습니다.');
+        });
+    }
+
+
+
+
 
 //___________________________________상세화면 송출___________________________________//
 function showDetailView(fno) {
     currentFno = fno;
     page = 1; // 페이지 초기화
 
-    fetch(`${contextPath}/vroom/getRestaurantDetails?fno=` + fno)
+    fetch(`/vroom/getRestaurantDetails?fno=` + fno)
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
@@ -264,18 +296,18 @@ function showDetailView(fno) {
             reviewsContainer.innerHTML = ''; // 기존 내용 지우기
             if (data) {
                 // 왼쪽 패널 설정
-                document.getElementById('panel-image').src = `${contextPath}/images/bibimbab.jpg`;
-                document.getElementById('panel-name').textContent = data.fname;
-                document.getElementById('panel-category').textContent = data.fcategory;
-                document.getElementById('panel-location').textContent = data.faddress;
-                document.getElementById('fno').value = fno;
+                //document.getElementById('panel-image').src = `/images/bibimbab.jpg`;
+                //document.getElementById('panel-name').textContent = data.fname;
+                //document.getElementById('panel-category').textContent = data.fcategory;
+                //document.getElementById('panel-location').textContent = data.faddress;
+                //document.getElementById('fno').value = fno;
 
                 document.getElementById('restaurant-container').style.display = 'none';
                 document.getElementById('left-panel').style.display = 'block';
                 document.getElementById('right-panel').style.display = 'block';
 
                 // 리뷰 정보 가져오기
-                return fetch('${contextPath}/api/getRestaurantReviews?fno=' + fno + '&page='+page+'&pageSize='+pageSize);
+                return fetch('/api/getRestaurantReviews?fno=' + fno + '&page='+page+'&pageSize='+pageSize);
             } else {
                 alert('식당 정보를 찾을 수 없습니다.');
                 throw new Error('No restaurant data');
@@ -292,7 +324,7 @@ function showDetailView(fno) {
         })
         .catch(error => {
             console.error('Error fetching data:', error);
-           	alert(error);
+              alert(error);
             alert('데이터를 가져오는 데 실패했습니다.2');
         });
 }
@@ -301,13 +333,13 @@ function showDetailView(fno) {
 
 //___________________________________더보기 클릭시 추가 리뷰 가져오기___________________________________//
 function loadMoreReviews() {
-	//fno가 없으면 리턴
+   //fno가 없으면 리턴
     if (!currentFno) return;
-	//전역함수인 page를 하나씩 더해줌. (기존 5개씩 보여줌)
+   //전역함수인 page를 하나씩 더해줌. (기존 5개씩 보여줌)
     page++;
-	//서버에 리뷰를 가져오기 위한 요청 보냄
-    fetch('${contextPath}/api/getRestaurantReviews?fno='+currentFno+'&page='+page+'&pageSize='+pageSize)
-		//응답상태 확인. 응답이 실패시 에러문구 표시해주는 용도
+   //서버에 리뷰를 가져오기 위한 요청 보냄
+    fetch('/api/getRestaurantReviews?fno='+currentFno+'&page='+page+'&pageSize='+pageSize)
+      //응답상태 확인. 응답이 실패시 에러문구 표시해주는 용도
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
@@ -317,26 +349,26 @@ function loadMoreReviews() {
         })
         //리뷰 처리
         .then(reviews => {
-        	//리뷰 처리 함수 실행(json으로 가져온 reviews를 함수로 넘겨줌)
-        	displayReviews(reviews);
-            
+           //리뷰 처리 함수 실행(json으로 가져온 reviews를 함수로 넘겨줌)
+           displayReviews(reviews);
+
         })
         //에러 캐치
         .catch(error => {
             console.error('Error fetching data:', error);
             alert('데이터를 가져오는 데 실패했습니다.1');
         });
-	
+
 }
 
 
 //___________________________________리뷰 화면___________________________________//
 function displayReviews(reviews) {
     const reviewsContainer = document.getElementById('reviews-container');
-    
+
     // 기존 리뷰가 없을 때는 비워주기
     if (reviewsContainer.innerHTML.trim() === '') {
-        reviewsContainer.innerHTML = ''; 
+        reviewsContainer.innerHTML = '';
     }
 
     if (reviews.length === 0) {
@@ -350,8 +382,8 @@ function displayReviews(reviews) {
     let newReviewsHTML = '';
 
     reviews.forEach(review => {
-    	
-    	 // 왼쪽 패널의 Rating 값을 설정합니다.
+
+        // 왼쪽 패널의 Rating 값을 설정합니다.
         document.getElementById('panel-rating').textContent = review.ratingAverage;
         // 오른쪽 패널의 Rating 값을 설정합니다.
         document.querySelector('#right-panel #panel-rating').textContent =review.ratingAverage;
@@ -363,18 +395,21 @@ function displayReviews(reviews) {
         // 날짜형식 전환
         const formattedDate = review.frregDate.split('T')[0];
         // 동적 HTML 추가
-        newReviewsHTML += 
-            "<div class='review_div'>"
-                + "<ul class='review_ul' data-frno="+review.frno+" data-uno="+review.uno+" data-fno="+review.fno+">"
-                    + "<li>제목: "+review.frtitle+"</li>"
-                    + "<li>내용: "+review.frcontent+"</li>"
-                    + "<li>작성자: "+review.frwriter+"</li>"
-                    + "<li>등록일: "+formattedDate+"</li>" // 날짜 부분만 출력
-                    + "<li>별점: "+review.frrating+"</li>"
-                + "</ul>"
-            + "</div>";
-    });
-
+        newReviewsHTML +=
+        	"<div class='review_div'>"
+            + "<ul class='review_ul' data-frno="+review.frno+" data-uno="+review.uno+" data-fno="+review.fno+">"
+                + "<li>제목: "+review.frtitle+"</li>"
+                + "<li>내용: "+review.frcontent+"</li>"
+                + "<li>작성자: "+review.frwriter+"</li>"
+                + "<li>등록일: "+formattedDate+"</li>" // 날짜 부분만 출력
+                + "<li>별점: "+review.frrating+"</li>"
+                + "<li>" 
+                    + (currentUserId === review.frwriter ? "<button onclick=\"editReview('" + review.frno + "', '" + review.frtitle + "', '" + review.frcontent + "')\">수정</button>" : "")
+                    + (currentUserId === review.frwriter ? "<button onclick=\"deleteReview('" + review.frno + "')\">삭제</button>" : "")
+                + "</li>"
+            + "</ul>"
+        + "</div>";
+	});
     // 새로 추가된 리뷰들을 컨테이너에 추가
     reviewsContainer.innerHTML += newReviewsHTML;
 
@@ -391,7 +426,7 @@ function displayReviews(reviews) {
         seeMoreElement.innerHTML =
             "<button id='load-more-btn' style='display: block;'>더보기</button>";
         reviewsContainer.appendChild(seeMoreElement);
-        
+
         const loadMoreBtn = document.getElementById('load-more-btn');
         if (loadMoreBtn) {
             loadMoreBtn.onclick = loadMoreReviews;
@@ -402,10 +437,21 @@ function displayReviews(reviews) {
 
 
 //___________________________________리뷰 입력 화면 나타내기, 숨김___________________________________//
-function toggleReviewForm() {
-    const reviewWrap = document.getElementById('reviews_wrap');
-    reviewWrap.style.display = (reviewWrap.style.display === 'none' || reviewWrap.style.display === '') ? 'block' : 'none';
-}
+    function toggleReviewForm() {
+        const reviewButton = document.getElementById('review-button');
+        const reviewsWrap = document.getElementById('reviews_wrap');
+        const frwriterField = document.getElementById('frwriter');
+
+        if (reviewsWrap.style.display === 'none' || reviewsWrap.style.display === '') {
+            reviewsWrap.style.display = 'block'; // reviews_wrap을 표시
+            reviewButton.style.display = 'none'; // 리뷰 입력 버튼 숨기기
+            frwriterField.value = currentUserId; // frwriter에 현재 로그인 사용자 ID를 설정
+        } else {
+            reviewsWrap.style.display = 'none'; // reviews_wrap을 숨김
+            reviewButton.style.display = 'block'; // 리뷰 입력 버튼 표시
+        }
+    }
+
 
 //___________________________________뒤로가기 버튼___________________________________//
 function goBack() {
@@ -416,22 +462,82 @@ function goBack() {
     container.style.display = 'block';
     leftPanel.style.display = 'none';
     rightPanel.style.display = 'none';
-    minSize = 0;
-    maxSize = 5;
+
 }
 
 //___________________________________더보기 버튼 클릭시 리뷰추가___________________________________//
+
 document.addEventListener('DOMContentLoaded', () => {
+    const container = document.getElementById('restaurant-container');
+
+    function loadMoreRestaurants() {
+        if (isLoading) return; // Avoid duplicate requests while loading
+        isLoading = true;
+
+        fetch("${contextPath}/api/restaurant?page="+restPage+"&pageSize="+restPageSize)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.length > 0) {
+                    appendRestaurants(data);
+                    restPage++; // Increment restPage here
+                }
+                isLoading = false;
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+                isLoading = false;
+            });
+    }
+
+    function appendRestaurants(restaurants) {
+        restaurants.forEach(restaurant => {
+            const restaurantCard = document.createElement('div');
+            restaurantCard.className = 'restaurant-card';
+            restaurantCard.dataset.fno = restaurant.fno;
+            restaurantCard.onclick = () => showDetailView(restaurant.fno);
+
+           restaurantCard.innerHTML = 
+           	    "<img src=${contextPath}/images/bibimbab.jpg alt='" + restaurant.fname + " Image'>" +
+           	    "<div class=\"restaurant-info\">" +
+           	    "   <h3>" + restaurant.fname + "</h3>" +
+           	    "   <p>Location: " + restaurant.faddress + "</p>" +
+           	    "   <p>Rating: " + restaurant.frating + "</p>" +
+           	    "</div>";
+
+
+            container.appendChild(restaurantCard);
+        });
+    }
+
+    container.addEventListener('scroll', () => {
+        if (container.scrollWidth - container.scrollLeft <= container.clientWidth + 50) {
+            // Load more data when scrolling close to the end
+            loadMoreRestaurants();
+        }
+    });
+
+    container.addEventListener('wheel', (event) => {
+        event.preventDefault();
+        container.scrollLeft += event.deltaY;
+    });
+
+    // Initial data load
+    loadMoreRestaurants();
+
     const loadMoreBtn = document.getElementById('load-more-btn');
     if (loadMoreBtn) {
         loadMoreBtn.addEventListener('click', loadMoreReviews);
     }
 });
-    
+
 
 
 
 </script>
-
 </body>
 </html>
