@@ -249,6 +249,8 @@
     </div>
 
     <script>
+    
+    
         const reviewsContainer = document.getElementById('reviews-container');
         const contextPath = "${contextPath}";
         const currentUserId = "${user.userId}"
