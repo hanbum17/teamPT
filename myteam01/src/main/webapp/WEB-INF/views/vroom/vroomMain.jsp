@@ -31,6 +31,7 @@
     </style>
 </head>
 <body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <div class="ty"></div>
 
 <div class="background-video">
@@ -66,7 +67,7 @@
     <a href="#cookies">쿠키정책</a>
     <a href="#cookie-consent">쿠키동의</a>
     <a href="#site">사이트 운영방식</a>
-    <a href="#support">고객센터</a>
+    <a href="/cs/Center">고객센터</a>
 </div>
 
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=bc42aa044cb0d127af995d28498082d8"></script>
@@ -88,8 +89,8 @@ document.getElementById('loginLink').addEventListener('click', function(event) {
     }
 });
 
-$(".map").on("click",funtion(){
-	
+$(".box").on("click",function(){
+	 window.location.href = '${contextPath}/vroom/event';
 });
 
 // JSON 데이터 파일을 서버에서 가져옵니다

@@ -130,15 +130,12 @@ public class VroomRestController {
     public List<EventReviewVO> getEventReviews( @RequestParam Long eno,
             												@RequestParam Long page,
             												@RequestParam Long pageSize) {
-    	System.out.println("리뷰리스트1 : "+ eno);
     	EventReviewVO eventReviewVO = new EventReviewVO();
     	eventReviewVO.setEno(eno);
     	eventReviewVO.setPage(page);
     	eventReviewVO.setPageSize(pageSize);
-    	System.out.println("리뷰리스트2 : "+ eventReviewVO);
         // 데이터 조회 로직
         List<EventReviewVO> reviews = eventService.selectMoreReviews(eventReviewVO);
-        System.out.println("리뷰리스트3 : "+ reviews);
         return reviews;
     }
     

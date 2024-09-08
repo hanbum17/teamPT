@@ -98,6 +98,7 @@ public class EventServiceImpl implements EventService{
 	
 	@Override
 	public int registerReview(EventReviewVO eventReviewVO) {
+		System.out.println(eventReviewVO);
 		return eventMapper.registerReview(eventReviewVO);
 	}
 	

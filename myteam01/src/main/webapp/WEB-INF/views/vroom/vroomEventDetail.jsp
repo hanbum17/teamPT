@@ -14,6 +14,10 @@
             font-family: Arial, sans-serif;
             height: 100vh;
             background-color: #f7f7f7;
+            background-image: url('/image/kakaoMAP.jpg');
+            background-size: cover; /* 배경 이미지가 요소의 전체를 덮도록 설정 */
+   			 background-position: center; /* 이미지의 위치를 중앙으로 설정 */
+    		background-repeat: no-repeat; /* 이미지 반복을 방지 */
             display: flex;
             flex-direction: column;
             justify-content: flex-end;
@@ -188,6 +192,8 @@
 <body>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
+
+
     <div style="position: absolute; top: 10px; left: 10px; font-size: 16px;">
         <c:if test="${not empty user}">
             현재 로그인: <strong>${user.userId}</strong>
@@ -319,7 +325,7 @@
                         // 리뷰 정보 가져오기
                         return fetch(`${contextPath}/api/getEventReviews?eno=` + eno + '&page=' + page + '&pageSize=' + pageSize);
                     } else {
-                        alert('식당 정보를 찾을 수 없습니다.');
+                        alert('행사 정보를 찾을 수 없습니다.');
                     }
                 })
                 .then(response => {
@@ -344,7 +350,6 @@
 
             // 새로 추가된 리뷰를 저장할 배열
             let newReviewsHTML = '';
-
             if (reviews.length === 0) {
                 if (reviewsContainer.childElementCount === 0) {
                     reviewsContainer.innerHTML = '<p>리뷰가 없습니다.</p>';
@@ -353,6 +358,7 @@
             }
 
             reviews.forEach(review => {
+            	
                 // 왼쪽 패널의 Rating 값을 설정합니다.
                 document.getElementById('panel-rating').textContent = review.ratingAverage;
                 // 오른쪽 패널의 Rating 값을 설정합니다.
@@ -385,11 +391,12 @@
             
 			 reviewsContainer.appendChild(reviewDiv);
             });
-            // 더보기 버튼 처리
+            // 더보기 버튼 처리 동적 생성된 버튼이라 안먹히는거같음.
             const existingMoreButton = document.getElementById('load-more-btn');
             if (existingMoreButton) {
                 existingMoreButton.parentElement.removeChild(existingMoreButton);
             }
+            //마지막에 가져올땐 길이가 5라 더보기 버튼이 생김
             if (reviews.length >= pageSize) {
                 const seeMoreElement = document.createElement('div');
                 seeMoreElement.className = 'more-review-btn';
@@ -400,7 +407,7 @@
                 if (loadMoreBtn) {
                     loadMoreBtn.onclick = loadMoreReviews;
                 }
-            }
+            } 
         }
 
 
@@ -431,6 +438,7 @@
                 .then(result => {
                     if (result.success) {
                         alert("리뷰가 삭제되었습니다.");
+                        reviewsContainer.innerHTML = '';
                         showDetailView(document.getElementById('eno').value); // 패널 업데이트
                     } else {
                         alert("리뷰 삭제에 실패했습니다.");

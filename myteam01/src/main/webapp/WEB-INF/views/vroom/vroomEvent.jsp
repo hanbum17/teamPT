@@ -13,6 +13,10 @@
             font-family: Arial, sans-serif;
             height: 100vh;
             background-color: #f7f7f7;
+                   background-image: url('/image/kakaoMAP.jpg');
+            background-size: cover; /* 배경 이미지가 요소의 전체를 덮도록 설정 */
+   			 background-position: center; /* 이미지의 위치를 중앙으로 설정 */
+    		background-repeat: no-repeat; /* 이미지 반복을 방지 */
             display: flex;
             flex-direction: column;
             justify-content: flex-end;
@@ -24,7 +28,7 @@
             white-space: nowrap;
             padding: 20px;
             box-sizing: border-box;
-            background-color: #fff;
+            background-color: transparent;
             width: 100%;
             height: 300px;
             align-items: center;
@@ -177,23 +181,84 @@
 	            list-style-type: none; /* 리스트의 기본 점을 제거합니다 */
 	            padding: 0;
 	        }
+	        
+	 .restaurant-search-btn {
+	    position: absolute;
+	    top: 700px; /* 컨테이너 상단과의 거리 */
+	    right: 10px; /* 컨테이너 우측과의 거리 */
+	    padding: 10px 20px;
+	    background-color: #007bff;
+	    color: #fff;
+	    border: none;
+	    border-radius: 5px;
+	    cursor: pointer;
+	    z-index: 1000; /* 버튼이 다른 요소 위에 표시되도록 설정 */
+	}
+
+	.restaurant-search-btn:hover {
+    	background-color: #0056b3;
+	}
+	
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px; /* 패딩을 줄여서 내용이 위로 이동하도록 설정 */
+    background-color: transparent; /* 상단 바 배경 제거 */
+    color: #ffffff;
+    border-bottom: none; /* 흰색 줄 제거 */
+    height: 60px; /* 헤더의 높이를 적절히 설정 */
+    position: fixed; /* 헤더를 페이지 상단에 고정 */
+    width: 100%; /* 헤더가 전체 너비를 차지하도록 설정 */
+    top: 0; /* 상단에 위치하도록 설정 */
+    left: 0; /* 왼쪽에 위치하도록 설정 */
+    z-index: 1000; /* 다른 요소들 위에 표시되도록 설정 */
+}
+
+
+
+	.header .logo {
+	    font-size: 30px; /* 글자 크기 2/3로 줄임 */
+	    font-weight: bold;
+	}
+	
+	.header .nav {
+	    font-size: 20px; /* 글자 크기 2/3로 줄임 */
+	}
+	
+	.header .nav a {
+	    color: #ffffff;
+	    text-decoration: none;
+	    margin: 0 15px; /* 글자 사이 간격 조정 */
+	}
 
 
     </style>
 </head>
 <body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<div class="header">
+    <div class="logo" id="goToMain">Vroom</div>
+    <div class="nav">
+        <a href="#about">ABOUT US</a>
+        <a href="#" id="loginLink">${user != null ? "MYPAGE" : "LOGIN"}</a>
+        <a href="/logout" id="logout">${user != null ? "LOGOUT" : ""}</a>
+        <a href="#contact">CONTACT US</a>
+    </div>
+</div>
+
 
     <div style="position: absolute; top: 10px; left: 10px; font-size: 16px;">
         <c:if test="${not empty user}">
             현재 로그인: <strong>${user.userId}</strong>
         </c:if>
     </div>
+	
+<button class="restaurant-search-btn" id="restaurant-search-btn">음식점 조회</button>
 
     <div class="container" id="event-container">
         <!-- 레스토랑 카드 반복문으로 생성 -->
-        
         <div class="more-event-card">
 	        <c:forEach var="event" items="${eventList}">
 	            <div class="event-card" data-eno="${event.eno}" onclick="window.location.href='${contextPath}/vroom/event/details?eno=${event.eno}'">
@@ -220,6 +285,27 @@
     </div>
 </body>
 <script>
+$("#goToMain").on("click", function() {
+    window.location.href = '${contextPath}/vroom/main';
+});
+
+document.getElementById('loginLink').addEventListener('click', function(event) {
+    event.preventDefault(); // 링크의 기본 동작을 막습니다
+
+    // 서버에서 `user` 값을 JSP로 전달했다고 가정합니다.
+    // `user` 변수가 JSP에서 설정되어 있어야 합니다.
+    var user = ${userBoolean}; // JSP에서 전달된 `user` 값
+
+    if (user) {
+        // `user` 값이 존재하면 MYPAGE로 이동
+        window.location.href = '/user/user_detail';
+    } else {
+        // `user` 값이 없으면 LOGIN으로 이동
+        window.location.href = '/user/login';
+    }
+});
+
+
 let isLoading = false;
 let restPage = 2; // 전역 변수로 설정
 const restPageSize = 10;
@@ -228,6 +314,13 @@ const contextPath = "${contextPath}";
 
 //브라우저 시작되고 반응형 스크립트
 document.addEventListener('DOMContentLoaded', () => {
+	
+	 const restaurantButton = document.getElementById('restaurant-search-btn');
+
+	    restaurantButton.addEventListener('click', () => {
+	        window.location.href = '${contextPath}/vroom/restaurant';
+	    });
+	
 	
     const container = document.getElementById('event-container'); //추가할 컨테이너
 

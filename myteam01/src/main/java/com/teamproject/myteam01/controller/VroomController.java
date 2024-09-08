@@ -78,11 +78,18 @@ public class VroomController {
 
     @GetMapping("/restaurant")
     public String restMain(@AuthenticationPrincipal UserDetails userDetails,  Model model) {
-        // 현재 로그인된 사용자의 ID를 이용해 사용자 정보 조회
+    	boolean userBoolean;
+    	
+    	// 현재 로그인된 사용자의 ID를 이용해 사용자 정보 조회
         if (userDetails != null) {
+        	userBoolean = true;
             String userId = userDetails.getUsername();
             UserVO user = userService.findByUsername(userId);
             model.addAttribute("user", user);
+            model.addAttribute("userBoolean", userBoolean);
+        } else {
+        	userBoolean = false;
+        	model.addAttribute("userBoolean", userBoolean);
         }
         
         // 식당 목록 추가
@@ -205,7 +212,18 @@ public class VroomController {
 	
     @GetMapping("/event")
     public String eventMain(@AuthenticationPrincipal UserDetails userDetails,  Model model) {
-        // 현재 로그인된 사용자의 ID를 이용해 사용자 정보 조회
+        
+    	boolean userBoolean;
+    	
+    	if (userDetails != null) {
+    		userBoolean = true;
+    		model.addAttribute("userBoolean", userBoolean);
+             // 로그인된 사용자에게 보여줄 페이지
+        } else {
+        	userBoolean = false;
+        	model.addAttribute("userBoolean", userBoolean);
+        }
+    	// 현재 로그인된 사용자의 ID를 이용해 사용자 정보 조회
         if (userDetails != null) {
             String userId = userDetails.getUsername();
             UserVO user = userService.findByUsername(userId);
@@ -272,9 +290,7 @@ public class VroomController {
 	@GetMapping("/getEventReviews")
 	@ResponseBody
 	public List<EventReviewVO> getEventReviews(@RequestParam("eno") Long eno, Model model) {
-		System.out.println("리뷰리스트 : "+ eno);
 		List<EventReviewVO> reviews = eventService.selectReviews2(eno);
-	    System.out.println("리뷰리스트 : "+reviews);
 	    return reviews;
 	}
 	
@@ -308,7 +324,6 @@ public class VroomController {
 	        response.put("success", false);
 	        response.put("message", "리뷰 등록 중 오류가 발생했습니다.");
 	    }
-	    System.out.println(eventService.registerReview(eventReviewVO));
 	    return response;
 	}
 }
