@@ -80,7 +80,7 @@ body {
 }
 
 .message {
-    color: #ffffff; /* 문구 색상: 흰색 */
+    color: black; /* 문구 색상: 흰색 */
     font-size: 23px; /* 글자 크기 1.5배 */
     animation: fadeIn 1s ease-out forwards; /* 애니메이션 적용 */
     animation-delay: 1.5s; /* 애니메이션 지연 시간 설정 */

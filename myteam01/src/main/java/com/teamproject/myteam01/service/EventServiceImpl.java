@@ -18,6 +18,37 @@ public class EventServiceImpl implements EventService{
 
 	private final EventMapper eventMapper ;
 	
+	
+	//영범 추가
+	@Override
+	public List<EventReviewVO> selectMoreReviews(EventReviewVO eventReviewVO){
+		Long offSet = (eventReviewVO.getPage()- 1 ) * eventReviewVO.getPageSize();
+		eventReviewVO.setOffset(offSet);
+		List<EventReviewVO> reviews = eventMapper.selectMoreReviews(eventReviewVO);
+		List<Long> forStars = eventMapper.selectReviewsForStar(eventReviewVO.getEno());
+		
+		Double frRating = 0.0;
+		Long count = 0L;
+		if (forStars != null && !forStars.isEmpty()) {
+			for (Long forStar : forStars) {
+	            frRating += forStar;
+	            count++;
+	        }
+			Double ratingAverage = frRating / count;
+	        Double finalRatingAverage = Math.round(ratingAverage * 10) / 10.0;
+	        
+	     // 모든 리뷰 객체에 평균 평점과 리뷰 개수를 설정하기
+	        for (EventReviewVO review : reviews) {
+	            review.setRatingAverage(finalRatingAverage);
+	            review.setErCount(count);
+	        }
+			
+		}
+		return reviews;
+		
+	}
+	
+	
 	//록귀
 	@Override
 	public EventVO eventDetail(Long eno) {
@@ -34,23 +65,35 @@ public class EventServiceImpl implements EventService{
 	@Override
 	public List<EventReviewVO> selectReviews2(Long eno) {
 		List<EventReviewVO> reviews = eventMapper.selectReviews2(eno);
-		Long count =0L;
-		Long erRating = 0L;
+		Double frRating = 0.0;
+	    Long count = 0L;
 		EventReviewVO setRatingAverage = new EventReviewVO();
-		if(reviews != null) {
-			for(int i = 0 ; i <= reviews.size(); i++) {
-				EventReviewVO getReviews = reviews.get(i);
-				erRating += getReviews.getErrating();
-				count += i ;
+		
+		if (reviews != null && !reviews.isEmpty()) {
+			for(EventReviewVO review : reviews) {
+				frRating += review.getErrating();
+	            count++;
 			}
-			float ratingAverage = erRating/count;
-			setRatingAverage.setErCount(count);
-			setRatingAverage.setRatingAverage(ratingAverage);
+			Double ratingAverage = frRating / count;
+	        Double finalRatingAverage = Math.round(ratingAverage * 10) / 10.0;
 			
+	        for (EventReviewVO review : reviews) {
+	            review.setRatingAverage(finalRatingAverage);
+	            review.setErCount(count);
+	        }
+	        
+	        return reviews;
 		}
 		
 		return reviews;
 	}
+	@Override
+	public List<EventReviewVO> modifyreview(EventReviewVO eventReviewVO) {
+		System.out.println("리뷰 수정 서비스 값: "+eventReviewVO);
+		eventMapper.updaterestreview(eventReviewVO);
+		return null;
+	}
+	
 	
 	
 	@Override
@@ -84,8 +127,21 @@ public class EventServiceImpl implements EventService{
 	//행사 목록
 	@Override
 	public List<EventVO> eventList(){
-		List<EventVO> event = eventMapper.selectEventList();
-		return event;
+		List<EventVO> eventList = eventMapper.selectEventList();
+		return eventList;
+	}
+	
+	@Override
+	public List<EventVO> getEventList(Long page , Long pageSize){
+		EventVO eventVO = new EventVO();
+		Long offSet = (page- 1 ) * pageSize;
+		
+		eventVO.setPage(page);
+		eventVO.setPageSize(pageSize);
+		eventVO.setOffset(offSet);
+		
+		List<EventVO> eventList = eventMapper.selectEventList2(eventVO);
+		return eventList;
 	}
 	
 	//행사 등록
