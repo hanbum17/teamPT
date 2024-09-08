@@ -6,8 +6,7 @@
 	<!-- FAQ 조회-->
 	<select id="selectFAQList" resultType="com.teamproject.myteam01.domain.CsVO">
 			SELECT FAQNO, FAQCATEGORY, FAQTITLE, FAQCONTENT, FAQREGDATE, FAQMODDATE, FAQDELFLAG
-			FROM teampj.FAQ
-			ORDER BY FAQNO DESC
+			FROM teampj.FAQ ORDER BY FAQNO DESC
 	</select>
 
 	<!-- FAQ 등록 -->
@@ -23,9 +22,9 @@
 
 	<!-- FAQ 조회 -->
 	<select id="selectFAQ" resultType="com.teamproject.myteam01.domain.CsVO">
-		SELECT FAQNO, FAQCATEGORY, FAQTITLE, FAQCONTENT, FAQREGDATE, FAQMODDATE
+		SELECT FAQNO, FAQCATEGORY, FAQTITLE, FAQCONTENT, FAQREGDATE, FAQMODDATE, FAQDELFLAG
 		FROM teampj.FAQ
-		WHERE FAQNO = #{faqno}
+		WHERE faqno = #{faqno}
 	</select>
 
 	<!-- FAQ 수정 -->
@@ -40,7 +39,7 @@
 	
 	<!-- FAQ 삭제 -->
 	<delete id="delFAQ">
-		DELETE teampj.FAQ
+		DELETE FROM teampj.FAQ
 		WHERE FAQNO = #{faqno}
 	</delete>
 	

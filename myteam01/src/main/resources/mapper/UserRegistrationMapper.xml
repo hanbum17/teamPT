@@ -33,4 +33,32 @@
         WHERE ur.USERID = #{userId}
     </select>
 
+    <!-- 사용자가 작성한 행사 리뷰를 조회하는 쿼리 (userId로) -->
+    <select id="getUserEventReviewsByUserId" resultType="map">
+        SELECT 
+            er.ERNO AS reviewId,
+            e.ENAME AS itemName,
+            er.ERTITLE AS reviewTitle,
+            TO_CHAR(er.ERCONTENT) AS reviewContent, 
+            er.ERREGDATE AS reviewDate,
+            er.ERRATING AS reviewRating
+        FROM EVENT_REVIEWS er
+        JOIN EVENT e ON er.ENO = e.ENO
+        WHERE er.ERWRITER = #{userId}
+    </select>
+
+    <!-- 사용자가 작성한 음식점 리뷰를 조회하는 쿼리 (userId로) -->
+    <select id="getUserRestaurantReviewsByUserId" resultType="map">
+        SELECT 
+            rr.FRNO AS reviewId,
+            r.FNAME AS itemName,
+            rr.FRTITLE AS reviewTitle,
+            TO_CHAR(rr.FRCONTENT) AS reviewContent,
+            rr.FRREGDATE AS reviewDate,
+            rr.FRRATING AS reviewRating
+        FROM RESTAURANTS_REVIEWS rr
+        JOIN RESTAURANTS r ON rr.FNO = r.FNO
+        WHERE rr.FRWRITER = #{userId}
+    </select>
+
 </mapper>
