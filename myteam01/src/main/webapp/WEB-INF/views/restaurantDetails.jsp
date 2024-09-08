@@ -71,18 +71,18 @@
         }
 
         .panel {
-		    position: absolute;
-		    top: 50px;
-		    width: 28%;
-		    height: calc(100vh - 100px); /* 패널의 높이 설정 */
-		    border-radius: 10px;
-		    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-		    background-color: #fff;
-		    padding: 20px;
-		    box-sizing: border-box;
-		    display: none;
-		    overflow: hidden; /* 패널 내부 콘텐츠가 넘칠 경우 숨기기 */
-		}
+          position: absolute;
+          top: 50px;
+          width: 28%;
+          height: calc(100vh - 100px); /* 패널의 높이 설정 */
+          border-radius: 10px;
+          box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+          background-color: #fff;
+          padding: 20px;
+          box-sizing: border-box;
+          display: none;
+          overflow: hidden; /* 패널 내부 콘텐츠가 넘칠 경우 숨기기 */
+      }
 
         .left-panel {
             left: 5%;
@@ -92,12 +92,12 @@
         }
 
         .right-panel {
-		    right: 5%;
-		    border: 1px solid #ddd;
-		    padding: 20px;
-		    box-sizing: border-box;
-		    overflow-y: auto; /* 스크롤 활성화 */
-		}
+          right: 5%;
+          border: 1px solid #ddd;
+          padding: 20px;
+          box-sizing: border-box;
+          overflow-y: auto; /* 스크롤 활성화 */
+      }
 
         .panel h2 {
             margin-bottom: 20px;
@@ -134,7 +134,7 @@
         }
 
         #reviews_wrap {
-       	 	display: none; 
+              display: none; 
             margin-top: 20px;
         }
         .small-text {
@@ -143,20 +143,20 @@
             margin-left: 5px; /* 레이아웃에 맞게 여백 조절 */
         }
         #reviews-container {
-		    max-height: calc(100vh - 250px); /* 패널 높이에 따라 조정 */
-		    overflow-y: auto; /* 스크롤 추가 */
-		    padding: 10px;
-		    border: 0.5px solid #ddd;
-		    border-radius: 10px;
-		    background-color: #fff;
-		    box-shadow: 0 0 10px rgba(0, 0, 0, 0);
-		}
+          max-height: calc(100vh - 250px); /* 패널 높이에 따라 조정 */
+          overflow-y: auto; /* 스크롤 추가 */
+          padding: 10px;
+          border: 0.5px solid #ddd;
+          border-radius: 10px;
+          background-color: #fff;
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0);
+      }
 
       /* 웹킷 기반 브라우저에서 스크롤바 숨기기 */
-      	#reviews-container::-webkit-scrollbar {
-		    width: 0; /* 스크롤바 숨기기 */
-		    background: transparent;
-		}
+         #reviews-container::-webkit-scrollbar {
+          width: 0; /* 스크롤바 숨기기 */
+          background: transparent;
+      }
       .load-more-btn{
          width: 100%;
          padding: 10px;
@@ -168,19 +168,19 @@
       }
 
       #editReviewForm {
-		    display: none;
-		    margin-top: 20px; /* 위치 조정 */
-		    padding: 10px;
-		    border: 1px solid #ddd;
-		    border-radius: 10px;
-		    background-color: #fff;
-		    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-		}
+          display: none;
+          margin-top: 20px; /* 위치 조정 */
+          padding: 10px;
+          border: 1px solid #ddd;
+          border-radius: 10px;
+          background-color: #fff;
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
 
-	 .review_ul {
-	            list-style-type: none; /* 리스트의 기본 점을 제거합니다 */
-	            padding: 0;
-	        }
+    .review_ul {
+               list-style-type: none; /* 리스트의 기본 점을 제거합니다 */
+               padding: 0;
+           }
 
 
     </style>
@@ -224,15 +224,15 @@
 
         <!-- 리뷰 등록 폼 -->
         <div id="reviews_wrap" style="display: none; margin-top: 20px;">
-		    <form id="reviewForm">
-		        <input type="text" id="frtitle" name="frtitle" placeholder="제목"><br>
-		        <textarea id="frcontent" name="frcontent" placeholder="내용"></textarea><br>
-		        <input type="text" id="frwriter" name="frwriter" placeholder="작성자" readonly><br>
-		        <input type="text" id="frrating" name="frrating" placeholder="별점 0~5"><br>
-		        <input type="text" id="fno" name="fno" readonly> <!-- 여기에 fno를 동적으로 설정 -->
-		        <button id="review_register_btn" type="button" onclick="submitReview()">리뷰등록</button>
-		    </form>
-		</div>
+          <form id="reviewForm">
+              <input type="text" id="frtitle" name="frtitle" placeholder="제목"><br>
+              <textarea id="frcontent" name="frcontent" placeholder="내용"></textarea><br>
+              <input type="text" id="frwriter" name="frwriter" placeholder="작성자" readonly><br>
+              <input type="text" id="frrating" name="frrating" placeholder="별점 0~5"><br>
+              <input type="text" id="fno" name="fno" readonly> <!-- 여기에 fno를 동적으로 설정 -->
+              <button id="review_register_btn" type="button" onclick="submitReview()">리뷰등록</button>
+          </form>
+      </div>
 
         <!-- 리뷰 수정 폼 -->
         <div id="editReviewForm" style="display:none;">
@@ -258,7 +258,8 @@
         const pageSize = 5;
 
         function submitEditReview() {
-        	reviewsContainer.innerHTML = '';
+
+           reviewsContainer.innerHTML = '';
             const form = document.getElementById('reviewEditForm');
             const formData = new FormData(form);
 
@@ -380,7 +381,8 @@
                     + "</ul>"
                 + "</div>";
             
-			 reviewsContainer.appendChild(reviewDiv);
+
+          reviewsContainer.appendChild(reviewDiv);
             });
             // 더보기 버튼 처리
             const existingMoreButton = document.getElementById('load-more-btn');
@@ -414,6 +416,7 @@
         }
         
         function deleteReview(frno) {
+        	reviewsContainer.innerHTML = '';
             if (confirm("정말로 이 리뷰를 삭제하시겠습니까?")) {
                 fetch(`${contextPath}/vroom/deleteReview`, {
                     method: 'POST',
@@ -468,7 +471,8 @@
         });
         
         function submitReview() {
-        	reviewsContainer.innerHTML = '';
+
+           reviewsContainer.innerHTML = '';
             const form = document.getElementById('reviewForm');
             const formData = new FormData(form);
 
@@ -500,33 +504,33 @@
         }
 
         function loadMoreReviews() {
-        	   //fno가 없으면 리턴
-        	    if (!currentFno) return;
-        	   //전역함수인 page를 하나씩 더해줌. (기존 5개씩 보여줌)
-        	    page++;
-        	   //서버에 리뷰를 가져오기 위한 요청 보냄
-        	    fetch('/api/getRestaurantReviews?fno='+currentFno+'&page='+page+'&pageSize='+pageSize)
-        	      //응답상태 확인. 응답이 실패시 에러문구 표시해주는 용도
-        	        .then(response => {
-        	            if (!response.ok) {
-        	                throw new Error('Network response was not ok');
-        	            }
-        	            //응답이 성공적일 시 json으로 받은걸 가져옴
-        	            return response.json();
-        	        })
-        	        //리뷰 처리
-        	        .then(reviews => {
-        	           //리뷰 처리 함수 실행(json으로 가져온 reviews를 함수로 넘겨줌)
-        	           displayReviews(reviews);
+              //fno가 없으면 리턴
+               if (!currentFno) return;
+              //전역함수인 page를 하나씩 더해줌. (기존 5개씩 보여줌)
+               page++;
+              //서버에 리뷰를 가져오기 위한 요청 보냄
+               fetch('/api/getRestaurantReviews?fno='+currentFno+'&page='+page+'&pageSize='+pageSize)
+                 //응답상태 확인. 응답이 실패시 에러문구 표시해주는 용도
+                   .then(response => {
+                       if (!response.ok) {
+                           throw new Error('Network response was not ok');
+                       }
+                       //응답이 성공적일 시 json으로 받은걸 가져옴
+                       return response.json();
+                   })
+                   //리뷰 처리
+                   .then(reviews => {
+                      //리뷰 처리 함수 실행(json으로 가져온 reviews를 함수로 넘겨줌)
+                      displayReviews(reviews);
 
-        	        })
-        	        //에러 캐치
-        	        .catch(error => {
-        	            console.error('Error fetching data:', error);
-        	            alert('데이터를 가져오는 데 실패했습니다.1');
-        	        });
+                   })
+                   //에러 캐치
+                   .catch(error => {
+                       console.error('Error fetching data:', error);
+                       alert('데이터를 가져오는 데 실패했습니다.1');
+                   });
 
-        	}
+           }
         
     </script>
 </body>
