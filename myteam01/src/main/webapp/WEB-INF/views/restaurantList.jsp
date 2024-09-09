@@ -261,15 +261,17 @@
         <!-- 레스토랑 카드 반복문으로 생성 -->        
         <div class="more-restaurant-card">
 	        <c:forEach var="restaurant" items="${restList}">
-	            <div class="restaurant-card" data-fno="${restaurant.fno}" onclick="window.location.href='${contextPath}/vroom/restaurant/details?fno=${restaurant.fno}'">
-				    <img src="${contextPath}/images/bibimbab.jpg" alt="${restaurant.fname} Image">
-				    <div class="restaurant-info">
-				        <h3>${restaurant.fname}</h3>
-				        <p>Location: ${restaurant.faddress}</p>
-				        <p>Rating: ${restaurant.frating}</p>
-				    </div>
-				</div>
-			</c:forEach> 
+			    <div class="restaurant-card" data-fno="${restaurant.fno}" onclick="window.location.href='${contextPath}/vroom/restaurant/details?fno=${restaurant.fno}'">
+			        <img src="${contextPath}/images/${restaurant.attachFileList[0].fileName}" alt="${restaurant.fname} Image">
+
+
+			        <div class="restaurant-info">
+			            <h3>${restaurant.fname}</h3>
+			            <p>Location: ${restaurant.faddress}</p>
+			            <p>Rating: ${restaurant.frating}</p>
+			        </div>
+			    </div>
+			</c:forEach>
 		</div>
         <!-- 데이터가 없는 경우 표시할 카드 -->
         <c:if test="${empty restList}">

@@ -21,6 +21,11 @@
         SELECT UUID, UPLOADPATH, FILENAME, FILEDELFLAG, FILETYPE, UNO 
         FROM teampj.ATTACHFILES WHERE uuid = #{uuid}
     </select>
+    
+    <select id="getAttachFilesByUno" resultType="com.teamproject.myteam01.domain.AttachFileDTO">
+	    SELECT * FROM ATTACHFILES WHERE uno = #{uno}
+	</select>
+    
 	
 	
 </mapper>

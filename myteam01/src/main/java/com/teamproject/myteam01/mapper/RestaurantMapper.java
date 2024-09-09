@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.teamproject.myteam01.domain.AttachFileDTO;
 import com.teamproject.myteam01.domain.RestaurantVO;
 import com.teamproject.myteam01.domain.RestaurantsReviewVO;
 
@@ -21,6 +22,8 @@ public interface RestaurantMapper {
 	public List<RestaurantVO> selectRestList(RestaurantVO restVO);
 
 	public int updaterestreview(RestaurantsReviewVO restReviewVO);
+	
+	
 
 	//영범
 	public List<RestaurantsReviewVO> selectMoreReviews(RestaurantsReviewVO reviewVO);
