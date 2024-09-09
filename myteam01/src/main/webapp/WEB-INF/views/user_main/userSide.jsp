@@ -25,12 +25,12 @@
                 <ul class="sidebar-menu">
                     <li class="menu-item">
                         <form action="/user/user_detail" method="get">
-                            <button type="submit"><i class="fa-regular fa-circle-question"></i> 상세 정보</button>
+                            <button type="submit"><i class="fa-solid fa-circle-info"></i> 상세 정보</button>
                         </form>
                     </li>
                     <li class="menu-item">
                         <form action="/user/user_fav" method="get">
-                            <button type="submit"><i class="fa-regular fa-bookmark"></i> 즐겨찾기 목록</button>
+                            <button type="submit"><i class="fa-solid fa-bookmark"></i> 즐겨찾기 목록</button>
                         </form>
                     </li>
                     <li class="menu-item">
@@ -60,7 +60,7 @@
                     </li>
                     <li class="menu-item">
                         <form action="/user/user_inquiry" method="get">
-                            <button type="submit"><i class="fa-regular fa-comment"></i> 문의 내역</button>
+                            <button type="submit"><i class="fa-solid fa-comment"></i> 문의 내역</button>
                         </form>
                     </li>
                     <li class="menu-item"><sec:authorize

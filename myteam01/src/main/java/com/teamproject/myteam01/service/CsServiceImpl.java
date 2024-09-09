@@ -22,25 +22,19 @@ public class CsServiceImpl implements CsService{
 	//FAQ 목록
 	@Override
 	public List<CsVO> csList(){
-		System.out.println("서비스: FAQ 목록");
-		
-		System.out.println(csMapper.selectFAQList());
 		return csMapper.selectFAQList();
 	}
 	
 	//FAQ 등록
 	@Override
 	public Long regiFAQ(CsVO faq) {
-		System.out.println("서비스 : FAQ 등록" + faq);
 		csMapper.registerFAQ(faq);
-		System.out.println("서비스 : FAQ 등록 후" + faq);
 		return faq.getFaqno();
 	}
 	
 	//FAQ 조회
 	@Override
 	public CsVO getFAQ(Long faqno) {
-		System.out.println("서비스 : FAQ 조회");
 		CsVO faq = csMapper.selectFAQ(faqno);
 		return faq ;
 	}

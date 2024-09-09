@@ -286,9 +286,12 @@ function checkEventValue() {
     }
 }
 
-$("#btnRegister").on("click", function() {
+$("#btnRegister").on("click", function(event) {
     if (!checkEventValue()) {
-        alert("모든 필드를 유효한 값으로 입력해야 합니다.");
+        alert("모든 내용은 필수 작성입니다!");
+        // 원래 페이지로 직접 이동
+        //window.location.href = "${contextPath}/event/register";
+        event.preventDefault(); // 기본 폼 제출 방지
         return;
     }
 

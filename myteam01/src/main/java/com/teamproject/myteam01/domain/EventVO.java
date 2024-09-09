@@ -12,10 +12,8 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 public class EventVO {
-
-    //private Integer eno;         // 행사 번호
+	
     private Long eno ;
-    
     private String ename;       // 행사 이름
     private String eperiod;     // 행사 기간
     private String ecost;       // 행사 비용
