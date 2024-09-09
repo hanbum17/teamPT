@@ -89,7 +89,7 @@ public class UserController {
     // 여행 계획 세우기 페이지로 이동
     @GetMapping("/user/user_trip")
     public String userTripPage() {
-        return "user_main/user_menu/user_trip";
+        return "user_main/user_menu/user_trip_list";
     }
 
     // 등록한 행사 및 음식점 페이지로 이동
