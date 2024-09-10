@@ -34,6 +34,8 @@ public class RestaurantVO {
     private Long page;
 	private Long pageSize;
 	private Long offset;
+	
+	
    
 
 }

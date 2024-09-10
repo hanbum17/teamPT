@@ -21,6 +21,16 @@
             flex-direction: column;
             justify-content: flex-end;
         }
+        
+         /* 지도와 컨테이너 스타일 */
+        #map {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
 
         .container {
             display:  flex;
@@ -261,17 +271,15 @@
         <!-- 레스토랑 카드 반복문으로 생성 -->        
         <div class="more-restaurant-card">
 	        <c:forEach var="restaurant" items="${restList}">
-			    <div class="restaurant-card" data-fno="${restaurant.fno}" onclick="window.location.href='${contextPath}/vroom/restaurant/details?fno=${restaurant.fno}'">
-			        <img src="${contextPath}/images/${restaurant.attachFileList[0].fileName}" alt="${restaurant.fname} Image">
-
-
-			        <div class="restaurant-info">
-			            <h3>${restaurant.fname}</h3>
-			            <p>Location: ${restaurant.faddress}</p>
-			            <p>Rating: ${restaurant.frating}</p>
-			        </div>
-			    </div>
-			</c:forEach>
+	            <div class="restaurant-card" data-fno="${restaurant.fno}" onclick="window.location.href='${contextPath}/vroom/restaurant/details?fno=${restaurant.fno}'">
+				    <img src="${contextPath}/images/bibimbab.jpg" alt="${restaurant.fname} Image">
+				    <div class="restaurant-info">
+				        <h3>${restaurant.fname}</h3>
+				        <p>Location: ${restaurant.faddress}</p>
+				        <p>Rating: ${restaurant.frating}</p>
+				    </div>
+				</div>
+			</c:forEach> 
 		</div>
         <!-- 데이터가 없는 경우 표시할 카드 -->
         <c:if test="${empty restList}">
@@ -285,7 +293,22 @@
             </div>
         </c:if>
     </div>
-</body>
+    
+    <div id="map"></div>
+
+<div class="container" id="restaurant-container">
+    <c:forEach var="restaurant" items="${restList}">
+        <div class="restaurant-card" data-lat="${restaurant.lat}" data-lng="${restaurant.lng}">
+            <img src="${contextPath}/images/${restaurant.attachFileList[0].fileName}" alt="${restaurant.fname} Image">
+            <div class="restaurant-info">
+                <h3>${restaurant.fname}</h3>
+                <p>Location: ${restaurant.faddress}</p>
+                <p>Rating: ${restaurant.frating}</p>
+            </div>
+        </div>
+    </c:forEach>
+</div>
+
 <script>
 $("#goToMain").on("click", function() {
     window.location.href = '${contextPath}/vroom/main';
@@ -405,4 +428,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 </script>
+</body>
 </html>
