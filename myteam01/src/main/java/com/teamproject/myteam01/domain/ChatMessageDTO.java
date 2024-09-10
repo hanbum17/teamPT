@@ -1,5 +1,6 @@
 package com.teamproject.myteam01.domain;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 import lombok.AllArgsConstructor;
@@ -21,5 +22,5 @@ public class ChatMessageDTO {
 	private int roomId; // 방번호(FK)
     private String username; //userId
     private String content; // 내용
-    private Date date; // 보낸날짜시간
+    private Date sendDate; // 보낸날짜시간
 }

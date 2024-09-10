@@ -4,13 +4,13 @@
 
 	<!-- 채팅기록불러오기 -->
 	<select id="selectChatList" resultType="com.teamproject.myteam01.domain.ChatMessageDTO">
-		select * from chatMessage where roomId = #{roomId}
+		select * from chatMessage where roomId = #{roomId} order by cno ASC
 	</select>
 	
 	<!-- 채팅입력시DB저장 -->
 	<insert id="insertChat">
 		insert into chatMessage
-		values(seq_cno.nextval, 1, #{username}, #{content}, #{date})
+		values(seq_cno.nextval, #{roomId}, #{username}, #{content}, DEFAULT)
 	</insert>
 	
 	<!-- 채팅방목록조회 -->
@@ -21,7 +21,13 @@
 		WHERE cr.userId1 = #{username}
 	</select>
 	
-	
+	<!-- RoomId로 게시글제목(채팅방제목) 가져오기 -->
+	<select id="selectChatRoomTitle">
+		SELECT r.FNAME
+		FROM RESTAURANTS r
+		JOIN CHATROOM cr ON r.UNO = cr.UNO
+		WHERE cr.ROOMID = #{roomId}
+	</select>
 	
 	
 </mapper>

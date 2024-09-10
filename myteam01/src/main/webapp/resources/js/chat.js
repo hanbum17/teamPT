@@ -9,45 +9,63 @@ var connectingElement = document.querySelector('.connecting');
 var stompClient = null;
 var username = null;
 
+
 var colors = [
     '#2196F3', '#32c787', '#00BCD4', '#ff5652',
     '#ffc107', '#ff85af', '#FF9800', '#39bbb0'
 ];
 
-function connect(event) {
-    username = document.querySelector('#name').value.trim();
 
+
+function connect() {
+    //username = document.querySelector('#name').value.trim();
+	username = principal ;
     if (username) {
-        usernamePage.classList.add('hidden');
-        chatPage.classList.remove('hidden');
+        /*usernamePage.classList.add('hidden');
+        chatPage.classList.remove('hidden');*/
 
         var socket = new SockJS('/ws');
         stompClient = Stomp.over(socket);
-
+		stompClient.debug = null;
         stompClient.connect({}, onConnected, onError);
     }
-    event.preventDefault();
+    //event.preventDefault();
 }
 
+/*연결 끊겼을 때 함수*/
 function disconnect() {
     if (stompClient) {
         stompClient.send("/pub/chat/leave",
             {},
-            JSON.stringify({ username: username, content: 'LEAVE', date: new Date()})
+            JSON.stringify({ username: username, sendDate: new Date(), roomId: roomId})
         );
+		
+		/*stompClient.send("/pub/chat/leave",
+		            {},
+		            JSON.stringify({ username: username, content: 'LEAVE', sendDate: new Date(), roomId: roomId})
+		        );*/
+		
         stompClient.disconnect();
     }
 }
 
+/*연결 성공 함수*/
 function onConnected() {
-    stompClient.subscribe('/sub/chat/room/1', onMessageReceived);
+    stompClient.subscribe('/sub/chat/room/'+ roomId , onMessageReceived);
 	stompClient.subscribe('/sub/chat/userCnt', onUserCntReceived);
-    stompClient.send("/pub/chat/enter",
-        {},
-        JSON.stringify({ username: username, content: 'JOIN', date: new Date() })
-    );
+	stompClient.subscribe('/sub/chat/chatHistory'+roomId , chatHistory);
 	
-    connectingElement.classList.add('hidden');
+	stompClient.send("/pub/chat/enter",
+	        {},
+	        JSON.stringify({ username: username, sendDate: new Date(), roomId: roomId })
+	    );
+    
+	/*stompClient.send("/pub/chat/enter",
+        {},
+        JSON.stringify({ username: username, content: 'JOIN', sendDate: new Date(), roomId: roomId })
+    );*/
+	
+    /*connectingElement.classList.add('hidden');*/
 }
 
 function onError(error) {
@@ -61,32 +79,141 @@ function sendMessage(event) {
         var chatMessage = {
             username: username,
             content: messageInput.value,
-			date: new Date()
+			sendDate: new Date(),
+			roomId: roomId
         };
         stompClient.send("/pub/chat/message", {}, JSON.stringify(chatMessage));
         messageInput.value = '';
     }
     event.preventDefault();
 }
+//////////////////////////////////////////////////////////////////////////////
+function formatDate(sendDate) {
+    // ISO 형식의 날짜 문자열을 Date 객체로 변환
+    var date = new Date(sendDate);
 
-function formatDate(){
-	var today = new Date();
-	var hours = ('0' + today.getHours()).slice(-2); 
-	var minutes = ('0' + today.getMinutes()).slice(-2);
-	var seconds = ('0' + today.getSeconds()).slice(-2); 
+    // 연도, 월, 일, 시간, 분, 초를 각각 가져옴
+    var year = date.getFullYear();
+    var month = ('0' + (date.getMonth() + 1)).slice(-2); // 월은 0부터 시작하므로 +1
+    var day = ('0' + date.getDate()).slice(-2);
+    var hours = ('0' + date.getHours()).slice(-2);
+    var minutes = ('0' + date.getMinutes()).slice(-2);
+    var seconds = ('0' + date.getSeconds()).slice(-2);
 
-	var timeString = hours + ':' + minutes  + ':' + seconds;
-	
-	return timeString ; 
+    // 형식에 맞게 조합하여 반환
+    //var formattedDate = year + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':' + seconds;
+	var formattedDate = ' ' + hours + ':' + minutes + ':' + seconds + ' '; //시 분 초
+    return formattedDate;
 }
+/*유저 입장 시 인원수증가*/
 function onUserCntReceived(payload) {
     userCnt = JSON.parse(payload.body);
-    $("#chat-title").text("☆★☆902강의장 임시 채팅방☆★☆ 참여인원: " + userCnt);
+    $("#chat-title").text(chatRoomTitle + " 채팅방");
 }
+
+/*이전 채팅기록 불러오기*/
+function chatHistory(payload) {
+    // JSON으로 변환
+    var messages = JSON.parse(payload.body);
+    
+    // 메시지 영역 초기화
+    messageArea.innerHTML = '';
+
+    // 메시지 배열을 반복하며 처리
+    for (var i in messages) {
+        var message = messages[i];
+
+        if (!message.content) {
+            continue; // 내용이 없는 메시지는 건너뜁니다
+        }
+
+        var messageElement = document.createElement('li');
+        
+        // 메시지 스타일을 설정
+        if (message.username && message.username !== principal) {
+            // 상대방의 메시지
+            messageElement.classList.add('chat-message');
+
+            // 메시지 내용과 타임스탬프를 포함할 div 생성
+            var chatWrapper = document.createElement('div');
+            chatWrapper.classList.add('chat1');
+
+            // 사용자 이름
+            var usernameElement = document.createElement('span');
+            usernameElement.classList.add('username');
+            var usernameText = document.createTextNode(message.username);
+            usernameElement.appendChild(usernameText);
+            chatWrapper.appendChild(usernameElement);
+
+            // 메시지 내용
+            var textElement = document.createElement('p');
+            var messageText = document.createTextNode(message.content);
+            textElement.appendChild(messageText);
+            chatWrapper.appendChild(textElement);
+
+            // 타임스탬프
+            var timeElement = document.createElement('div');
+            timeElement.classList.add('timestamp');
+            var formattedDate = formatDate(message.sendDate);
+            var timeTextNode = document.createTextNode(formattedDate);
+            timeElement.appendChild(timeTextNode);
+
+            // 메시지 요소에 내용을 추가
+            messageElement.appendChild(chatWrapper);
+            messageElement.appendChild(timeElement);
+
+        } else {
+            // 자신의 메시지
+            messageElement.classList.add('my-chat-message');
+
+            // 타임스탬프
+            var timeElement = document.createElement('div');
+            timeElement.classList.add('timestamp');
+            var formattedDate = formatDate(message.sendDate);
+            var timeTextNode = document.createTextNode(formattedDate);
+            timeElement.appendChild(timeTextNode);
+
+            // 메시지 내용과 사용자 이름을 포함할 div 생성
+            var chatWrapper = document.createElement('div');
+            chatWrapper.classList.add('chat1');
+
+            // 사용자 이름
+            var usernameElement = document.createElement('span');
+            usernameElement.classList.add('username');
+            var usernameText = document.createTextNode(message.username);
+            usernameElement.appendChild(usernameText);
+            chatWrapper.appendChild(usernameElement);
+
+            // 메시지 내용
+            var textElement = document.createElement('p');
+            var messageText = document.createTextNode(message.content);
+            textElement.appendChild(messageText);
+            chatWrapper.appendChild(textElement);
+
+            // 메시지 요소에 타임스탬프와 내용을 추가
+            messageElement.appendChild(timeElement);
+            messageElement.appendChild(chatWrapper);
+        }
+
+        // 메시지 영역에 추가
+        messageArea.appendChild(messageElement);
+    }
+
+    // 스크롤을 맨 아래로 이동
+    messageArea.scrollTop = messageArea.scrollHeight;
+}
+
+
+
+
 
 function onMessageReceived(payload) {
     var message = JSON.parse(payload.body);
-    //console.log("message", message);
+
+    if (!message.content) {
+        return;
+    }
+
     var messageElement = document.createElement('li');
 
     if (message.content === 'JOIN') {
@@ -96,41 +223,59 @@ function onMessageReceived(payload) {
         messageElement.classList.add('event-message');
         messageElement.textContent = message.username + ' 님이 퇴장하셨습니다.';
     } else {
-        messageElement.classList.add('chat-message');
-
-        var avatarElement = document.createElement('i');
-        var avatarText = document.createTextNode(message.username[0]);
-        avatarElement.appendChild(avatarText);
-        avatarElement.style['background-color'] = getAvatarColor(message.username);
-
-        messageElement.appendChild(avatarElement);
+        var chatWrapper = document.createElement('div');
+        chatWrapper.classList.add('chat1');
 
         var usernameElement = document.createElement('span');
         var usernameText = document.createTextNode(message.username);
         usernameElement.appendChild(usernameText);
-        messageElement.appendChild(usernameElement);
+
+        var textElement = document.createElement('p');
+        var messageText = document.createTextNode(message.content);
+        textElement.appendChild(messageText);
+
+        if (message.username && message.username !== principal) {
+            // 상대방 채팅
+            messageElement.classList.add('chat-message');
+
+            chatWrapper.appendChild(usernameElement);
+            chatWrapper.appendChild(textElement);
+
+            var timeElement = document.createElement('div');
+            timeElement.classList.add('timestamp');
+            var formattedDate = formatDate(message.sendDate);
+            var timeTextNode = document.createTextNode(formattedDate);
+            timeElement.appendChild(timeTextNode);
+
+            messageElement.appendChild(chatWrapper);
+            messageElement.appendChild(timeElement);
+
+        } else {
+            // 자신의 채팅
+            messageElement.classList.add('my-chat-message');
+
+            var timeElement = document.createElement('div');
+            timeElement.classList.add('timestamp');
+            var formattedDate = formatDate(message.sendDate);
+            var timeTextNode = document.createTextNode(formattedDate);
+            timeElement.appendChild(timeTextNode);
+
+            chatWrapper.appendChild(usernameElement);
+            chatWrapper.appendChild(textElement);
+
+            messageElement.appendChild(timeElement);
+            messageElement.appendChild(chatWrapper);
+        }
     }
 
-    var textElement = document.createElement('p');
-	var timeElement = document.createElement('p');
-	var formattedDate = formatDate(); // formatDate()가 반환하는 문자열
-	// 문자열을 텍스트 노드로 변환하여 추가
-	var textNode = document.createTextNode(formattedDate);
-	timeElement.appendChild(textNode);
-
-	var messageText = document.createTextNode(message.content);
-	
-	if(messageElement.classList.value === "chat-message"){
-	    textElement.appendChild(messageText);
-	}
-	    messageElement.appendChild(textElement);
-		messageElement.appendChild(timeElement);
-	
-	    messageArea.appendChild(messageElement);
-	    messageArea.scrollTop = messageArea.scrollHeight;
+    var messageArea = document.getElementById('messageArea');
+    messageArea.appendChild(messageElement);
+    messageArea.scrollTop = messageArea.scrollHeight;
 }
 
 
+
+/* 프로필배경 색깔 랜덤뽑기 */
 function getAvatarColor(messageusername) {
     var hash = 0;
     for (var i = 0; i < messageusername.length; i++) {
@@ -147,5 +292,5 @@ window.addEventListener('beforeunload', function (event) {
     // event.preventDefault(); // Some browsers may require this to show a confirmation dialog
 });
 
-usernameForm.addEventListener('submit', connect, true);
+/*usernameForm.addEventListener('submit', connect, true);*/
 messageForm.addEventListener('submit', sendMessage, true);

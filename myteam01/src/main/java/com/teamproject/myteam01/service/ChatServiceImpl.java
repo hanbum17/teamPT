@@ -33,8 +33,12 @@ public class ChatServiceImpl implements ChatService{
 
 	@Override
 	public List<ChatRoomDTO> selectChatRoomList(String username) {
-		
 		return chatMapper.selectChatRoomList(username);
+	}
+
+	@Override
+	public String selectChatRoomTitle(int roomId) {
+		return chatMapper.selectChatRoomTitle(roomId);
 	}
 	
 }

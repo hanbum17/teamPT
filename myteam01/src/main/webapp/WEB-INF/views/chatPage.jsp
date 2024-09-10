@@ -13,13 +13,13 @@
 </head>
 <body>
 	<c:forEach items="${chatList }" var="chatRoom">
-		<a href="${chatRoom.roomId }">채팅방제목: ${chatRoom.title } &nbsp&nbsp&nbsp 방번호(RoomId): ${chatRoom.roomId } &nbsp&nbsp&nbsp 내닉네임: ${userId1 } 상대닉네임: ${userId2 }</a><br>	
+		<a href="${contextPath }/chat/chat?roomId=${chatRoom.roomId }">채팅방제목: ${chatRoom.title } &nbsp&nbsp&nbsp 방번호(RoomId): ${chatRoom.roomId } &nbsp&nbsp&nbsp 내닉네임: ${userId1 } 상대닉네임: ${userId2 }</a><br>	
 	</c:forEach>
 <script>
-	$('a').on("click", function(e){
+	/* $('a').on("click", function(e){
 		e.preventDefault();
-		alert($(this).attr('href'));		
-	});
+		alert($(this).attr('href'));	
+	}); */
 </script>
 </body>
 </html>

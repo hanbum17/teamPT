@@ -11,31 +11,16 @@
     
 </head>
 <body>
-
-<div id="username-page">
-    <div class="username-page-container">
-        <h1 class="title">실명으로 들어오세요</h1>
-        <form id="usernameForm" name="usernameForm">
-            <div class="form-group">
-                <input type="text" id="name" placeholder="Username" autocomplete="off" class="form-control" />
-            </div>
-            <div class="form-group">
-                <button type="submit" class="accent username-submit">채팅 시작하기</button>
-            </div>
-        </form>
-    </div>
-</div>
-
 <div id="chat-page" class="hidden">
     <div class="chat-container">
         <div class="chat-header">
-            <h2 id="chat-title">☆★☆902강의장 임시 채팅방☆★☆ 참여인원: 0</h2>
+            <h2 id="chat-title">☆★☆902강의장 ${roomId }번 채팅방☆★☆ 참여인원: 0</h2>
         </div>
-        <div class="connecting">
+        <!-- <div class="connecting">
             연결중...
-        </div>
+        </div> -->
         <ul id="messageArea">
-
+        
         </ul>
         <form id="messageForm" name="messageForm">
             <div class="form-group">
@@ -51,15 +36,15 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 <script src="/js/chat.js"></script>
 <script>
-function getRandomColor() {
-	  let red = Math.floor(Math.random() * 256);
-	  let green = Math.floor(Math.random() * 256);
-	  let blue = Math.floor(Math.random() * 256);
-	  return 'rgb(' + red + ',' + green + ',' +blue + ')';
-	}
+var roomId = ${roomId};
+var chatRoomTitle = '${chatRoomTitle}';
+var principal = '${username}' ; 
 
-	document.body.style.backgroundColor = getRandomColor();
+$(document).ready(function(){
+	console.log("connect 즉시실행, 닉네임: " + principal);
+	connect();
 	
+});
 	
 </script>
 </body>

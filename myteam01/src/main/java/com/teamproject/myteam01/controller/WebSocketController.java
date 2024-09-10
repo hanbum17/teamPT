@@ -1,5 +1,6 @@
 package com.teamproject.myteam01.controller;
 
+import java.security.Principal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -7,6 +8,7 @@ import java.util.List;
 
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,11 +30,16 @@ public class WebSocketController {
 	private final SimpMessagingTemplate messagingTemplate ;
 	private int userCnt = 0;
 	
+	//채팅방 페이지
 	@GetMapping("/chat/chat")
-	public String chat() {
+	public String chat(int roomId, Model model, Principal principal) {
+		model.addAttribute("roomId", roomId);
+		model.addAttribute("chatRoomTitle", chatService.selectChatRoomTitle(roomId));
+		model.addAttribute("username", principal.getName());
 		return "chat";
 	}
 	
+	//내가 참여한 채팅방 리스트 조회 페이지
 	@GetMapping("/chat/chatPage")
 	public String chatPage(String username, Model model) {
 		username = "user4";
@@ -43,52 +50,66 @@ public class WebSocketController {
 		return "chatPage";
 	}
 	
+	//이전채팅기록 가져오기
+//	private List<ChatMessageDTO> chatMessageList(int roomId) {
+//		messagingTemplate.convertAndSend("/sub/chat/chatHistory", chatService.selectChatList(roomId));
+//		System.out.println(chatService.selectChatList(roomId));
+//		return chatService.selectChatList(roomId);
+//	}
+	 
 	//입장
 	@MessageMapping("/chat/enter")
-	public void enter(@RequestBody ChatMessageDTO chat) {
+	public void enter(@RequestBody ChatMessageDTO chat, Principal principal) {
 		userCnt++;
 		updateUserCnt();
-
+		int roomId = chat.getRoomId();
 		
-		System.out.println(chatMessageList(chat.getRoomId()));
+		String username = principal.getName();
+		System.out.println("username: " + username);
+		
+		//입장 시 채팅기록을 입장한 유저에게만 전송
+		List<ChatMessageDTO> chatHistory = chatService.selectChatList(roomId);
+		System.out.println("chatHistory: " + chatHistory);
+//		messagingTemplate.convertAndSendToUser(username, "/user/queue/chatHistory", chatHistory);
+		messagingTemplate.convertAndSend("/sub/chat/chatHistory"+roomId , chatHistory);
+		
 		
 		SimpleDateFormat smpDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		String fmtDate = smpDate.format(chat.getDate());
-		System.out.println("sender: " + chat.getUsername() + " content: " + chat.getContent() + " date: " + fmtDate);
+		String fmtDate = smpDate.format(chat.getSendDate());
+		System.out.println("username: " + chat.getUsername() + " content: " + chat.getContent() + " date: " + fmtDate + " roomId: " + roomId);
 
-		messagingTemplate.convertAndSend("/sub/chat/room/1", chat);
+		//입장 시 모든유저에게 입장알림메세지 전송
+		messagingTemplate.convertAndSend("/sub/chat/room/" + roomId, chat);
 	}
+	
 	//퇴장
 	@MessageMapping("/chat/leave")
 	public void leave(@RequestBody ChatMessageDTO chat) {
 		userCnt--;
 		updateUserCnt();
-
+		int roomId = chat.getRoomId();
+		
 		SimpleDateFormat smpDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		String fmtDate = smpDate.format(chat.getDate());
-		System.out.println("sender: " + chat.getUsername() + " content: " + chat.getContent() + " date: " + fmtDate);
+		String fmtDate = smpDate.format(chat.getSendDate());
+		System.out.println("username: " + chat.getUsername() + " content: " + chat.getContent() + " date: " + fmtDate + " roomId: " + roomId);
 
-		messagingTemplate.convertAndSend("/sub/chat/room/1", chat);
+		messagingTemplate.convertAndSend("/sub/chat/room/" + roomId , chat);
 	}
+	
 	//전송
 	@MessageMapping("/chat/message")
 	public void message(@RequestBody ChatMessageDTO chat) {
 		SimpleDateFormat smpDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		String fmtDate = smpDate.format(chat.getDate());
-
+		String fmtDate = smpDate.format(chat.getSendDate());
+		
+		int roomId = chat.getRoomId();
 		
 		chatService.insertChat(chat);
 		
-		System.out.println("sender: " + chat.getUsername() + " content: " + chat.getContent() + " date: " + fmtDate);
+		System.out.println("username: " + chat.getUsername() + " content: " + chat.getContent() + " date: " + fmtDate + " roomId: " + roomId);
 
-		messagingTemplate.convertAndSend("/sub/chat/room/1", chat);
+		messagingTemplate.convertAndSend("/sub/chat/room/" + roomId , chat);
     }
-	//이전채팅목록 불러오기
-	@GetMapping("/chat/chatHistory")
-	private List<ChatMessageDTO> chatMessageList(int roomId) {
-		messagingTemplate.convertAndSend("/sub/chat/chatList", chatService.selectChatList(roomId));
-		return chatService.selectChatList(roomId);
-	}
 	
 	//접속유저수 변환
 	private void updateUserCnt() {
