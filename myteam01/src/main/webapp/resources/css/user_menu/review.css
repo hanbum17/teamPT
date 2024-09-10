@@ -1,1 +1,219 @@
-@charset "UTF-8";
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Jua&display=swap');
+
+/* 전체에 폰트 적용 */
+body {
+    font-family: 'Roboto', sans-serif;
+}
+
+.fixed-header {
+    position: sticky;
+    display: flex;
+    justify-content: space-between; /* 버튼을 오른쪽으로 정렬 */
+
+    z-index: 5;
+    border-bottom: 1px solid #ddd;
+    background-color: #ffffff; /* 흰색 배경 추가 */
+    top: 0; /* 최상단에 고정 */
+    padding-bottom: 10px; /* 아래 여백 공간 제거 */
+    margin-right:10px;
+}
+
+.content
+
+/* 리뷰 목록 스타일 */
+.review-section {
+	
+    overflow-y: auto;
+    flex: 1;
+    padding: 0 10px;
+    max-height: calc(100vh - 280px); /* 헤더를 제외한 높이 조정 */
+}
+
+/* 패딩 및 마진 제거 */
+#restaurant-reviews ul,
+#event-reviews ul {
+    padding: 0;
+    margin: 0;
+}
+
+/* 리뷰 항목 스타일 */
+.review-item {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;   /* 넘치는 내용은 숨김 */
+    transition: max-height 0.3s ease; /* 높이 변경 애니메이션 */
+}
+
+
+/* 리뷰 헤더 스타일 */
+.review-header {
+    padding: 10px;
+    height: 35px;
+    align-content: center;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    color: #ffffff; /* 흰색 텍스트 */
+}
+
+.review-header h4 {
+    margin: 0px;
+    margin-top: 3px;
+    margin-left: 10px;
+    font-size: 24px;
+    font-weight: 100;
+    font-family: "Jua", sans-serif;
+}
+
+/* 리뷰 본문 스타일 */
+.review-body {
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start; /* 이미지와 텍스트를 위쪽으로 정렬 */
+    flex-wrap: wrap;  /* 내용이 길어지면 다음 줄로 내려가도록 설정 */
+}
+
+/* 리뷰 텍스트 정보 */
+.review-info {
+    flex: 1;
+    padding-right: 15px;
+    min-width: 300px; /* 텍스트 영역 최소 너비 설정 */
+    max-width: calc(100% - 150px); /* 이미지 공간 제외한 나머지 공간 차지 */
+}
+
+
+/* 리뷰 이미지 */
+.review-image {
+    width: 105px;
+    height: 105px;
+    background-color: #f0f0f0;
+    border-radius: 8px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+/* 각 항목 간의 여백 */
+.review-info p {
+    margin: 5px 0;
+}
+
+/* 날짜 및 평가 스타일 */
+.review-date, .review-rating, .item-date {
+    font-size: 14px;
+    color: #999;
+}
+
+/* 리뷰 내용 스타일 */
+.review-content {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #444;
+    word-break: break-word;
+    max-height: 50px;  /* 기본적으로 짧게 보이도록 설정 */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+    transition: max-height 0.3s ease;
+}
+
+/* 더보기 버튼 */
+.more-btn {
+    background-color: #009fff;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+    display: inline-block;
+    
+}
+
+/* 음식점 리뷰의 더보기 버튼 색상을 초록색으로 변경 */
+.review-item[data-type='RESTAURANT'] .more-btn {
+    background-color: #2ECC71;
+}
+
+/* 호버 시 더보기 버튼 색상 */
+.more-btn:hover {
+    background-color: #0056b3; /* 기본 버튼 호버 색상 */
+}
+
+.review-item[data-type='RESTAURANT'] .more-btn:hover {
+    background-color: #27ae60; /* 음식점 리뷰 버튼 호버 색상 */
+}
+
+/* 더보기 버튼을 누르면 확장 */
+.review-item.expanded .review-content {
+    max-height: none; /* 확장 상태일 때 높이 제한 해제 */
+}
+
+.review-item.expanded .more-btn {
+    display: none; /* 확장 시 더보기 버튼 숨김 */
+}
+
+.review-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+/* 별 아이콘 스타일 */
+.review-rating i, .star {
+    color: #FFD700;
+    margin-right: 2px;
+}
+
+/* 행사와 음식점 구분 */
+.review-item[data-type='EVENT'] .review-header {
+    background-color: #009fff;
+}
+
+.review-item[data-type='RESTAURANT'] .review-header {
+    background-color: #2ECC71; /* 밝은 초록색 */
+}
+
+/* 토글 버튼 스타일 */
+.review-toggle-buttons {
+    text-align: right; /* 오른쪽 정렬 */
+}
+
+.toggle-button {
+    padding: 10px 20px;
+
+    background-color: #fff;
+    color: #000000;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
+}
+
+
+
+.toggle-button:hover {
+	background-color: #009fff; 
+    color: #fff; 
+}
+
+
+.toggle-button:hover[data-section="restaurant"] {
+    background-color: #2ECC71;
+    color: #fff;
+}
+
+.toggle-button.active[data-section="event"] {
+    background-color: #009fff; 
+    color: #fff; 
+}
+
+/* 음식점 리뷰 버튼이 선택되었을 때 */
+.toggle-button.active[data-section="restaurant"] {
+    background-color: #2ECC71;
+    color: #fff;
+}

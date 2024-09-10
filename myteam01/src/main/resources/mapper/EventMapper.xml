@@ -9,6 +9,27 @@
 		SELECT EHOST FROM EVENT ORDER BY ENO DESC 
 	</select>
 	
+	<!-- 영범 -->
+	<update id="updaterestreview">
+	    UPDATE event_reviews 
+	    SET eRTITLE = #{ertitle},
+	        eRCONTENT = #{ercontent},
+	        eRMODDATE = DEFAULT
+	    WHERE erno = #{erno}
+	</update>
+	<select id="selectMoreReviews" resultType="com.teamproject.myteam01.domain.EventReviewVO">
+		SELECT *
+		FROM (
+		    SELECT event_reviews.*, 
+		           ROW_NUMBER() OVER (ORDER BY ERNO DESC) AS rn
+		    FROM event_reviews
+		    WHERE eno = #{eno}
+		) subquery
+		WHERE rn BETWEEN #{offset} + 1 AND #{offset} + #{pageSize}
+	</select>
+	<select id="selectReviewsForStar" resultType="Long"> 
+		SELECT ERRATING FROM event_reviews WHERE ENO = #{eno} ORDER BY ERNO DESC 
+	</select>
 	
 	
 	<update id="updateEventCoord" parameterType="com.teamproject.myteam01.domain.EventVO">
@@ -50,27 +71,22 @@
 	<!--  행사리뷰등록  -->
 	<insert id="registerReview" parameterType="com.teamproject.myteam01.domain.EventReviewVO"> 
 		INSERT INTO EVENT_reviews 
-		VALUES(seq_EVENT_reviews.nextval, #{ertitle}, #{ercontent}, #{erwriter}, DEFAULT, DEFAULT, #{errating}, seq_uno.nextval, #{eno}) 
+		VALUES(SEQ_EVENT_REVIEWS.nextval, #{ertitle}, #{ercontent}, #{erwriter}, DEFAULT, DEFAULT, #{errating}, seq_uno.nextval, #{eno}) 
 	</insert>
-	
-	
-	
-	<!--  행사리뷰삭제시 DEL_REVIEWS 테이블로 옮기기  -->
-	<insert id="copyReview" parameterType="com.teamproject.myteam01.domain.EventReviewVO"> 
-		INSERT INTO DEL_REVIEWS (DRNO, DRTITLE, DRCONTENT, DRWRITER, DRREGDATE, DRMODDATE, DRRATING, DTYPE) 
-		SELECT ERNO, ERTITLE, ERCONTENT, ERWRITER, ERREGDATE, ERMODDATE, ERRATING, 4 AS DTYPE FROM EVENT_REVIEWS
-		WHERE ERNO = #{erno} 
-	</insert>
-	
-	
-	
+
 	<!--  행사리뷰삭제  -->
 	<delete id="deleteReview"> DELETE EVENT_REVIEWS WHERE ERNO = #{erno} </delete>
 	
 	
 	
-	
-	
+	<select id="selectEventList2" resultType="com.teamproject.myteam01.domain.EventVO"> 
+		SELECT ENO, ENAME, EPERIOD, ECOST, EADDRESS, EPLACE, ESITE, EHOST, ECONTENT, 
+		   UNO, EVIEWSCNT, ERATING, EXCOORD, EYCOORD, ETYPE 
+		FROM teampj.EVENT
+		ORDER BY ENO DESC
+		OFFSET #{offset} ROWS
+		FETCH NEXT #{pageSize} ROWS ONLY
+	</select>
 	<!--  희준  -->
 	<!--  목록조회  -->
 	<select id="selectEventList" resultType="com.teamproject.myteam01.domain.EventVO"> 

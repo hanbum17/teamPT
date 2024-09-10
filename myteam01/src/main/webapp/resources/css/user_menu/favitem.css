@@ -1,0 +1,152 @@
+/* Header 스타일 */
+.content-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fff;
+    margin-bottom: 20px;
+}
+
+/* Back 버튼 스타일 */
+.back-btn {
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.back-btn:hover {
+    background-color: #0056b3;
+}
+
+/* 즐겨찾기 항목 컨테이너 */
+.fav-playlist-container {
+	cursor: pointer;
+    padding: 0 10px;
+    max-height: 630px; /* Adjust this value as needed */
+    overflow-y: auto;
+}
+
+.fav-items-container {
+    margin: 20px 0;
+}
+
+.fav-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    padding: 20px 10px;
+    background-color: #fff;
+    border: 1px dashed #c0c0c0;
+    border-radius: 5px;
+
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.fav-item:hover {
+    transform: translateY(-1px);
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.fav-item-thumbnail {
+    width: 120px;
+    height: 80px;
+    border-radius: 8px;
+    object-fit: cover;
+    margin-right: 20px;
+}
+
+.fav-item-info {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.fav-item-info h4 {
+    margin: 0;
+    font-size: 1.2em;
+}
+
+.fav-item-info p {
+    margin: 4px 0;
+    color: #666;
+}
+
+.fav-item-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.fav-more-btn {
+    background: none;
+    border: none;
+    font-size: 1.5em;
+    cursor: pointer;
+    color: #333;
+}
+
+.fav-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.fav-dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: #fff;
+    min-width: 80px;
+    border: 1px dashed #c0c0c0;
+    border-radius: 5px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 500;
+}
+
+.fav-dropdown:hover .fav-dropdown-content {
+    display: block;
+}
+
+.fav-dropdown-content button {
+    background-color: #fff;
+    color: #333;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+    font-size: 0.8em;
+}
+
+.fav-dropdown-content button:hover {
+    background-color: #f1f1f1;
+}
+
+.fav-delete-btn {
+    color: #e74c3c;
+}
+
+.fav-delete-btn:hover {
+    background-color: #f8d7da;
+}
+
+.fav-edit-btn {
+    color: #007bff;
+}
+
+.fav-edit-btn:hover {
+    background-color: #d7ebff;
+}
+
+/* 스타일 정의 */
+.ellipsis-text {
+    white-space: nowrap; /* 텍스트가 한 줄로 표시 */
+    overflow: hidden;    /* 넘치는 텍스트 숨기기 */
+    text-overflow: ellipsis; /* 넘치면 말줄임표(...) 표시 */
+    max-width: 400px;   /* 텍스트가 차지할 최대 너비 */
+    display: inline-block; /* block 레벨 요소처럼 동작 */
+}

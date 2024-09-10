@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.teamproject.myteam01.domain.EventReviewVO;
 import com.teamproject.myteam01.domain.EventVO;
 import com.teamproject.myteam01.domain.RestaurantVO;
 import com.teamproject.myteam01.domain.RestaurantsReviewVO;
@@ -105,6 +106,38 @@ public class VroomRestController {
         return restList ;
     }
     
+    @GetMapping("/event")
+    public List<EventVO> eventMain(@AuthenticationPrincipal UserDetails userDetails, 
+                           @RequestParam(value = "page", defaultValue = "1") Long page, 
+                           @RequestParam(value = "pageSize", defaultValue = "12") Long pageSize,
+                           Model model) {
+        // 현재 로그인된 사용자의 ID를 이용해 사용자 정보 조회
+        if (userDetails != null) {
+            String userId = userDetails.getUsername();
+            UserVO user = userService.findByUsername(userId);
+            model.addAttribute("user", user);
+        }
+        System.out.println("page"+page);
+        // 식당 목록 추가
+        List<EventVO> restList = eventService.getEventList(page, pageSize);
+        System.out.println(restList);
+        
+        return restList ;
+    }
+    
+    
+    @GetMapping("/getEventReviews")
+    public List<EventReviewVO> getEventReviews( @RequestParam Long eno,
+            												@RequestParam Long page,
+            												@RequestParam Long pageSize) {
+    	EventReviewVO eventReviewVO = new EventReviewVO();
+    	eventReviewVO.setEno(eno);
+    	eventReviewVO.setPage(page);
+    	eventReviewVO.setPageSize(pageSize);
+        // 데이터 조회 로직
+        List<EventReviewVO> reviews = eventService.selectMoreReviews(eventReviewVO);
+        return reviews;
+    }
     
 
 }

@@ -28,72 +28,72 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/restaurant")
 public class RestaurantController {
 
-	private final RestaurantService restaurantService ;
+   private final RestaurantService restaurantService ;
     private final UserRegistrationService userRegistrationService;
 
-	
+   
 
-	@GetMapping("/detail")
-	public String eventDetail(@RequestParam("fno")Long fno, Model model) {
-		RestaurantVO restaurantVO = restaurantService.restaurantDetail(fno);
-		if(restaurantVO != null) {
-			model.addAttribute("Restaurant", restaurantVO);
-			model.addAttribute("Reviews", restaurantService.selectReviews(fno));
-			return "restaurantDetail";
-		} else {
-			return "redirect:/list";
-		}
-		
-	}
-	
-	@PostMapping("/registerReview")
-	public String registerReview(Model model, RestaurantsReviewVO restReviewVO) {
-		restaurantService.registerReview(restReviewVO);
-		return "redirect:/restaurant/detail?fno=" + restReviewVO.getFno() ;
-	}
-	
-	@PostMapping("/deleteReview")
+   @GetMapping("/detail")
+   public String eventDetail(@RequestParam("fno")Long fno, Model model) {
+      RestaurantVO restaurantVO = restaurantService.restaurantDetail(fno);
+      if(restaurantVO != null) {
+         model.addAttribute("Restaurant", restaurantVO);
+         model.addAttribute("Reviews", restaurantService.selectReviews(fno));
+         return "restaurantDetail";
+      } else {
+         return "redirect:/list";
+      }
+      
+   }
+   
+   @PostMapping("/registerReview")
+   public String registerReview(Model model, RestaurantsReviewVO restReviewVO) {
+      restaurantService.registerReview(restReviewVO);
+      return "redirect:/restaurant/detail?fno=" + restReviewVO.getFno() ;
+   }
+   
+   @PostMapping("/deleteReview")
     @ResponseBody  // 이 어노테이션은 JSON이나 텍스트 데이터를 응답으로 보내기 위해 사용됩니다.
     public String deleteReview(@RequestParam("frno") Long frno) {
-		restaurantService.copyReview(frno);
-		restaurantService.deleteReview(frno);
+      restaurantService.copyReview(frno);
+      restaurantService.deleteReview(frno);
         // 성공적인 처리 후 응답 메시지를 반환
         return "리뷰 삭제 처리 완료";  // 클라이언트에게 전송될 응답
     }
-	
-	//윤정 파트
-			@GetMapping("/rest_register")
-		    public String restaurantRegister() {
-		        return "rest_register"; // JSP 페이지로 이동
-		    }
-			
-			
-			@PostMapping("/rest_register")
-		    public String restaurantRegister(RestaurantVO rest, RedirectAttributes redirectAttr, Model model, @AuthenticationPrincipal UserDetails userDetails) {
-		        System.out.println("식당 등록 컨트롤러: " + rest);
-		        List<AttachFileDTO> attachFileList = rest.getAttachFileList();
-		        model.addAttribute("attachFileList", attachFileList);
-	
-		        Long fno = null;
-		        if (attachFileList != null && !attachFileList.isEmpty()) {
-		            attachFileList.forEach(attachFile -> System.out.println("첨부파일 확인: " + attachFile.toString()));
-		            fno = restaurantService.registerRest(rest, attachFileList.get(0));
-		        } else {
-		            System.out.println("controller:첨부파일 없음 ");
-		            fno = restaurantService.registerRest(rest, null); // 첨부파일 없음
-		        }
-	
-		        System.out.println("등록된 식당 번호: " + fno);
-		        redirectAttr.addFlashAttribute("result", fno);
-	
-		        // USER_REGISTRATIONS 테이블에 등록
-		        userRegistrationService.registerUserRestaurant(userDetails.getUsername(), fno);
-	
-		        return "redirect:/restaurant/rest_register";
-		    }
+   
+   //윤정 파트
+         @GetMapping("/rest_register")
+          public String restaurantRegister() {
+              return "rest_register"; // JSP 페이지로 이동
+          }
+         
+         
+         @PostMapping("/rest_register")
+          public String restaurantRegister(RestaurantVO rest, RedirectAttributes redirectAttr, Model model, @AuthenticationPrincipal UserDetails userDetails) {
+              System.out.println("식당 등록 컨트롤러: " + rest);
+              List<AttachFileDTO> attachFileList = rest.getAttachFileList();
+              model.addAttribute("attachFileList", attachFileList);
+   
+              Long fno = null;
+              if (attachFileList != null && !attachFileList.isEmpty()) {
+                  attachFileList.forEach(attachFile -> System.out.println("첨부파일 확인: " + attachFile.toString()));
+                  fno = restaurantService.registerRest(rest, attachFileList.get(0));
+              } else {
+                  System.out.println("controller:첨부파일 없음 ");
+                  fno = restaurantService.registerRest(rest, null); // 첨부파일 없음
+              }
+   
+              System.out.println("등록된 식당 번호: " + fno);
+              redirectAttr.addFlashAttribute("result", fno);
+   
+              // USER_REGISTRATIONS 테이블에 등록
+              userRegistrationService.registerUserRestaurant(userDetails.getUsername(), fno);
+   
+              return "redirect:/restaurant/rest_register";
+          }
 
 
-	
-	
-	
+   
+   
+   
 }

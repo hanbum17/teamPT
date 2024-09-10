@@ -1,5 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="jakarta.tags.core" prefix="c" %>
+
+<!-- SweetAlert2와 jQuery CDN 추가 -->
+
+
 <c:set var="contextPath" value="${pageContext.request.contextPath }"/>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <!DOCTYPE html>
@@ -188,14 +192,80 @@
 
 
     </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 </head>
 <body>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
-    <div style="position: absolute; top: 10px; left: 10px; font-size: 16px;">
-        <c:if test="${not empty user}">
-            현재 로그인: <strong>${user.userId}</strong>
-        </c:if>
+<div class="container" id="restaurant-container">
+    <!-- 레스토랑 카드 반복문으로 생성 -->
+    <c:forEach var="restaurant" items="${restList}">
+        <div class="restaurant-card" data-fno="${restaurant.fno}" onclick="showDetailView(this.dataset.fno)">
+            <img src="${contextPath}/images/bibimbab.jpg" alt="${restaurant.fname} Image">
+            <div class="restaurant-info">
+                <h3>${restaurant.fname}</h3>
+                <p>Location: ${restaurant.faddress}</p>
+                <p>Rating: ${restaurant.frating}</p>
+            </div>
+        </div>
+        
+    </c:forEach>
+
+    <!-- 데이터가 없는 경우 표시할 카드 -->
+    <c:if test="${empty restList}">
+        <div class="restaurant-card">
+            <img src="${contextPath}/images/bibimbab.jpg" alt="No Data Image">
+            <div class="restaurant-info">
+                <h3>No Restaurants Available</h3>
+                <p>Location: N/A</p>
+                <p>Rating: N/A</p>
+            </div>
+        </div>
+    </c:if>
+</div>
+
+<!-- 왼쪽 패널: 식당 정보 -->
+<div class="panel left-panel" id="left-panel">
+    <img id="panel-image" src="" alt="Detail Image" style="width: 100%; height: auto; border-radius: 10px; margin-bottom: 20px;">
+    <p><strong id="panel-name"></strong></p>
+    <p>
+    	<strong>Rating:</strong> 
+    	<span id="panel-rating"></span>
+    	<span id="rating-extra" class="small-text"></span>
+    </p>
+    <p><strong>Category:</strong> <span id="panel-category"></span></p>
+    <p><strong>Location:</strong> <span id="panel-location"></span></p>
+    <button id="addFavoriteBtn" class="add-fav-btn">즐겨찾기 추가</button>
+    <button class="back-button" onclick="goBack()">Back</button>
+</div>
+
+<!-- 오른쪽 패널: 리뷰/별점 -->
+<div class="panel right-panel" id="right-panel">
+    <!-- 별점 부분 -->
+    <p>
+    	<strong>Rating:</strong> 
+    	<span id="panel-rating"></span>
+    	<span id="rating-extra" class="small-text"></span>
+    </p>
+
+    <!-- 리뷰 입력 버튼 -->
+    <button id="review-button" onclick="toggleReviewForm()" style="display: block; width: 100%; padding: 10px; border: none; border-radius: 5px; background-color: #007bff; color: #fff; cursor: pointer;">
+        리뷰 입력
+    </button>
+
+    <!-- 리뷰 등록 폼 -->
+    <div id="reviews_wrap" style="display: none; margin-top: 20px;">
+        <form action="${contextPath }/vroom/restregisterReview" method="post">
+            <input type="text" id="frtitle" name="frtitle" placeholder="제목"><br>
+            <textarea id="frcontent" name="frcontent" placeholder="내용"></textarea><br>
+            <input type="text" id="frwriter" name="frwriter" placeholder="작성자"><br>
+            <input type="text" id="frrating" name="frrating" placeholder="별점 0~5"><br>
+            <input type="text" id="fno" name="fno" readonly> <!-- 여기에 fno를 동적으로 설정 -->
+            <button id="review_register_btn" type="submit">리뷰등록</button>
+        </form>
+
     </div>
 
     <!-- 왼쪽 패널: 식당 정보 -->
@@ -238,6 +308,7 @@
 		    </form>
 		</div>
 
+\
         <!-- 리뷰 수정 폼 -->
         <div id="editReviewForm" style="display:none;">
             <form id="reviewEditForm" action="${contextPath}/vroom/updateReview" method="post">
@@ -429,135 +500,180 @@
 
 
 
+//___________________________________리뷰 입력 화면 나타내기, 숨김___________________________________//
+function toggleReviewForm() {
+    const reviewWrap = document.getElementById('reviews_wrap');
+    reviewWrap.style.display = (reviewWrap.style.display === 'none' || reviewWrap.style.display === '') ? 'block' : 'none';
+}
+
+//___________________________________뒤로가기 버튼___________________________________//
+function goBack() {
+    const container = document.getElementById('restaurant-container');
+    const leftPanel = document.getElementById('left-panel');
+    const rightPanel = document.getElementById('right-panel');
+
+    container.style.display = 'block';
+    leftPanel.style.display = 'none';
+    rightPanel.style.display = 'none';
+    minSize = 0;
+    maxSize = 5;
+}
+
+//___________________________________더보기 버튼 클릭시 리뷰추가___________________________________//
+document.addEventListener('DOMContentLoaded', () => {
+    const loadMoreBtn = document.getElementById('load-more-btn');
+    if (loadMoreBtn) {
+        loadMoreBtn.addEventListener('click', loadMoreReviews);
+    }
+});
+    
+//...................즐찾....................................................//
+document.addEventListener('DOMContentLoaded', function() {
+    // 즐겨찾기 버튼이 로드되었는지 콘솔에서 확인
+    console.log('DOM fully loaded and parsed');
+    
+    // jQuery 및 SweetAlert이 로드되었는지 확인
+    console.log('jQuery version:', $.fn.jquery);
+    console.log('SweetAlert2 loaded:', typeof Swal !== 'undefined');
 
 
-        function editReview(frno, title, content) {
-            document.getElementById('editFrno').value = frno;
-            document.getElementById('editFrtitle').value = title;
-            document.getElementById('editFrcontent').value = content;
-            document.getElementById('editReviewForm').style.display = 'block';
-        }
+    // ID가 정확한지 확인하고 이벤트 리스너 추가
+    const addFavoriteBtn = document.getElementById('addFavoriteBtn');
+    
+    if (addFavoriteBtn) {  // 버튼이 존재할 경우에만 이벤트 추가
+        console.log('addFavoriteBtn found, adding click event.');
         
-        function deleteReview(frno) {
-            if (confirm("정말로 이 리뷰를 삭제하시겠습니까?")) {
-                fetch(${contextPath}/vroom/deleteReview, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                    },
-                    body: new URLSearchParams({
-                        'frno': frno
-                    })
-                })
-                .then(response => response.json())
-                .then(result => {
-                    if (result.success) {
-                        alert("리뷰가 삭제되었습니다.");
-                        showDetailView(document.getElementById('fno').value); // 패널 업데이트
-                    } else {
-                        alert("리뷰 삭제에 실패했습니다.");
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('리뷰 삭제 중 오류가 발생했습니다.');
-                });
-            }
-        }
-
-        function toggleReviewForm() {
-            const reviewForm = document.getElementById('reviews_wrap');
-            const reviewButton = document.getElementById('review-button');
-            const writerField = document.getElementById('frwriter');
-
-            if (reviewForm.style.display === 'none') {
-                reviewForm.style.display = 'block';
-                writerField.value = currentUserId; 
-                reviewButton.style.display = 'none';  // 버튼 숨기기
-            } else {
-                reviewForm.style.display = 'none';
-                reviewButton.style.display = 'block'; // 버튼 보이기
-                resetReviewForm(); // 폼 필드 초기화
-            }
-        }
+        addFavoriteBtn.onclick = function() {
+            // 즐겨찾기 목록을 불러오기 위한 Ajax 호출
+            $.ajax({
+                url: '/user/getFavoriteLists', // 사용자 즐겨찾기 목록을 불러오는 API 엔드포인트
+                method: 'GET',
+                success: function(favoriteLists) {
+                    let optionsHtml = '';
 
 
-        function goBack() {
-            window.location.href = '/vroom/restaurant';  
-        }
+                    // 즐겨찾기 목록을 option으로 구성
+                    favoriteLists.forEach(list => {
+                        optionsHtml += `<option value="${list.listId}">${list.listName}</option>`;
+                    });
 
-        document.addEventListener('DOMContentLoaded', function() {
-            if (currentFno) {
-                showDetailView(currentFno);
-            }
-        });
-        
-        function submitReview() {
-            const form = document.getElementById('reviewForm');
-            const formData = new FormData(form);
+                    Swal.fire({
+                        title: '즐겨찾기 목록 선택',
+                        html: `
+                            <label>즐겨찾기 목록:</label>
+                            <select id="favoriteListSelect" class="swal2-input">
+                                ${optionsHtml}
+                            </select>
+                            <input type="text" id="itemName" class="swal2-input" placeholder="항목 이름" required>
+                            <button type="button" id="addNewListBtn" class="swal2-confirm swal2-styled" style="margin-top: 10px;">새 목록 추가</button>
+                        `,
+                        showCancelButton: true,
+                        confirmButtonText: '저장',
+                        cancelButtonText: '취소',
+                        preConfirm: () => {
+                            const listId = Swal.getPopup().querySelector('#favoriteListSelect').value;
+                            const itemName = Swal.getPopup().querySelector('#itemName').value;
+                            const pageUrl = window.location.href; // 현재 페이지 URL
+                            const eno = urlParams.get('eno'); // URL에서 eno 추출
+                            const fno = urlParams.get('fno'); // URL에서 fno 추출
+                            const date = new Date().toISOString().slice(0, 10); // 오늘 날짜
 
-            fetch(${contextPath}/vroom/restregisterReview, {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(result => {
-                if (result.success) {
-                    alert(result.message);
-                    document.getElementById('reviews_wrap').style.display = 'none'; // 폼 숨기기
-                    document.getElementById('review-button').style.display = 'block'; // 버튼 보이기
-                    showDetailView(document.getElementById('fno').value); // 패널 업데이트
-                    resetReviewForm(); // 폼 필드 초기화
-                } else {
-                    alert(result.message);
+                            if (!itemName || !listId) {
+                                Swal.showValidationMessage('모든 필드를 입력해주세요.');
+                            }
+
+                            return { listId, itemName, pageUrl, eno, fno, date };
+                        }
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // 서버로 전송하기 위한 POST 요청 생성
+                            const { listId, itemName, pageUrl, eno, fno, date } = result.value;
+                            const form = document.createElement('form');
+                            form.method = 'POST';
+                            form.action = '/user/addFavoriteItem'; // 서버로 전송할 URL
+
+                            const inputListId = document.createElement('input');
+                            inputListId.type = 'hidden';
+                            inputListId.name = 'listId';
+                            inputListId.value = listId;
+
+                            const inputItemName = document.createElement('input');
+                            inputItemName.type = 'hidden';
+                            inputItemName.name = 'itemName';
+                            inputItemName.value = itemName;
+
+                            const inputLink = document.createElement('input');
+                            inputLink.type = 'hidden';
+                            inputLink.name = 'link';
+                            inputLink.value = pageUrl;
+
+                            const inputEno = document.createElement('input');
+                            inputEno.type = 'hidden';
+                            inputEno.name = 'eno';
+                            inputEno.value = eno || ''; // 행사 ID가 있으면 사용, 없으면 빈 문자열
+
+                            const inputFno = document.createElement('input');
+                            inputFno.type = 'hidden';
+                            inputFno.name = 'fno';
+                            inputFno.value = fno || ''; // 음식점 ID가 있으면 사용, 없으면 빈 문자열
+
+                            const inputDate = document.createElement('input');
+                            inputDate.type = 'hidden';
+                            inputDate.name = 'createdDate';
+                            inputDate.value = date;
+
+                            form.appendChild(inputListId);
+                            form.appendChild(inputItemName);
+                            form.appendChild(inputLink);
+                            form.appendChild(inputEno);
+                            form.appendChild(inputFno);
+                            form.appendChild(inputDate);
+
+                            document.body.appendChild(form);
+                            form.submit();
+                        }
+                    });
+
+                    // **새 목록 추가 버튼**의 이벤트 리스너는 모달 내에서 별도로 다시 바인딩해야 함
+                    $(document).on('click', '#addNewListBtn', function() {
+                        Swal.fire({
+                            title: '새 즐겨찾기 목록 추가',
+                            html: `<input type="text" id="newListName" class="swal2-input" placeholder="목록 이름">`,
+                            confirmButtonText: '추가',
+                            showCancelButton: true,
+                            preConfirm: () => {
+                                const newListName = Swal.getPopup().querySelector('#newListName').value;
+                                if (!newListName) {
+                                    Swal.showValidationMessage('목록 이름을 입력해주세요.');
+                                }
+                                return { newListName };
+                            }
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                // 새로운 목록 추가 요청을 서버에 보냄
+                                $.ajax({
+                                    url: '/user/addFavoriteList',
+                                    method: 'POST',
+                                    data: { listName: result.value.newListName },
+                                    success: function(response) {
+                                        // 추가된 목록을 선택 가능한 목록에 추가
+                                        const newOption = `<option value="${response.listId}">${response.listName}</option>`;
+                                        $('#favoriteListSelect').append(newOption).val(response.listId);
+                                    }
+                                });
+                            }
+                        });
+                    });
                 }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('리뷰 등록 중 오류가 발생했습니다.');
             });
-        }
+        };
+    } else {
+        console.log('addFavoriteBtn not found');
+    }
+});
 
-        
-        function resetReviewForm() {
-            document.getElementById('reviewForm').reset(); // Clears the form fields
-        }
-        
-        
-        function appendReviews(reviews) {
-            const reviewsContainer = document.getElementById('reviews-container');
-            let newReviewsHTML = '';
-
-            reviews.forEach(review => {
-                // 날짜형식 전환
-                const formattedDate = review.frregDate.split('T')[0];
-
-                // 새로운 리뷰를 HTML로 추가
-                newReviewsHTML +=
-                    "<div class='review_div'>"
-                    + "<ul class='review_ul' data-frno='" + review.frno + "' data-uno='" + review.uno + "' data-fno='" + review.fno + "'>"
-                        + "<li>제목: " + review.frtitle + "</li>"
-                        + "<li>내용: " + review.frcontent + "</li>"
-                        + "<li>작성자: " + review.frwriter + "</li>"
-                        + "<li>등록일: " + formattedDate + "</li>"
-                        + "<li>별점: " + review.frrating + "</li>"
-                        + "<li>"
-                            + (currentUserId === review.frwriter ? "<button onclick=\"editReview('" + review.frno + "', '" + review.frtitle + "', '" + review.frcontent + "')\">수정</button>" : "")
-                            + (currentUserId === review.frwriter ? "<button onclick=\"deleteReview('" + review.frno + "')\">삭제</button>" : "")
-                        + "</li>"
-                    + "</ul>"
-                + "</div>";
-            });
-
-            // 기존 리뷰에 새로운 리뷰 추가
-            reviewsContainer.innerHTML += newReviewsHTML;
-
-            // 더보기 버튼을 리뷰 목록의 마지막으로 이동
-            const loadMoreBtn = document.getElementById('load-more-btn');
-            reviewsContainer.appendChild(loadMoreBtn);
-        }
-
-        
-    </script>
+// URL에서 query parameter 추출
+const urlParams = new URLSearchParams(window.location.search);
+</script>
 </body>
 </html>

@@ -27,6 +27,10 @@ public class EventReviewVO {
 	private Long uno ;
 	private Long eno ;
 	
-	private float ratingAverage ;
+	private Double ratingAverage ;
 	private Long erCount;
+	
+	private Long page;
+	private Long pageSize;
+	private Long offset;
 }

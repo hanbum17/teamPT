@@ -2,65 +2,188 @@
 <%@ include file="../userSide.jsp"%>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/user_menu/fav.css">
 
-<!-- 메인 콘텐츠 박스 -->
+<!-- Include SweetAlert2 CSS and JS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+
 <main class="content-box">
     <div class="content">
         <div class="content-header">
             <h2>즐겨찾기 목록</h2>
+            <button id="addFavoriteListBtn" class="add-list-btn">즐겨찾기 목록 추가</button>
         </div>
         <div class="favorite-list">
-            <h3>나의 즐겨찾기</h3>
-
-            <!-- Add Favorite List Button -->
-            <button id="addFavoriteListBtn">즐겨찾기 목록 추가</button>
-
             <!-- Favorite Lists -->
-            <ul id="favoriteList">
+            <div id="favoriteList" class="favorite-grid">
                 <c:forEach var="favoriteList" items="${favoriteLists}">
-                    <li>${favoriteList.listName} - <a href="/user/user_fav_items?listId=${favoriteList.listId}">자세히 보기</a></li>
+                    <a href="/user/user_fav_items?listId=${favoriteList.listId}" class="favorite-list-item">
+                    	<div class="color-bar" style="background-color: ${favoriteList.color};" data-color="${favoriteList.color}"></div>
+                        <h4>${favoriteList.listName} </h4>
+                        <h5>${favoriteList.items.size()} items</h5>
+                        <div class="actions">
+                            <button class="edit-btn" type="button">수정</button>
+                            <button class="delete-btn" type="button">삭제</button>
+                        </div>
+                    </a>
                 </c:forEach>
-            </ul>
-        </div>
-
-        <!-- Modal for Adding a Favorite List -->
-        <div id="favoriteListModal" class="modal">
-            <div class="modal-content">
-                <span class="close">&times;</span>
-                <h2>즐겨찾기 목록 추가</h2>
-                <form action="/user/addFavoriteList" method="post">
-                    <label for="listName">목록 이름:</label>
-                    <input type="text" id="listName" name="listName" required>
-                    <button type="submit">추가</button>
-                </form>
             </div>
         </div>
-
     </div>
 </main>
-</div>
-</body>
-</html>
 
 <script>
-//Get the modal elements
-var modal = document.getElementById("favoriteListModal");
-var btn = document.getElementById("addFavoriteListBtn");
-var span = document.getElementsByClassName("close")[0];
 
-// Open the modal
-btn.onclick = function() {
-    modal.style.display = "block";
-}
+document.getElementById('addFavoriteListBtn').onclick = function() {
+    Swal.fire({
+        title: '즐겨찾기 목록 추가',
+        html: `
 
-// Close the modal
-span.onclick = function() {
-    modal.style.display = "none";
-}
+            <input type="text" id="listName" class="swal2-input" placeholder="목록 이름" required>
 
-// Close modal when clicking outside of it
-window.onclick = function(event) {
-    if (event.target == modal) {
-        modal.style.display = "none";
-    }
-}
+            <label class="color-picker-label" for="listColor">목록 색상 선택</label>
+            <input type="color" id="listColor" class="color-picker-input" value="#007bff" required>
+        `,
+        showCancelButton: true,
+        confirmButtonText: '추가',
+        cancelButtonText: '취소',
+        preConfirm: () => {
+            const listName = Swal.getPopup().querySelector('#listName').value;
+            const listColor = Swal.getPopup().querySelector('#listColor').value;
+            if (!listName || !listColor) {
+                Swal.showValidationMessage(`목록 이름과 색상을 입력해주세요.`);
+            }
+            return { listName: listName, listColor: listColor };
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // 서버로 전송하기 위한 POST 요청 생성
+            const { listName, listColor } = result.value;
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '/user/addFavoriteList';
+
+            const inputName = document.createElement('input');
+            inputName.type = 'hidden';
+            inputName.name = 'listName';
+            inputName.value = listName;
+
+            const inputColor = document.createElement('input');
+            inputColor.type = 'hidden';
+            inputColor.name = 'listColor';
+            inputColor.value = listColor;
+
+            form.appendChild(inputName);
+            form.appendChild(inputColor);
+
+            document.body.appendChild(form);
+            form.submit();
+        }
+    });
+};
+
+
+	document.querySelectorAll('.edit-btn').forEach(function(button) {
+	    button.addEventListener('click', function(event) {
+	        event.preventDefault();
+	        event.stopPropagation();
+	
+	        const listItem = button.closest('.favorite-list-item');
+	        const listId = listItem.getAttribute('href').split('=')[1]; // URL에서 listId 추출
+	        const nameElement = listItem.querySelector('h4');
+	        const currentName = nameElement ? nameElement.textContent.trim() : ''; // 현재 목록 이름 가져오기
+	        const currentColor = listItem.querySelector('.color-bar').dataset.color;
+	
+	        // HTML 문자열을 큰따옴표로 작성
+	        const htmlContent = "<input type='text' id='newListName' class='swal2-input' placeholder='목록 이름' value='" + currentName + "' required>" +
+	                            "<label for='listColor' class='color-picker-label'>목록 색상:</label>" +
+	                            "<input type='color' id='listColor' class='color-picker-input' value='" + currentColor + "'>";
+	
+	        Swal.fire({
+	            title: '목록 수정',
+	            html: htmlContent,
+	            showCancelButton: true,
+	            confirmButtonText: '수정',
+	            cancelButtonText: '취소',
+	            preConfirm: () => {
+	                const newName = Swal.getPopup().querySelector('#newListName').value;
+	                const newColor = Swal.getPopup().querySelector('#listColor').value;
+	
+	                if (!newName) {
+	                    Swal.showValidationMessage("목록 이름을 입력해주세요.");
+	                }
+	
+	                return { listId, newName, newColor };
+	            }
+	        }).then((result) => {
+	            if (result.isConfirmed) {
+	                const { listId, newName, newColor } = result.value;
+	
+	                // 서버로 수정된 데이터 전송
+	                const form = document.createElement('form');
+	                form.method = 'POST';
+	                form.action = '/user/updateFavoriteList'; // 수정 요청 URL
+	
+	                const inputId = document.createElement('input');
+	                inputId.type = 'hidden';
+	                inputId.name = 'listId';
+	                inputId.value = listId;
+	
+	                const inputName = document.createElement('input');
+	                inputName.type = 'hidden';
+	                inputName.name = 'listName';
+	                inputName.value = newName;
+	
+	                const inputColor = document.createElement('input');
+	                inputColor.type = 'hidden';
+	                inputColor.name = 'listColor';
+	                inputColor.value = newColor;
+	
+	                form.appendChild(inputId);
+	                form.appendChild(inputName);
+	                form.appendChild(inputColor);
+	
+	                document.body.appendChild(form);
+	                form.submit();
+	            }
+	        });
+	    });
+	});
+    
+    document.querySelectorAll('.delete-btn').forEach(function(button) {
+        button.addEventListener('click', function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            const listItem = button.closest('.favorite-list-item');
+            const listId = listItem.getAttribute('href').split('=')[1]; // URL에서 listId 추출
+
+            Swal.fire({
+                title: '정말 삭제하시겠습니까?',
+                text: "이 작업은 되돌릴 수 없습니다!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: '삭제',
+                cancelButtonText: '취소'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // 서버로 삭제 요청 전송
+                    const form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = '/user/deleteFavoriteList'; // 삭제 요청 URL
+
+                    const inputId = document.createElement('input');
+                    inputId.type = 'hidden';
+                    inputId.name = 'listId';
+                    inputId.value = listId;
+
+                    form.appendChild(inputId);
+
+                    document.body.appendChild(form);
+                    form.submit();
+                }
+            });
+        });
+    });
+
 </script>
+

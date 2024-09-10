@@ -14,6 +14,10 @@
             font-family: Arial, sans-serif;
             height: 100vh;
             background-color: #f7f7f7;
+             background-image: url('/image/kakaoMAP.jpg');
+            background-size: cover; /* 배경 이미지가 요소의 전체를 덮도록 설정 */
+   			 background-position: center; /* 이미지의 위치를 중앙으로 설정 */
+    		background-repeat: no-repeat; /* 이미지 반복을 방지 */
             display: flex;
             flex-direction: column;
             justify-content: flex-end;
@@ -258,6 +262,7 @@
         const pageSize = 5;
 
         function submitEditReview() {
+
            reviewsContainer.innerHTML = '';
             const form = document.getElementById('reviewEditForm');
             const formData = new FormData(form);
@@ -380,6 +385,7 @@
                     + "</ul>"
                 + "</div>";
             
+
           reviewsContainer.appendChild(reviewDiv);
             });
             // 더보기 버튼 처리
@@ -469,6 +475,7 @@
         });
         
         function submitReview() {
+
            reviewsContainer.innerHTML = '';
             const form = document.getElementById('reviewForm');
             const formData = new FormData(form);

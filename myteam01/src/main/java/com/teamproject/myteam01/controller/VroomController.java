@@ -23,7 +23,10 @@ import com.teamproject.myteam01.domain.EventReviewVO;
 import com.teamproject.myteam01.domain.EventVO;
 import com.teamproject.myteam01.domain.RestaurantVO;
 import com.teamproject.myteam01.domain.RestaurantsReviewVO;
+
+
 import com.teamproject.myteam01.domain.UserVO;
+
 import com.teamproject.myteam01.service.EventService;
 import com.teamproject.myteam01.service.RestaurantService;
 import com.teamproject.myteam01.service.UserService;
@@ -37,12 +40,24 @@ import lombok.RequiredArgsConstructor;
 public class VroomController {
 
 
+
 	public final RestaurantService restService;
 	public final UserService userService;
     private final EventService eventService;
 
     @GetMapping("/main")
-    public String main() {
+    public String main(@AuthenticationPrincipal UserDetails userDetails, Model model) {
+    	
+    	boolean user;
+    	
+    	if (userDetails != null) {
+            user = true;
+    		model.addAttribute("user", user);
+             // 로그인된 사용자에게 보여줄 페이지
+        } else {
+        	user = false;
+        	model.addAttribute("user", user);
+        }
         return "vroom/vroomMain";
     }
 
@@ -60,13 +75,21 @@ public class VroomController {
     }
 
 
+
     @GetMapping("/restaurant")
     public String restMain(@AuthenticationPrincipal UserDetails userDetails,  Model model) {
-        // 현재 로그인된 사용자의 ID를 이용해 사용자 정보 조회
+    	boolean userBoolean;
+    	
+    	// 현재 로그인된 사용자의 ID를 이용해 사용자 정보 조회
         if (userDetails != null) {
+        	userBoolean = true;
             String userId = userDetails.getUsername();
             UserVO user = userService.findByUsername(userId);
             model.addAttribute("user", user);
+            model.addAttribute("userBoolean", userBoolean);
+        } else {
+        	userBoolean = false;
+        	model.addAttribute("userBoolean", userBoolean);
         }
         
         // 식당 목록 추가
@@ -104,6 +127,7 @@ public class VroomController {
 	    System.out.println("리뷰리스트 : "+reviews);
 	    return reviews;
 	}
+
 
 	
 	@PostMapping("/restregisterReview")
@@ -181,36 +205,125 @@ public class VroomController {
 //	}
 
 
+	 
+	 
 
-	@GetMapping("/event")
-	public String vroomEvent(Model model) {
-	    List<EventVO> events = eventService.eventList();
+
+	
+    @GetMapping("/event")
+    public String eventMain(@AuthenticationPrincipal UserDetails userDetails,  Model model) {
+        
+    	boolean userBoolean;
+    	
+    	if (userDetails != null) {
+    		userBoolean = true;
+    		model.addAttribute("userBoolean", userBoolean);
+             // 로그인된 사용자에게 보여줄 페이지
+        } else {
+        	userBoolean = false;
+        	model.addAttribute("userBoolean", userBoolean);
+        }
+    	// 현재 로그인된 사용자의 ID를 이용해 사용자 정보 조회
+        if (userDetails != null) {
+            String userId = userDetails.getUsername();
+            UserVO user = userService.findByUsername(userId);
+            model.addAttribute("user", user);
+        }
+        
+        // 식당 목록 추가
+        Long restPage = 1L;
+        Long restPageSize = 10L;
+        List<EventVO> eventList = eventService.getEventList(restPage, restPageSize);
+        model.addAttribute("eventList", eventList);
+        
+        List<RestaurantVO> restList = restService.getRestList(restPage, restPageSize);
+
+        return "vroom/vroomEvent";
+    }
+
+    
+    @GetMapping("/getEventDetails")
+    @ResponseBody
+    public EventVO getEventDetails(@RequestParam("eno") Long eno) {
+    	EventVO detail = eventService.eventDetail(eno);
+        detail.setReviewsList(eventService.selectReviews2(eno));
+        return detail;
+    }
+
+    
+    @GetMapping("/event/details")
+    public String eventDetails(@RequestParam("eno") Long eno, Model model, @AuthenticationPrincipal UserDetails userDetails) {
+        
+        EventVO event = eventService.eventDetail(eno);
+        event.setReviewsList(eventService.selectReviews2(eno));
+        model.addAttribute("event", event);
+        
+        
+        
+        if (userDetails != null) {
+            String userId = userDetails.getUsername();
+            UserVO user = userService.findByUsername(userId);
+            model.addAttribute("user", user);
+        }
+        return "vroom/vroomEventDetail";
+    }
+	
+
+	@PostMapping("/updateReviewEvent")
+	@ResponseBody
+	public Map<String, Object> updateReviewEvent(EventReviewVO review) {
+	    Map<String, Object> response = new HashMap<>();
 	    try {
-	        String eventsJson = new ObjectMapper().writeValueAsString(events);
-	        model.addAttribute("eventsJson", eventsJson);
-	        return "vroom/vroomEvent";
-	    } catch (JsonProcessingException e) {
-	        e.printStackTrace();
-	        return "error";
+	        List<EventReviewVO> result = eventService.modifyreview(review);
+	        response.put("success", true);
+	        response.put("message", "리뷰가 성공적으로 수정되었습니다.");
+	        response.put("data", result);
+	    } catch (Exception e) {
+	        response.put("success", false);
+	        response.put("message", "리뷰 수정에 실패했습니다.");
+	        e.printStackTrace(); // 로그에 에러 출력
 	    }
+	    return response;
 	}
+    
 
-
-    @GetMapping("/api/events")
-    @ResponseBody
-    public List<EventVO> getEvents() {
-        return eventService.eventList();
-    }
-
-    @GetMapping("/api/events/{eno}")
-    @ResponseBody
-    public EventVO eventDetail(@PathVariable Long eno) {
-        return eventService.eventDetail(eno);
-    }
-
-    @GetMapping("/api/events/{eno}/reviews")
-    @ResponseBody
-    public List<EventReviewVO> getEventReviews(@PathVariable Long eno) {
-        return eventService.selectReviews2(eno);
-    }
+	@GetMapping("/getEventReviews")
+	@ResponseBody
+	public List<EventReviewVO> getEventReviews(@RequestParam("eno") Long eno, Model model) {
+		List<EventReviewVO> reviews = eventService.selectReviews2(eno);
+	    return reviews;
+	}
+	
+	@PostMapping("/deleteReviewEvent")
+	@ResponseBody
+	public Map<String, Object> deleteReviewEvent(@RequestParam Long erno) {
+	    Map<String, Object> result = new HashMap<>();
+	    try {
+	        int deleteResult = eventService.deleteReview(erno);
+	        if (deleteResult > 0) {
+	            result.put("success", true);
+	        } else {
+	            result.put("success", false);
+	        }
+	    } catch (Exception e) {
+	        result.put("success", false);
+	        result.put("message", e.getMessage());
+	    }
+	    return result;
+	}
+	
+	@PostMapping("/eventregisterReview")
+	@ResponseBody
+	public Map<String, Object> eventregisterReview(@RequestBody EventReviewVO eventReviewVO) {
+	    Map<String, Object> response = new HashMap<>();
+	    try {
+	        eventService.registerReview(eventReviewVO);
+	        response.put("success", true);
+	        response.put("message", "리뷰가 성공적으로 등록되었습니다.");
+	    } catch (Exception e) {
+	        response.put("success", false);
+	        response.put("message", "리뷰 등록 중 오류가 발생했습니다.");
+	    }
+	    return response;
+	}
 }

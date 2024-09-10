@@ -20,11 +20,14 @@ public interface EventMapper {
 
 	//영범
 	public List<EventReviewVO> selectReviews2(Long eno);
+	public int updaterestreview(EventReviewVO eventReviewVO);
+	public List<EventReviewVO> selectMoreReviews(EventReviewVO reviewVO);
+	public List<Long> selectReviewsForStar(Long eno);
 	
 	//희준
 	//행사 목록
 	public List<EventVO> selectEventList();
-	
+	public List<EventVO> selectEventList2(EventVO eventVO);
 	//행사 등록
 	public Integer registerEvent(EventVO event);
 	
