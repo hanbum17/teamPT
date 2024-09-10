@@ -22,15 +22,15 @@
             justify-content: flex-end;
         }
         
-         /* 지도와 컨테이너 스타일 */
         #map {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-        }
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1; /* 지도를 배경으로 만들기 위해 z-index를 음수로 설정 */
+    }
+        
 
         .container {
             display:  flex;
@@ -247,6 +247,8 @@
 <body>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
+<div id="map"></div>
+
 <div class="header">
     <div class="logo" id="goToMain">Vroom</div>
     <div class="nav">
@@ -293,25 +295,58 @@
             </div>
         </c:if>
     </div>
-    
-    <div id="map"></div>
-
-<div class="container" id="restaurant-container">
-    <c:forEach var="restaurant" items="${restList}">
-        <div class="restaurant-card" data-lat="${restaurant.lat}" data-lng="${restaurant.lng}">
-            <img src="${contextPath}/images/${restaurant.attachFileList[0].fileName}" alt="${restaurant.fname} Image">
-            <div class="restaurant-info">
-                <h3>${restaurant.fname}</h3>
-                <p>Location: ${restaurant.faddress}</p>
-                <p>Rating: ${restaurant.frating}</p>
-            </div>
-        </div>
-    </c:forEach>
-</div>
-
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=fe9306b4adbbf3249d28d6b7a2c37c0a&libraries=services"></script>
 <script>
-$("#goToMain").on("click", function() {
-    window.location.href = '${contextPath}/vroom/main';
+
+//카카오 지도 초기화
+var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+    mapOption = {
+        center: new kakao.maps.LatLng(37.5665, 126.9780), // 기본 중심 좌표 (서울시청)
+        level: 3 // 지도 확대 레벨
+    };
+
+var map = new kakao.maps.Map(mapContainer, mapOption);
+
+// 기본 마커 생성
+var marker = new kakao.maps.Marker({
+    position: map.getCenter(),
+    draggable: true // 마커를 드래그 가능하게 설정
+});
+
+marker.setMap(map);
+
+kakao.maps.event.addListener(map, 'click', function(mouseEvent) {
+    var latLng = mouseEvent.latLng;
+    map.setCenter(latLng);
+    marker.setPosition(latLng); // 클릭한 위치에 마커 위치 변경
+});
+
+// 마커 드래그 시 좌표 업데이트
+kakao.maps.event.addListener(marker, 'dragend', function() {
+    var latlng = marker.getPosition();
+    $("#fxcoord").val(latlng.getLng()); // x좌표 설정
+    $("#fycoord").val(latlng.getLat()); // y좌표 설정
+});
+
+//식당 카드에 마우스가 닿을 때 핀 찍기
+document.querySelectorAll('.restaurant-card').forEach(function(card) {
+    card.addEventListener('mouseover', function() {
+        var lat = this.getAttribute('data-lat');
+        var lng = this.getAttribute('data-lng');
+
+        if (lat && lng) {
+            var coords = new kakao.maps.LatLng(lat, lng);
+            marker.setPosition(coords);
+            map.setCenter(coords);
+        } else {
+            console.error("좌표를 불러오지 못했습니다.");
+        }
+    });
+
+    // 마우스가 떠나면 마커를 지우고 기본 중심으로 복원
+    card.addEventListener('mouseout', function() {
+        marker.setMap(null); // 마커를 지웁니다
+    });
 });
 
 document.getElementById('loginLink').addEventListener('click', function(event) {
