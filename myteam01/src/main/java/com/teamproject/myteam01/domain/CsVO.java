@@ -16,15 +16,14 @@ import lombok.ToString;
 @AllArgsConstructor
 public class CsVO {
 
-	private Long fbno; // 피드백 번호
-	private String fbtitle; // 피드백 제목
-	private String fbcontent; // 피드백 내용
-	private Timestamp fbRegDate; // 피드백 등록일
-	private String fbCategory; // 피드백 카테고리
-	private Long uno; // 공통 식별자
-	private String fResponse; // 피드백 답변
+	private Long fbno; // 건의사항 번호
+	private String fbtitle; // 건의사항 제목
+	private String fbcontent; // 건의사항 내용
+	private Timestamp fbRegDate; // 건의사항 등록일
+	private Integer fbdelflag; // 상태 0 = 존재,  1 = 삭제
 
-	////
+
+	///////
 	
 	private Long faqno; // FAQ 번호
 	private String faqcategory; // FAQ 카테고리
@@ -33,5 +32,15 @@ public class CsVO {
 	private Date faqregdate; // FAQ 등록일
 	private Timestamp faqmoddate; // FAQ 수정일
 	private Integer faqdelflag; // FAQ 상태 0 = 존재,  1 = 삭제
+	
+	/////
+	
+	private Long ino; // inquiry 번호
+	private String icategory; // inquiry 카테고리
+	private String ititle; // inquiry 제목(질문)
+	private String icontent; // inquiry 내용(답변)
+	private Date iregdate; // inquiry 등록일
+	private Integer idelflag; // inquiry 상태 0 = 존재,  1 = 삭제
+	private String iresponse; // inquiry 답변
 	
 }//end

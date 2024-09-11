@@ -22,6 +22,40 @@ public interface CsService {
 	
 	//FAQ 삭제
 	public boolean removeFAQ(Long faqno);
+
+/////////////////////////////////////////////////////////////
+	
+	//Inquiry 목록
+	public List<CsVO> csInList();
+	
+	//Inquiry 등록
+	public Long regiIn(CsVO inq);
+	
+	//Inquiry 조회
+	public CsVO getIn(Long ino);
+	
+	//Inquiry 수정
+	public boolean modifyIn(CsVO inq);
+	
+	//Inquiry 삭제
+	public boolean removeIn(Long ino);
+	
+/////////////////////////////////////////////////////////////
+	
+	//FeedBack 목록
+	public List<CsVO> csFBList();
+	
+	//FeedBack 등록
+	public Long regiFB(CsVO feeb);
+	
+	//FeedBack 조회
+	public CsVO getFB(Long fbno);
+	
+	//FeedBack 수정
+	public boolean modifyFB(CsVO feeb);
+	
+	//FeedBack 삭제
+	public boolean removeFB(Long fbno);
 	
 	
 }
