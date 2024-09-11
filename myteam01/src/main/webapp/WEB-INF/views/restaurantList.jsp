@@ -330,29 +330,26 @@ function setMarker(lat, lng) {
 
 // 마우스 오버 리스너 추가
 function addMouseOverListenerToCards() {
-        const restaurantCards = document.querySelectorAll('.restaurant-card');
-        restaurantCards.forEach(card => {
-            card.addEventListener('mouseover', function() {
-                // 데이터 속성에서 fxcoord와 fycoord 값을 가져옴
-                const lat = parseFloat(card.dataset.fxcoord); // 식당의 위도
-                const lng = parseFloat(card.dataset.fycoord); // 식당의 경도
+    const restaurantCards = document.querySelectorAll('.restaurant-card');
+    restaurantCards.forEach(card => {
+        card.addEventListener('mouseover', function() {
+            // 데이터 속성에서 fxcoord와 fycoord 값을 가져옴
+            const lat = parseFloat(card.dataset.fxcoord); // 식당의 위도
+            const lng = parseFloat(card.dataset.fycoord); // 식당의 경도
+            
+            console.log(`Card data - Latitude: ${card.dataset.fxcoord}, Longitude: ${card.dataset.fycoord}`);
+            
+            if (!isNaN(lat) && !isNaN(lng)) {
+                // 지도 위치를 해당 식당의 좌표로 이동
+                setMarker(lat, lng);
                 
-                if (!isNaN(lat) && !isNaN(lng)) {
-                    // 지도 위치를 해당 식당의 좌표로 이동
-                    setMarker(lat, lng);
-                    
-                    // 지도 중심 이동 및 마커 추가
-                    var moveLatLon = new kakao.maps.LatLng(lat, lng);
-                    map.setCenter(moveLatLon);
-                    marker.setPosition(moveLatLon);
-                    
-                    console.log(`Mouse over at card: Latitude ${lat}, Longitude ${lng}`);
-                } else {
-                    console.error('Invalid lat or lng values:', lat, lng);
-                }
-            });
+                console.log(`Mouse over at card: Latitude ${lat}, Longitude ${lng}`);
+            } else {
+                console.error('Invalid lat or lng values:', lat, lng);
+            }
         });
-    }
+    });
+}
     
     
 // 지도 위치를 업데이트하고 마커를 설정하는 함수
