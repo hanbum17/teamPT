@@ -273,7 +273,11 @@
         <!-- 레스토랑 카드 반복문으로 생성 -->        
         <div class="more-restaurant-card">
 	        <c:forEach var="restaurant" items="${restList}">
-	            <div class="restaurant-card" data-fno="${restaurant.fno}" onclick="window.location.href='${contextPath}/vroom/restaurant/details?fno=${restaurant.fno}'">
+	            <div class="restaurant-card" 
+	            data-fno="${restaurant.fno}" 
+	            data-fxcoord="${restaurant.fxcoord}" 
+         		data-fycoord="${restaurant.fycoord}" 
+	            onclick="window.location.href='${contextPath}/vroom/restaurant/details?fno=${restaurant.fno}'">
 				    <img src="${contextPath}/images/bibimbab.jpg" alt="${restaurant.fname} Image">
 				    <div class="restaurant-info">
 				        <h3>${restaurant.fname}</h3>
@@ -315,39 +319,54 @@ var marker = new kakao.maps.Marker({
 
 marker.setMap(map);
 
-kakao.maps.event.addListener(map, 'click', function(mouseEvent) {
-    var latLng = mouseEvent.latLng;
-    map.setCenter(latLng);
-    marker.setPosition(latLng); // 클릭한 위치에 마커 위치 변경
-});
+//마커 생성 함수 (중복 방지 위해 따로 함수로 설정)
+function setMarker(lat, lng) {
+    var moveLatLon = new kakao.maps.LatLng(lat, lng);
+    map.setCenter(moveLatLon);  // 지도 중심 이동
+    marker.setPosition(moveLatLon);  // 마커 위치 변경
+    
+    console.log(`Marker set at: Latitude ${lat}, Longitude ${lng}`);
+}
 
-// 마커 드래그 시 좌표 업데이트
-kakao.maps.event.addListener(marker, 'dragend', function() {
-    var latlng = marker.getPosition();
-    $("#fxcoord").val(latlng.getLng()); // x좌표 설정
-    $("#fycoord").val(latlng.getLat()); // y좌표 설정
-});
+// 마우스 오버 리스너 추가
+function addMouseOverListenerToCards() {
+        const restaurantCards = document.querySelectorAll('.restaurant-card');
+        restaurantCards.forEach(card => {
+            card.addEventListener('mouseover', function() {
+                // 데이터 속성에서 fxcoord와 fycoord 값을 가져옴
+                const lat = parseFloat(card.dataset.fxcoord); // 식당의 위도
+                const lng = parseFloat(card.dataset.fycoord); // 식당의 경도
+                
+                if (!isNaN(lat) && !isNaN(lng)) {
+                    // 지도 위치를 해당 식당의 좌표로 이동
+                    setMarker(lat, lng);
+                    
+                    // 지도 중심 이동 및 마커 추가
+                    var moveLatLon = new kakao.maps.LatLng(lat, lng);
+                    map.setCenter(moveLatLon);
+                    marker.setPosition(moveLatLon);
+                    
+                    console.log(`Mouse over at card: Latitude ${lat}, Longitude ${lng}`);
+                } else {
+                    console.error('Invalid lat or lng values:', lat, lng);
+                }
+            });
+        });
+    }
+    
+    
+// 지도 위치를 업데이트하고 마커를 설정하는 함수
+function setMarker(lat, lng) {
+    var moveLatLon = new kakao.maps.LatLng(lat, lng);
+    map.setCenter(moveLatLon);  // 지도 중심 이동
+    marker.setPosition(moveLatLon);  // 마커 위치 변경
+}
 
-//식당 카드에 마우스가 닿을 때 핀 찍기
-document.querySelectorAll('.restaurant-card').forEach(function(card) {
-    card.addEventListener('mouseover', function() {
-        var lat = this.getAttribute('data-lat');
-        var lng = this.getAttribute('data-lng');
 
-        if (lat && lng) {
-            var coords = new kakao.maps.LatLng(lat, lng);
-            marker.setPosition(coords);
-            map.setCenter(coords);
-        } else {
-            console.error("좌표를 불러오지 못했습니다.");
-        }
-    });
 
-    // 마우스가 떠나면 마커를 지우고 기본 중심으로 복원
-    card.addEventListener('mouseout', function() {
-        marker.setMap(null); // 마커를 지웁니다
-    });
-});
+
+
+
 
 document.getElementById('loginLink').addEventListener('click', function(event) {
     event.preventDefault(); // 링크의 기본 동작을 막습니다
@@ -415,11 +434,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     
     //레스토랑 리스트 추가
-    function appendRestaurants(restaurants) {
+
+ function appendRestaurants(restaurants) {
     restaurants.forEach(restaurant => {
         const restaurantCard = document.createElement('div');
         restaurantCard.className = 'restaurant-card'; // 스타일 적용
         restaurantCard.dataset.fno = restaurant.fno;
+        restaurantCard.dataset.fxcoord = restaurant.fxcoord; 
+        restaurantCard.dataset.fycoord = restaurant.fycoord;  
         restaurantCard.onclick = () => {
             window.location.href = contextPath + '/vroom/restaurant/details?fno=' + restaurant.fno;
         };
@@ -434,8 +456,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         container.appendChild(restaurantCard);
     });
-}
 
+    // 새로 추가된 카드에 대한 우클릭 리스너 추가
+    addMouseOverListenerToCards();
+}
 
 
     container.addEventListener('scroll', () => {
