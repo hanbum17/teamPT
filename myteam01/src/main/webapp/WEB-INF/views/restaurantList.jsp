@@ -28,7 +28,7 @@
         left: 0;
         width: 100%;
         height: 100%;
-        z-index: -1; /* 지도를 배경으로 만들기 위해 z-index를 음수로 설정 */
+        z-index: 0; /* 지도를 배경으로 만들기 위해 z-index를 음수로 설정 */
     }
         
 
@@ -273,19 +273,21 @@
         <!-- 레스토랑 카드 반복문으로 생성 -->        
         <div class="more-restaurant-card">
 	        <c:forEach var="restaurant" items="${restList}">
-	            <div class="restaurant-card" 
-	            data-fno="${restaurant.fno}" 
-	            data-fxcoord="${restaurant.fxcoord}" 
-         		data-fycoord="${restaurant.fycoord}" 
-	            onclick="window.location.href='${contextPath}/vroom/restaurant/details?fno=${restaurant.fno}'">
-				    <img src="${contextPath}/images/bibimbab.jpg" alt="${restaurant.fname} Image">
-				    <div class="restaurant-info">
-				        <h3>${restaurant.fname}</h3>
-				        <p>Location: ${restaurant.faddress}</p>
-				        <p>Rating: ${restaurant.frating}</p>
-				    </div>
-				</div>
-			</c:forEach> 
+			    <div class="restaurant-card" 
+			         data-fno="${restaurant.fno}" 
+			         data-fxcoord="${restaurant.fxcoord}" 
+			         data-fycoord="${restaurant.fycoord}" 
+			         onclick="window.location.href='${contextPath}/vroom/restaurant/details?fno=${restaurant.fno}'">
+			        <img src="${contextPath}/images/bibimbab.jpg" alt="${restaurant.fname} Image">
+			        <div class="restaurant-info">
+			            <h3>${restaurant.fname}</h3>
+			            <p>Location: ${restaurant.faddress}</p>
+			            <p>Rating: ${restaurant.frating}</p>
+			            <p>${restaurant.fxcoord}</p> 
+			            <p>${restaurant.fycoord}</p>
+			        </div>
+			    </div>
+			</c:forEach>
 		</div>
         <!-- 데이터가 없는 경우 표시할 카드 -->
         <c:if test="${empty restList}">
@@ -319,44 +321,47 @@ var marker = new kakao.maps.Marker({
 
 marker.setMap(map);
 
-//마커 생성 함수 (중복 방지 위해 따로 함수로 설정)
-function setMarker(lat, lng) {
-    var moveLatLon = new kakao.maps.LatLng(lat, lng);
-    map.setCenter(moveLatLon);  // 지도 중심 이동
-    marker.setPosition(moveLatLon);  // 마커 위치 변경
-    
-    console.log(`Marker set at: Latitude ${lat}, Longitude ${lng}`);
+let markers = [];
+
+//마커 생성 함수
+function setMarker(lng, lat) {
+    // 기존 마커 삭제
+    markers.forEach(marker => marker.setMap(null));
+    markers = []; // markers 배열 비우기
+
+    // 새로운 마커 추가
+    var newMarker = new kakao.maps.Marker({
+        position: new kakao.maps.LatLng(lat, lng),
+        map: map
+    });
+
+    // 새 마커를 배열에 추가하고 지도의 중심을 새 마커의 위치로 설정
+    markers.push(newMarker);
+    map.setCenter(new kakao.maps.LatLng(lat, lng));
+
+    // 디버깅 로그 추가
+    console.log('setMarker 함수: lat ' + lat + ', lng ' + lng);
+    console.log('지도 중심:', map.getCenter());
+    console.log('마커 배열:', markers);
 }
 
-// 마우스 오버 리스너 추가
+
+//마우스 오버 리스너 추가
 function addMouseOverListenerToCards() {
     const restaurantCards = document.querySelectorAll('.restaurant-card');
     restaurantCards.forEach(card => {
         card.addEventListener('mouseover', function() {
-            // 데이터 속성에서 fxcoord와 fycoord 값을 가져옴
             const lat = parseFloat(card.dataset.fxcoord); // 식당의 위도
             const lng = parseFloat(card.dataset.fycoord); // 식당의 경도
-            
-            console.log(`Card data - Latitude: ${card.dataset.fxcoord}, Longitude: ${card.dataset.fycoord}`);
-            
+
             if (!isNaN(lat) && !isNaN(lng)) {
-                // 지도 위치를 해당 식당의 좌표로 이동
                 setMarker(lat, lng);
-                
-                console.log(`Mouse over at card: Latitude ${lat}, Longitude ${lng}`);
+                console.log('Mouse over at card: Latitude ' + lat + ', Longitude ' + lng);
             } else {
                 console.error('Invalid lat or lng values:', lat, lng);
             }
         });
     });
-}
-    
-    
-// 지도 위치를 업데이트하고 마커를 설정하는 함수
-function setMarker(lat, lng) {
-    var moveLatLon = new kakao.maps.LatLng(lat, lng);
-    map.setCenter(moveLatLon);  // 지도 중심 이동
-    marker.setPosition(moveLatLon);  // 마커 위치 변경
 }
 
 
@@ -403,10 +408,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     //레스토랑 추가 데이터 가져오는 스크립트 (드래그 시 10개씩 추가)
     function loadMoreRestaurants() {
-        if (isLoading) return; // 중복 요청 방지
+        if (isLoading) return;
         isLoading = true;
 
-        fetch("${contextPath}/api/restaurant?page="+restPage+"&pageSize="+restPageSize)
+        fetch(contextPath + "/api/restaurant?page=" + restPage + "&pageSize=" + restPageSize)
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
@@ -416,7 +421,7 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(data => {
                 if (data.length > 0) {
                     appendRestaurants(data);
-                    restPage++; // Increment restPage here
+                    restPage++;
                 }
                 isLoading = false;
             })
@@ -424,16 +429,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.error('Error fetching data:', error);
                 isLoading = false;
             });
+
     }
     
-    
-    	
+	
 
     
     //레스토랑 리스트 추가
 
  function appendRestaurants(restaurants) {
     restaurants.forEach(restaurant => {
+    	console.log('Restaurant Data:', restaurant.fxcoord, restaurant.fycoord);
+    	
         const restaurantCard = document.createElement('div');
         restaurantCard.className = 'restaurant-card'; // 스타일 적용
         restaurantCard.dataset.fno = restaurant.fno;
@@ -452,6 +459,15 @@ document.addEventListener('DOMContentLoaded', () => {
             "</div>";
 
         container.appendChild(restaurantCard);
+        
+        const latLng = new kakao.maps.LatLng(restaurant.fxcoord, restaurant.fycoord);
+        const marker = new kakao.maps.Marker({
+            position: latLng,
+            map: map
+        });
+        kakao.maps.event.addListener(marker, 'click', function() {
+            map.setCenter(latLng);
+        });
     });
 
     // 새로 추가된 카드에 대한 우클릭 리스너 추가
@@ -474,10 +490,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initial data load
     loadMoreRestaurants();
 
-    /* const loadMoreBtn = document.getElementById('load-more-btn');
-    if (loadMoreBtn) {
-        loadMoreBtn.addEventListener('click', loadMoreReviews);
-    } */
 });
 
 

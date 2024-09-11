@@ -160,7 +160,6 @@
             <div class="form-group">
                 <label for="fycoord">y좌표</label>
                 <input type="text" class="form-control" id="fycoord" name="fycoord" placeholder="y좌표를 입력하세요">
-                <input type="text" class="form-control" id="fxcoord" name="fxcoord" placeholder="x좌표를 입력하세요" readonly>
             </div>
             <div class="form-group">
                 <label for="fycoord">y좌표</label>
