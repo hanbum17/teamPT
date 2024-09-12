@@ -20,4 +20,5 @@ public class TripPlaceVO {
     private String address;       // 주소
     private Integer orderNum;     // 순서
     private Date startDate;       // 일정 시작 시간
+    private Integer tripDay;
 }

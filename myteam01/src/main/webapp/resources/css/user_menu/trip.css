@@ -1,155 +1,153 @@
-/* 기본 레이아웃 */
-.content-box {
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: 20px;
+/* 전체 콘텐츠 스타일 */
+.content {
+    height: 98%; /* 전체 높이 설정 */
+    display: flex;
+    flex-direction: column; /* 세로 방향 정렬 */
 }
 
-/* 모달 스타일 */
+/* 여행 목록 리스트 스타일 */
+.trip-list {
+    background-color: #fff;
+    overflow-y: auto; /* 세로 스크롤 허용 */
+    flex: 1; /* 남은 공간을 차지 */
+    max-height: calc(100vh - 60px); /* 상단 영역의 높이를 제외한 최대 높이 */
+    padding: 0 10px;
+}
+
+/* 항목 리스트 스타일 */
+.trip-list ul {
+    list-style-type: none; /* 기본 목록 스타일 제거 */
+    padding: 0; /* 기본 여백 제거 */
+    margin: 0; /* 기본 여백 제거 */
+}
+
+/* 각 항목 스타일 */
+.trip-item {
+    border-bottom: 1px solid #ddd; /* 하단 테두리 색상 */
+    padding: 15px 20px; /* 내부 여백 */
+    margin: 10px 0; /* 항목 간 여백 */
+    border: 1px solid #ddd; /* 테두리 색상 */
+    border-radius: 4px; /* 테두리 둥글기 */
+    background-color: #f8f9fa; /* 항목 배경색 */
+    display: flex; /* 플렉스 박스 사용 */
+    justify-content: space-between; /* 좌우 정렬 */
+}
+
+.trip-item p {
+	align-content: center;
+}
+
+/* 제목과 버튼 스타일 */
+.content-header {
+    display: flex; /* 플렉스 박스 사용 */
+    justify-content: space-between; /* 좌우 정렬 */
+    align-items: center; /* 중앙 정렬 */
+    margin-bottom: 15px; /* 제목과 내용 간 여백 */
+    position: sticky; /* 스크롤 시 고정 */
+    top: 0; /* 상단 고정 */
+    background-color: #fff; /* 배경 색상 */
+    border-bottom: 1px solid #ddd; /* 하단 테두리 색상 */
+    z-index: 5; /* 다른 요소 위에 표시 */
+}
+
+/* 추가 버튼 스타일 */
+.add-trip-btn {
+    background-color: #009fff; /* 버튼 배경 색상 */
+    color: #fff; /* 버튼 텍스트 색상 */
+    border: none; /* 기본 테두리 제거 */
+    border-radius: 4px; /* 테두리 둥글기 */
+    padding: 8px 16px; /* 내부 여백 */
+    font-size: 14px; /* 폰트 크기 */
+    cursor: pointer; /* 커서 변경 */
+}
+
+.add-trip-btn:hover {
+    background-color: #0056b3; /* 호버 시 배경 색상 변경 */
+}
+
+/* 세부 계획 보기 링크 스타일 */
+.details-link {
+    text-decoration: none; /* 링크 밑줄 제거 */
+    color: #007bff; /* 링크 색상 */
+    font-weight: bold; /* 글씨 굵기 */
+}
+
+.details-link:hover {
+    color: #0056b3; /* 호버 시 링크 색상 */
+}
+
+/* 모달 창 스타일 */
 .modal {
-    display: none; 
-    position: fixed; 
-    z-index: 1000; 
-    padding-top: 60px; 
+    display: none; /* 기본적으로 숨기기 */
+    position: fixed; /* 화면에 고정 */
+    z-index: 10; /* 다른 요소 위에 표시 */
     left: 0;
     top: 0;
-    width: 100%; 
-    height: 100%; 
-    overflow: auto; 
-    background-color: rgba(0, 0, 0, 0.4); 
+    width: 100%; /* 전체 너비 */
+    height: 100%; /* 전체 높이 */
+    background-color: rgba(0, 0, 0, 0.5); /* 반투명 검은 배경 */
+    overflow: auto; /* 스크롤 허용 */
 }
 
+/* 모달 콘텐츠 스타일 */
 .modal-content {
-    background-color: #fefefe;
-    margin: 5% auto; 
+    background-color: #fff;
+    margin: 15% auto;
     padding: 20px;
     border: 1px solid #888;
-    width: 50%; 
+    width: 500px; /* 모달 너비 조정 */
+    max-width: 90%;
     border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }
 
+/* 모달 닫기 버튼 스타일 */
 .close {
     color: #aaa;
     float: right;
     font-size: 28px;
     font-weight: bold;
+    cursor: pointer;
 }
 
 .close:hover,
 .close:focus {
     color: black;
-    text-decoration: none;
-    cursor: pointer;
 }
 
-/* 여행 계획 폼 스타일 */
-.trip-plan-form label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: bold;
-}
-
-.trip-plan-form input[type="text"],
-.trip-plan-form input[type="datetime-local"],
-.trip-plan-form textarea {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 15px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-}
-
-.trip-plan-form button {
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.trip-plan-form button:hover {
-    background-color: #0056b3;
-}
-
-/* 기타 스타일 */
-.content-header {
+/* 폼 스타일 */
+.modal-content form {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #ddd;
+    flex-direction: column; /* 세로 정렬 */
+    
 }
 
-.add-trip-btn {
-    padding: 10px 15px;
-    background-color: #007bff;
-    color: white;
-    text-decoration: none;
-    border-radius: 5px;
-    transition: background-color 0.3s;
+/* input 요소 스타일 */
+.modal-content input[type="text"],
+.modal-content input[type="date"] {
+    width: 100%; /* 너비를 100%로 설정하여 버튼과 동일하게 */
+    padding: 10px;
+    margin: 8px 0; /* 여백 추가 */
+    box-sizing: border-box; /* 패딩과 보더를 포함한 너비 계산 */
+    border: 1px solid #ccc; /* 기본 테두리 */
+    border-radius: 4px; /* 모서리를 둥글게 */
 }
 
-.add-trip-btn:hover {
-    background-color: #0056b3;
-}
 
-.trip-plan-list {
+
+/* 버튼 스타일 */
+.modal-content button {
+    width: 100%; /* 버튼도 input과 동일한 너비로 설정 */
+    background-color: #28a745; /* 초록색 배경 */
+    color: white; /* 텍스트 색상 */
     margin-top: 20px;
-}
-
-.trip-plan-item {
-    background-color: #f9f9f9;
-    padding: 15px;
-    border-radius: 8px;
-    margin-bottom: 15px;
-    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.trip-plan-actions {
-    margin-top: 10px;
-    display: flex;
-    justify-content: flex-end;
-}
-
-.edit-btn,
-.delete-btn {
-    padding: 8px 12px;
-    margin-left: 10px;
-    background-color: #28a745;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    text-decoration: none;
-}
-
-.delete-btn {
-    background-color: #dc3545;
-}
-
-.delete-btn:hover,
-.edit-btn:hover {
-    background-color: #0056b3;
-}
-.drag-blocks {
-    float: left;
-    width: 200px;
     padding: 10px;
-    border: 1px solid #ddd;
-    background-color: #f9f9f9;
-    margin-right: 10px;
-}
-
-#external-events {
-    margin-bottom: 10px;
-}
-
-.fc-event {
-    margin: 10px 0;
-    padding: 8px;
-    background-color: #007bff;
-    color: white;
-    cursor: pointer;
+    border: none;
     border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px; /* 버튼 글자 크기 */
+}
+
+.modal-content button:hover {
+    background-color: #218838; /* 호버 시 배경색 변경 */
 }

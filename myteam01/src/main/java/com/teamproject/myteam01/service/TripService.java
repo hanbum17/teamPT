@@ -32,10 +32,14 @@ public class TripService {
     public void addPlace(TripPlaceVO place) {
         tripMapper.insertPlace(place);
     }
+    
+    public void deletePlace(Long placeId) {
+        tripMapper.deletePlaceById(placeId);
+    }
 
     public void saveSchedule(List<TripPlaceVO> schedule) {
         for (TripPlaceVO place : schedule) {
-            tripMapper.updatePlaceOrder(place);
+            tripMapper.updatePlaceOrderAndDate(place);
         }
     }
 }

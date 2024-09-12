@@ -1,6 +1,8 @@
 package com.teamproject.myteam01.controller;
 
+import com.teamproject.myteam01.domain.TripPlanVO;
 import com.teamproject.myteam01.domain.UserVO;
+import com.teamproject.myteam01.service.TripService;
 import com.teamproject.myteam01.service.UserRegistrationService;
 import com.teamproject.myteam01.service.UserService;
 
@@ -26,6 +28,9 @@ public class UserController {
     
     @Autowired
     private UserRegistrationService userRegistrationService;
+    
+    @Autowired
+    private TripService tripService;
 
     @GetMapping("/user/registerSelect")
     public String showRegisterSelectPage() {
@@ -88,7 +93,12 @@ public class UserController {
 
     // 여행 계획 세우기 페이지로 이동
     @GetMapping("/user/user_trip")
-    public String userTripPage() {
+    public String userTripPage(@AuthenticationPrincipal UserDetails userDetails, Model model) {
+        String userId = userDetails.getUsername();
+       
+        List<TripPlanVO> tripPlans = tripService.getTripPlansByUserId(userId);
+        model.addAttribute("tripPlans", tripPlans);
+        
         return "user_main/user_menu/user_trip_list";
     }
 
