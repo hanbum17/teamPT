@@ -17,7 +17,7 @@
 		<div class="fav-playlist-container">
 			<div class="fav-items-container">
 				<c:forEach var="favoriteItem" items="${favoriteItems}">
-					<div class="fav-item" onclick="navigateTo('${favoriteItem.link}')">
+					<div class="fav-item" onclick="navigateTo('${favoriteItem.link}')" style="border-right-color: ${favoriteList.color};">
 						<div class="fav-item-thumbnail">
 							<%-- <img src="${favoriteItem.thumbnail}" alt="Thumbnail"> --%>
 						</div>

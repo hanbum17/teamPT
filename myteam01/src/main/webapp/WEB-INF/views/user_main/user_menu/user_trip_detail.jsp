@@ -43,33 +43,54 @@
 
 	
 	        <!-- 등록된 장소 목록 -->
-	        <div class="place-list-header">
-	        	<h3>등록된 장소</h3>
-	        	<button id="activateDeleteMode" class="delete-mode-btn">지우기</button>
-	        </div>
-	        <div class="place-list">
-	            <div id="placeContainer">
-	                <c:forEach var="place" items="${places}">
-	                    <div class="place-item" draggable="true" data-id="${place.id}">
-	                        ${place.placeName}
-	                    </div>
-	                </c:forEach>
-	            </div>
-	        </div>
-	
-	        <!-- 여행 일정 공간 -->
-	        <div class="scheduleContainer-header">
+			<div class="place-list-header">
+			    <h3>등록된 장소</h3>
+			    <button id="activateDeleteMode" class="delete-mode-btn">지우기</button>
+			</div>
+			<div class="place-list">
+			    <div id="placeContainer">
+			        <c:forEach var="place" items="${places}">
+			            <div class="place-item" draggable="true" data-id="${place.id}" data-address="${place.address}">
+			                ${place.placeName}
+			            </div>
+			        </c:forEach>
+			    </div>
+			</div>
+			
+			<!-- 여행 일정 공간 -->
+			<div class="scheduleContainer-header">
 			    <h3>여행 일정</h3>
 			    <div class="pagination">
-				    <c:forEach var="day" begin="1" end="${tripPlan.tripDays}">
-				        <a href="?day=${day}" class="${param.day == day ? 'active' : ''}">${day}</a>
-				    </c:forEach>
-				</div>
+			        <c:forEach var="day" begin="1" end="${tripPlan.tripDays}">
+			            <a href="?day=${day}" class="${param.day == day || (param.day == null && day == 1) ? 'active' : ''}">
+			                ${day}일
+			            </a>
+			        </c:forEach>
+			    </div>
 			</div>
-	        <div id="scheduleContainer" style="border: 1px dashed #ccc; min-height: 300px; padding: 10px;">
-	            <!-- 장소를 드래그 앤 드롭할 수 있는 공간 -->
-	        </div>
-	        
+
+			<div id="scheduleContainer" style="border: 1px dashed #ccc; min-height: 300px; padding: 10px;">
+			    <c:if test="${daySpecificPlaces.isEmpty()}">
+			        <p id="dragGuideText">등록된 장소를 드래그해주세요.</p>
+			    </c:if>
+			    <c:forEach var="place" items="${daySpecificPlaces}">
+			        <div class="dropped-place" data-id="${place.id}" data-order="${place.orderNum}" data-tripNo="${tripPlan.tripNo}">
+					    <div>
+					        <p class="place-name">${place.placeName}</p>
+					        <p class="place-address">${place.address}</p>
+					    </div>
+					    <div>
+					        <label>일정 시작 시간: </label>
+					        <input type="time" class="place-time" value="${place.startDate}">
+					    </div>
+					    <div>
+					        <!-- 빼기 버튼 -->
+					        <button class="exclude-btn">빼기</button>
+					    </div>
+					</div>
+			    </c:forEach>
+			</div>
+			        
 	        <button id="saveScheduleBtn">일정 저장</button>
 	    </div>
 
@@ -182,22 +203,39 @@ scheduleContainer.addEventListener('dragover', (e) => {
     e.preventDefault();
 });
 
-scheduleContainer.addEventListener('drop', (e) => {
+scheduleContainer.addEventListener('drop', function(e) {
     e.preventDefault();
-    const placeId = e.dataTransfer.getData('text/plain');
-    const placeElement = document.querySelector(`.place-item[data-id="${placeId}"]`);
+    var placeId = e.dataTransfer.getData('text/plain');
+    var placeElement = document.querySelector('.place-item[data-id="' + placeId + '"]');
+    
 
+ // 안내 문구 제거
+    var dragGuideText = document.getElementById('dragGuideText');
+    if (dragGuideText) {
+        dragGuideText.remove();
+    }
+    
+
+    
+ // 장소 이름 및 주소 가져오기
+    const placeName = placeElement.innerText;
+    const placeAddress = placeElement.getAttribute('data-address');
+    
     // 새로 추가된 장소 박스 생성
-    const newPlaceBox = document.createElement('div');
+    var newPlaceBox = document.createElement('div');
     newPlaceBox.classList.add('dropped-place');
-    newPlaceBox.style.border = "1px solid #ddd";
-    newPlaceBox.style.margin = "10px";
-    newPlaceBox.style.padding = "10px";
+    newPlaceBox.setAttribute('data-id', placeId);
 
+    // HTML을 일반 문자열로 추가
     newPlaceBox.innerHTML = 
-        `<p><strong>장소:</strong> ${placeElement.innerHTML} </p>
-        <label>시간 설정:</label>
-        <input type='time' class='place-time' />`;
+        "<div>" +
+            "<p class='place-name'>" + placeName + "</p>" +  // class 추가
+            "<p class='place-address'>" + placeAddress + "</p>" +  // class 추가
+        "</div>" +
+        "<div>" +
+            "<label>일정 시작 시간: </label>" +
+            "<input type='time' class='place-time' />" +
+        "</div>";
 
     scheduleContainer.appendChild(newPlaceBox);
     
@@ -212,29 +250,86 @@ scheduleContainer.addEventListener('drop', (e) => {
 
 document.getElementById('saveScheduleBtn').addEventListener('click', function() {
     const schedule = [];
+    const tripDay = getTripDay();  // 현재 tripDay 값 가져오기
+
+    // 드래그된 장소를 모아서 배열로 저장
     document.querySelectorAll('.dropped-place').forEach((placeBox, index) => {
-        const placeName = placeBox.querySelector('p strong').textContent;
+        const placeId = placeBox.getAttribute('data-id');
         const placeTime = placeBox.querySelector('.place-time').value;
 
         schedule.push({
-            placeName: placeName,
-            time: placeTime,
-            orderNum: index + 1
+            id: placeId,
+            startDate: placeTime,
+            tripDay: tripDay  // 현재 tripDay 값 저장
         });
     });
 
-    // 서버로 일정 전송
+ 	// 시간순으로 배열 정렬 (시간 기준 오름차순 정렬)
+    schedule.sort(function(a, b) {
+        return new Date('1970/01/01 ' + a.startDate) - new Date('1970/01/01 ' + b.startDate);
+    });
+
+    // 각 일정의 순서 번호 (orderNum)을 시간순으로 재정렬하여 저장
+    schedule.forEach((item, index) => {
+        item.orderNum = index + 1; // 빠른 시간 순서대로 1번부터 매김
+    });
+
+    // 서버로 일정 전송 (Ajax)
     $.ajax({
         type: 'POST',
-        url: '/user/trip/saveSchedule',
+        url: '/user/trip/saveSchedule',  // 실제 API 경로
         contentType: 'application/json',
         data: JSON.stringify(schedule),
         success: function(response) {
             alert('일정이 저장되었습니다.');
+            window.location.reload(); 
         },
-        error: function() {
+        error: function(xhr, status, error) {
+            console.error('Ajax error:', xhr.responseText);  // 에러 메시지 출력
             alert('일정 저장에 실패했습니다.');
         }
     });
 });
+
+function getTripDay() {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get('day') || 1;  // 'day' 파라미터가 없으면 기본값 1
+}
+
+//-------------------------일정 빼기-------------------------------------
+
+document.querySelectorAll('.exclude-btn').forEach(button => {
+    button.addEventListener('click', function() {
+        const placeId = this.closest('.dropped-place').getAttribute('data-id');  // 일정 ID 가져오기
+        const orderNum = this.closest('.dropped-place').getAttribute('data-order');  // orderNum 가져오기
+        const tripNo = this.closest('.dropped-place').getAttribute('data-tripNo');  // tripNo 가져오기
+        const tripDay = getTripDay();  // 현재 tripDay 가져오기
+
+        if (confirm('이 일정을 제외하시겠습니까?')) {
+            $.ajax({
+                type: 'POST',
+                url: '/user/trip/excludeSchedule',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    tripPlaceId: placeId,
+                    orderNum: orderNum,
+                    tripNo: tripNo,
+                    tripDay: tripDay
+                }),
+                success: function(response) {
+                    alert('일정이 성공적으로 제외되었습니다.');
+                    location.reload();  // 성공 후 페이지를 새로고침하거나 일정을 갱신
+                },
+                error: function(xhr, status, error) {
+                    console.error('Ajax Error:', xhr.responseText);
+                    alert('일정 제외에 실패했습니다. 콘솔에서 자세한 내용을 확인하세요.');
+                }
+            });
+        }
+    });
+});
+
+
+
+
 </script>

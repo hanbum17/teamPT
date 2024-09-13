@@ -42,12 +42,33 @@
 	<delete id="deletePlaceById" parameterType="Long">
 	    DELETE FROM trip_places WHERE id = #{placeId}
 	</delete>
+	
+	<select id="getPlacesByTripNoAndDay" parameterType="map" resultType="com.teamproject.myteam01.domain.TripPlaceVO">
+	    SELECT * FROM trip_places
+	    WHERE trip_no = #{tripNo} 
+	      AND trip_day = #{tripDay}
+	    ORDER BY order_num
+	</select>
+	
+	<update id="updateScheduleToNull">
+	    UPDATE trip_places
+	    SET trip_day = null, start_date = null, order_num = null
+	    WHERE id = #{tripPlaceId}
+	</update>
+	
+	<update id="updateOrderNumsAfterExclusion">
+	    UPDATE trip_places
+	    SET order_num = order_num - 1
+	    WHERE trip_no = #{tripNo}
+	    AND trip_day = #{tripDay}
+	    AND order_num > #{orderNum}
+	</update>
 
     <!-- 장소 순서 및 일정 시간 업데이트 -->
-    <update id="updatePlaceOrderAndDate" parameterType="com.teamproject.myteam01.domain.TripPlaceVO">
-        UPDATE trip_places
-        SET order_num = #{orderNum}, start_date = #{startDate}
-        WHERE id = #{id}
-    </update>
+    <update id="updatePlaceOrderAndDay" parameterType="com.teamproject.myteam01.domain.TripPlaceVO">
+	    UPDATE trip_places
+	    SET order_num = #{orderNum}, start_date = #{startDate}, trip_day = #{tripDay}
+	    WHERE id = #{id}
+	</update>
 
 </mapper>

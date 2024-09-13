@@ -6,7 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.util.Date;
+import java.time.LocalTime;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Getter
 @Setter
@@ -19,6 +20,8 @@ public class TripPlaceVO {
     private String placeName;     // 장소 이름
     private String address;       // 주소
     private Integer orderNum;     // 순서
-    private Date startDate;       // 일정 시작 시간
+    
+    @DateTimeFormat(pattern = "HH:mm")
+    private LocalTime startDate;       // 일정 시작 시간
     private Integer tripDay;
 }

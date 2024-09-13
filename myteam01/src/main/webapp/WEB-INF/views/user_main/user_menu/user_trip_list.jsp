@@ -18,7 +18,7 @@
                         <h4>${tripPlan.title}</h4>
                         <p>
                             <fmt:formatDate value="${tripPlan.startDate}" pattern="yyyy년 MM월 dd일" /> ~ 
-                            <fmt:formatDate value="${tripPlan.endDate}" pattern="yyyy년 MM월 dd일" />
+                            <fmt:formatDate value="${tripPlan.endDate}" pattern="MM월 dd일" />
                         </p>
                         <a href="/user/trip/detail/${tripPlan.tripNo}" class="details-link">세부 계획 보기</a>
                     </div>
