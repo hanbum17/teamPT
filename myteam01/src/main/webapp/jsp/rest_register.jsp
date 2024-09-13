@@ -161,10 +161,7 @@
                 <label for="fycoord">y좌표</label>
                 <input type="text" class="form-control" id="fycoord" name="fycoord" placeholder="y좌표를 입력하세요">
             </div>
-            <div class="form-group">
-                <label for="fycoord">y좌표</label>
-                <input type="text" class="form-control" id="fycoord" name="fycoord" placeholder="y좌표를 입력하세요" readonly>
-            </div>
+           
             <div class="form-group">
                 <label>등록 확인</label>
                 <div class="radio-group">
