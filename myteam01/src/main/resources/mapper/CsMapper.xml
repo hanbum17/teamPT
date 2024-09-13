@@ -42,6 +42,87 @@
 		DELETE FROM teampj.FAQ
 		WHERE FAQNO = #{faqno}
 	</delete>
+<!--                                 까지 FAQ                      -->	
+
+	<!-- Inquiry 조회-->
+	<select id="selectInquiryList" resultType="com.teamproject.myteam01.domain.CsVO">
+			SELECT INO, ICATEGORY, ITITLE, ICONTENT, IREGDATE, IDELFLAG, IRESPONSE
+			FROM teampj.INQUIRY ORDER BY INO DESC
+	</select>
+
+	<!-- Inquiry 등록 -->
+	<insert id="registerINQ" parameterType="com.teamproject.myteam01.domain.CsVO">
+		<selectKey keyProperty="ino" order="BEFORE" resultType="Long">
+			SELECT teampj.seq_INQUIRY.nextval FROM dual
+		</selectKey>
+		
+		INSERT INTO teampj.INQUIRY
+	
+		VALUES (#{ino}, #{icategory}, #{ititle}, #{icontent}, DEFAULT, DEFAULT, DEFAULT)
+	</insert>
+
+	<!-- Inquiry 조회 -->
+	<select id="selectINQ" resultType="com.teamproject.myteam01.domain.CsVO">
+		SELECT INO, ICATEGORY, ITITLE, ICONTENT, IREGDATE, IDELFLAG, IRESPONSE
+		FROM teampj.INQUIRY
+		WHERE ino = #{ino}
+	</select>
+
+	<!-- Inquiry 수정 -->
+	<update id="updateINQ">
+		UPDATE teampj.INQ
+		SET ICATEGORY = #{icategory},
+			ITITLE = #{ititle},
+			ICONTENT = #{icontent},
+		WHERE INO = #{ino}
+	</update>
+	
+	<!-- Inquiry 삭제 -->
+	<delete id="delINQ">
+		DELETE FROM teampj.INQ
+		WHERE INO = #{ino}
+	</delete>
+<!--                                  까지 Inquiry                -->
+
+
+	<!-- Feedback 조회-->
+	<select id="selectFeedbackList" resultType="com.teamproject.myteam01.domain.CsVO">
+			SELECT FBNO, FBTITLE, FBCONTENT, FBREGDATE, FBDELFLAG
+			FROM teampj.FEEDBACK ORDER BY FAQNO DESC
+	</select>
+
+	<!-- Feedback 등록 -->
+	<insert id="registerFeedback" parameterType="com.teamproject.myteam01.domain.CsVO">
+		<selectKey keyProperty="fbno" order="BEFORE" resultType="Long">
+			SELECT teampj.seq_FEEDBACK.nextval FROM dual
+		</selectKey>
+		
+		INSERT INTO teampj.FEEDBACK
+	
+		VALUES (#{fbno}, #{fbtitle}, #{fbcontent}, DEFAULT, DEFAULT)
+	</insert>
+
+	<!-- Feedback 조회 -->
+	<select id="selectFeedback" resultType="com.teamproject.myteam01.domain.CsVO">
+		SELECT FBNO, FBTITLE, FBCONTENT, FBREGDATE, FBDELFLAG
+		FROM teampj.FEEDBACK
+		WHERE fbno = #{fbno}
+	</select>
+
+	<!-- Feedback 수정 -->
+	<update id="updateFeedback">
+		UPDATE teampj.FEEDBACK
+		SET FBTITLE = #{fbtitle},
+			FBCONTENT = #{fbcontent},
+			FBMODDATE = DEFAULT
+		WHERE FAQNO = #{fbno}
+	</update>
+	
+	<!-- Feedback 삭제 -->
+	<delete id="delFeedback">
+		DELETE FROM teampj.FEEDBACK
+		WHERE FAQNO = #{fbno}
+	</delete>
 	
 
 	

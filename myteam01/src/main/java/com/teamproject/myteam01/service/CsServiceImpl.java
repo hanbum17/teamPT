@@ -65,31 +65,31 @@ public class CsServiceImpl implements CsService{
 	
 	//Inquiry 등록
 	@Override
-	public Long regiIn(CsVO faq) {
-		csMapper.registerInquiry(faq);
-		return faq.getFaqno();
+	public Long regiIn(CsVO inq) {
+		csMapper.registerInquiry(inq);
+		return inq.getFaqno();
 	}
 	
 	//Inquiry 조회
 	@Override
-	public CsVO getIn(Long faqno) {
-		CsVO faq = csMapper.selectFAQ(faqno);
-		return faq ;
+	public CsVO getIn(Long ino) {
+		CsVO inq = csMapper.selectFAQ(ino);
+		return inq ;
 	}
 	
 	
 	//Inquiry 수정
 	@Override
-	public boolean modifyIn(CsVO faq) {
+	public boolean modifyIn(CsVO inq) {
 		System.out.println("서비스 : Inquiry 수정");
-		return csMapper.updateFAQ(faq) == 1;
+		return csMapper.updateFAQ(inq) == 1;
 	}
 	
 	//Inquiry 삭제
 	@Override
-	public boolean removeIn(Long faqno) {
+	public boolean removeIn(Long ino) {
 		System.out.println("서비스 : Inquiry 삭제");
-		return csMapper.delFAQ(faqno) == 1;
+		return csMapper.delFAQ(ino) == 1;
 		
 	}
 
@@ -103,16 +103,16 @@ public class CsServiceImpl implements CsService{
 	
 	//FeedBack 등록
 	@Override
-	public Long regiFB(CsVO faq) {
-		csMapper.registerFeedback(faq);
-		return faq.getFaqno();
+	public Long regiFB(CsVO feeb) {
+		csMapper.registerFeedback(feeb);
+		return feeb.getFaqno();
 	}
 	
 	//FeedBack 조회
 	@Override
-	public CsVO getFB(Long faqno) {
-		CsVO faq = csMapper.selectFeedback(fbno);
-		return faq ;
+	public CsVO getFB(Long fbno) {
+		CsVO feeb = csMapper.selectFeedback(fbno);
+		return feeb ;
 	}
 	
 	
