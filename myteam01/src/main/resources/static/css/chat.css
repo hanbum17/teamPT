@@ -9,11 +9,18 @@ body, html {
     align-items: center;
     height: 100vh;
 }
-
+.invisible-chat .chat1 {
+    visibility: hidden; /* 가상의 메시지는 화면에 보이지 않음 */
+    max-width: 70%; /* 최대 채팅 너비에 맞춰 공간 확보 */
+    padding: 10px;
+    border-radius: 10px;
+    word-wrap: break-word;
+}
 /* 채팅 페이지 스타일 */
 .chat-container {
     width: 100%;
-    max-width: 800px;
+    min-width: 70vw; /* 화면 너비의 70%를 최소 너비로 설정 */
+    max-width: 800px; /* 최대 너비는 유지 */
     height: 90vh;
     margin: 0 auto;
     padding: 20px;
@@ -109,6 +116,10 @@ body, html {
     padding-right: 5px;
 }
 
+#messageArea .my-chat-message span {
+	text-align: right;
+}
+
 #messageForm {
     border-top: 1px solid #ececec;
     padding: 10px;
@@ -143,7 +154,7 @@ body, html {
     background-color: #0056b3;
 }
 
-@media screen and (max-width: 730px) {
+/* @media screen and (max-width: 730px) {
     .chat-container {
         margin-left: 10px;
         margin-right: 10px;
@@ -154,7 +165,7 @@ body, html {
 @media screen and (max-width: 480px) {
     .chat-container {
         height: calc(100% - 30px);
-    }
+    } */
 
     .username-page-container {
         width: auto;

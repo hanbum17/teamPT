@@ -36,6 +36,9 @@ button {
 .btnInquiry {
     background-color: #dc3545;
 }
+.btnAdminChat{
+	background-color: #000000;
+}
 
 button:hover {
     opacity: 0.9;
@@ -161,6 +164,7 @@ th:nth-child(3), td:nth-child(3) {
         <button class="btnFAQ" onclick="showSection('faq')">자주 묻는 질문(FAQ)</button>
         <button class="btnFeedback" onclick="showSection('feedback')">고객의 소리(건의사항)</button>
         <button class="btnInquiry" onclick="showSection('inquiry')">1:1 문의</button>
+        <a href="http://195.168.9.110:8080/chat/adminChat">관리자와 실시간 채팅</a>
     </div>
 
     <div id="faq" class="section">

@@ -33,9 +33,31 @@ public class WebSocketController {
 	//채팅방 페이지
 	@GetMapping("/chat/chat")
 	public String chat(int roomId, Model model, Principal principal) {
+		System.out.println("/chat/chat 실행됨.");
 		model.addAttribute("roomId", roomId);
 		model.addAttribute("chatRoomTitle", chatService.selectChatRoomTitle(roomId));
 		model.addAttribute("username", principal.getName());
+		return "chat";
+	}
+	
+	@GetMapping("/chat/adminChat")
+	public String adminChatPage(Principal principal, Model model) {
+		String username = principal.getName();
+		ChatRoomDTO chatRoom = chatService.selectAdminChatRoom(username);
+		
+		if(chatRoom == null) {
+			System.out.println("방없음");
+			chatRoom = new ChatRoomDTO();
+			chatService.createChatRoom(username);
+			chatRoom.setRoomId(chatService.selectAdminChatRoom(username).getRoomId());
+			System.out.println(chatRoom.getRoomId());
+		}
+		
+		int roomId = chatRoom.getRoomId();
+		model.addAttribute("roomId", roomId);
+		model.addAttribute("chatRoomTitle", "관리자와 실시간 상담");
+		model.addAttribute("username", principal.getName());
+		
 		return "chat";
 	}
 	
@@ -46,7 +68,6 @@ public class WebSocketController {
 		List<ChatRoomDTO> chatList = chatService.selectChatRoomList(username) ;
 		System.out.println(chatList);
 		model.addAttribute("chatList", chatList);
-		
 		return "chatPage";
 	}
 	

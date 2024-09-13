@@ -40,5 +40,15 @@ public class ChatServiceImpl implements ChatService{
 	public String selectChatRoomTitle(int roomId) {
 		return chatMapper.selectChatRoomTitle(roomId);
 	}
+
+	@Override
+	public Integer createChatRoom(String username) {
+		return chatMapper.createChatRoom(username);
+	}
+
+	@Override
+	public ChatRoomDTO selectAdminChatRoom(String username) {
+		return chatMapper.selectAdminChatRoom(username);
+	}
 	
 }

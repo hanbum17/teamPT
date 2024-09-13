@@ -29,5 +29,17 @@
 		WHERE cr.ROOMID = #{roomId}
 	</select>
 	
+	<!-- 고객센터 실시간채팅방 존재여부 -->
+	<select id="selectAdminChatRoom">
+		SELECT * FROM CHATROOM
+		WHERE userId1 = #{username} 
+	</select>
+	
+	<!-- 고객센터 실시간채팅방 생성 -->
+	<insert id="createChatRoom" parameterType="com.teamproject.myteam01.domain.ChatRoomDTO">
+	    INSERT INTO CHATROOM
+	    VALUES(SEQ_ROOMID.NEXTVAL, DEFAULT, #{userId1}, 'admin4')
+	</insert>
+
 	
 </mapper>

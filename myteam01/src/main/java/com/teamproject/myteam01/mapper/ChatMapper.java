@@ -12,5 +12,7 @@ public interface ChatMapper {
 	public List<ChatMessageDTO> selectChatList(int roomId);
 	public List<ChatRoomDTO> selectChatRoomList(String username);
 	public String selectChatRoomTitle(int roomId);
+	public Integer createChatRoom(String username);
+	public ChatRoomDTO selectAdminChatRoom(String username);
 }
  

@@ -14,14 +14,19 @@
 <div id="chat-page" class="hidden">
     <div class="chat-container">
         <div class="chat-header">
-            <h2 id="chat-title">☆★☆902강의장 ${roomId }번 채팅방☆★☆ 참여인원: 0</h2>
+            <h2 id="chat-title">채팅방</h2>
         </div>
         <!-- <div class="connecting">
             연결중...
         </div> -->
-        <ul id="messageArea">
         
+        <ul id="messageArea">
+        	<li class="invisible-chat">
+       			<div class="chat1">가상의 메시지입니다</div>
+    		</li>
+    		<!-- 채팅이 표시되는 곳 -->
         </ul>
+        
         <form id="messageForm" name="messageForm">
             <div class="form-group">
                 <div class="input-group clearfix">
