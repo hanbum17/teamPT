@@ -1,8 +1,11 @@
 package com.teamproject.myteam01.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
 import com.teamproject.myteam01.domain.FavoriteItemVO;
 import com.teamproject.myteam01.domain.FavoriteListVO;
 
@@ -28,6 +31,8 @@ public interface FavoriteMapper {
 
     // 즐겨찾기 목록 이름을 수정하는 메서드
     void updateFavoriteListName(FavoriteListVO favoriteListVO);
+    
+    void updateFavoriteList(@Param("favoriteId") Long favoriteId, @Param("newListId") Long newListId);
 
     // 즐겨찾기 목록을 삭제하는 메서드
     void deleteFavoriteList(Long listId);

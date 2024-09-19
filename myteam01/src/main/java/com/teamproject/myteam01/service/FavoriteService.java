@@ -1,6 +1,9 @@
 package com.teamproject.myteam01.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -51,6 +54,12 @@ public class FavoriteService {
     public void updateFavoriteListName(FavoriteListVO favoriteListVO) {
         favoriteMapper.updateFavoriteListName(favoriteListVO);
     }
+    
+    public void updateFavoriteList(Long favoriteId, Long newListId) {
+        favoriteMapper.updateFavoriteList(favoriteId, newListId);
+    }
+
+
 
     public void deleteFavoriteList(Long listId) {
         favoriteMapper.deleteFavoriteList(listId);
