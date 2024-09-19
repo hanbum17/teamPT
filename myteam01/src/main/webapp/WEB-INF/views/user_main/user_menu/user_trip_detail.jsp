@@ -79,13 +79,14 @@
 					        <p class="place-name">${place.placeName}</p>
 					        <p class="place-address">${place.address}</p>
 					    </div>
-					    <div>
-					        <label>일정 시작 시간: </label>
-					        <input type="time" class="place-time" value="${place.startDate}">
-					    </div>
-					    <div>
-					        <!-- 빼기 버튼 -->
-					        <button class="exclude-btn">빼기</button>
+					    <div class="right-container">
+					        <div class="place-time-container">
+					            <input type="time" class="place-time" value="${place.startDate}">
+					        </div>
+					        <div>
+					            <!-- 빼기 버튼 -->
+					            <button class="exclude-btn">빼기</button>
+					        </div>
 					    </div>
 					</div>
 			    </c:forEach>

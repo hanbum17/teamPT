@@ -84,6 +84,33 @@ public class UserController {
         model.addAttribute("user", user);
         return "user_main/user_menu/user_detail"; // 해당 JSP 페이지로 이동
     }
+    
+    @PostMapping("/user/changePassword")
+    public String changePassword(@AuthenticationPrincipal UserDetails userDetails,
+                                 @RequestParam("oldPassword") String oldPassword,
+                                 @RequestParam("newPassword") String newPassword,
+                                 @RequestParam("confirmPassword") String confirmPassword,
+                                 RedirectAttributes redirectAttributes) {
+        UserVO user = userService.findByUsername(userDetails.getUsername());
+
+        // 현재 비밀번호가 맞는지 확인
+        if (!userService.checkPassword(user, oldPassword)) {
+            redirectAttributes.addFlashAttribute("error", "현재 비밀번호가 일치하지 않습니다.");
+            return "redirect:/user/user_detail";
+        }
+
+        // 새 비밀번호와 확인 비밀번호가 일치하는지 확인
+        if (!newPassword.equals(confirmPassword)) {
+            redirectAttributes.addFlashAttribute("error", "새 비밀번호가 일치하지 않습니다.");
+            return "redirect:/user/user_detail";
+        }
+
+        // 비밀번호 변경
+        userService.changePassword(user, newPassword);
+        redirectAttributes.addFlashAttribute("message", "비밀번호가 성공적으로 변경되었습니다.");
+
+        return "redirect:/user/user_detail";
+    }
 
     // 즐겨찾기 목록 페이지로 이동
     @GetMapping("/user/user_fav")

@@ -1,5 +1,5 @@
 .content h3 {
-	margin-bottom: 5px;
+    margin-bottom: 5px;
 }
 
 .content-header {
@@ -19,7 +19,6 @@
     flex: 1; /* 남은 공간을 차지 */
     max-height: calc(100vh - 250px); /* 상단 영역의 높이를 제외한 최대 높이 */
     padding: 0 10px;
-
 }
 
 .back-button,
@@ -29,7 +28,6 @@
 
 /* Back 버튼 스타일 */
 .back-button {
-
     background-color: #009fff; /* 버튼 배경 색상 */
     color: #fff; /* 버튼 텍스트 색상 */
     border: none; /* 기본 테두리 제거 */
@@ -45,11 +43,10 @@
 
 /* 장소 등록 버튼 스타일 */
 .add-place-btn {
-	
     background-color: #009fff;
     color: white;
     border: none; /* 기본 테두리 제거 */
-    border-radius: 4px; 
+    border-radius: 4px;
     padding: 8px 16px;
     font-size: 14px;
     cursor: pointer;
@@ -93,34 +90,21 @@
     cursor: pointer;
 }
 
-
-
-
-.dropped-place {
-    border: 1px solid #ddd;
-    margin: 10px 0;
-    padding: 10px;
-    background-color: #f9f9f9;
-    border-radius: 5px;
-}
-
 /* 등록된 장소 리스트 전체를 가로로 정렬 */
 .place-list-header {
-	display: flex;
+    display: flex;
     align-items: center; /* 세로 중앙 정렬 */
     margin: 10px 0;
 }
 
-
 .place-list-header h3 {
-	margin : 0;
-	margin-right: 10px;
+    margin: 0;
+    margin-right: 10px;
 }
 
 /* 삭제 모드 버튼 스타일 */
 .delete-mode-btn {
-	
-    background-color: #28a745; 
+    background-color: #28a745;
     color: white;
     border: none;
     border-radius: 3px;
@@ -136,17 +120,12 @@
 .place-list {
     display: flex;
     justify-content: flex-start; /* 오른쪽에서부터 정렬 */
-    overflow-x: auto; 
-    white-space: nowrap; 
+    overflow-x: auto;
+    white-space: nowrap;
     gap: 10px; /* 아이템 간 간격 */
     padding: 5px; /* 리스트 내부 여백 */
     min-height: 120px;
-
 }
-
-
-
-
 
 /* 개별 장소 아이템 스타일 */
 .place-item {
@@ -166,39 +145,51 @@
     word-break: break-all; /* 긴 단어가 있으면 강제로 줄바꿈 */
 }
 
+.place-name, .place-address {
+    white-space: nowrap;       
+    overflow: hidden;        
+    text-overflow: ellipsis;  
+   
+    vertical-align: top;   
+}
 
+.place-name {
+    font-weight: bold;
+    margin: 0;
+    max-width: 250px;  
+}
 
-
+.place-address {
+    color: #555;
+    margin: 0;
+    max-width: 450px;  
+}
 
 /* 드래그 시 변화 */
 .place-item:active {
     cursor: grabbing; /* 드래그 중일 때 커서 */
 }
 
-
 .scheduleContainer-header {
-	display: flex;
-	margin-top: 35px;
-	margin-bottom: 15px;
-	
+    display: flex;
+    margin-top: 35px;
+    margin-bottom: 15px;
 }
 
 .scheduleContainer-header h3 {
-	margin : 0;
-	margin-right: 10px;
+    margin: 0;
+    margin-right: 10px;
 }
 
 .pagination {
     align-content: center;
-
 }
 
 .pagination a {
     text-decoration: none; /* 기본 링크 밑줄 제거 */
     color: #009fff; /* 링크 색상 */
     padding: 4px 8px; /* 내부 여백 */
-    
-    font-size : 15px;
+    font-size: 15px;
     margin: 0 1px; /* 아이템 간 간격 */
     border: none; /* 테두리 */
     border-radius: 4px; /* 둥근 테두리 */
@@ -223,10 +214,9 @@
 #scheduleContainer {
     border: 2px dashed #ccc; /* 점선 테두리 */
     padding: 10px;
-    min-height: 150px auto; /* 최소 높이 */
+    min-height: 150px; /* 최소 높이 */
     margin-bottom: 20px; /* 일정 저장 버튼과의 간격 */
-        position: relative;
-    
+    position: relative;
 }
 
 #dragGuideText {
@@ -246,7 +236,7 @@
 .dropped-place {
     border: 1px solid #ddd;
     margin: 10px;
-    padding: 15px;
+    padding: 15px 20px;
     background-color: #fff;
     border-radius: 4px; /* 모서리를 둥글게 */
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 부드러운 그림자 */
@@ -256,13 +246,20 @@
     align-items: center; /* 아이템이 세로로 중앙 정렬되도록 */
 }
 
-
-/* 내부 텍스트 및 시간 설정 input에 추가적인 스타일 */
-.dropped-place p {
-    margin: 0;
-    font-weight: bold;
-    color: #333;
+.right-container {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* 시간 필드와 빼기 버튼 사이 간격 */
 }
+
+/* 일정 시작 시간과 필드 수평 정렬 */
+.place-time-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+
 
 .place-time {
     border: 1px solid #ccc;
@@ -270,7 +267,22 @@
     border-radius: 4px;
     background-color: #fff;
     font-size: 14px;
-    width: 120px;
+    width: 105px;
+	margin: 3px 0;
+
+}
+
+.exclude-btn {
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.exclude-btn:hover {
+    background-color: #d9534f;
 }
 
 /* 일정 저장 버튼 스타일 */
@@ -281,10 +293,9 @@
     background-color: #28a745; /* 버튼 배경색 */
     color: white; /* 버튼 글자색 */
     border: none;
-    border-radius : 4px;
+    border-radius: 4px;
     font-size: 16px; /* 글자 크기 */
     cursor: pointer;
-    
 }
 
 #saveScheduleBtn:hover {
@@ -296,5 +307,112 @@
 
 
 
+/* -------------------------------------------------------------------------------------------------------------- */
+
+/* 모달 창 배경 스타일 */
+.modal {
+    display: none; /* 기본적으로 숨김 */
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* 어두운 배경 */
+}
+
+/* 모달 콘텐츠 스타일 */
+.modal-content {
+    background-color: #fff;
+    margin: 10% auto;
+    padding: 20px;
+    border-radius: 10px; /* 둥근 모서리 */
+    width: 40%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 그림자 효과 */
+}
+
+/* 제목 스타일 */
+.modal-content h3 {
+    margin-top: 0;
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+/* 입력 필드 스타일 */
+.modal-content input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px; /* 둥근 모서리 */
+    box-sizing: border-box;
+    font-size: 1em;
+}
+
+/* 폼 라벨 스타일 */
+.modal-content label {
+    font-weight: bold;
+    margin-top: 10px;
+    display: block; /* 라벨을 블록으로 표시 */
+}
+
+/* 장소 추가 버튼 스타일 */
+.modal-content button[type="submit"] {
+    background-color: #4CAF50; /* 녹색 배경 */
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%; /* 전체 너비 차지 */
+    font-size: 1.1em;
+    margin-top: 10px;
+}
+
+.modal-content button[type="submit"]:hover {
+    background-color: #45a049; /* 호버 시 색상 변경 */
+}
+
+/* 즐겨찾기 목록 섹션 스타일 */
+#favoritesContainer {
+    margin-top: 20px;
+    border-top: 1px solid #ddd;
+    padding-top: 20px;
+}
+
+/* 즐겨찾기 아이템 스타일 */
+.favorite-item {
+    background-color: #f9f9f9;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between; /* 내부 아이템들을 양쪽에 배치 */
+    align-items: center; /* 세로 가운데 정렬 */
+}
+
+/* 즐겨찾기 아이템 텍스트 스타일 */
+.favorite-item p {
+    margin: 0;
+    font-size: 1em;
+    color: #333;
+}
+
+/* 선택 버튼 스타일 */
+.select-favorite {
+    background-color: #009fff; /* 파란색 배경 */
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9em;
+}
+
+.select-favorite:hover {
+    background-color: #007acc; /* 호버 시 색상 변경 */
+}
 
 

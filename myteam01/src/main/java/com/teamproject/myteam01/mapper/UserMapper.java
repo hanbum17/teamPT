@@ -26,6 +26,9 @@ public interface UserMapper {
 
     // 마지막 로그인 날짜를 업데이트
     void updateLastLoginDate(String userId);
+    
+ // 사용자 비밀번호 업데이트
+    void updateUserPassword(UserVO user);
 
     // 사용자 정보를 업데이트
     void updateUser(UserVO userVO);

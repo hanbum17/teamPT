@@ -56,6 +56,12 @@
             userType = #{userType}
         WHERE userId = #{userId}
     </update>
+    
+    <update id="updateUserPassword" parameterType="com.teamproject.myteam01.domain.UserVO">
+	    UPDATE users
+	    SET userPw = #{userPw}
+	    WHERE userId = #{userId}
+	</update>
 
     <!-- 회원 탈퇴 기능: ACCOUNT_STATUS를 1로 업데이트 -->
     <update id="updateAccountStatus" parameterType="map">
