@@ -1,3 +1,4 @@
+
 package com.teamproject.myteam01.service;
 
 import com.teamproject.myteam01.domain.UserVO;
@@ -56,8 +57,19 @@ public class UserService {
         userMapper.updateLastLoginDate(userId);
     }
     
+
+    public Integer findUserRoleId(String userId) {
+        return userMapper.findUserRoleId(userId);
+    }
+    
+    public boolean isUserAdmin(String userId) {
+        Integer roleId = userMapper.findUserRoleId(userId);
+        return roleId != null && roleId == 1;
+    }
+
     public void deactivateAccount(String userId) {
         userMapper.updateAccountStatus(userId, 1); // 1로 업데이트하여 계정을 비활성화
+
     }
 }
 

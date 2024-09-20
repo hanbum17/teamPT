@@ -1,5 +1,7 @@
 package com.teamproject.myteam01.domain;
 
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -36,7 +38,12 @@ public class EventVO {
         this.eycoord = eycoord;
     }
     
+    private Long page;
+	private Long pageSize;
+	private Long offset;
+	
+	private List<EventReviewVO> reviewsList;
+    
 }
-
 
 

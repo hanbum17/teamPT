@@ -92,7 +92,6 @@ public class RestaurantServiceImpl implements RestaurantService{
 	    return reviews; // 빈 리스트를 반환
 	}
 
-	
 	@Override
 	public int registerReview(RestaurantsReviewVO restReviewVO) {
 		return restaurantMapper.registerReview(restReviewVO);
@@ -110,7 +109,6 @@ public class RestaurantServiceImpl implements RestaurantService{
 
 	
 	//윤정 파트
-
 	@Override
 	   public Long registerRest(RestaurantVO rest, AttachFileDTO attach) {
 	      System.out.println("서비스에 전달된 레스토랑 값: "+rest);
@@ -132,11 +130,31 @@ public class RestaurantServiceImpl implements RestaurantService{
 	      return rest.getFno();
 	   }
 	
-		public List<RestaurantVO> getRestList(){
-			return restaurantMapper.selectRestList();
+		/* 행사조회 ServiceImple , page번호와 pageSize표시할 개수를 매개변수로 받아
+		 * VO에 세팅해준다. 이후 해당 값을 매퍼로 넘겨서 리스트를 10개씩 가져온다. */
+		@Override
+		public List<RestaurantVO> getRestList(Long page, Long pageSize){
+			RestaurantVO restVO = new RestaurantVO();
+			Long offSet = (page- 1 ) * pageSize;
+			
+			restVO.setPage(page);
+			restVO.setPageSize(pageSize);
+			restVO.setOffset(offSet);
+			
+			List<RestaurantVO> restList = restaurantMapper.selectRestList(restVO);
+			System.out.println("테스트3");
+			return restList;
 		}
+		
+		@Override
+		public List<RestaurantsReviewVO> modifyreview(RestaurantsReviewVO restReviewVO) {
+			System.out.println("리뷰 수정 서비스 값: "+restReviewVO);
+			restaurantMapper.updaterestreview(restReviewVO);
+			return null;
+		}
+		
+		
 
 	
-
 	
 }
