@@ -6,29 +6,30 @@
     <title>Vroom - Home</title>
     <link rel="stylesheet" type="text/css" href="/css/vroomMain.css"> <!-- CSS 파일 링크 -->
     <style>
-	    .footer {
-		    text-align: center; /* 가운데 정렬 */
-		    margin-top: 20px; /* 위쪽 여백 */
-		}
-		
-		.footer hr {
-		    border: 1px solid #ccc; /* 연한 회색 줄 */
-		    margin: 10px 0; /* 상하 여백 */
-		}
-		
-		.footer-info {
-		    font-size: 12px; /* 글자 크기 */
-		    color: #aaa; /* 연한 회색 */
-		}
-		
-		.footer-info a {
-		    color: #aaa; /* 연한 회색 링크 */
-		    text-decoration: none; /* 밑줄 제거 */
-		}
-		
-		.footer-info a:hover {
-		    text-decoration: underline; /* hover 시 밑줄 */
-		}
+        .footer {
+            text-align: center; /* 가운데 정렬 */
+            margin-top: 20px; /* 위쪽 여백 */
+        }
+        
+        .footer hr {
+            border: 1px solid #ccc; /* 연한 회색 줄 */
+            margin: 10px 0; /* 상하 여백 */
+        }
+        
+        .footer-info {
+            font-size: 12px; /* 글자 크기 */
+            color: #aaa; /* 연한 회색 */
+        }
+        
+        .footer-info a {
+            color: #aaa; /* 연한 회색 링크 */
+            text-decoration: none; /* 밑줄 제거 */
+        }
+        
+        .footer-info a:hover {
+            text-decoration: underline; /* hover 시 밑줄 */
+        }
+        
         .area {
             position: absolute;
             background: #fff;
@@ -67,7 +68,6 @@
     </div>
 
     <div class="container">
-        <!-- 가운데 상자에 있는 사진을 제거하고 지도만 남깁니다 -->
         <div class="box">
             <div id="map"></div>
         </div>
@@ -76,40 +76,45 @@
         </div>
     </div>
 
-
-<div class="footer">
-    <a href="/vroom/policy?section=terms">이용약관</a>
-    <a href="/vroom/policy?section=privacy">개인정보 취급방침</a>
-    <a href="/vroom/policy?section=cookiePolicy">쿠키정책</a>
-    <a href="/vroom/policy?section=youthUsagePolicy">청소년 보호정책</a>
-    <a href="/vroom/policy">사이트 운영방식</a>
-    <a href="/cs/Center">고객센터</a>
-      <hr> <!-- 가로 줄 추가 -->
-    <div class="footer-info">
-        <p>© 2024 Vroom. All Rights Reserved</p>
-        <p>VroomCompany | 서울특별시 종로구 종로12길 15, 9층 902호</p>
-        <p>사업자등록번호 111-22-33333 | 고객 문의 02-2222-3333 | <a href="#">사업자정보 확인</a></p>
+    <div class="footer">
+        <a href="/vroom/policy?section=terms">이용약관</a>
+        <a href="/vroom/policy?section=privacy">개인정보 취급방침</a>
+        <a href="/vroom/policy?section=cookiePolicy">쿠키정책</a>
+        <a href="/vroom/policy?section=youthUsagePolicy">청소년 보호정책</a>
+        <a href="/vroom/policy">사이트 운영방식</a>
+        <a href="/cs/Center">고객센터</a>
+        <hr> <!-- 가로 줄 추가 -->
+        <div class="footer-info">
+            <p>© 2024 Vroom. All Rights Reserved</p>
+            <p>VroomCompany | 서울특별시 종로구 종로12길 15, 9층 902호</p>
+            <p>사업자등록번호 111-22-33333 | 고객 문의 02-2222-3333 | <a href="#">사업자정보 확인</a></p>
+        </div>
     </div>
-</div>
-
 
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=bc42aa044cb0d127af995d28498082d8"></script>
     <script>
         // 서울시 영역 데이터를 가져옵니다
         fetch('/json/SIDO_MAP.json')
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok ' + response.statusText);
+                }
+                return response.json();
+            })
             .then(data => {
-                console.log(data); // 데이터 구조 확인
+                console.log('Loaded data:', data); // 데이터 로드 확인
                 
                 if (data.features && Array.isArray(data.features)) {
                     var areas = data.features.map(feature => ({
-                        name: feature.properties.CTP_ENG_NM,
+                        name: feature.properties.CTP_KOR_NM,
                         path: feature.geometry.coordinates[0].map(coord => {
                             const lat = coord[1];
                             const lng = coord[0];
                             return new kakao.maps.LatLng(lat, lng);
                         })
                     }));
+
+                    console.log('Areas:', areas); // 생성된 area 출력
 
                     var mapContainer = document.getElementById('map'),
                         mapOption = { 
@@ -207,6 +212,8 @@
                     }
 
                     function displayGuArea(guArea) {
+                        console.log("Area Name:", guArea.name); // 수정: area.name에서 guArea.name으로
+                        console.log("Coordinates:", guArea.path);
                         var guPolygon = new kakao.maps.Polygon({
                             map: map,
                             path: guArea.path,
