@@ -17,7 +17,7 @@
 		<div class="fav-playlist-container">
 			<div class="fav-items-container">
 				<c:forEach var="favoriteItem" items="${favoriteItems}">
-					<div class="fav-item" onclick="navigateTo('${favoriteItem.link}')">
+					<div class="fav-item" onclick="navigateTo('${favoriteItem.link}')" style="border-right-color: ${favoriteList.color};">
 						<div class="fav-item-thumbnail">
 							<%-- <img src="${favoriteItem.thumbnail}" alt="Thumbnail"> --%>
 						</div>
@@ -55,7 +55,8 @@
 							<div class="fav-dropdown">
 								<button class="fav-more-btn" onclick="event.stopPropagation();">⋮</button>
 								<div class="fav-dropdown-content">
-									<button class="fav-edit-btn" type="submit" onclick="event.stopPropagation();">수정</button>
+									<button class="fav-edit-btn" type="button" onclick="showEditModal(${favoriteItem.favoriteId}); event.stopPropagation();">수정</button>
+
 
 									<form action="/user/favorites/remove" method="post" onsubmit="return confirm('정말로 삭제하시겠습니까?');" onclick="event.stopPropagation();">
 										<input type="hidden" name="favoriteId" value="${favoriteItem.favoriteId}">
@@ -70,6 +71,21 @@
 			</div>
 		</div>
 	</div>
+	<!-- 수정 모달 -->
+	<div id="editModal" class="modal" style="display:none;">
+	  <div class="modal-content">
+	    <h3>즐겨찾기 수정</h3>
+	    <label for="newList">이동할 즐겨찾기 목록을 선택하세요:</label>
+	    <select id="newListSelect" size="5">
+	      <c:forEach var="list" items="${favoriteLists}">
+	        <option value="${list.listId}">${list.listName}</option>
+	      </c:forEach>
+	    </select>
+	    <button id="saveChangesBtn">저장</button>
+	    <button id="closeModalBtn">닫기</button>
+	  </div>
+	</div>
+	
 </main>
 
 <script>
@@ -81,5 +97,40 @@
 	// 클릭 시 해당 링크로 이동하는 함수
 	function navigateTo(url) {
 		window.location.href = url;
+	}
+	
+	// 수정 모달 보여주기
+	function showEditModal(favoriteId) {
+	    document.getElementById('editModal').style.display = 'block';
+	    document.getElementById('saveChangesBtn').onclick = function() {
+	        const newListId = document.getElementById('newListSelect').value;
+	        updateFavoriteList(favoriteId, newListId);
+	    };
+	}
+
+	// 모달 닫기
+	document.getElementById('closeModalBtn').onclick = function() {
+	    document.getElementById('editModal').style.display = 'none';
+	};
+	
+
+
+	// Ajax로 즐겨찾기 목록 업데이트
+	function updateFavoriteList(favoriteId, newListId) {
+	    $.ajax({
+	        type: 'POST',
+	        url: '/user/favorites/updateList',
+	        data: {
+	            favoriteId: favoriteId,
+	            newListId: newListId
+	        },
+	        success: function(response) {
+	            alert('즐겨찾기 목록이 변경되었습니다.');
+	            window.location.reload();  // 페이지 새로고침
+	        },
+	        error: function(xhr, status, error) {
+	            alert('즐겨찾기 목록 변경에 실패했습니다.');
+	        }
+	    });
 	}
 </script>

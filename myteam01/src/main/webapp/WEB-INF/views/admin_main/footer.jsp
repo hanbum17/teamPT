@@ -48,10 +48,12 @@
         <!-- 메인 콘텐츠가 들어갈 부분 -->
     </main>
     <footer>
-        <a href="#">이용약관</a>
-        <a href="#">개인정보 취급방침 및 쿠키정책</a>
-        <a href="#">쿠키동의</a>
-        <a href="#">문의하기</a>
+        <a href="/vroom/policy?section=terms">이용약관</a>
+	    <a href="/vroom/policy?section=privacy">개인정보 취급방침</a>
+	    <a href="/vroom/policy?section=cookiePolicy">쿠키정책</a>
+	    <a href="/vroom/policy?section=youthUsagePolicy">청소년 보호정책</a>
+	    <a href="/vroom/policy">사이트 운영방식</a>
+        <a href="/cs/Center">고객센터</a>
     </footer>
 </body>
 </html>
