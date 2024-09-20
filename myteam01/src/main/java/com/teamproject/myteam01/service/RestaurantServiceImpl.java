@@ -132,6 +132,17 @@ public class RestaurantServiceImpl implements RestaurantService{
 	
 		/* 행사조회 ServiceImple , page번호와 pageSize표시할 개수를 매개변수로 받아
 		 * VO에 세팅해준다. 이후 해당 값을 매퍼로 넘겨서 리스트를 10개씩 가져온다. */
+		/*
+		 * @Override public List<RestaurantVO> getRestList(Long page, Long pageSize){
+		 * RestaurantVO restVO = new RestaurantVO(); Long offSet = (page- 1 ) *
+		 * pageSize;
+		 * 
+		 * restVO.setPage(page); restVO.setPageSize(pageSize); restVO.setOffset(offSet);
+		 * 
+		 * List<RestaurantVO> restList = restaurantMapper.selectRestList(restVO);
+		 * System.out.println("테스트3"); return restList; }
+		 */
+	
 		@Override
 		public List<RestaurantVO> getRestList(Long page, Long pageSize){
 			RestaurantVO restVO = new RestaurantVO();
@@ -142,9 +153,16 @@ public class RestaurantServiceImpl implements RestaurantService{
 			restVO.setOffset(offSet);
 			
 			List<RestaurantVO> restList = restaurantMapper.selectRestList(restVO);
+			
+			for (RestaurantVO restaurant : restList) {
+	            List<AttachFileDTO> attachFileList = restAttachFile.getAttachFilesByUno(restaurant.getUno());
+	            restaurant.setAttachFileList(attachFileList); // 이미지 리스트를 restaurant에 추가
+	        }
+
 			System.out.println("테스트3");
 			return restList;
 		}
+		
 		
 		@Override
 		public List<RestaurantsReviewVO> modifyreview(RestaurantsReviewVO restReviewVO) {
