@@ -124,7 +124,17 @@
     white-space: nowrap;
     gap: 10px; /* 아이템 간 간격 */
     padding: 5px; /* 리스트 내부 여백 */
-    min-height: 120px;
+    min-height: 90px;
+}
+
+
+.place-list::-webkit-scrollbar {
+    display: none; 
+}
+
+.place-list {
+    -ms-overflow-style: none;  
+    scrollbar-width: none;  
 }
 
 /* 개별 장소 아이템 스타일 */
@@ -162,7 +172,7 @@
 .place-address {
     color: #555;
     margin: 0;
-    max-width: 450px;  
+    max-width: 400px;  
 }
 
 /* 드래그 시 변화 */
@@ -173,41 +183,58 @@
 .scheduleContainer-header {
     display: flex;
     margin-top: 35px;
-    margin-bottom: 15px;
+    margin-bottom: 13px;
 }
 
 .scheduleContainer-header h3 {
     margin: 0;
     margin-right: 10px;
-}
-
-.pagination {
+    min-width: 80px;
     align-content: center;
 }
 
+.pagination {
+    display: flex;
+    justify-content: flex-start; /* 좌측부터 정렬 */
+    align-items: center;
+    overflow-x: auto; /* 가로 스크롤 가능 */
+    white-space: nowrap; /* 줄바꿈 방지 */
+    gap: 10px; /* 각 페이지 버튼 간 간격 */
+    padding: 5px;
+}
+
+/* 스크롤바 숨기기 (가로 스크롤은 작동하지만 스크롤바는 보이지 않게 처리) */
+.pagination::-webkit-scrollbar {
+    display: none; /* 웹킷 기반 브라우저에서 스크롤바 숨기기 */
+}
+
+.pagination {
+    -ms-overflow-style: none;  /* IE와 Edge에서 스크롤바 숨기기 */
+    scrollbar-width: none;  /* Firefox에서 스크롤바 숨기기 */
+}
+
+/* 페이지 버튼 스타일 */
 .pagination a {
     text-decoration: none; /* 기본 링크 밑줄 제거 */
     color: #009fff; /* 링크 색상 */
     padding: 4px 8px; /* 내부 여백 */
     font-size: 15px;
-    margin: 0 1px; /* 아이템 간 간격 */
-    border: none; /* 테두리 */
     border-radius: 4px; /* 둥근 테두리 */
-    background-color: #fff; /* 기본 배경색 */
-    transition: background-color 0.3s ease; /* 호버 효과 부드럽게 */
+    background-color: #fff;
+    transition: background-color 0.3s ease;
 }
 
+/* 호버 시 스타일 */
 .pagination a:hover {
-    background-color: #0056b3; /* 호버 시 배경색 변경 */
-    color: #fff; /* 호버 시 텍스트 색상 변경 */
+    background-color: #0056b3;
+    color: #fff;
 }
 
-/* 현재 페이지 스타일 */
+/* 현재 활성화된 페이지 스타일 */
 .pagination a.active {
-    background-color: #009fff; /* 현재 페이지 배경색 */
-    color: white; /* 현재 페이지 텍스트 색상 */
-    cursor: default; /* 클릭 불가능하게 설정 */
-    pointer-events: none; /* 링크 비활성화 */
+    background-color: #009fff;
+    color: white;
+    pointer-events: none;
 }
 
 /* 드롭존 스타일 */
