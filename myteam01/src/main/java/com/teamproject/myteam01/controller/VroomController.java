@@ -326,4 +326,13 @@ public class VroomController {
 	    }
 	    return response;
 	}
+	
+	@GetMapping("/policy")
+	public String getService() {
+		return "vroom/vroomPolicy";
+	}
+	
+	
+	
+	
 }

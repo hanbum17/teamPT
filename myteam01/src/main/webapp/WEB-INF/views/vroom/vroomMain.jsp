@@ -62,11 +62,11 @@
 </div>
 
 <div class="footer">
-    <a href="#terms">이용약관</a>
-    <a href="#privacy">개인정보 취급방침</a>
-    <a href="#cookies">쿠키정책</a>
-    <a href="#cookie-consent">쿠키동의</a>
-    <a href="#site">사이트 운영방식</a>
+    <a href="/vroom/policy?section=terms">이용약관</a>
+    <a href="/vroom/policy?section=privacy">개인정보 취급방침</a>
+    <a href="/vroom/policy?section=cookiePolicy">쿠키정책</a>
+    <a href="/vroom/policy?section=youthUsagePolicy">청소년 보호정책</a>
+    <a href="/vroom/policy">사이트 운영방식</a>
     <a href="/cs/Center">고객센터</a>
 </div>
 
