@@ -16,12 +16,17 @@ public class SecurityConfig {
     private final CustomUserDetailsService customUserDetailsService;
     private final CustomAuthenticationSuccessHandler successHandler;
     private final CustomAuthenticationFailureHandler failureHandler;
+    private final CustomAccessDeniedHandler accessDeniedHandler;
 
     @Autowired
-    public SecurityConfig(CustomUserDetailsService customUserDetailsService, CustomAuthenticationSuccessHandler successHandler, CustomAuthenticationFailureHandler failureHandler ) {
+    public SecurityConfig(CustomUserDetailsService customUserDetailsService, 
+    						CustomAuthenticationSuccessHandler successHandler, 
+    						CustomAuthenticationFailureHandler failureHandler,
+    						CustomAccessDeniedHandler accessDeniedHandler) {
         this.customUserDetailsService = customUserDetailsService;
         this.successHandler = successHandler;
         this.failureHandler = failureHandler;
+        this.accessDeniedHandler = accessDeniedHandler;
     }
 
     @Bean
@@ -34,7 +39,12 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(authz -> authz
-                .requestMatchers("/WEB-INF/views/user/**", "/user/**", "/resources/**", "/images/**", "/cs/**").permitAll()
+                .requestMatchers("/resources/**", "/images/**").permitAll()
+
+                .requestMatchers("/WEB-INF/views/user/login.jsp", "/WEB-INF/views/user/register.jsp", "/WEB-INF/views/user/registerSelect.jsp").anonymous()
+                
+
+                
                 .requestMatchers("/admin_main/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
             )
@@ -57,6 +67,9 @@ public class SecurityConfig {
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID", "remember-me")
                 .permitAll()
+            )
+            .exceptionHandling(exception -> exception
+                .accessDeniedHandler(accessDeniedHandler)  // AccessDeniedHandler 추가
             );
 
         return http.build();

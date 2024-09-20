@@ -8,15 +8,17 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.teamproject.myteam01.domain.FavoriteItemVO;
+import com.teamproject.myteam01.domain.TripRegisteredPlaceVO;
 import com.teamproject.myteam01.domain.TripPlaceVO;
 import com.teamproject.myteam01.domain.TripPlanVO;
-import com.teamproject.myteam01.service.FavoriteService;
 import com.teamproject.myteam01.service.TripService;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/user")
@@ -24,14 +26,11 @@ public class TripController {
 
     @Autowired
     private TripService tripService;
-    
-    @Autowired
-    private FavoriteService favoriteService;
 
     // 여행 계획 저장
     @PostMapping("/trip/saveTripPlan")
     public String saveTripPlan(@AuthenticationPrincipal UserDetails userDetails, TripPlanVO tripPlan) {
-        String userId = userDetails.getUsername();  
+        String userId = userDetails.getUsername();
         tripPlan.setUserId(userId);               // 사용자 ID 설정
         tripService.saveTripPlan(tripPlan);       // 여행 계획 저장
         return "redirect:/user/trip/list";        // 여행 계획 목록 페이지로 리디렉션
@@ -44,77 +43,130 @@ public class TripController {
         model.addAttribute("tripPlans", tripPlans);
         return "user_main/user_menu/user_trip_list";  // 여행 계획 리스트 페이지로 이동
     }
+    
+    // 여행 계획 삭제
+    @PostMapping("/trip/delete/{tripNo}")
+    public ResponseEntity<String> deleteTripPlan(@PathVariable("tripNo") Long tripNo) {
+        try {
+            tripService.deleteTripPlanAndDetails(tripNo);
+            return ResponseEntity.ok("여행 계획이 삭제되었습니다.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("여행 계획 삭제에 실패했습니다.");
+        }
+    }
+    
+    @PostMapping("/trip/update/{tripNo}")
+    public ResponseEntity<String> updateTrip(@PathVariable("tripNo") Long tripNo, @RequestBody TripPlanVO updatedTrip) {
+        try {
+            // 업데이트 로직
+            tripService.updateTrip(tripNo, updatedTrip);
+            return ResponseEntity.ok("여행 계획이 성공적으로 수정되었습니다.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("여행 계획 수정에 실패했습니다.");
+        }
+    }
 
-    // 여행 세부 계획 보기 (tripDay로 필터링)
+    
+    
+
+    // 여행 계획 세부 내용 보기
     @GetMapping("/trip/detail/{tripNo}")
     public String getTripPlanDetail(@PathVariable("tripNo") Long tripNo,
                                     @RequestParam(value = "day", required = false, defaultValue = "1") Integer tripDay,
                                     Model model, @AuthenticationPrincipal UserDetails userDetails) {
         TripPlanVO tripPlan = tripService.getTripPlan(tripNo);
         
-        // 전체 장소 가져오기 (tripDay와 관계없이 모든 장소)
-        List<TripPlaceVO> allPlaces = tripService.getTripPlacesByTripNo(tripNo);
+        // 모든 장소 가져오기 (등록된 장소)
+        List<TripRegisteredPlaceVO> allRegisteredPlaces = tripService.getRegisteredPlacesByTripNo(tripNo);
         
-        // 특정 tripDay에 해당하는 일정만 가져오기
+        // 특정 day에 해당하는 장소 가져오기
         List<TripPlaceVO> daySpecificPlaces = tripService.getPlacesByTripNoAndDay(tripNo, tripDay);
+       
 
         model.addAttribute("tripPlan", tripPlan);
-        model.addAttribute("places", allPlaces);  // 모든 장소
-        model.addAttribute("daySpecificPlaces", daySpecificPlaces);  // tripDay에 맞는 일정
-        model.addAttribute("tripDay", tripDay);  // 현재 tripDay
-        model.addAttribute("userId", userDetails.getUsername());
-        
-        return "user_main/user_menu/user_trip_detail";
+        model.addAttribute("places", allRegisteredPlaces);  // 전체 등록된 장소
+        model.addAttribute("daySpecificPlaces", daySpecificPlaces);  // 해당 day의 장소
+        model.addAttribute("tripDay", tripDay);
+
+        return "user_main/user_menu/user_trip_detail"; 
     }
-    
-    
 
-
-    // 장소 추가
+ // 장소 추가 (등록)
     @PostMapping("/trip/addPlace")
-    public String addPlace(TripPlaceVO place) {
-        tripService.addPlace(place);  // 장소 추가
-        return "redirect:/user/trip/detail/" + place.getTripNo();  // 해당 여행 계획의 세부 페이지로 리디렉션
+    public String addPlace(@ModelAttribute TripRegisteredPlaceVO place, RedirectAttributes redirectAttributes) {
+        try {
+            tripService.addRegisteredPlace(place);
+            
+            redirectAttributes.addFlashAttribute("message", "장소가 성공적으로 등록되었습니다.");
+            return "redirect:/user/trip/detail/" + place.getTripNo();
+        } catch (Exception e) {
+            e.printStackTrace();
+            
+            redirectAttributes.addFlashAttribute("message", "장소 등록에 실패했습니다.");
+            return "redirect:/user/trip/detail/" + place.getTripNo();
+        }
     }
     
-    // 장소 삭제
+    // 등록된 장소 삭제
     @PostMapping("/trip/deletePlace")
+    @ResponseBody
     public ResponseEntity<String> deletePlace(@RequestParam Long placeId) {
-        tripService.deletePlace(placeId);  // 장소 삭제 처리
-        return ResponseEntity.ok("삭제 완료");
+        try {
+            tripService.deletePlace(placeId);  // 서비스 호출
+            return ResponseEntity.ok("장소가 성공적으로 삭제되었습니다.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("장소 삭제에 실패했습니다.");
+        }
+    }
+    
+    // 즐겨찾기 목록에서 장소 선택 시 처리
+    @PostMapping("/trip/favoritePlace")
+    @ResponseBody
+    public String addFavoritePlace(@RequestParam Long tripNo, @RequestParam String placeName, @RequestParam String address) {
+    	TripRegisteredPlaceVO place = new TripRegisteredPlaceVO();
+        place.setTripNo(tripNo);
+        place.setPlaceName(placeName);
+        place.setAddress(address);
+        tripService.addRegisteredPlace(place);
+        return "success";  // 성공 시 클라이언트로 메시지 반환
     }
 
     // 일정 저장
     @PostMapping("/trip/saveSchedule")
     public ResponseEntity<String> saveSchedule(@RequestBody List<TripPlaceVO> schedule) {
+    	for (TripPlaceVO place : schedule) {
+            System.out.println("받은 일정 정보: " + place);
+        }
         try {
-            // schedule 객체 출력해보기 (디버깅용)
-            schedule.forEach(place -> System.out.println(place.toString()));
-            
             tripService.saveTripSchedule(schedule);
             return ResponseEntity.ok("일정이 성공적으로 저장되었습니다.");
         } catch (Exception e) {
-            e.printStackTrace();  // 예외 스택 트레이스 출력
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("일정 저장에 실패했습니다.");
         }
     }
     
-    @PostMapping("/trip/excludeSchedule")
-    public ResponseEntity<String> excludeSchedule(@RequestBody Map<String, Object> requestData) {
-        try {
-            Long tripPlaceId = Long.valueOf(requestData.get("tripPlaceId").toString());
-            Integer orderNum = Integer.valueOf(requestData.get("orderNum").toString());
-            Long tripNo = Long.valueOf(requestData.get("tripNo").toString());
-            Integer tripDay = Integer.valueOf(requestData.get("tripDay").toString());
 
-            // 일정 제외 처리 로직 수행 (tripDay, startDate, orderNum을 null로 설정)
-            tripService.excludeTripSchedule(tripPlaceId, tripNo, orderNum, tripDay);
-            
-            return ResponseEntity.ok("일정 제외가 성공적으로 처리되었습니다.");
+    
+    // 일정 삭제
+    @PostMapping("/trip/deleteSchedule")
+    @ResponseBody
+    public ResponseEntity<String> deleteSchedule(@RequestBody Map<String, Object> requestData) {
+        try {
+            Long tripPlaceId = Long.parseLong((String) requestData.get("tripPlaceId")); // String -> Long 변환
+            Long tripNo = Long.parseLong((String) requestData.get("tripNo")); // String -> Long 변환
+            Integer orderNum = Integer.parseInt((String) requestData.get("orderNum")); // String -> Integer 변환
+            Integer tripDay = Integer.parseInt((String) requestData.get("tripDay")); // String -> Integer 변환
+
+            tripService.deleteSchedule(tripPlaceId, tripNo, orderNum, tripDay);
+            return ResponseEntity.ok("일정이 성공적으로 삭제되었습니다.");
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                                 .body("일정 제외에 실패했습니다.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("일정 삭제에 실패했습니다.");
         }
     }
+
 }
