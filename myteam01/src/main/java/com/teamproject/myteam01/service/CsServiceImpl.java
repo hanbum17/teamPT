@@ -61,13 +61,14 @@ public class CsServiceImpl implements CsService{
 	@Override
 	public List<CsVO> csInList(){
 		return csMapper.selectInquiryList();
+		
 	}
 	
 	//Inquiry 등록
 	@Override
 	public Long regiIn(CsVO inq) {
 		csMapper.registerInquiry(inq);
-		return inq.getFaqno();
+		return inq.getIno();
 	}
 	
 	//Inquiry 조회
@@ -98,14 +99,14 @@ public class CsServiceImpl implements CsService{
 	//FeedBack 목록
 	@Override
 	public List<CsVO> csFBList(){
-		return csMapper.selectFAQList();
+		return csMapper.selectFeedbackList();
 	}
 	
 	//FeedBack 등록
 	@Override
 	public Long regiFB(CsVO feeb) {
 		csMapper.registerFeedback(feeb);
-		return feeb.getFaqno();
+		return feeb.getFbno();
 	}
 	
 	//FeedBack 조회
