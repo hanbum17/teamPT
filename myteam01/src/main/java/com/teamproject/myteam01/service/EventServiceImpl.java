@@ -171,7 +171,17 @@ public class EventServiceImpl implements EventService{
 	@Override
 	public boolean removeEvent(Long eno) {
 		return eventMapper.delEvent(eno) == 1;
-		
 	}
 	
+	//날짜 조회
+	@Override
+	public List<EventVO> eventRegDate(){
+		return eventMapper.selectRegDate();
+	}
+	
+	//최신순 조회
+	@Override
+	public List<EventVO> recentEvent(){
+		return eventMapper.selectRecentEvent();
+	}
 }

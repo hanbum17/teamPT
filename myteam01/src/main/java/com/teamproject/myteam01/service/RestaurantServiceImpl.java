@@ -171,8 +171,17 @@ public class RestaurantServiceImpl implements RestaurantService{
 			return null;
 		}
 		
-		
+		//모든 식당 등록된 날짜만 조회
+		@Override
+		public List<RestaurantVO> restRegDate(){
+			return restaurantMapper.selectRegDate();
+		}
 
+		//최신순 10개 조회
+		@Override
+		public List<RestaurantVO> recentRest(){
+			return restaurantMapper.selectRecentRest();
+		}
 	
 	
 }

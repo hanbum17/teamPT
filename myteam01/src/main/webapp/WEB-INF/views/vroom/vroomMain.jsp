@@ -93,20 +93,17 @@
 
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=bc42aa044cb0d127af995d28498082d8"></script>
     <script>
+    // 카카오 지도 API 로드 후 실행
+    document.addEventListener('DOMContentLoaded', function () {
         // 서울시 영역 데이터를 가져옵니다
         fetch('/json/SIDO_MAP.json')
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok ' + response.statusText);
-                }
-                return response.json();
-            })
+            .then(response => response.json())
             .then(data => {
-                console.log('Loaded data:', data); // 데이터 로드 확인
+                console.log(data); // 데이터 구조 확인
                 
                 if (data.features && Array.isArray(data.features)) {
                     var areas = data.features.map(feature => ({
-                        name: feature.properties.CTP_KOR_NM,
+                        name: feature.properties.CTP_ENG_NM,
                         path: feature.geometry.coordinates[0].map(coord => {
                             const lat = coord[1];
                             const lng = coord[0];
@@ -114,16 +111,14 @@
                         })
                     }));
 
-                    console.log('Areas:', areas); // 생성된 area 출력
-
-                    var mapContainer = document.getElementById('map'),
-                        mapOption = { 
-                            center: new kakao.maps.LatLng(36.591186820098365, 128.19210633207655),
-                            level: 13,
-                            draggable: false,
-                            scrollwheel: false,
-                            disableDoubleClickZoom: true
-                        };
+                    var mapContainer = document.getElementById('map');
+                    var mapOption = { 
+                        center: new kakao.maps.LatLng(36.591186820098365, 128.19210633207655),
+                        level: 13,
+                        draggable: false,
+                        scrollwheel: false,
+                        disableDoubleClickZoom: true
+                    };
 
                     var map = new kakao.maps.Map(mapContainer, mapOption),
                         customOverlay = new kakao.maps.CustomOverlay({}),
@@ -212,8 +207,6 @@
                     }
 
                     function displayGuArea(guArea) {
-                        console.log("Area Name:", guArea.name); // 수정: area.name에서 guArea.name으로
-                        console.log("Coordinates:", guArea.path);
                         var guPolygon = new kakao.maps.Polygon({
                             map: map,
                             path: guArea.path,
@@ -248,6 +241,8 @@
                 }
             })
             .catch(error => console.error('Error loading JSON:', error));
+    });
+
     </script>
 </body>
 </html>

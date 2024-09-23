@@ -1,12 +1,15 @@
 
 package com.teamproject.myteam01.service;
 
-import com.teamproject.myteam01.domain.UserVO;
-import com.teamproject.myteam01.mapper.UserMapper;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import com.teamproject.myteam01.domain.UserVO;
+import com.teamproject.myteam01.mapper.UserMapper;
 
 @Service
 public class UserService {
@@ -69,7 +72,24 @@ public class UserService {
 
     public void deactivateAccount(String userId) {
         userMapper.updateAccountStatus(userId, 1); // 1로 업데이트하여 계정을 비활성화
+    }
+    
+    
+    //영범 성별 통계
+    public UserVO countGender() {
+    	
+    	List<UserVO> genderCount = userMapper.userGenderCount();
+    	UserVO result = new UserVO(); // 초기화
 
+        for (UserVO user : genderCount) {
+            if (user.getUserGender() == 'M') {
+                result.setMaleCnt(result.getMaleCnt() + 1L); 
+            } else if (user.getUserGender() == 'F') {
+                result.setFemaleCnt(result.getFemaleCnt() + 1L);
+            }
+        }
+    	
+    	return result;
     }
 }
 

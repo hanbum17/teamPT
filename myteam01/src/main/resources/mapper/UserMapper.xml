@@ -83,5 +83,9 @@
         WHERE USERID = #{userId}
     </update>
 
+	<!-- 영범 성별 통계 -->
+	<select id="userGenderCount" resultType="com.teamproject.myteam01.domain.UserVO">
+		SELECT userGender from users
+	</select>
 
 </mapper>
