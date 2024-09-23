@@ -19,7 +19,7 @@ body, html {
 /* 채팅 페이지 스타일 */
 .chat-container {
     width: 100%;
-    min-width: 70vw; /* 화면 너비의 70%를 최소 너비로 설정 */
+    min-width: 50vw; /* 화면 너비의 70%를 최소 너비로 설정 */
     max-width: 800px; /* 최대 너비는 유지 */
     height: 90vh;
     margin: 0 auto;
@@ -117,7 +117,7 @@ body, html {
 }
 
 #messageArea .my-chat-message span {
-	text-align: right;
+	/* text-align: right; */
 }
 
 #messageForm {
@@ -197,4 +197,3 @@ body, html {
     .chat-header h2 {
         font-size: 1.1em;
     }
-}
