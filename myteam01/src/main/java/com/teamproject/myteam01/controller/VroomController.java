@@ -77,30 +77,41 @@ public class VroomController {
 
 
     @GetMapping("/restaurant")
-    public String restMain(@AuthenticationPrincipal UserDetails userDetails,  Model model) {
-    	boolean userBoolean;
-    	
-    	// 현재 로그인된 사용자의 ID를 이용해 사용자 정보 조회
+    public String restMain(@AuthenticationPrincipal UserDetails userDetails, @RequestParam(required = false) String guName, Model model) {
+        boolean userBoolean;
+        
+        // 현재 로그인된 사용자의 ID를 이용해 사용자 정보 조회
         if (userDetails != null) {
-        	userBoolean = true;
+            userBoolean = true;
             String userId = userDetails.getUsername();
             UserVO user = userService.findByUsername(userId);
             model.addAttribute("user", user);
             model.addAttribute("userBoolean", userBoolean);
         } else {
-        	userBoolean = false;
-        	model.addAttribute("userBoolean", userBoolean);
+            userBoolean = false;
+            model.addAttribute("userBoolean", userBoolean);
         }
         
         // 식당 목록 추가
         Long restPage = 1L;
         Long restPageSize = 10L;
-        List<RestaurantVO> restList = restService.getRestList(restPage, restPageSize);
+
+        List<RestaurantVO> restList;
+        if (guName != null && !guName.isEmpty()) {
+            // 특정 구의 식당 목록을 가져옴
+            restList = restService.getRestListByGuName(guName, restPage, restPageSize);
+        } else {
+            // 전체 식당 목록을 가져옴
+            restList = restService.getRestList(restPage, restPageSize);
+        }
+
         model.addAttribute("restList", restList);
-        System.out.println("컨트롤러에 전달된 restaurantLis 값"+restList);
+        System.out.println("컨트롤러에 전달된 restaurantLis 값: " + restList);
+        System.out.println("전달받은 guName: " + guName);
 
         return "restaurantList";
     }
+
 
 	
 	

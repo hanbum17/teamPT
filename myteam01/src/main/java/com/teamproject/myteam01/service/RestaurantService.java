@@ -19,6 +19,7 @@ public interface RestaurantService {
 	public Long registerRest(RestaurantVO rest, AttachFileDTO attach);
 	public List<RestaurantVO> getRestList(Long page, Long pageSize);
 	public List<RestaurantsReviewVO> modifyreview(RestaurantsReviewVO restReviewVO);
+	public List<RestaurantVO> getRestListByGuName(String guName, Long page, Long pageSize);
 	//영범
 	public List<RestaurantsReviewVO> selectMoreReviews(RestaurantsReviewVO restReviewVO);
 

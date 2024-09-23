@@ -23,6 +23,8 @@ public interface RestaurantMapper {
 
 	public int updaterestreview(RestaurantsReviewVO restReviewVO);
 	
+	public List<RestaurantVO> selectRestListByGuName(@Param("guName") String guName, @Param("restVO") RestaurantVO restVO);
+	
 	
 
 	//영범

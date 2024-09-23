@@ -51,9 +51,9 @@
         
         /* 지도 스타일 추가 */
         #map {
-            width: 100%;
-            height: 100%;
-            height: 500px;
+            width: 100%; /* 부모 요소인 box의 너비에 맞추기 */
+            height: 100%; /* 부모 요소인 box의 높이에 맞추기 */
+            position: relative; /* 지도의 위치 설정 */
         }
     </style>
 </head>
@@ -74,6 +74,7 @@
         <div class="message">
             떠나고자 하는 지역을 선택해주세요
         </div>
+        <button id="backButton" style="display:none;">뒤로가기</button> <!-- 뒤로가기 버튼 추가 -->
     </div>
 
     <div class="footer">
@@ -93,20 +94,20 @@
 
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=bc42aa044cb0d127af995d28498082d8"></script>
     <script>
-        // 서울시 영역 데이터를 가져옵니다
+    document.addEventListener('DOMContentLoaded', function () {
+        // 지도 초기 상태를 저장할 변수
+        var initialCenter = new kakao.maps.LatLng(36.591186820098365, 128.19210633207655);
+        var initialLevel = 13;
+
+        // 뒤로가기 버튼
+        var backButton = document.getElementById('backButton');
+
         fetch('/json/SIDO_MAP.json')
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok ' + response.statusText);
-                }
-                return response.json();
-            })
+            .then(response => response.json())
             .then(data => {
-                console.log('Loaded data:', data); // 데이터 로드 확인
-                
                 if (data.features && Array.isArray(data.features)) {
                     var areas = data.features.map(feature => ({
-                        name: feature.properties.CTP_KOR_NM,
+                        name: feature.properties.CTP_ENG_NM,
                         path: feature.geometry.coordinates[0].map(coord => {
                             const lat = coord[1];
                             const lng = coord[0];
@@ -114,16 +115,14 @@
                         })
                     }));
 
-                    console.log('Areas:', areas); // 생성된 area 출력
-
-                    var mapContainer = document.getElementById('map'),
-                        mapOption = { 
-                            center: new kakao.maps.LatLng(36.591186820098365, 128.19210633207655),
-                            level: 13,
-                            draggable: false,
-                            scrollwheel: false,
-                            disableDoubleClickZoom: true
-                        };
+                    var mapContainer = document.getElementById('map');
+                    var mapOption = { 
+                        center: initialCenter,
+                        level: initialLevel,
+                        draggable: false,
+                        scrollwheel: false,
+                        disableDoubleClickZoom: true
+                    };
 
                     var map = new kakao.maps.Map(mapContainer, mapOption),
                         customOverlay = new kakao.maps.CustomOverlay({}),
@@ -167,15 +166,6 @@
                         });
 
                         kakao.maps.event.addListener(polygon, 'click', function(mouseEvent) {
-                            var content = '<div class="info">' + 
-                                        '   <div class="title">' + area.name + '</div>' +
-                                        '   <div class="size">총 면적 : 약 ' + Math.floor(polygon.getArea()) + ' m<sup>2</sup></div>' +
-                                        '</div>';
-
-                            infowindow.setContent(content); 
-                            infowindow.setPosition(mouseEvent.latLng); 
-                            infowindow.setMap(map);
-
                             var bounds = new kakao.maps.LatLngBounds();
                             area.path.forEach(coord => bounds.extend(coord));
                             map.setBounds(bounds);
@@ -189,6 +179,9 @@
 
                             polygons.forEach(p => p.setMap(null));
 
+                            // 뒤로가기 버튼 표시
+                            backButton.style.display = 'block';
+
                             // 서울 클릭 시 구별 폴리곤 추가
                             if (area.name === 'Seoul') {
                                 fetch('/json/GU_MAP.json')
@@ -196,7 +189,7 @@
                                     .then(guData => {
                                         if (guData.features && Array.isArray(guData.features)) {
                                             var guAreas = guData.features.map(feature => ({
-                                                name: feature.properties.GU_NAME,
+                                                name: feature.properties.name, // 'GU_NAME'을 'name'으로 수정
                                                 path: feature.geometry.coordinates[0].map(coord => {
                                                     const lat = coord[1];
                                                     const lng = coord[0];
@@ -212,8 +205,6 @@
                     }
 
                     function displayGuArea(guArea) {
-                        console.log("Area Name:", guArea.name); // 수정: area.name에서 guArea.name으로
-                        console.log("Coordinates:", guArea.path);
                         var guPolygon = new kakao.maps.Polygon({
                             map: map,
                             path: guArea.path,
@@ -242,12 +233,27 @@
                         });
 
                         kakao.maps.event.addListener(guPolygon, 'click', function() {
-                            window.location.href = 'http://localhost:8080/vroom/restaurant'; // 링크로 이동
+                            var guName = guArea.name; // 클릭한 구 이름
+                            console.log("구 이름:", guName); // 구 이름 확인
+                            window.location.href = '/vroom/restaurant?guName=' + encodeURIComponent(guName); // 링크로 이동
                         });
                     }
+
+                    // 뒤로가기 버튼 클릭 이벤트
+                    backButton.addEventListener('click', function() {
+                        backButton.style.display = 'none'; // 뒤로가기 버튼 숨기기
+                        polygons.forEach(p => p.setMap(map)); // 원래의 구역 다시 표시
+                        map.setCenter(initialCenter);
+                        map.setLevel(initialLevel);
+                        if (highlightedPolygon) {
+                            highlightedPolygon.setOptions({fillColor: '#fff'});
+                            highlightedPolygon = null;
+                        }
+                    });
                 }
             })
-            .catch(error => console.error('Error loading JSON:', error));
+            .catch(error => console.error('Error loading SIDO_MAP.json:', error));
+    });
     </script>
 </body>
 </html>

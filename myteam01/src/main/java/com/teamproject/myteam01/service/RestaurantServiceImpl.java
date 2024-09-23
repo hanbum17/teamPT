@@ -171,6 +171,28 @@ public class RestaurantServiceImpl implements RestaurantService{
 			return null;
 		}
 		
+		@Override
+		public List<RestaurantVO> getRestListByGuName(String guName, Long page, Long pageSize) {
+		    RestaurantVO restVO = new RestaurantVO();
+		    Long offSet = (page - 1) * pageSize;
+
+		    restVO.setPage(page);
+		    restVO.setPageSize(pageSize);
+		    restVO.setOffset(offSet);
+		    restVO.setGuName(guName); // guName 설정
+
+		    List<RestaurantVO> restList = restaurantMapper.selectRestListByGuName(restVO); // guName은 이제 restVO 안에 포함됨
+		    
+		    for (RestaurantVO restaurant : restList) {
+		        List<AttachFileDTO> attachFileList = restAttachFile.getAttachFilesByUno(restaurant.getUno());
+		        restaurant.setAttachFileList(attachFileList); // 이미지 리스트를 restaurant에 추가
+		    }
+
+		    System.out.println("테스트3");
+		    return restList;
+		}
+
+		
 		
 
 	

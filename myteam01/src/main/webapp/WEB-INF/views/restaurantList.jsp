@@ -283,8 +283,6 @@
 			            <h3>${restaurant.fname}</h3>
 			            <p>Location: ${restaurant.faddress}</p>
 			            <p>Rating: ${restaurant.frating}</p>
-			            <p>${restaurant.fxcoord}</p> 
-			            <p>${restaurant.fycoord}</p>
 			        </div>
 			    </div>
 			</c:forEach>
