@@ -31,6 +31,7 @@
 
 .fav-items-container {
     margin: 20px 0;
+    margin-bottom: 40px;
 }
 
 .fav-item {
@@ -38,11 +39,11 @@
     align-items: center;
     justify-content: space-between;
     margin-bottom: 10px;
-    padding: 20px 10px;
+    padding: 7px 7px;
     background-color: #fff;
     border: 1px dashed #c0c0c0;
     border-radius: 5px;
-
+	border-right: 10px solid #000;
     transition: transform 0.3s, box-shadow 0.3s;
 }
 
@@ -52,11 +53,11 @@
 }
 
 .fav-item-thumbnail {
-    width: 120px;
-    height: 80px;
+    width: 100px;
+    height: 100px;
     border-radius: 8px;
     object-fit: cover;
-    margin-right: 20px;
+    margin-right: 10px;
 }
 
 .fav-item-info {
@@ -82,6 +83,8 @@
 }
 
 .fav-more-btn {
+	padding: 30px 10px;
+	padding-left : 20px;
     background: none;
     border: none;
     font-size: 1.5em;
@@ -97,6 +100,7 @@
 .fav-dropdown-content {
     display: none;
     position: absolute;
+    top:58px;
     right: 0;
     background-color: #fff;
     min-width: 80px;
@@ -149,4 +153,120 @@
     text-overflow: ellipsis; /* 넘치면 말줄임표(...) 표시 */
     max-width: 400px;   /* 텍스트가 차지할 최대 너비 */
     display: inline-block; /* block 레벨 요소처럼 동작 */
+}
+
+
+/* 모달 배경 스타일 */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.5); /* 어두운 반투명 배경 */
+  padding-top: 60px;
+  transition: all 0.3s ease-in-out; /* 부드러운 애니메이션 효과 */
+}
+
+/* 모달 내용 스타일 */
+.modal-content {
+  position: absolute;
+  background-color: #ffffff;
+  top:40%;
+  left:50%;
+  transform: translate(-50%, -50%);
+  padding : 20px;
+  border-radius: 5px; /* 둥근 모서리 */
+  width: 400px; /* 크기를 좀 더 줄임 */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 그림자 효과 */
+  transition: transform 0.3s ease; /* 열고 닫힐 때의 애니메이션 효과 */
+}
+
+.modal-content h3 {
+  font-size: 24px;
+  font-weight: 600;
+  margin-top: 15px;;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* 선택 메뉴 스타일 */
+#newListSelect {
+  width: 100%;
+  padding: 6px; /* 패딩을 약간 더 줘서 여유 있게 */
+  margin-top: 10px;
+  margin-bottom: 20px;
+  border-radius: 4px; /* 둥근 모서리로 디자인 */
+  border: 1px solid #ccc; /* 좀 더 부드러운 회색 */
+  background-color: #fefefe; /* 배경을 약간 더 밝게 */
+  font-size: 16px;
+  color: #333;
+  transition: border 0.2s ease, box-shadow 0.2s ease; /* 테두리와 그림자 애니메이션 */
+  max-height: 150px; /* 드롭다운이 열렸을 때의 최대 높이 */
+  overflow-y: auto; /* 스크롤 활성화 */
+}
+
+#newListSelect:focus {
+  border-color: #007bff; /* 포커스 시 테두리 색 변경 */
+  box-shadow: 0 0 8px rgba(0, 123, 255, 0.25); /* 포커스 시 약간의 그림자 */
+}
+
+#newListSelect option {
+  padding: 8px 10px; /* 옵션 항목 간격 조정 */
+  background-color: #fff; /* 옵션 배경 */
+  border-bottom: 1px solid #eee; /* 옵션 사이 경계 */
+}
+
+#newListSelect option:hover {
+  background-color: #f0f8ff; /* 마우스 오버 시 배경색 변경 */
+}
+
+#newListSelect option:checked {
+  background-color: #007bff; /* 선택된 항목 배경색 */
+  color: white; /* 선택된 항목 글자색 */
+}
+
+/* 저장 버튼 스타일 */
+#saveChangesBtn, #closeModalBtn {
+  background-color: #007bff;
+
+  color: white;
+  padding: 10px 20px;
+  margin-right: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.2s ease;
+}
+
+#closeModalBtn {
+  background-color: #6c757d; /* 닫기 버튼의 회색 배경 */
+}
+
+#saveChangesBtn:hover {
+  background-color: #0056b3;
+}
+
+#closeModalBtn:hover {
+  background-color: #5a6268;
+}
+
+/* 반응형 모달 크기 */
+@media (max-width: 768px) {
+  .modal-content {
+    width: 90%; /* 작은 화면에서는 모달의 폭을 90%로 설정 */
+  }
 }
