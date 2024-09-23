@@ -1,6 +1,7 @@
 package com.teamproject.myteam01.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
@@ -172,27 +173,17 @@ public class RestaurantServiceImpl implements RestaurantService{
 		}
 		
 		@Override
-		public List<RestaurantVO> getRestListByGuName(String guName, Long page, Long pageSize) {
-		    RestaurantVO restVO = new RestaurantVO();
-		    Long offSet = (page - 1) * pageSize;
-
-		    restVO.setPage(page);
-		    restVO.setPageSize(pageSize);
-		    restVO.setOffset(offSet);
-		    restVO.setGuName(guName); // guName 설정
-
-		    List<RestaurantVO> restList = restaurantMapper.selectRestListByGuName(restVO); // guName은 이제 restVO 안에 포함됨
+		public List<RestaurantVO> getRestListByGuName(Map<String, Object> params) {
+		    Long offset = (Long) params.get("offset");
+		    Long pageSize = (Long) params.get("pageSize");
+		    String guName = (String) params.get("guName");
+		    System.out.println("서비스에 전달된 구: "+guName);
 		    
-		    for (RestaurantVO restaurant : restList) {
-		        List<AttachFileDTO> attachFileList = restAttachFile.getAttachFilesByUno(restaurant.getUno());
-		        restaurant.setAttachFileList(attachFileList); // 이미지 리스트를 restaurant에 추가
-		    }
 
-		    System.out.println("테스트3");
-		    return restList;
+		    // Mapper 호출
+		    return restaurantMapper.selectRestListByGuName(guName, offset, pageSize);
 		}
 
-		
 		
 
 	

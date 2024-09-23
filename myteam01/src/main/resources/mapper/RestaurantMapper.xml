@@ -57,12 +57,19 @@
 	    WHERE frno = #{frno}
 	</update>
 	
-	<select id="selectRestListByGuName" parameterType="RestaurantVO" resultType="com.teamproject.myteam01.domain.RestaurantVO">
+	<select id="selectRestListByGuName" resultType="com.teamproject.myteam01.domain.RestaurantVO">
 	    SELECT *
-	    FROM restaurant
-	    WHERE faddress LIKE CONCAT('%', #{guName}, '%')
-	    LIMIT #{offset}, #{pageSize}
+	    FROM restaurants
+	    WHERE faddress LIKE '%' || #{guName} || '%'
+	    ORDER BY FNO
+	    OFFSET #{offset} ROWS
+	    FETCH NEXT #{pageSize} ROWS ONLY
 	</select>
+
+
+
+
+
 
 
 
