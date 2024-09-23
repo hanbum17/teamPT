@@ -54,5 +54,82 @@ public class CsServiceImpl implements CsService{
 		return csMapper.delFAQ(faqno) == 1;
 		
 	}
+
+/////////////////////////////////////////////////////////////
+	
+	//Inquiry 목록
+	@Override
+	public List<CsVO> csInList(){
+		return csMapper.selectInquiryList();
+		
+	}
+	
+	//Inquiry 등록
+	@Override
+	public Long regiIn(CsVO inq) {
+		csMapper.registerInquiry(inq);
+		return inq.getIno();
+	}
+	
+	//Inquiry 조회
+	@Override
+	public CsVO getIn(Long ino) {
+		CsVO inq = csMapper.selectFAQ(ino);
+		return inq ;
+	}
+	
+	
+	//Inquiry 수정
+	@Override
+	public boolean modifyIn(CsVO inq) {
+		System.out.println("서비스 : Inquiry 수정");
+		return csMapper.updateFAQ(inq) == 1;
+	}
+	
+	//Inquiry 삭제
+	@Override
+	public boolean removeIn(Long ino) {
+		System.out.println("서비스 : Inquiry 삭제");
+		return csMapper.delFAQ(ino) == 1;
+		
+	}
+
+/////////////////////////////////////////////////////////////
+	
+	//FeedBack 목록
+	@Override
+	public List<CsVO> csFBList(){
+		return csMapper.selectFeedbackList();
+	}
+	
+	//FeedBack 등록
+	@Override
+	public Long regiFB(CsVO feeb) {
+		csMapper.registerFeedback(feeb);
+		return feeb.getFbno();
+	}
+	
+	//FeedBack 조회
+	@Override
+	public CsVO getFB(Long fbno) {
+		CsVO feeb = csMapper.selectFeedback(fbno);
+		return feeb ;
+	}
+	
+	
+	//FeedBack 수정
+	@Override
+	public boolean modifyFB(CsVO feeb) {
+		System.out.println("서비스 : Feedback 수정");
+		return csMapper.updateFeedback(feeb) == 1;
+	}
+	
+	//FeedBack 삭제
+	@Override
+	public boolean removeFB(Long fbno) {
+		System.out.println("서비스 : Feedback 삭제");
+		return csMapper.delFeedback(fbno) == 1;
+		
+	}
 	
 }

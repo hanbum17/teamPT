@@ -97,6 +97,7 @@ public class VroomController {
         Long restPageSize = 10L;
         List<RestaurantVO> restList = restService.getRestList(restPage, restPageSize);
         model.addAttribute("restList", restList);
+        System.out.println("컨트롤러에 전달된 restaurantLis 값"+restList);
 
         return "restaurantList";
     }
@@ -326,4 +327,13 @@ public class VroomController {
 	    }
 	    return response;
 	}
+	
+	@GetMapping("/policy")
+	public String getService() {
+		return "vroom/vroomPolicy";
+	}
+	
+	
+	
+	
 }

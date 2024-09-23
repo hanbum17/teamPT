@@ -2,48 +2,122 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.teamproject.myteam01.mapper.CsMapper">
 
-	<!-- 희준 -->
-	<!-- FAQ 조회-->
-	<select id="selectFAQList" resultType="com.teamproject.myteam01.domain.CsVO">
-			SELECT FAQNO, FAQCATEGORY, FAQTITLE, FAQCONTENT, FAQREGDATE, FAQMODDATE, FAQDELFLAG
-			FROM teampj.FAQ ORDER BY FAQNO DESC
-	</select>
+    <!-- FAQ 조회 -->
+    <select id="selectFAQList" resultType="com.teamproject.myteam01.domain.CsVO">
+        SELECT FAQNO, FAQCATEGORY, FAQTITLE, FAQCONTENT, FAQREGDATE, FAQMODDATE, FAQDELFLAG
+        FROM teampj.FAQ 
+        WHERE FAQDELFLAG = 0
+        ORDER BY FAQNO DESC
+    </select>
 
-	<!-- FAQ 등록 -->
-	<insert id="registerFAQ" parameterType="com.teamproject.myteam01.domain.CsVO">
-		<selectKey keyProperty="faqno" order="BEFORE" resultType="Long">
-			SELECT teampj.seq_FAQ.nextval FROM dual
-		</selectKey>
-		
-		INSERT INTO teampj.FAQ
-	
-		VALUES (#{faqno}, #{faqcategory}, #{faqtitle}, #{faqcontent}, DEFAULT, DEFAULT, DEFAULT)
-	</insert>
+    <!-- FAQ 등록 -->
+    <insert id="registerFAQ" parameterType="com.teamproject.myteam01.domain.CsVO">
+        <selectKey keyProperty="faqno" order="BEFORE" resultType="Long">
+            SELECT teampj.seq_FAQ.nextval FROM dual
+        </selectKey>
+        INSERT INTO teampj.FAQ (FAQNO, FAQCATEGORY, FAQTITLE, FAQCONTENT, FAQREGDATE, FAQMODDATE, FAQDELFLAG)
+        VALUES (#{faqno}, #{faqcategory}, #{faqtitle}, #{faqcontent}, DEFAULT, DEFAULT, 0)
+    </insert>
 
-	<!-- FAQ 조회 -->
-	<select id="selectFAQ" resultType="com.teamproject.myteam01.domain.CsVO">
-		SELECT FAQNO, FAQCATEGORY, FAQTITLE, FAQCONTENT, FAQREGDATE, FAQMODDATE, FAQDELFLAG
-		FROM teampj.FAQ
-		WHERE faqno = #{faqno}
-	</select>
+    <!-- FAQ 조회 -->
+    <select id="selectFAQ" resultType="com.teamproject.myteam01.domain.CsVO">
+        SELECT FAQNO, FAQCATEGORY, FAQTITLE, FAQCONTENT, FAQREGDATE, FAQMODDATE, FAQDELFLAG
+        FROM teampj.FAQ
+        WHERE FAQNO = #{faqno}
+    </select>
 
-	<!-- FAQ 수정 -->
-	<update id="updateFAQ">
-		UPDATE teampj.FAQ
-		SET FAQCATEGORY = #{faqcategory},
-			FAQTITLE = #{faqtitle},
-			FAQCONTENT = #{faqcontent},
-			FAQMODDATE = DEFAULT
-		WHERE FAQNO = #{faqno}
-	</update>
-	
-	<!-- FAQ 삭제 -->
-	<delete id="delFAQ">
-		DELETE FROM teampj.FAQ
-		WHERE FAQNO = #{faqno}
-	</delete>
-	
+    <!-- FAQ 수정 -->
+    <update id="updateFAQ">
+        UPDATE teampj.FAQ
+        SET FAQCATEGORY = #{faqcategory},
+            FAQTITLE = #{faqtitle},
+            FAQCONTENT = #{faqcontent},
+            FAQMODDATE = DEFAULT
+        WHERE FAQNO = #{faqno}
+    </update>
+    
+    <!-- FAQ 삭제 -->
+    <delete id="delFAQ">
+        DELETE FROM teampj.FAQ
+        WHERE FAQNO = #{faqno}
+    </delete>
 
-	
-	
+    <!-- Inquiry 조회 -->
+    <select id="selectInquiryList" resultType="com.teamproject.myteam01.domain.CsVO">
+        SELECT INO, ICATEGORY, ITITLE, ICONTENT, IREGDATE, IDELFLAG, IRESPONSE
+        FROM teampj.INQUIRY 
+        WHERE IDELFLAG = 0
+        ORDER BY INO DESC
+    </select>
+
+    <!-- Inquiry 등록 -->
+    <insert id="registerInquiry" parameterType="com.teamproject.myteam01.domain.CsVO">
+        <selectKey keyProperty="ino" order="BEFORE" resultType="Long">
+            SELECT teampj.seq_INQUIRY.nextval FROM dual
+        </selectKey>
+        INSERT INTO teampj.INQUIRY (INO, ICATEGORY, ITITLE, ICONTENT, IREGDATE, IDELFLAG, IRESPONSE)
+        VALUES (#{ino}, #{icategory}, #{ititle}, #{icontent}, DEFAULT, 0, '빠른 확인 후 답변드리겠습니다.')
+    </insert>
+
+    <!-- Inquiry 조회 -->
+    <select id="selectINQ" resultType="com.teamproject.myteam01.domain.CsVO">
+        SELECT INO, ICATEGORY, ITITLE, ICONTENT, IREGDATE, IDELFLAG, IRESPONSE
+        FROM teampj.INQUIRY
+        WHERE INO = #{ino}
+    </select>
+
+    <!-- Inquiry 수정 -->
+    <update id="updateINQ">
+        UPDATE teampj.INQUIRY
+        SET ICATEGORY = #{icategory},
+            ITITLE = #{ititle},
+            ICONTENT = #{icontent}
+        WHERE INO = #{ino}
+    </update>
+    
+    <!-- Inquiry 삭제 -->
+    <delete id="delINQ">
+        DELETE FROM teampj.INQUIRY
+        WHERE INO = #{ino}
+    </delete>
+
+    <!-- Feedback 조회 -->
+    <select id="selectFeedbackList" resultType="com.teamproject.myteam01.domain.CsVO">
+        SELECT FBNO, FBTITLE, FBCONTENT, FBREGDATE, FBDELFLAG
+        FROM teampj.FEEDBACK 
+        WHERE FBDELFLAG = 0
+        ORDER BY FBNO DESC
+    </select>
+
+    <!-- Feedback 등록 -->
+    <insert id="registerFeedback" parameterType="com.teamproject.myteam01.domain.CsVO">
+        <selectKey keyProperty="fbno" order="BEFORE" resultType="Long">
+            SELECT teampj.seq_FEEDBACK.nextval FROM dual
+        </selectKey>
+        INSERT INTO teampj.FEEDBACK (FBNO, FBTITLE, FBCONTENT, FBREGDATE, FBDELFLAG)
+        VALUES (#{fbno}, #{fbtitle}, #{fbcontent}, DEFAULT, 0)
+    </insert>
+
+    <!-- Feedback 조회 -->
+    <select id="selectFeedback" resultType="com.teamproject.myteam01.domain.CsVO">
+        SELECT FBNO, FBTITLE, FBCONTENT, FBREGDATE, FBDELFLAG
+        FROM teampj.FEEDBACK
+        WHERE FBNO = #{fbno}
+    </select>
+
+    <!-- Feedback 수정 -->
+    <update id="updateFeedback">
+        UPDATE teampj.FEEDBACK
+        SET FBTITLE = #{fbtitle},
+            FBCONTENT = #{fbcontent},
+            FBMODDATE = DEFAULT
+        WHERE FBNO = #{fbno}
+    </update>
+    
+    <!-- Feedback 삭제 -->
+    <delete id="delFeedback">
+        DELETE FROM teampj.FEEDBACK
+        WHERE FBNO = #{fbno}
+    </delete>
+
 </mapper>

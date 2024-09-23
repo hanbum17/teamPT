@@ -15,6 +15,8 @@ public interface AttachFileMapper {
 	
 	public AttachFileDTO findByUuid(String uuid);
 
+	public List<AttachFileDTO> getAttachFilesByUno(Long uno);
+
 
 	
 }

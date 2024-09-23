@@ -34,6 +34,10 @@ public class RestaurantVO {
     private Long page;
 	private Long pageSize;
 	private Long offset;
+	
+	 private Double lat; // 위도
+	 private Double lng; 
+	
    
 
 }

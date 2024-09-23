@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib uri="jakarta.tags.core" prefix="c" %>
+
+<%@ include file="./menu/nav.jsp"%>
 <c:set var="contextPath" value="${pageContext.request.contextPath }"/>
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -21,6 +23,16 @@
             flex-direction: column;
             justify-content: flex-end;
         }
+        
+        #map {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0; /* 지도를 배경으로 만들기 위해 z-index를 음수로 설정 */
+    }
+        
 
         .container {
             display:  flex;
@@ -237,6 +249,8 @@
 <body>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
+<div id="map"></div>
+
 <div class="header">
     <div class="logo" id="goToMain">Vroom</div>
     <div class="nav">
@@ -261,15 +275,21 @@
         <!-- 레스토랑 카드 반복문으로 생성 -->        
         <div class="more-restaurant-card">
 	        <c:forEach var="restaurant" items="${restList}">
-	            <div class="restaurant-card" data-fno="${restaurant.fno}" onclick="window.location.href='${contextPath}/vroom/restaurant/details?fno=${restaurant.fno}'">
-				    <img src="${contextPath}/images/bibimbab.jpg" alt="${restaurant.fname} Image">
-				    <div class="restaurant-info">
-				        <h3>${restaurant.fname}</h3>
-				        <p>Location: ${restaurant.faddress}</p>
-				        <p>Rating: ${restaurant.frating}</p>
-				    </div>
-				</div>
-			</c:forEach> 
+			    <div class="restaurant-card" 
+			         data-fno="${restaurant.fno}" 
+			         data-fxcoord="${restaurant.fxcoord}" 
+			         data-fycoord="${restaurant.fycoord}" 
+			         onclick="window.location.href='${contextPath}/vroom/restaurant/details?fno=${restaurant.fno}'">
+			        <img src="${contextPath}/images/bibimbab.jpg" alt="${restaurant.fname} Image">
+			        <div class="restaurant-info">
+			            <h3>${restaurant.fname}</h3>
+			            <p>Location: ${restaurant.faddress}</p>
+			            <p>Rating: ${restaurant.frating}</p>
+			            <p>${restaurant.fxcoord}</p> 
+			            <p>${restaurant.fycoord}</p>
+			        </div>
+			    </div>
+			</c:forEach>
 		</div>
         <!-- 데이터가 없는 경우 표시할 카드 -->
         <c:if test="${empty restList}">
@@ -283,11 +303,74 @@
             </div>
         </c:if>
     </div>
-</body>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=fe9306b4adbbf3249d28d6b7a2c37c0a&libraries=services"></script>
 <script>
-$("#goToMain").on("click", function() {
-    window.location.href = '${contextPath}/vroom/main';
+
+//카카오 지도 초기화
+var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+    mapOption = {
+        center: new kakao.maps.LatLng(37.566826004661, 126.978652258309), // 기본 중심 좌표 (서울시청)
+        level: 3 // 지도 확대 레벨
+    };
+
+var map = new kakao.maps.Map(mapContainer, mapOption);
+
+// 기본 마커 생성
+var marker = new kakao.maps.Marker({
+    position: map.getCenter(),
+    draggable: true // 마커를 드래그 가능하게 설정
 });
+
+marker.setMap(map);
+
+let markers = [];
+
+//마커 생성 함수
+function setMarker(lng, lat) {
+    // 기존 마커 삭제
+    markers.forEach(marker => marker.setMap(null));
+    markers = []; // markers 배열 비우기
+
+    // 새로운 마커 추가
+    var newMarker = new kakao.maps.Marker({
+        position: new kakao.maps.LatLng(lat, lng),
+        map: map
+    });
+
+    // 새 마커를 배열에 추가하고 지도의 중심을 새 마커의 위치로 설정
+    markers.push(newMarker);
+    map.setCenter(new kakao.maps.LatLng(lat, lng));
+
+    // 디버깅 로그 추가
+    console.log('setMarker 함수: lat ' + lat + ', lng ' + lng);
+    console.log('지도 중심:', map.getCenter());
+    console.log('마커 배열:', markers);
+}
+
+
+//마우스 오버 리스너 추가
+function addMouseOverListenerToCards() {
+    const restaurantCards = document.querySelectorAll('.restaurant-card');
+    restaurantCards.forEach(card => {
+        card.addEventListener('mouseover', function() {
+            const lat = parseFloat(card.dataset.fxcoord); // 식당의 위도
+            const lng = parseFloat(card.dataset.fycoord); // 식당의 경도
+
+            if (!isNaN(lat) && !isNaN(lng)) {
+                setMarker(lat, lng);
+                console.log('Mouse over at card: Latitude ' + lat + ', Longitude ' + lng);
+            } else {
+                console.error('Invalid lat or lng values:', lat, lng);
+            }
+        });
+    });
+}
+
+
+
+
+
+
 
 document.getElementById('loginLink').addEventListener('click', function(event) {
     event.preventDefault(); // 링크의 기본 동작을 막습니다
@@ -327,10 +410,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     //레스토랑 추가 데이터 가져오는 스크립트 (드래그 시 10개씩 추가)
     function loadMoreRestaurants() {
-        if (isLoading) return; // 중복 요청 방지
+        if (isLoading) return;
         isLoading = true;
 
-        fetch("${contextPath}/api/restaurant?page="+restPage+"&pageSize="+restPageSize)
+        fetch(contextPath + "/api/restaurant?page=" + restPage + "&pageSize=" + restPageSize)
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
@@ -340,7 +423,7 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(data => {
                 if (data.length > 0) {
                     appendRestaurants(data);
-                    restPage++; // Increment restPage here
+                    restPage++;
                 }
                 isLoading = false;
             })
@@ -348,18 +431,23 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.error('Error fetching data:', error);
                 isLoading = false;
             });
+
     }
     
-    
-    	
+	
 
     
     //레스토랑 리스트 추가
-    function appendRestaurants(restaurants) {
+
+ function appendRestaurants(restaurants) {
     restaurants.forEach(restaurant => {
+    	console.log('Restaurant Data:', restaurant.fxcoord, restaurant.fycoord);
+    	
         const restaurantCard = document.createElement('div');
         restaurantCard.className = 'restaurant-card'; // 스타일 적용
         restaurantCard.dataset.fno = restaurant.fno;
+        restaurantCard.dataset.fxcoord = restaurant.fxcoord; 
+        restaurantCard.dataset.fycoord = restaurant.fycoord;  
         restaurantCard.onclick = () => {
             window.location.href = contextPath + '/vroom/restaurant/details?fno=' + restaurant.fno;
         };
@@ -373,9 +461,20 @@ document.addEventListener('DOMContentLoaded', () => {
             "</div>";
 
         container.appendChild(restaurantCard);
+        
+        const latLng = new kakao.maps.LatLng(restaurant.fxcoord, restaurant.fycoord);
+        const marker = new kakao.maps.Marker({
+            position: latLng,
+            map: map
+        });
+        kakao.maps.event.addListener(marker, 'click', function() {
+            map.setCenter(latLng);
+        });
     });
-}
 
+    // 새로 추가된 카드에 대한 우클릭 리스너 추가
+    addMouseOverListenerToCards();
+}
 
 
     container.addEventListener('scroll', () => {
@@ -393,14 +492,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initial data load
     loadMoreRestaurants();
 
-    /* const loadMoreBtn = document.getElementById('load-more-btn');
-    if (loadMoreBtn) {
-        loadMoreBtn.addEventListener('click', loadMoreReviews);
-    } */
 });
 
 
 
 
 </script>
+</body>
 </html>

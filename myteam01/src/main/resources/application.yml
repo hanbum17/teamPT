@@ -12,7 +12,13 @@ spring:
   web:
     resources:
       static-locations: classpath:/static/, classpath:/public/, classpath:/resources/, classpath:/META-INF/resources/, file:src/main/webapp/resources/
-
+  jackson:
+    time-zone: Asia/Seoul
+  datasource:
+    hikari:
+      data-source-properties:
+        serverTimezone: Asia/Seoul
+      
 server:
   servlet:
     jsp:
@@ -30,7 +36,7 @@ myuser:
         idle-timeout: 30000
         connection-timeout: 30000
         driver-class-name: oracle.jdbc.OracleDriver
-        jdbc-url: jdbc:oracle:thin:@192.168.45.87:1521:xe
+        jdbc-url: jdbc:oracle:thin:@195.168.9.58:1521:xe
         username: teampj
         password: teampj
         pool-name: teampjCP  

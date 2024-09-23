@@ -18,8 +18,8 @@
 		<selectKey keyProperty="favoriteId" order="BEFORE" resultType="Long">
 	        SELECT FAVORITES_SEQ.NEXTVAL FROM DUAL
 	    </selectKey>
-	    INSERT INTO FAVORITES (FAVORITE_ID, LIST_ID, USERID, ITEM_NAME, LINK, ENO, FNO, REGISTRATION_DATE)
-    	VALUES (#{favoriteId}, #{listId}, #{userId}, #{itemName}, #{link}, 
+	    INSERT INTO FAVORITES (FAVORITE_ID, LIST_ID, USERID, LINK, ENO, FNO, REGISTRATION_DATE)
+    	VALUES (#{favoriteId}, #{listId}, #{userId}, #{link}, 
             <if test="eno != null">#{eno}</if>
             <if test="eno == null">CAST(NULL AS NUMBER)</if>, 
             <if test="fno != null">#{fno}</if>
@@ -45,7 +45,7 @@
 
     <!-- 즐겨찾기 목록 ID로 즐겨찾기 항목 조회 -->
     <select id="getFavoritesByListId" parameterType="Long" resultType="com.teamproject.myteam01.domain.FavoriteItemVO">
-        SELECT FAVORITE_ID, LIST_ID, USERID, ITEM_NAME, LINK, ENO, FNO
+        SELECT FAVORITE_ID, LIST_ID, USERID, LINK, ENO, FNO
 	    FROM FAVORITES
 	    WHERE LIST_ID = #{listId}
     </select>
@@ -58,6 +58,13 @@
 	    SET LIST_NAME = #{listName}, COLOR = #{color}
 	    WHERE LIST_ID = #{listId}
 	</update>
+	
+	<update id="updateFavoriteList" parameterType="map">
+	    UPDATE FAVORITES
+	    SET LIST_ID = #{newListId}
+	    WHERE FAVORITE_ID = #{favoriteId}
+	</update>
+	
 	
 	<!-- 즐겨찾기 목록 삭제 -->
 	<delete id="deleteFavoriteList" parameterType="Long">
@@ -82,7 +89,6 @@
     <!-- ResultMap 설정 -->
     <resultMap id="FavoriteDetailMap" type="com.teamproject.myteam01.domain.FavoriteItemVO">
         <result property="favoriteId" column="FAVORITE_ID"/>
-        <result property="itemName" column="ITEM_NAME"/>
         <result property="link" column="LINK"/>
         <result property="fname" column="restaurantName"/>
         <result property="ename" column="eventName"/>

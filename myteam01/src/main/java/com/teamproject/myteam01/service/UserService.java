@@ -14,6 +14,8 @@ public class UserService {
 	 @Autowired
     private UserMapper userMapper;
 	 
+	 
+	 
 	 private PasswordEncoder passwordEncoder() {
 	        return new BCryptPasswordEncoder();
 	    }
@@ -27,6 +29,18 @@ public class UserService {
 
     public void registerUserRole(String userId, String role) {
         userMapper.insertUserRole(userId, role);
+    }
+    
+    // 현재 비밀번호 확인
+    public boolean checkPassword(UserVO user, String currentPassword) {
+        return passwordEncoder().matches(currentPassword, user.getUserPw());
+    }
+
+    // 새 비밀번호로 변경
+    public void changePassword(UserVO user, String newPassword) {
+        String encodedPassword = passwordEncoder().encode(newPassword);
+        user.setUserPw(encodedPassword);
+        userMapper.updateUserPassword(user);
     }
 
     

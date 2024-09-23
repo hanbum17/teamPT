@@ -7,7 +7,8 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/login.css?v=1.0">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <title>Login</title>
-    <%@ include file="../user_main/nav.jsp" %>
+    <%@ include file="../menu/nav.jsp" %>
+    <%@ include file="../menu/footer.jsp"%>
 </head>
 <body class="flex-center">
     <div class="container">

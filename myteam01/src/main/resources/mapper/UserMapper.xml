@@ -56,6 +56,12 @@
             userType = #{userType}
         WHERE userId = #{userId}
     </update>
+    
+    <update id="updateUserPassword" parameterType="com.teamproject.myteam01.domain.UserVO">
+	    UPDATE users
+	    SET userPw = #{userPw}
+	    WHERE userId = #{userId}
+	</update>
 
 
     <!-- 사용자 삭제 -->
