@@ -19,32 +19,37 @@
 	        
 
 			<!-- 모달 및 기타 내용 -->
-			<div id="placeModal" class="modal" style="display: none;">
-			    <div class="modal-content">
-			        <h3>장소 등록</h3>
-			        <form id="placeForm" action="/user/trip/addPlace" method="post">
-			            <input type="hidden" name="tripNo" value="${tripPlan.tripNo}">
-			            
-			            <label>장소 이름:</label>
-			            <input type="text" name="placeName" required>
-			            
-			            <label>주소:</label>
-			            <input type="text" name="address" required>
-			            
-			            <button type="submit">장소 추가</button>
-			        </form>
-			        <h3>즐겨찾기 목록에서 장소 선택</h3>
-	                <div id="favoritesContainer">
-	                    <c:forEach var="favoriteItem" items="${favoriteItems}">
-	                        <div class="favorite-item" data-id="${favoriteItem.id}" data-name="${favoriteItem.name}" data-address="${favoriteItem.address}">
-	                            <p>${favoriteItem.name}</p>
-	                            <p>${favoriteItem.address}</p>
-	                            <button class="select-favorite">선택</button>
-	                        </div>
-	                    </c:forEach>
-	                </div>
-			    </div>
-			</div>
+            <div id="placeModal" class="modal" style="display: none;">
+                <div class="modal-content">
+                    <h3>장소 등록</h3>
+                    <form id="placeForm" action="/user/trip/addPlace" method="post">
+                        <input type="hidden" name="tripNo" value="${tripPlan.tripNo}">
+                        
+                        <label>장소 이름:</label>
+                        <input type="text" name="placeName" required>
+                        
+                        <label>주소:</label>
+                        <input type="text" name="address" required>
+                        
+                        <button type="submit">장소 추가</button>
+                    </form>
+
+                    <h3>즐겨찾기 목록에서 장소 선택</h3>
+					<div id="favoritesContainer">
+					    <select id="favoriteListSelect">
+					        <c:forEach var="favoriteList" items="${favoriteLists}">
+					            <option value="${favoriteList.listId}">${favoriteList.listName}</option>
+					        </c:forEach>
+					    </select>
+					</div>
+					
+					<!-- 선택된 값을 보여주는 공간 추가 -->
+					<div id="selectedPlace" style="margin-top: 10px;">
+					    <!-- 선택한 장소가 여기에 표시됩니다 -->
+					</div>
+
+                </div>
+            </div>
 
 
 	
@@ -115,8 +120,6 @@ document.getElementById('openPlaceModalBtn').addEventListener('click', function(
     document.getElementById('placeModal').style.display = 'block';
 });
 
-
-
 // 모달 외부를 클릭하면 모달을 닫기
 window.addEventListener('click', function(event) {
     const modal = document.getElementById('placeModal');
@@ -125,22 +128,74 @@ window.addEventListener('click', function(event) {
     }
 });
 
-
-// 즐겨찾기에서 선택 버튼 클릭 시
-document.querySelectorAll('.select-favorite').forEach(function(button) {
-    button.addEventListener('click', function() {
-        const item = button.closest('.favorite-item');
-        const placeName = item.getAttribute('data-name');
-        const placeAddress = item.getAttribute('data-address');
-        
-        // 폼에 즐겨찾기에서 선택한 값 자동 입력
-        document.querySelector('input[name="placeName"]').value = placeName;
-        document.querySelector('input[name="address"]').value = placeAddress;
-
-        // 모달 창 닫기
-        document.getElementById('favoritesModal').style.display = 'none';
-    });
+// 즐겨찾기 목록이 변경될 때 해당 목록의 장소들을 불러오기
+document.getElementById('favoriteListSelect').addEventListener('change', function() {
+    var listId = this.value;
+    loadFavoriteItems(listId);
 });
+
+function loadFavoriteItems(listId) {
+    $.ajax({
+        type: 'GET',
+        url: '/user/trip/favorites',
+        data: { listId: listId },
+        success: function(favoriteItems) {
+            const container = document.getElementById('selectedPlace');
+            container.innerHTML = '';  // 기존 내용을 초기화
+
+            if (favoriteItems.length === 0) {
+                container.innerHTML = '<p>즐겨찾기 항목이 없습니다.</p>';
+            } else {
+                favoriteItems.forEach(item => {
+                    const itemDiv = document.createElement('div');
+                    itemDiv.className = 'favorite-item';
+
+                    // 이벤트와 레스토랑 정보를 가져옴
+                    let placeName = '이름 없음';
+                    let placeAddress = '주소 없음';
+
+                    if (item.event) {
+                        placeName = item.event.ename;
+                        placeAddress = item.event.eaddress;
+                    } else if (item.restaurant) {
+                        placeName = item.restaurant.fname;
+                        placeAddress = item.restaurant.faddress;
+                    }
+
+                    itemDiv.setAttribute('data-name', placeName);
+                    itemDiv.setAttribute('data-address', placeAddress);
+
+                    itemDiv.innerHTML = 
+    				    '<p>장소: ' + placeName + '</p>' +
+    				    '<p>주소: ' + placeAddress + '</p>' +
+    				    '<button class="select-favorite">선택</button>';
+
+                    container.appendChild(itemDiv);
+                });
+            }
+
+            // 선택 버튼에 이벤트 리스너 추가
+            document.querySelectorAll('.select-favorite').forEach(function(button) {
+                button.addEventListener('click', function() {
+                    const item = button.closest('.favorite-item');
+                    const placeName = item.getAttribute('data-name');
+                    const placeAddress = item.getAttribute('data-address');
+
+                    // 폼에 선택된 값 넣기
+                    document.querySelector('input[name="placeName"]').value = placeName;
+                    document.querySelector('input[name="address"]').value = placeAddress;
+                });
+            });
+        },
+        error: function() {
+            console.error('즐겨찾기 항목 불러오기 실패');
+        }
+    });
+}
+
+
+
+
 
 
 //------------------------------------------등록된 장소 삭제------------------------------------------

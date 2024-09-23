@@ -2,103 +2,15 @@
     pageEncoding="UTF-8"%>
 
     <%@ include file="../menu/nav.jsp"%>
-
+	<%@ include file="../menu/footer.jsp"%>
+	<link rel="stylesheet" type="text/css" href="/css/vroomPolicy.css"> 
 <c:set var="contextPath" value="${pageContext.request.contextPath }"/>
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
     <title>Vroom Policy</title>
-    <style>
-        /* Global settings */
-        * {
-            transition: all 0.3s ease;
-            box-sizing: border-box;
-            font-family: 'Arial', sans-serif;
-        }
 
-        html, body {
-            margin: 0;
-            padding: 0;
-
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: #f4f4f4;
-        }
-
-        /* Container styles */
-        .container {
-        	margin : 100px 0 ;
-            background-color: white;
-            width: 1000px;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
-            animation: fadeIn 1s ease;
-        }
-
-        /* Title styles */
-        .title {
-            text-align: center;
-            font-size: 26px;
-            font-weight: bold;
-            margin-top :0;
-            margin-bottom: 20px;
-            color: #333;
-        }
-
-        /* Menu styles */
-        .menu {
-            text-align: center;
-            margin-bottom: 30px;
-            background-color: #009fff;
-            padding: 15px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .menu a {
-            margin-right: 20px;
-            padding: 10px 20px;
-            cursor: pointer;
-            text-decoration: none;
-            font-weight: 700;
-            color: #009fff;
-            background-color: #fff;
-            border: 1px solid #fff;
-            border-radius: 5px;
-            transition: background-color 0.3s, color 0.3s;
-        }
-
-        .menu a:hover {
-            background-color: #0056b3;
-            color: #fff;
-        }
-
-        /* Section styles */
-        .section {
-            display: none;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            transition: opacity 0.5s ease, transform 0.5s ease;
-        }
-
-        .section.active {
-            display: block;
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Animation for page fade-in */
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-    </style>
     <script>
         function showSection(sectionId) {
             // 모든 섹션을 숨김
