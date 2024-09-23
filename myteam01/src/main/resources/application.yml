@@ -36,7 +36,7 @@ myuser:
         idle-timeout: 30000
         connection-timeout: 30000
         driver-class-name: oracle.jdbc.OracleDriver
-        jdbc-url: jdbc:oracle:thin:@192.168.45.87:1521:xe
+        jdbc-url: jdbc:oracle:thin:@195.168.9.58:1521:xe
         username: teampj
         password: teampj
         pool-name: teampjCP  
