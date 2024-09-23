@@ -3,6 +3,9 @@ package com.teamproject.myteam01.service;
 
 import com.teamproject.myteam01.domain.UserVO;
 import com.teamproject.myteam01.mapper.UserMapper;
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,11 +17,13 @@ public class UserService {
 	 @Autowired
     private UserMapper userMapper;
 	 
+	public List<UserVO> selectUserList(){
+		return userMapper.selectUserList() ;
+	}
 	 
-	 
-	 private PasswordEncoder passwordEncoder() {
-	        return new BCryptPasswordEncoder();
-	    }
+	private PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
 
     // PasswordEncoder를 바로 호출
     public void registerUser(UserVO user) {

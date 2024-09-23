@@ -8,6 +8,8 @@ import com.teamproject.myteam01.domain.UserVO;
 
 @Mapper
 public interface UserMapper {
+	
+	List<UserVO> selectUserList();
 
     // 사용자의 ID로 사용자 정보를 조회
     UserVO findByUsername(String username);
