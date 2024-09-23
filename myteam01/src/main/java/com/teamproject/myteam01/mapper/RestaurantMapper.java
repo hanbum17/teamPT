@@ -28,5 +28,7 @@ public interface RestaurantMapper {
 	//영범
 	public List<RestaurantsReviewVO> selectMoreReviews(RestaurantsReviewVO reviewVO);
 	public List<Long> selectReviewsForStar(Long fno);
-
+	public List<RestaurantVO> selectRegDate();
+	public List<RestaurantVO> selectRecentRest();
+	
 }
