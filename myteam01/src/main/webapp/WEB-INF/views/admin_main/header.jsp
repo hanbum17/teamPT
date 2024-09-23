@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
+w<%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -275,20 +275,20 @@ $("#enter_chat").on("click", function(){
   </section>
   <ul>
   	<li>
-  	
       <a href="#"><i class="fa-solid fa-cat"></i> 글관리</a>
       <ul>
         <li><a href="/list">행사,식당목록</a></li>
         <li><a href="/event/register">행사등록</a></li>
         <li><a href="/restaurant/rest_register">식당등록</a></li>
       </ul>
-      
-      <a href="#"><i class="fa-solid fa-cat"></i> 사용자관리</a>
-      <ul>
-        <li><a href="/list">사용자 목록 조회</a></li>
-        <li><a href="/event/register">사용자 상세 정보 보기</a></li>
-        <li><a href="/restaurant/rest_register">사용자 계정 수정 및 삭제</a></li>
-      </ul>
+    </li>
+    <li>
+    	<a href="#"><i class="fa-solid fa-cat"></i> 사용자관리</a>
+		<ul>
+		  <li><a href="/list">사용자 목록 조회</a></li>
+		  <li><a href="/event/register">사용자 상세 정보 보기</a></li>
+		  <li><a href="/restaurant/rest_register">사용자 계정 수정 및 삭제</a></li>
+		</ul>
     </li>
     <!-- <li>
       <a href="#">구현x_대시보드</a>
