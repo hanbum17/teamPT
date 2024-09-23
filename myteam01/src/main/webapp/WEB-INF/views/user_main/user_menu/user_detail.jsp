@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <%@ include file="../userSide.jsp"%>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/user_menu/detail.css">
@@ -18,8 +19,21 @@
 
         <div class="account-settings">
             <h3>계정 설정</h3>
-            <a href="/user/updatePassword">비밀번호 변경</a> 
-            <a href="/user/updateEmail">이메일 변경</a>
+            <a href="#" id="openModalBtn">비밀번호 변경</a> 
+            
+           	<!-- 에러 메시지가 있을 경우 표시 -->
+			<c:if test="${not empty error}">
+			    <div class="alert alert-danger">
+			        ${error}
+			    </div>
+			</c:if>
+
+			<!-- 성공 메시지가 있을 경우 표시 -->
+			<c:if test="${not empty message}">
+			    <div class="alert alert-success">
+			        ${message}
+			    </div>
+			</c:if>
         </div>
 
         <div class="notification-settings">
@@ -31,7 +45,52 @@
             </form>
         </div>
     </div>
+    
+    <!-- 비밀번호 변경 모달 -->
+	<div id="changePasswordModal" class="modal">
+	    <div class="modal-content">
+	        <h2>비밀번호 변경</h2>
+	        <form id="changePasswordForm" action="/user/changePassword" method="post">
+	            <div>
+	                <label for="oldPassword">현재 비밀번호</label>
+	                <input type="password" id="oldPassword" name="oldPassword" required>
+	            </div>
+	            <div>
+	                <label for="newPassword">새 비밀번호</label>
+	                <input type="password" id="newPassword" name="newPassword" required>
+	            </div>
+	            <div>
+	                <label for="confirmPassword">새 비밀번호 확인</label>
+	                <input type="password" id="confirmPassword" name="confirmPassword" required>
+	            </div>
+	            <button type="submit" id="modal-button">비밀번호 변경</button>
+	        </form>
+	    </div>
+	</div>
+
+	
 </main>
 </div>
 </body>
 </html>
+
+<script>
+// 모달을 열고 닫는 스크립트
+var modal = document.getElementById("changePasswordModal");
+var btn = document.getElementById("openModalBtn");
+var span = document.getElementsByClassName("close")[0];
+
+// 모달 열기
+btn.onclick = function() {
+    modal.style.display = "block";
+}
+
+
+// 모달 닫기 (외부 클릭 시)
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
+
+</script>

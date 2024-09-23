@@ -29,11 +29,12 @@
         #map {
             width: 100%;
             height: 100%;
+            /* 원하는 높이로 조정할 수 있습니다 */
+            height: 500px;
         }
     </style>
 </head>
 <body>
-
     <div class="header">
         <div class="logo">Vroom</div>
         <div class="nav">
@@ -44,6 +45,7 @@
     </div>
 
     <div class="container">
+        <!-- 가운데 상자에 있는 사진을 제거하고 지도만 남깁니다 -->
         <div class="box">
             <div id="map"></div>
         </div>

@@ -3,6 +3,8 @@ package com.teamproject.myteam01.controller;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,6 +22,8 @@ import com.teamproject.myteam01.domain.RestaurantVO;
 import com.teamproject.myteam01.mapper.EventMapper;
 import com.teamproject.myteam01.mapper.RestaurantMapper;
 import com.teamproject.myteam01.service.FavoriteService;
+
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 
 @Controller
 public class FavoriteController {
@@ -109,13 +113,21 @@ public class FavoriteController {
 
 
     @GetMapping("/user/user_fav_items")
-    public String getFavoriteItems(@RequestParam("listId") Long listId, Model model) {
-        List<FavoriteItemVO> favoriteItems = favoriteService.getFavoritesWithDetailsByListId(listId); // Service에서 이벤트 및 레스토랑 정보를 포함한 아이템 조회
+    public String getFavoriteItems(@RequestParam("listId") Long listId, 
+                                   @AuthenticationPrincipal UserDetails userDetails,
+                                   Model model) {
+        List<FavoriteItemVO> favoriteItems = favoriteService.getFavoritesWithDetailsByListId(listId); // 선택된 즐겨찾기 목록에 대한 항목 조회
+        FavoriteListVO favoriteList = favoriteService.getFavoriteListById(listId); // 선택된 목록 정보 조회
         
-        FavoriteListVO favoriteList = favoriteService.getFavoriteListById(listId); // 목록 정보도 함께 조회
-        
+        // 현재 사용자의 다른 즐겨찾기 목록 가져오기
+        String userId = userDetails.getUsername();
+        List<FavoriteListVO> favoriteLists = favoriteService.getFavoriteListsByUserId(userId); // 다른 목록들 가져오기
+
+        // 데이터를 모델에 추가하여 JSP로 전달
         model.addAttribute("favoriteItems", favoriteItems);
-        model.addAttribute("favoriteList", favoriteList); // 목록 정보 추가
+        model.addAttribute("favoriteList", favoriteList); // 선택된 목록 정보
+        model.addAttribute("favoriteLists", favoriteLists); // 사용자의 다른 즐겨찾기 목록들
+
         return "user_main/user_menu/user_fav_items";
     }
 
@@ -124,14 +136,12 @@ public class FavoriteController {
 
     @PostMapping("/user/addFavoriteItem")
     public String addFavoriteItem(@RequestParam("listId") Long listId,
-                                  @RequestParam("itemName") String itemName,
                                   @RequestParam("link") String link,
                                   @RequestParam(value = "eno", required = false) Long eno,
                                   @RequestParam(value = "fno", required = false) Long fno,
                                   @AuthenticationPrincipal UserDetails userDetails) {
         FavoriteItemVO favoriteItemVO = new FavoriteItemVO();
         favoriteItemVO.setListId(listId);
-        favoriteItemVO.setItemName(itemName);
         favoriteItemVO.setLink(link);
         favoriteItemVO.setEno(eno);
         favoriteItemVO.setFno(fno);
@@ -142,6 +152,19 @@ public class FavoriteController {
         
         favoriteService.addFavoriteItem(favoriteItemVO);
         return "redirect:/user/user_fav_items?listId=" + listId;
+    }
+    
+    @PostMapping("/user/favorites/updateList")
+    @ResponseBody
+    public String updateFavoriteList(@RequestParam Long favoriteId, @RequestParam Long newListId) {
+        try {
+            // 즐겨찾기 항목을 새로운 목록으로 이동
+            favoriteService.updateFavoriteList(favoriteId, newListId);
+            return "Success";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Failed";
+        }
     }
 
     
