@@ -93,7 +93,6 @@ public class EventController {
         // 성공적인 처리 후 응답 메시지를 반환
         return "리뷰 삭제 처리 완료";  // 클라이언트에게 전송될 응답
     }
-
 	
 	
 	

@@ -1,5 +1,7 @@
 package com.teamproject.myteam01.domain;
 
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,10 +14,8 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 public class EventVO {
-
-    //private Integer eno;         // 행사 번호
+	
     private Long eno ;
-    
     private String ename;       // 행사 이름
     private String eperiod;     // 행사 기간
     private String ecost;       // 행사 비용
@@ -38,7 +38,12 @@ public class EventVO {
         this.eycoord = eycoord;
     }
     
+    private Long page;
+	private Long pageSize;
+	private Long offset;
+	
+	private List<EventReviewVO> reviewsList;
+    
 }
-
 
 

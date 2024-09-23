@@ -1,3 +1,4 @@
+
 package com.teamproject.myteam01.service;
 
 import com.teamproject.myteam01.domain.UserVO;
@@ -13,6 +14,8 @@ public class UserService {
 	 @Autowired
     private UserMapper userMapper;
 	 
+	 
+	 
 	 private PasswordEncoder passwordEncoder() {
 	        return new BCryptPasswordEncoder();
 	    }
@@ -26,6 +29,18 @@ public class UserService {
 
     public void registerUserRole(String userId, String role) {
         userMapper.insertUserRole(userId, role);
+    }
+    
+    // 현재 비밀번호 확인
+    public boolean checkPassword(UserVO user, String currentPassword) {
+        return passwordEncoder().matches(currentPassword, user.getUserPw());
+    }
+
+    // 새 비밀번호로 변경
+    public void changePassword(UserVO user, String newPassword) {
+        String encodedPassword = passwordEncoder().encode(newPassword);
+        user.setUserPw(encodedPassword);
+        userMapper.updateUserPassword(user);
     }
 
     
@@ -42,8 +57,19 @@ public class UserService {
         userMapper.updateLastLoginDate(userId);
     }
     
+
+    public Integer findUserRoleId(String userId) {
+        return userMapper.findUserRoleId(userId);
+    }
+    
+    public boolean isUserAdmin(String userId) {
+        Integer roleId = userMapper.findUserRoleId(userId);
+        return roleId != null && roleId == 1;
+    }
+
     public void deactivateAccount(String userId) {
         userMapper.updateAccountStatus(userId, 1); // 1로 업데이트하여 계정을 비활성화
+
     }
 }
 

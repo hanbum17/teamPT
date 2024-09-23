@@ -15,12 +15,7 @@ import lombok.ToString;
 @AllArgsConstructor
 public class RestaurantVO {
 	
-//    private String fno;         // 음식점 번호
-//	private String uno;         // 공통 식별자
-//	private int fviewscnt;      // 음식점 조회수
-//	private float frating;      // 음식점 평점
-//	private String fxcoord;     // 음식점 X좌표
-//    private String fycoord;     // 음식점 Y좌표
+
   private Long fno;
 	private Long uno;
 	private Integer fviewscnt;
@@ -36,7 +31,13 @@ public class RestaurantVO {
     private List<AttachFileDTO> attachFileList;
     private List<RestaurantsReviewVO> reivewsList;
     
-    
+    private Long page;
+	private Long pageSize;
+	private Long offset;
+	
+	 private Double lat; // 위도
+	 private Double lng; 
+	
    
 
 }

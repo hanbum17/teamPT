@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.teamproject.myteam01.mapper.TripMapper">
+
+    <!-- 여행 계획 저장 -->
+    <insert id="insertTripPlan" parameterType="com.teamproject.myteam01.domain.TripPlanVO">
+        INSERT INTO trip_plans (trip_no, userId, title, start_date, end_date)
+        VALUES (trip_seq.NEXTVAL, #{userId}, #{title}, #{startDate}, #{endDate})
+    </insert>
+
+    <!-- 사용자 ID로 여행 계획 목록 조회 -->
+    <select id="selectTripPlansByUserId" resultType="com.teamproject.myteam01.domain.TripPlanVO">
+        SELECT trip_no, userId, title, start_date, end_date
+        FROM trip_plans
+        WHERE userId = #{userId}
+    </select>
+    
+    <!-- 여행 계획 삭제 -->
+	<delete id="deleteTripPlan" parameterType="Long">
+	    DELETE FROM trip_plans WHERE trip_no = #{tripNo}
+	</delete>
+	
+	<!-- 여행 계획에 속한 TripPlaceVO 삭제 -->
+	<delete id="deleteTripPlacesByTripNo" parameterType="Long">
+	    DELETE FROM trip_places WHERE trip_no = #{tripNo}
+	</delete>
+	
+	<!-- 여행 계획에 속한 TripRegisteredPlaceVO 삭제 -->
+	<delete id="deleteRegisteredPlacesByTripNo" parameterType="Long">
+	    DELETE FROM trip_registered_places WHERE trip_no = #{tripNo}
+	</delete>
+	
+	<!-- 여행 계획 수정 -->
+	<update id="updateTripPlan" parameterType="com.teamproject.myteam01.domain.TripPlanVO">
+	    UPDATE trip_plans
+	    SET title = #{title},
+	        start_date = #{startDate},
+	        end_date = #{endDate}
+	    WHERE trip_no = #{tripNo}
+	</update>
+		
+
+    <!-- 특정 여행 계획 조회 -->
+    <select id="selectTripPlan" resultType="com.teamproject.myteam01.domain.TripPlanVO">
+        SELECT trip_no, userId, title, start_date, end_date
+        FROM trip_plans
+        WHERE trip_no = #{tripNo}
+    </select>
+
+    <!-- 등록된 장소 목록 조회 -->
+    <select id="selectRegisteredPlacesByTripNo" resultType="com.teamproject.myteam01.domain.TripRegisteredPlaceVO">
+	    SELECT id, trip_no, place_name, address
+	    FROM trip_registered_places
+	    WHERE trip_no = #{tripNo}
+	</select>
+
+    <!-- 장소 등록 (trip_registered_places에 추가) -->
+    <insert id="insertRegisteredPlace" parameterType="com.teamproject.myteam01.domain.TripRegisteredPlaceVO">
+	    <!-- 시퀀스에서 ID 값을 미리 가져오기 -->
+	    <selectKey keyProperty="id" resultType="Long" order="BEFORE">
+	        SELECT trip_registered_place_seq.NEXTVAL FROM DUAL
+	    </selectKey>
+	    INSERT INTO trip_registered_places (id, trip_no, place_name, address)
+	    VALUES (#{id}, #{tripNo}, #{placeName}, #{address})
+	</insert>
+
+    <!-- 여행 일정에 장소 추가 (trip_places에 추가) -->
+    <insert id="insertTripPlace" parameterType="com.teamproject.myteam01.domain.TripPlaceVO">
+        INSERT INTO trip_places (id, trip_no, registered_place_id, order_num, start_date, trip_day)
+        VALUES (place_seq.NEXTVAL, #{tripNo}, #{registeredPlaceId}, #{orderNum}, #{startDate}, #{tripDay})
+    </insert>
+
+    <!-- 장소 삭제 -->
+    <delete id="deletePlaceById" parameterType="Long">
+        DELETE FROM trip_places WHERE id = #{placeId}
+    </delete>
+
+    <!-- 특정 여행 계획에 속한 장소와 trip_day로 일정 조회 -->
+	<select id="getPlacesByTripNoAndDay" parameterType="map" resultType="com.teamproject.myteam01.domain.TripPlaceVO">
+	    SELECT p.id, p.trip_no, p.registered_place_id, p.order_num, p.start_date, p.trip_day,
+	           r.place_name AS placeName, r.address AS address
+	    FROM trip_places p
+	    JOIN trip_registered_places r ON p.registered_place_id = r.id
+	    WHERE p.trip_no = #{tripNo}
+	      AND p.trip_day = #{tripDay}
+	    ORDER BY p.order_num
+	</select>
+
+
+
+    <select id="selectScheduleByIdAndStartDate" parameterType="map" resultType="com.teamproject.myteam01.domain.TripPlaceVO">
+	    SELECT * 
+	    FROM trip_places
+	    WHERE id = #{id} 
+	      AND start_date = #{startDate}
+	</select>
+	
+	<!-- 일정이 존재하면 업데이트 -->
+	<update id="updateSchedule" parameterType="com.teamproject.myteam01.domain.TripPlaceVO">
+	    UPDATE trip_places
+	    SET order_num = #{orderNum}, start_date = #{startDate}, trip_day = #{tripDay}
+	    WHERE id = #{id}
+	</update>
+	
+	<!-- 일정이 없으면 삽입 -->
+	<insert id="insertSchedule" parameterType="com.teamproject.myteam01.domain.TripPlaceVO">
+	    <selectKey keyProperty="id" resultType="Long" order="BEFORE">
+	        SELECT trip_place_seq.NEXTVAL FROM DUAL
+	    </selectKey>
+	    INSERT INTO trip_places (id, trip_no, registered_place_id, order_num, start_date, trip_day)
+	    VALUES (#{id}, #{tripNo}, #{registeredPlaceId}, #{orderNum}, #{startDate}, #{tripDay})
+	</insert>
+	
+	<!-- 특정 일정 삭제 -->
+	<delete id="deleteScheduleById" parameterType="Long">
+	    DELETE FROM trip_places WHERE id = #{tripPlaceId}
+	</delete>
+	
+	    <!-- 특정 일정 제외 후 order_num 정렬 -->
+    <update id="updateOrderNumsAfterExclusion">
+        UPDATE trip_places
+        SET order_num = order_num - 1
+        WHERE trip_no = #{tripNo}
+          AND trip_day = #{tripDay}
+          AND order_num > #{orderNum}
+    </update>
+	
+
+</mapper>

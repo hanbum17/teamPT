@@ -6,6 +6,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+
     <meta charset="UTF-8">
     <title>고객센터</title>
     <style>
@@ -72,6 +73,7 @@
         .faq-detail .delete-btn, .inquiry-detail .delete-btn, .feedback-detail .delete-btn { background-color: #dc3545; }
         .faq-detail .back-btn, .inquiry-detail .back-btn, .feedback-detail .back-btn { background-color: #007bff; }
     </style>
+
 </head>
 <body>
     <h1>고객센터</h1>
@@ -79,6 +81,7 @@
         <button class="btnFAQ" onclick="showSection('faq')">자주 묻는 질문(FAQ)</button>
         <button class="btnFeedback" onclick="showSection('feedback')">고객의 소리(건의사항)</button>
         <button class="btnInquiry" onclick="showSection('inquiry')">1:1 문의</button>
+        <a href="http://195.168.9.110:8080/chat/adminChat">관리자와 실시간 채팅</a>
     </div>
 
     <!-- FAQ 섹션 -->

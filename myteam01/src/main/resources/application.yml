@@ -12,7 +12,13 @@ spring:
   web:
     resources:
       static-locations: classpath:/static/, classpath:/public/, classpath:/resources/, classpath:/META-INF/resources/, file:src/main/webapp/resources/
-
+  jackson:
+    time-zone: Asia/Seoul
+  datasource:
+    hikari:
+      data-source-properties:
+        serverTimezone: Asia/Seoul
+      
 server:
   servlet:
     jsp:

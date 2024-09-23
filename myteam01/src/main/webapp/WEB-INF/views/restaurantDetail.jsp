@@ -1,213 +1,151 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ taglib uri="jakarta.tags.core" prefix="c" %>
-<%@ taglib uri="jakarta.tags.fmt" prefix="fmt" %>
-<c:set var="contextPath" value="${pageContext.request.contextPath }"/>
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
-<meta charset="UTF-8">
-<title>Restaurant Detail Page</title>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-<style>
-    .wrap {position: absolute;left: 0;bottom: 40px;width: 288px;height: 132px;margin-left: -144px;text-align: left;overflow: hidden;font-size: 12px;font-family: 'Malgun Gothic', dotum, '돋움', sans-serif;line-height: 1.5;}
-    .wrap * {padding: 0;margin: 0;}
-    .wrap .info {width: 286px;height: 120px;border-radius: 5px;border-bottom: 2px solid #ccc;border-right: 1px solid #ccc;overflow: hidden;background: #fff;}
-    .wrap .info:nth-child(1) {border: 0;box-shadow: 0px 1px 2px #888;}
-    .info .title {padding: 5px 0 0 10px;height: 30px;background: #eee;border-bottom: 1px solid #ddd;font-size: 18px;font-weight: bold;}
-    .info .close {position: absolute;top: 10px;right: 10px;color: #888;width: 17px;height: 17px;background: url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/overlay_close.png');}
-    .info .close:hover {cursor: pointer;}
-    .info .body {position: relative;overflow: hidden;}
-    .info .desc {position: relative;margin: 13px 0 0 90px;height: 75px;}
-    .desc .ellipsis {overflow: hidden;text-overflow: ellipsis;white-space: nowrap;}
-    .desc .jibun {font-size: 11px;color: #888;margin-top: -2px;}
-    .info .img {position: absolute;top: 6px;left: 5px;width: 73px;height: 71px;border: 1px solid #ddd;color: #888;overflow: hidden;}
-    .info:after {content: '';position: absolute;margin-left: -12px;left: 50%;bottom: 0;width: 22px;height: 12px;background: url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png')}
-    .info .link {color: #5085BB;}
-</style>
+    <meta charset="UTF-8">
+    <title>Restaurant Detail</title>
+    <style>
+        /* 기존 CSS와 같은 스타일 */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            height: 100vh;
+            background-color: #f7f7f7;
+        }
+        .panel {
+            position: absolute;
+            top: 50px;
+            width: 28%;
+            height: calc(100vh - 100px);
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            background-color: #fff;
+            padding: 20px;
+            box-sizing: border-box;
+            display: block; /* 기본적으로 보이게 변경 */
+        }
+        .left-panel {
+            left: 5%;
+            border: 1px solid #ddd;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .right-panel {
+            right: 5%;
+            border: 1px solid #ddd;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .panel h2 {
+            margin-bottom: 20px;
+        }
+        .panel p {
+            margin-bottom: 10px;
+        }
+        #reviews-container {
+            max-height: 640px;
+            overflow-y: scroll;
+            padding: 10px;
+            border: 0.5px solid #ddd;
+            border-radius: 10px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0);
+        }
+        #reviews-container::-webkit-scrollbar {
+            width: 0;
+            background: transparent;
+        }
+        .back-button {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .back-button:hover {
+            background-color: #0056b3;
+        }
+        #editReviewForm {
+            display: block; /* 기본적으로 보이게 변경 */
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
 </head>
 <body>
-	<%-- ${Restaurant} --%>
-	<h3>fname: ${Restaurant.fname }</h3>
-	<p>fno: ${Restaurant.fno }</p>
-	<p>fcategory: ${Restaurant.fcategory }</p>
-	<p>faddress: ${Restaurant.faddress }</p>
-	<p>fviewscnt: ${Restaurant.fviewscnt }</p>
-	<p>frating: ${Restaurant.frating }</p>
-	<div id="imgDiv">
-		<ul>
-			
-		</ul>
-	</div>
-	<!-- 지도를 표시할 div 입니다 -->
-	<div id="map" style="width:500px;height:350px;"></div>
-	<div id="reviews_wrap">
-		<form action="${contextPath }/restaurant/registerReview" method="post">
-			<input type="text" id="frtitle" name="frtitle" placeholder="제목"><br>
-			<textarea id="frcontent" name="frcontent" placeholder="내용"></textarea><br>
-			<input type="text" id="frwriter" name="frwriter" placeholder="작성자"><br>
-			<input type="text" id="frrating" name="frrating" placeholder="별점 0~5"><br>
-			<input type="text" id="fno" name="fno" value="${Restaurant.fno }" readonly> <!-- 나중에 type="hidden" 으로 변경 -->
-			<button id="review_register_btn">리뷰등록</button>
-		</form>
-		
-		<c:forEach items="${Reviews }" var="review">
-			<div class="review_div">
-				<ul class="review_ul" data-frno="${review.frno }" data-uno="${review.uno }" data-fno="${review.fno }">
-					<li>frno: ${review.frno }</li>
-					<li>frtitle: ${review.frtitle }</li>
-					<li>frcontent: ${review.frcontent }</li>
-					<li>frwriter: ${review.frwriter }</li>
-					<li>frregDate: ${review.frregDate }</li>
-					<li>frrating: ${review.frrating }</li>
-					<li>uno: ${review.uno }</li>
-					<li>fno: ${review.fno }</li>
-				</ul>
-				<button class="review_blind_btn">블라인드처리</button>
-			</div>
-		</c:forEach>
-	</div>
+<div id="left-panel" class="panel left-panel">
+    <img id="panel-image" src="" alt="Detail Image" style="width: 100%; height: auto; border-radius: 10px; margin-bottom: 20px;">
+    <p><strong id="panel-name"></strong></p>
+    <p><strong>Rating:</strong> <span id="panel-rating"></span> <span id="rating-extra" class="small-text"></span></p>
+    <p><strong>Category:</strong> <span id="panel-category"></span></p>
+    <p><strong>Location:</strong> <span id="panel-location"></span></p>
+    <button class="back-button" onclick="goBack()">Back</button>
+</div>
 
+<div id="right-panel" class="panel right-panel">
+    <p><strong>Rating:</strong> <span id="panel-rating"></span> <span id="rating-extra" class="small-text"></span></p>
+    <button id="review-button" onclick="toggleReviewForm()" style="display: block; width: 100%; padding: 10px; border: none; border-radius: 5px; background-color: #007bff; color: #fff; cursor: pointer;">리뷰 입력</button>
+    <div id="reviews_wrap" style="display: block; margin-top: 20px;">
+        <form action="/vroom/restregisterReview" method="post">
+            <input type="text" id="frtitle" name="frtitle" placeholder="제목"><br>
+            <textarea id="frcontent" name="frcontent" placeholder="내용"></textarea><br>
+            <input type="text" id="frwriter" name="frwriter" placeholder="작성자" readonly><br>
+            <input type="text" id="frrating" name="frrating" placeholder="별점"><br>
+            <input type="hidden" id="fno" name="fno">
+            <button type="submit" style="padding: 10px 20px; border: none; border-radius: 5px; background-color: #007bff; color: #fff; cursor: pointer;">리뷰 등록</button>
+        </form>
+        <div id="reviews-container"></div>
+    </div>
+    <button class="back-button" onclick="goBack()">Back</button>
+</div>
 
 <script>
-var frno;
-$(".review_div").on("click", ".review_blind_btn", function(){
-    frno = $(this).siblings(".review_ul").data("frno");
-    fno = ${Restaurant.fno }
-    $.ajax({
-        type: "POST",
-        url: "/restaurant/deleteReview",  // 요청을 보낼 URL
-        data: { frno: frno, fno: fno},  // 서버로 전송할 데이터
-        success: function(response) {
-            // 요청이 성공적으로 완료되었을 때 실행할 코드
-            alert("리뷰가 성공적으로 삭제 처리되었습니다.");
-            location.reload(true);
-        },
-        error: function(error) {
-            // 요청이 실패했을 때 실행할 코드
-            alert("리뷰 삭제 처리 중 오류가 발생했습니다.");
+    function toggleReviewForm() {
+        var form = document.getElementById('editReviewForm');
+        var display = form.style.display === 'none' ? 'block' : 'none';
+        form.style.display = display;
+    }
+    function goBack() {
+        window.history.back();
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+        var urlParams = new URLSearchParams(window.location.search);
+        var fno = urlParams.get('fno');
+        if (fno) {
+            // AJAX를 사용하여 상세 데이터 로드
+            fetch(`/restaurantDetailData?fno=${fno}`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('panel-image').src = data.image;
+                    document.getElementById('panel-name').textContent = data.fname;
+                    document.getElementById('panel-category').textContent = data.fcategory;
+                    document.getElementById('panel-location').textContent = data.faddress;
+                    document.getElementById('fno').value = data.fno;
+
+                    var reviewsContainer = document.getElementById('reviews-container');
+                    reviewsContainer.innerHTML = '';
+                    data.reviews.forEach(review => {
+                        var reviewElement = document.createElement('div');
+                        reviewElement.className = 'review';
+                        reviewElement.innerHTML = 
+                            '<p><strong>' + review.title + '</strong></p>'
+                            + '<p>' + review.content + '</p>'
+                            + '<p><em>' + review.writer + '</em></p>'
+                            + '<p><strong>Rating:</strong>' + review.rating + '</p>' ;
+                        reviewsContainer.appendChild(reviewElement);
+                    });
+                });
         }
     });
-});
 </script>
-<!-- 이미지 썸네일 표시 스크립트 -->
-<script>
-	function displayThumbnail(uploadResult){
-	
-	var fileUploadResultUL = $("#imgDiv ul") ;
-	var resultHTML = "";
-	
-	if(uploadResult == null || uploadResult.length == 0){
-		return ;
-	}
-	
-	$(uploadResult).each(function(i, attachFile){
-		if(attachFile.fileType == "F"){
-			resultHTML += '<li>'
-			 		   +  		'<img alt=""> <p>' + attachFile.fileName + '</p>';
-					   +  		'&emsp; '
-					   +  '</li>' ;
-		}else{
-			var thumbnail = encodeURI(attachFile.repoPath + "/"
-									  + attachFile.uploadPath + "/s_"
-									  + attachFile.uuid + "_"
-									  + attachFile.fileName );
-			resultHTML += '<li>'
-					   +  		'<img src="${contextPath}/attachFile/displayThumbnail?thumbnail=' + thumbnail + '"><p>' + attachFile.fileName + '</p>';
-					   +  		'&emsp; '
-					   +  '</li>' ;
-		}
-	});
-	fileUploadResultUL.html(resultHTML);
-}
-</script>
-
-
-<!-- 카카오api 스크립트 -->
-<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=fe9306b4adbbf3249d28d6b7a2c37c0a"></script>
-<script>
-var overlay ;
-
-var x = ${Restaurant.fxcoord} ;
-var y = ${Restaurant.fycoord} ;
-var input_coord = "TM" ;
-var output_coord = "WGS84" ;
-var data = {x: x, y: y, input_coord: input_coord, output_coord: output_coord} ;
-
-$(document).ready(function(){
-	$.ajax({
-		type: "get",
-		url: "https://dapi.kakao.com/v2/local/geo/transcoord.json",
-		data: data,
-		beforeSend: function (xhr) {
-	        xhr.setRequestHeader("Authorization","KakaoAK 6b861044f2ac4d9e31f7e31184ac5a2b");
-	    },
-		success: function(result){
-			//console.log(result);
-			loadMap(result) ;
-		}//success end
-	}); // ajax end
-})// document ready end
-
-
-function loadMap(result){
-	
-	var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
-	mapOption = { 
-	       center: new kakao.maps.LatLng(result.documents[0].y, result.documents[0].x), // 지도의 중심좌표
-	       level: 3 // 지도의 확대 레벨
-	};
-	
-	// 지도를 표시할 div와  지도 옵션으로  지도를 생성합니다
-	var map = new kakao.maps.Map(mapContainer, mapOption); 
-	var markerPosition  = new kakao.maps.LatLng(result.documents[0].y, result.documents[0].x); 
-	
-	// 마커를 생성합니다
-	var marker = new kakao.maps.Marker({
-	    position: markerPosition
-	});
-	
-	// 마커가 지도 위에 표시되도록 설정합니다
-	marker.setMap(map);
-	
-	var content = '<div class="wrap">' + 
-	   '    <div class="info">' + 
-	   '        <div class="title">' + 
-	   '            ${Restaurant.fname} '+ 
-	   '            <div class="close" onclick="closeOverlay()" title="닫기"></div>' + 
-	   '        </div>' + 
-	   '        <div class="body">' + 
-	   '            <div class="img">' +
-	   '                <img src="https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/thumnail.png" width="73" height="70">' +
-	   '           </div>' + 
-	   '            <div class="desc">' + 
-	   '                <div class="ellipsis">${Restaurant.faddress }</div>' + 
-	   '            </div>' + 
-	   '        </div>' + 
-	   '    </div>' +    
-	   '</div>';
-	
-	// 마커 위에 커스텀오버레이를 표시합니다
-	// 마커를 중심으로 커스텀 오버레이를 표시하기위해 CSS를 이용해 위치를 설정했습니다
-	 	overlay = new kakao.maps.CustomOverlay({
-	    content: content,
-	    map: map,
-	    position: marker.getPosition()       
-	});
-	
-	// 마커를 클릭했을 때 커스텀 오버레이를 표시합니다
-	kakao.maps.event.addListener(marker, 'click', function() {
-	    overlay.setMap(map);
-	});
-	
-} //loadMap() end
-
-// 커스텀 오버레이를 닫기 위해 호출되는 함수입니다 
-function closeOverlay() {
-    overlay.setMap(null);     
-}
-	
-</script>
-
 </body>
 </html>

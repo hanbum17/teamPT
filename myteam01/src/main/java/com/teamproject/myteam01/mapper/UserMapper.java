@@ -14,6 +14,8 @@ public interface UserMapper {
 
     // 사용자의 ID로 역할(Role)을 조회
     List<String> findRolesByUserId(String userId);
+    
+    Integer findUserRoleId(String userId);
 
     // 사용자 정보를 데이터베이스에 삽입
     void insertUser(UserVO userVO);
@@ -26,7 +28,11 @@ public interface UserMapper {
 
     // 마지막 로그인 날짜를 업데이트
     void updateLastLoginDate(String userId);
+    
+ // 사용자 비밀번호 업데이트
+    void updateUserPassword(UserVO user);
 
     // 사용자 정보를 업데이트
     void updateUser(UserVO userVO);
+
 }
