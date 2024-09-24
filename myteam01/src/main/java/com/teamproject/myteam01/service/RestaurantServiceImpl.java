@@ -154,13 +154,12 @@ public class RestaurantServiceImpl implements RestaurantService{
 			restVO.setOffset(offSet);
 			
 			List<RestaurantVO> restList = restaurantMapper.selectRestList(restVO);
-			
 			for (RestaurantVO restaurant : restList) {
-	            List<AttachFileDTO> attachFileList = restAttachFile.getAttachFilesByUno(restaurant.getUno());
-	            restaurant.setAttachFileList(attachFileList); // 이미지 리스트를 restaurant에 추가
-	        }
-
-			System.out.println("테스트3");
+				if(restaurant.getUno()!=null) {
+					List<AttachFileDTO> attachFileList = restAttachFile.getAttachFilesByUno(restaurant.getUno());
+					restaurant.setAttachFileList(attachFileList); // 이미지 리스트를 restaurant에 추가
+				}
+			}
 			return restList;
 		}
 		
@@ -171,7 +170,7 @@ public class RestaurantServiceImpl implements RestaurantService{
 			restaurantMapper.updaterestreview(restReviewVO);
 			return null;
 		}
-		
+
 		@Override
 		public List<RestaurantVO> getRestListByGuName(Map<String, Object> params) {
 		    Long offset = (Long) params.get("offset");
@@ -184,8 +183,17 @@ public class RestaurantServiceImpl implements RestaurantService{
 		    return restaurantMapper.selectRestListByGuName(guName, offset, pageSize);
 		}
 
-		
+		//모든 식당 등록된 날짜만 조회
+		@Override
+		public List<RestaurantVO> restRegDate(){
+			return restaurantMapper.selectRegDate();
+		}
 
+		//최신순 10개 조회
+		@Override
+		public List<RestaurantVO> recentRest(){
+			return restaurantMapper.selectRecentRest();
+		}
 	
 	
 }

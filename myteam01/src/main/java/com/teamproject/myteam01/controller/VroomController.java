@@ -49,10 +49,11 @@ public class VroomController {
     public String main(@AuthenticationPrincipal UserDetails userDetails, Model model) {
     	
     	boolean user;
-    	
     	if (userDetails != null) {
             user = true;
     		model.addAttribute("user", user);
+    		String userName = userDetails.getUsername();
+        	userService.userIdInsert(userName);
              // 로그인된 사용자에게 보여줄 페이지
         } else {
         	user = false;
@@ -111,6 +112,7 @@ public class VroomController {
             // 전체 식당 목록을 가져옴
             restList = restService.getRestList(restPage, restPageSize);
         }
+
 
         model.addAttribute("restList", restList);
         System.out.println("컨트롤러에 전달된 restaurantList 값: " + restList);

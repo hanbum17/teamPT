@@ -23,5 +23,6 @@ public interface RestaurantService {
 	public List<RestaurantVO> getRestListByGuName(Map<String, Object> params) ;
 	//영범
 	public List<RestaurantsReviewVO> selectMoreReviews(RestaurantsReviewVO restReviewVO);
-
+	public List<RestaurantVO> restRegDate();
+	public List<RestaurantVO> recentRest();
 }
