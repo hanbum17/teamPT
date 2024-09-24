@@ -1,6 +1,7 @@
 package com.teamproject.myteam01.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
@@ -171,6 +172,18 @@ public class RestaurantServiceImpl implements RestaurantService{
 			return null;
 		}
 		
+		@Override
+		public List<RestaurantVO> getRestListByGuName(Map<String, Object> params) {
+		    Long offset = (Long) params.get("offset");
+		    Long pageSize = (Long) params.get("pageSize");
+		    String guName = (String) params.get("guName");
+		    System.out.println("서비스에 전달된 구: "+guName);
+		    
+
+		    // Mapper 호출
+		    return restaurantMapper.selectRestListByGuName(guName, offset, pageSize);
+		}
+
 		
 
 	

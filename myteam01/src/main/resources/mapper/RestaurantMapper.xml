@@ -56,7 +56,21 @@
 	        FRMODDATE = DEFAULT
 	    WHERE frno = #{frno}
 	</update>
-    
+	
+	<select id="selectRestListByGuName" resultType="com.teamproject.myteam01.domain.RestaurantVO">
+	    SELECT *
+	    FROM restaurants
+	    WHERE faddress LIKE '%' || #{guName} || '%'
+	    ORDER BY FNO
+	    OFFSET #{offset} ROWS
+	    FETCH NEXT #{pageSize} ROWS ONLY
+	</select>
+
+
+
+
+
+
 
 
    
