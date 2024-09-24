@@ -1,8 +1,12 @@
 package com.teamproject.myteam01.controller;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -12,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.teamproject.myteam01.domain.EventVO;
 import com.teamproject.myteam01.domain.RestaurantVO;
-import com.teamproject.myteam01.domain.RestaurantsReviewVO;
 import com.teamproject.myteam01.domain.UserVO;
 import com.teamproject.myteam01.service.EventService;
 import com.teamproject.myteam01.service.RestaurantService;
@@ -32,12 +35,56 @@ public class MainPageController {
 	@Autowired
 	private RestaurantService restService;
 	
+	//파이썬 추천 테스트
 	@GetMapping("/mypage")
 	public String test(@AuthenticationPrincipal UserDetails userDetails, Model model) {
 		String userName = userDetails.getUsername();
 		model.addAttribute("userName",userName);
+		List<EventVO> eventList = userService.recomendEvent(userName);
+		EventVO eRecoType = eventList.get(0);
+		model.addAttribute("eRecoType",eRecoType.getType());
+		model.addAttribute("eventList",eventList);
+		List<RestaurantVO> restList = userService.recomendRest(userName);
+		RestaurantVO fRecoType = restList.get(0);
+		model.addAttribute("fRecoType",fRecoType.getType());
+		model.addAttribute("restList",restList);
+		
+		
 		return "admin_main/pythonTest";
 	}
+	//파이썬 추천 테스트
+	
+	@GetMapping("/executePythonScripts")
+    public ResponseEntity<String> executePythonScripts() {
+        StringBuilder output = new StringBuilder();
+
+        // 첫 번째 스크립트 실행
+        output.append(executeScript("C:/myPython/PyvirtualEnvs/PyWebCrawlingEnv/crawling/yourpro01/사용자_행사추천.py"));
+        
+        // 두 번째 스크립트 실행
+        output.append(executeScript("C:/myPython/PyvirtualEnvs/PyWebCrawlingEnv/crawling/yourpro01/사용자_행사추천.py"));
+
+        return ResponseEntity.ok(output.toString());
+    }
+
+    private String executeScript(String scriptPath) {
+        StringBuilder output = new StringBuilder();
+        try {
+            ProcessBuilder pb = new ProcessBuilder("python", scriptPath);
+            pb.redirectErrorStream(true);
+            Process process = pb.start();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                output.append(line).append("\n");
+            }
+            process.waitFor();
+        } catch (Exception e) {
+            e.printStackTrace();
+            output.append("Error executing script at ").append(scriptPath).append(": ").append(e.getMessage()).append("\n");
+        }
+        return output.toString();
+    }
 	
 	@GetMapping("/main")
 	public String main() {
