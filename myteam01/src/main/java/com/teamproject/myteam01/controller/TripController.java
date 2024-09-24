@@ -11,10 +11,14 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.teamproject.myteam01.domain.TripRegisteredPlaceVO;
+import com.teamproject.myteam01.domain.FavoriteItemVO;
+import com.teamproject.myteam01.domain.FavoriteListVO;
 import com.teamproject.myteam01.domain.TripPlaceVO;
 import com.teamproject.myteam01.domain.TripPlanVO;
+import com.teamproject.myteam01.service.FavoriteService;
 import com.teamproject.myteam01.service.TripService;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +30,9 @@ public class TripController {
 
     @Autowired
     private TripService tripService;
+    
+    @Autowired
+    private FavoriteService favoriteService;
 
     // 여행 계획 저장
     @PostMapping("/trip/saveTripPlan")
@@ -78,20 +85,25 @@ public class TripController {
                                     Model model, @AuthenticationPrincipal UserDetails userDetails) {
         TripPlanVO tripPlan = tripService.getTripPlan(tripNo);
         
+        // 즐겨찾기 목록 가져오기
+        List<FavoriteListVO> favoriteLists = favoriteService.getFavoriteListsByUserId(userDetails.getUsername());
+        
         // 모든 장소 가져오기 (등록된 장소)
         List<TripRegisteredPlaceVO> allRegisteredPlaces = tripService.getRegisteredPlacesByTripNo(tripNo);
         
         // 특정 day에 해당하는 장소 가져오기
         List<TripPlaceVO> daySpecificPlaces = tripService.getPlacesByTripNoAndDay(tripNo, tripDay);
-       
 
         model.addAttribute("tripPlan", tripPlan);
-        model.addAttribute("places", allRegisteredPlaces);  // 전체 등록된 장소
-        model.addAttribute("daySpecificPlaces", daySpecificPlaces);  // 해당 day의 장소
-        model.addAttribute("tripDay", tripDay);
+        model.addAttribute("places", allRegisteredPlaces);
+        model.addAttribute("daySpecificPlaces", daySpecificPlaces);
+        
+        // 즐겨찾기 목록 추가
+        model.addAttribute("favoriteLists", favoriteLists);
 
         return "user_main/user_menu/user_trip_detail"; 
     }
+
 
  // 장소 추가 (등록)
     @PostMapping("/trip/addPlace")
@@ -108,6 +120,15 @@ public class TripController {
             return "redirect:/user/trip/detail/" + place.getTripNo();
         }
     }
+    
+    @GetMapping("/trip/favorites")
+    @ResponseBody
+    public List<FavoriteItemVO> getFavoriteItems(@RequestParam("listId") Long listId) {
+        return favoriteService.getFavoritesWithDetailsByListId(listId);
+    }
+
+
+
     
     // 등록된 장소 삭제
     @PostMapping("/trip/deletePlace")
@@ -151,15 +172,15 @@ public class TripController {
     
 
     
-    // 일정 삭제
+ // 일정 삭제
     @PostMapping("/trip/deleteSchedule")
     @ResponseBody
     public ResponseEntity<String> deleteSchedule(@RequestBody Map<String, Object> requestData) {
         try {
-            Long tripPlaceId = Long.parseLong((String) requestData.get("tripPlaceId")); // String -> Long 변환
-            Long tripNo = Long.parseLong((String) requestData.get("tripNo")); // String -> Long 변환
-            Integer orderNum = Integer.parseInt((String) requestData.get("orderNum")); // String -> Integer 변환
-            Integer tripDay = Integer.parseInt((String) requestData.get("tripDay")); // String -> Integer 변환
+            Long tripPlaceId = Long.valueOf(String.valueOf(requestData.get("tripPlaceId"))); 
+            Long tripNo = Long.valueOf(String.valueOf(requestData.get("tripNo"))); 
+            Integer orderNum = Integer.valueOf(String.valueOf(requestData.get("orderNum"))); 
+            Integer tripDay = Integer.valueOf(String.valueOf(requestData.get("tripDay"))); 
 
             tripService.deleteSchedule(tripPlaceId, tripNo, orderNum, tripDay);
             return ResponseEntity.ok("일정이 성공적으로 삭제되었습니다.");

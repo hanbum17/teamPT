@@ -76,20 +76,81 @@
     width: 40%;
 }
 
-.close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-}
+/* 즐겨찾기 목록 섹션 스타일 */
+    #favoritesContainer {
+        margin-top: 20px;
+        border-top: 1px solid #ddd;
+        padding-top: 20px;
+    }
 
-.close:hover,
-.close:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
-}
+    /* 즐겨찾기 리스트 선택 박스 */
+    #favoriteListSelect {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 20px;
 
+        font-size: 1em;
+    }
+
+    /* 즐겨찾기 아이템 스타일 */
+    .favorite-item {
+        background-color: #f4f4f4;
+        padding: 15px;
+        margin-bottom: 15px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: box-shadow 0.3s ease;
+        cursor: pointer;
+    }
+
+    /* 호버 시 그림자 추가 */
+    .favorite-item:hover {
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    /* 즐겨찾기 아이템 텍스트 스타일 */
+    .favorite-item p {
+        margin: 0;
+        font-size: 1.1em;
+        color: #333;
+    }
+
+    /* 선택 버튼 스타일 */
+    .select-favorite {
+        background-color: #009fff; /* 파란색 배경 */
+        color: white;
+        border: none;
+        padding: 8px 15px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 1em;
+        transition: background-color 0.3s ease;
+    }
+
+    /* 버튼 호버 시 색상 변화 */
+    .select-favorite:hover {
+        background-color: #007acc;
+    }
+
+    /* 즐겨찾기 목록과 선택된 항목 구분 */
+    #selectedPlace {
+        margin-top: 20px;
+
+        background-color: #fff;
+
+        font-size: 1.1em;
+        color: #555;
+    }
+
+    /* 선택된 항목의 텍스트 */
+    #selectedPlace p {
+        margin: 0;
+        padding: 5px 0;
+        font-size: 1em;
+        color: #333;
+    }
+    
 /* 등록된 장소 리스트 전체를 가로로 정렬 */
 .place-list-header {
     display: flex;

@@ -1,169 +1,189 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib uri="jakarta.tags.core" prefix="c" %>
-<%@ taglib uri="jakarta.tags.fmt" prefix="fmt" %>
+
+    <%@ include file="./menu/nav.jsp"%>
+    <%@ include file="./menu/footer.jsp"%>
 <c:set var="contextPath" value="${pageContext.request.contextPath }"/>
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>고객센터</title>
-<style>
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    margin: 0;
-    overflow-x: hidden;
-}
 
-button {
-    padding: 10px 20px;
-    margin: 5px;
-    border: none;
-    border-radius: 4px;
-    color: #fff;
-    font-size: 16px;
-    cursor: pointer;
-}
+    <meta charset="UTF-8">
+    <title>고객센터</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
 
-.btnFAQ {
-    background-color: #28a745;
-}
+        }
 
-.btnFeedback {
-    background-color: #007bff;
-}
+        main {
+            max-width: 1200px;
+            margin: 100px auto 0 ;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            margin-bottom: 100px;
+        }
 
-.btnInquiry {
-    background-color: #dc3545;
-}
+        h1 {
+            text-align: center;
+            font-size: 26px;
+            color: #333;
+            margin-bottom: 20px;
+        }
 
-button:hover {
-    opacity: 0.9;
-}
+        .btn-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
 
-.section {
-    display: none;
-}
+        button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 4px;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
 
-.section.active {
-    display: block;
-}
+        .btnFAQ { background-color: #28a745; }
+        .btnFeedback { background-color: #007bff; }
+        .btnInquiry { background-color: #dc3545; }
 
-.section-header {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 10px;
-}
+        button:hover { opacity: 0.9; }
 
-.section-header h3 {
-    margin-right: 20px;
-}
+        .section {
+            display: none;
+        }
 
-.register-btn {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    color: #fff;
-    background-color: #28a745;
-    cursor: pointer;
-}
+        .section.active {
+            display: block;
+            margin-top: 20px;
+            
+        }
 
-.register-btn:hover {
-    opacity: 0.9;
-}
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
 
-.table-container {
-    margin-top: 20px;
-}
+        .section-header h3 {
+            font-size: 20px;
+            color: #333;
+        }
 
-table {
-    width: 100%;
-    border-collapse: collapse;
-    table-layout: fixed; /* 열 너비를 고정 */
-}
+        .register-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            color: #fff;
+            background-color: #28a745;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
 
-th, td {
-    padding: 10px;
-    border: 1px solid #ddd;
-    text-align: center;
-}
+        .register-btn:hover { background-color: #218838; }
 
-th {
-    background-color: #f2f2f2;
-}
+        .table-container {
+            margin-top: 20px;
+            overflow-x: auto;
+        }
 
-/* 열 너비 설정 */
-th:nth-child(1), td:nth-child(1) {
-    width: 5%;
-}
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
 
-th:nth-child(2), td:nth-child(2) {
-    width: 10%;
-}
+        th, td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: center;
+            font-size: 14px;
+        }
 
-th:nth-child(3), td:nth-child(3) {
-    width: 56.67%;
-}
+        th {
+            background-color: #f8f9fa;
+            font-weight: bold;
+        }
 
-.faq-detail {
-    background-color: #fff;
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-}
+        td {
+            cursor: pointer;
+        }
 
-.faq-detail h3 {
-    margin-top: 0;
-}
+        /* FAQ, Inquiry, Feedback Detail View */
+        .detail-view {
+            background-color: #fff;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-top: 20px;
+            
+        }
 
-.faq-detail button {
-    margin-top: 20px;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    color: #fff;
-    cursor: pointer;
-}
+        .detail-view h3 {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
 
-.faq-detail .edit-btn {
-    background-color: #28a745;
-    margin-top: 10px;
-}
+        .detail-view button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
 
-.faq-detail .edit-btn:hover {
-    opacity: 0.9;
-}
+        .back-btn { background-color: #007bff; }
+        .edit-btn { background-color: #28a745; }
+        .delete-btn { background-color: #dc3545; }
 
-.faq-detail .delete-btn {
-    background-color: #dc3545;
-    margin-top: 10px;
-}
+        .back-btn:hover { background-color: #0069d9; }
+        .edit-btn:hover { background-color: #218838; }
+        .delete-btn:hover { background-color: #c82333; }
 
-.faq-detail .delete-btn:hover {
-    opacity: 0.9;
-}
+        /* Media Queries for Responsive Design */
+        @media (max-width: 768px) {
+            .btn-container {
+                flex-direction: column;
+                gap: 10px;
+            }
 
-/* 목록으로 돌아가기 버튼 스타일 */
-.faq-detail .back-btn {
-    background-color: #007bff; /* 고객의 소리 버튼과 동일한 색상 */
-    margin-top: 10px;
-}
+            table {
+                font-size: 12px;
+            }
 
-.faq-detail .back-btn:hover {
-    opacity: 0.9;
-}
-</style>
+            th, td {
+                padding: 10px;
+            }
+        }
+
+    </style>
+
 </head>
 <body>
+
+<main>
     <h1>고객센터</h1>
-    <div>
+
+    <!-- Section Buttons -->
+    <div class="btn-container">
         <button class="btnFAQ" onclick="showSection('faq')">자주 묻는 질문(FAQ)</button>
         <button class="btnFeedback" onclick="showSection('feedback')">고객의 소리(건의사항)</button>
         <button class="btnInquiry" onclick="showSection('inquiry')">1:1 문의</button>
     </div>
 
-    <div id="faq" class="section">
+    <!-- FAQ Section -->
+    <div id="faq" class="section active">
         <div class="section-header">
             <h3>자주 묻는 질문 (FAQ)</h3>
             <button class="register-btn" onclick="location.href='${contextPath}/cs/register?type=faq'">FAQ 등록</button>
@@ -183,111 +203,216 @@ th:nth-child(3), td:nth-child(3) {
                         </tr>
                     </c:if>
                     <c:if test="${cs.faqdelflag == 0}">
-                        <tr>
-                            <td style="cursor: pointer;" onclick="showDetail('${cs.faqno}', '${cs.faqtitle}', '${cs.faqcategory}', '${cs.faqcontent}')">
-                                <c:out value="${cs.faqno}" />
-                            </td>
-                            <td style="cursor: pointer;" onclick="showDetail('${cs.faqno}', '${cs.faqtitle}', '${cs.faqcategory}', '${cs.faqcontent}')">
-                                <c:out value="${cs.faqcategory}" />
-                            </td>
-                            <td style="cursor: pointer;" onclick="showDetail('${cs.faqno}', '${cs.faqtitle}', '${cs.faqcategory}', '${cs.faqcontent}')">
-                                <c:out value="${cs.faqtitle}" />
-                            </td>
+                        <tr onclick="showDetail('faq', '${cs.faqno}', '${cs.faqtitle}', '${cs.faqcategory}', '${cs.faqcontent}')">
+                            <td><c:out value="${cs.faqno}" /></td>
+                            <td><c:out value="${cs.faqcategory}" /></td>
+                            <td><c:out value="${cs.faqtitle}" /></td>
                         </tr>
                     </c:if>
                 </c:forEach>
             </table>
         </div>
-        
-        <!-- 상세 정보를 표시할 공간 -->
-        <div id="faq-detail" class="faq-detail" style="display: none; margin-top: 20px;">
+
+        <!-- FAQ Detail Section -->
+        <div id="faq-detail" class="detail-view" style="display: none;">
+            <h3>FAQ 상세보기</h3>
             <table style="width: 100%; border-collapse: collapse;">
                 <tr>
-                    <th style="width: 15%; text-align: Center; padding: 10px; border-bottom: 1px solid #ddd;">제목</th>
-                    <td id="faq-title" style="width: 35%; padding: 10px; border-bottom: 1px solid #ddd;"></td>
-                    <th style="width: 15%; text-align: Center; padding: 10px; border-bottom: 1px solid #ddd;">카테고리</th>
-                    <td id="faq-category" style="width: 35%; padding: 10px; border-bottom: 1px solid #ddd;"></td>
+                    <th style="width: 15%;">제목</th>
+                    <td id="faq-title"></td>
+                    <th style="width: 15%;">카테고리</th>
+                    <td id="faq-category"></td>
                 </tr>
                 <tr>
-                    <th style="width: 15%; text-align: Center; padding: 10px; border-bottom: 1px solid #ddd;">내용</th>
-                    <td colspan="3" id="faq-content" style="padding: 10px; border-bottom: 1px solid #ddd; white-space: pre-wrap;"></td>
+                    <th style="width: 15%;">내용</th>
+                    <td colspan="3" id="faq-content" style="white-space: pre-wrap;"></td>
                 </tr>
             </table>
-            <button class="back-btn" onclick="hideDetail()">목록으로</button>
+            <button class="back-btn" onclick="hideDetail()">닫기</button>
             <button class="edit-btn" onclick="editDetail()">수정</button>
             <button class="delete-btn" onclick="confirmDelete()">삭제</button>
         </div>
     </div>
 
+    <!-- Feedback Section -->
     <div id="feedback" class="section">
         <div class="section-header">
             <h3>고객의 소리</h3>
             <button class="register-btn" onclick="location.href='${contextPath}/cs/register?type=feedback'">고객의 소리 등록</button>
         </div>
-        <p>고객의 소리 내용을 여기에 작성합니다.</p>
+        <div class="table-container">
+            <table>
+                <tr>
+                    <th>번호</th>
+                    <th>제목</th>
+                </tr>
+                <c:forEach items="${feedbackList}" var="feeb">
+                    <c:if test="${feeb.fbdelflag == 1}">
+                        <tr>
+                            <td><c:out value="${feeb.fbno}" /></td>
+                            <td colspan="2"><em>삭제된 게시글입니다.</em></td>
+                        </tr>
+                    </c:if>
+                    <c:if test="${feeb.fbdelflag == 0}">
+                        <tr onclick="showDetail('feedback', '${feeb.fbno}', '${feeb.fbtitle}', '${feeb.fbRegDate}', '${feeb.fbcontent}')">
+                            <td><c:out value="${feeb.fbno}" /></td>
+                            <td><c:out value="${feeb.fbtitle}" /></td>
+                        </tr>
+                    </c:if>
+                </c:forEach>
+            </table>
+        </div>
+
+        <!-- Feedback Detail Section -->
+        <div id="feedback-detail" class="detail-view" style="display: none;">
+            <h3>고객의 소리 상세보기</h3>
+            <table style="width: 100%; border-collapse: collapse;">
+                <tr>
+                    <th style="width: 15%;">제목</th>
+                    <td id="feedback-title"></td>
+                    <th style="width: 15%;">등록일</th>
+                    <td id="feedback-regdate"></td>
+                </tr>
+                <tr>
+                    <th style="width: 15%;">내용</th>
+                    <td colspan="3" id="feedback-content" style="white-space: pre-wrap;"></td>
+                </tr>
+            </table>
+            <button class="back-btn" onclick="hideDetail()">닫기</button>
+            <button class="edit-btn" onclick="editDetail()">수정</button>
+            <button class="delete-btn" onclick="confirmDelete()">삭제</button>
+        </div>
     </div>
 
+    <!-- Inquiry Section -->
     <div id="inquiry" class="section">
         <div class="section-header">
-            <h3>1:1 문의내역</h3>
+            <h3>1:1 문의 내역</h3>
             <button class="register-btn" onclick="location.href='${contextPath}/cs/register?type=inquiry'">1:1 문의 등록</button>
         </div>
-        <p>문의사항 내용을 여기에 작성합니다.</p>
+        <div class="table-container">
+            <table>
+                <tr>
+                    <th>번호</th>
+                    <th>카테고리</th>
+                    <th>제목</th>
+                </tr>
+                <c:forEach items="${inquiryList}" var="inq">
+                    <c:if test="${inq.idelflag == 1}">
+                        <tr>
+                            <td><c:out value="${inq.ino}" /></td>
+                            <td colspan="2"><em>삭제된 게시글입니다.</em></td>
+                        </tr>
+                    </c:if>
+                    <c:if test="${inq.idelflag == 0}">
+                        <tr onclick="showDetail('inquiry', '${inq.ino}', '${inq.ititle}', '${inq.icategory}', '${inq.icontent}')">
+                            <td><c:out value="${inq.ino}" /></td>
+                            <td><c:out value="${inq.icategory}" /></td>
+                            <td><c:out value="${inq.ititle}" /></td>
+                        </tr>
+                    </c:if>
+                </c:forEach>
+            </table>
+        </div>
+
+        <!-- Inquiry Detail Section -->
+        <div id="inquiry-detail" class="detail-view" style="display: none;">
+            <h3>1:1 문의 상세보기</h3>
+            <table style="width: 100%; border-collapse: collapse;">
+                <tr>
+                    <th style="width: 15%;">제목</th>
+                    <td id="inquiry-title"></td>
+                    <th style="width: 15%;">카테고리</th>
+                    <td id="inquiry-category"></td>
+                </tr>
+                <tr>
+                    <th style="width: 15%;">내용</th>
+                    <td colspan="3" id="inquiry-content" style="white-space: pre-wrap;"></td>
+                </tr>
+            </table>
+            <button class="back-btn" onclick="hideDetail()">닫기</button>
+            <button class="edit-btn" onclick="editDetail()">수정</button>
+            <button class="delete-btn" onclick="confirmDelete()">삭제</button>
+        </div>
     </div>
-</body>
+</main>
 
 <script>
-function showSection(sectionId) {
-    var sections = document.querySelectorAll('.section');
-    sections.forEach(function(section) {
-        section.classList.remove('active');
-    });
-    
-    var selectedSection = document.getElementById(sectionId);
-    if (selectedSection) {
-        selectedSection.classList.add('active');
+    function showSection(sectionId) {
+        var sections = document.querySelectorAll('.section');
+        sections.forEach(function(section) {
+            section.classList.remove('active');
+        });
+
+        var selectedSection = document.getElementById(sectionId);
+        if (selectedSection) {
+            selectedSection.classList.add('active');
+        }
     }
-}
 
-window.onload = function() {
-    showSection('faq'); // 기본적으로 FAQ 섹션을 보여줌
-};
+    window.onload = function() {
+        showSection('faq'); // 기본적으로 FAQ 섹션을 보여줌
+    };
 
-function showDetail(faqno, faqtitle, faqcategory, faqcontent) {
-    // 글 목록을 숨기고 상세 페이지를 보여줌
-    document.querySelector('.table-container').style.display = 'none';
-    var detailSection = document.getElementById('faq-detail');
-    detailSection.style.display = 'block';
-    
-    // 상세 정보 설정
-    document.getElementById('faq-title').innerText = faqtitle;
-    document.getElementById('faq-category').innerText = faqcategory;
-    
-    var formattedContent = faqcontent.replace(/\n/g, '<br>');
-    document.getElementById('faq-content').innerHTML = formattedContent;
-    
-    // 수정 및 삭제 버튼에 게시글 번호 설정
-    var editButton = document.querySelector('.edit-btn');
-    var deleteButton = document.querySelector('.delete-btn');
-    if (editButton && deleteButton) {
-        editButton.setAttribute('data-faqno', faqno);
-        deleteButton.setAttribute('data-faqno', faqno);
+    function showDetail(type, no, title, category, content, regdate) {
+        var detailSection;
+        if (type === 'faq') {
+            detailSection = document.getElementById('faq-detail');
+            document.getElementById('faq-title').innerText = title;
+            document.getElementById('faq-category').innerText = category;
+            document.getElementById('faq-content').innerHTML = content.replace(/\n/g, '<br>');
+        } else if (type === 'inquiry') {
+            detailSection = document.getElementById('inquiry-detail');
+            document.getElementById('inquiry-title').innerText = title;
+            document.getElementById('inquiry-category').innerText = category;
+            document.getElementById('inquiry-content').innerHTML = content.replace(/\n/g, '<br>');
+        } else {
+            detailSection = document.getElementById('feedback-detail');
+            document.getElementById('feedback-title').innerText = title;
+            document.getElementById('feedback-regdate').innerText = regdate;
+            document.getElementById('feedback-content').innerHTML = content.replace(/\n/g, '<br>');
+        }
+        detailSection.style.display = 'block';
     }
-}
 
-function hideDetail() {
-    // 상세 페이지를 숨기고 글 목록을 다시 보여줌
-    document.querySelector('.table-container').style.display = 'block';
-    document.getElementById('faq-detail').style.display = 'none';
-}
-
-function editDetail() {
-    // 수정 버튼 클릭 시 수정 페이지로 이동
-    var faqno = document.querySelector('.edit-btn').getAttribute('data-faqno');
-    if (faqno) {
-        window.location.href = '${contextPath}/cs/edit?faqno=' + faqno;
+    function hideDetail() {
+        document.getElementById('faq-detail').style.display = 'none';
+        document.getElementById('feedback-detail').style.display = 'none';
+        document.getElementById('inquiry-detail').style.display = 'none';
     }
-}
 
+    function editDetail() {
+        var faqno = document.querySelector('.edit-btn').getAttribute('data-faqno');
+        var ino = document.querySelector('.edit-btn').getAttribute('data-ino');
+        var fbno = document.querySelector('.edit-btn').getAttribute('data-fbno');
+        if (faqno) {
+            window.location.href = '${contextPath}/cs/edit?faqno=' + faqno;
+        } else if (ino) {
+            window.location.href = '${contextPath}/cs/edit?ino=' + ino;
+        } else if (fbno) {
+            window.location.href = '${contextPath}/cs/edit?fbno=' + fbno;
+        }
+    }
+
+    function confirmDelete() {
+        var faqno = document.querySelector('.delete-btn').getAttribute('data-faqno');
+        var ino = document.querySelector('.delete-btn').getAttribute('data-inqno');
+        var fbno = document.querySelector('.delete-btn').getAttribute('data-fbno');
+
+        var deleteUrl;
+        if (faqno) {
+            deleteUrl = '${contextPath}/cs/deleteFAQ?faqno=' + faqno;
+        } else if (ino) {
+            deleteUrl = '${contextPath}/cs/deleteInquiry?ino=' + ino;
+        } else if (fbno) {
+            deleteUrl = '${contextPath}/cs/deleteFeedback?fbno=' + fbno;
+        }
+
+        if (confirm("정말로 삭제하시겠습니까?")) {
+            window.location.href = deleteUrl;
+        }
+    }
 </script>
+
+</body>
 </html>

@@ -97,6 +97,8 @@ label {
     <h1 style="text-align: center;">고객센터 통합 등록</h1>
 
     <form id="frmRegister" name="frmRegister" method="post" action="${contextPath}/cs/registerProc">
+        <input type="hidden" name="type" value="${param.type}" />
+        
         <div id="faqSection" class="section">
             <div class="form-group">
                 <label>카테고리</label>
@@ -118,24 +120,34 @@ label {
         </div>
 
         <div id="feedbackSection" class="section">
+
             <div class="form-group">
                 <label for="feedbackTitle">건의 제목</label>
-                <input type="text" id="feedbackTitle" name="feedbackTitle" class="form-control" />
+                <input type="text" id="feedbackTitle" name="fbtitle" class="form-control" />
             </div>
             <div class="form-group">
                 <label for="feedbackContent">건의 내용</label>
-                <textarea id="feedbackContent" name="feedbackContent" rows="5" class="form-control"></textarea>
+                <textarea id="feedbackContent" name="fbcontent" rows="5" class="form-control"></textarea>
             </div>
         </div>
 
         <div id="inquirySection" class="section">
+        	<div class="form-group">
+                <label>카테고리</label>
+                <select name="icategory" id="inquirycategory" class="form-control">
+                    <option value="일반">일반</option>
+                    <option value="결제">결제</option>
+                    <option value="서비스">서비스</option>
+                    <option value="기타">기타</option>
+                </select>
+	        </div>
             <div class="form-group">
                 <label for="inquiryTitle">문의 제목</label>
-                <input type="text" id="inquiryTitle" name="inquiryTitle" class="form-control" />
+                <input type="text" id="inquiryTitle" name="ititle" class="form-control" />
             </div>
             <div class="form-group">
                 <label for="inquiryContent">문의 내용</label>
-                <textarea id="inquiryContent" name="inquiryContent" rows="5" class="form-control"></textarea>
+                <textarea id="inquiryContent" name="icontent" rows="5" class="form-control"></textarea>
             </div>
         </div>
 
@@ -167,28 +179,26 @@ function checkFormValues() {
     var type = "${param.type}";
     var isValid = false;
     if (type === "faq") {
-        var category = document.getElementById("faqcategory").value;
-        var title = document.getElementById("faqtitle").value;
-        var content = convertNewlinesToBr(document.getElementById("faqcontent").value);
-        // Form validation logic
+        var faqcategory = document.getElementById("faqcategory").value;
+        var faqtitle = document.getElementById("faqtitle").value;
+        var faqcontent = convertNewlinesToBr(document.getElementById("faqcontent").value);
         isValid = category && title && content;
-        // Assign converted content back to textarea
         document.getElementById("faqcontent").value = content;
+        
     } else if (type === "feedback") {
-        var feedbackTitle = document.getElementById("feedbackTitle").value;
-        var feedbackContent = convertNewlinesToBr(document.getElementById("feedbackContent").value);
-
+    	
+        var fbtitle = document.getElementById("fbtitle").value;
+        var fbcontent = convertNewlinesToBr(document.getElementById("fbcontent").value);
         var regExp = /^\s+$/;
         isValid = feedbackTitle && feedbackContent && !regExp.test(feedbackTitle) && !regExp.test(feedbackContent);
-        // Assign converted content back to textarea
-        document.getElementById("feedbackContent").value = feedbackContent;
+        document.getElementById("fbcontent").value = feedbackContent;
+        
     } else if (type === "inquiry") {
-        var inquiryTitle = document.getElementById("inquiryTitle").value;
-        var inquiryContent = convertNewlinesToBr(document.getElementById("inquiryContent").value);
-
+    	var icategory = document.getElementById("icategory").value;
+        var ititle = document.getElementById("ititle").value;
+        var icontent = convertNewlinesToBr(document.getElementById("icontent").value);
         var regExp = /^\s+$/;
         isValid = inquiryTitle && inquiryContent && !regExp.test(inquiryTitle) && !regExp.test(inquiryContent);
-        // Assign converted content back to textarea
         document.getElementById("inquiryContent").value = inquiryContent;
     }
 
@@ -210,6 +220,8 @@ $("#btnRegister").on("click", function(event) {
 
 $(document).ready(function() {
     var type = "${param.type}";
+    $('input[name="type"]').val(type); // hidden input에 type 설정
+    
     if (type === "faq") {
         showSection('faqSection');
     } else if (type === "feedback") {

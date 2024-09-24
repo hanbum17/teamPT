@@ -4,50 +4,11 @@
 <head>
     <meta charset="utf-8">
     <title>Vroom - Home</title>
-    <link rel="stylesheet" type="text/css" href="/css/vroomMain.css"> <!-- CSS 파일 링크 -->
+    <%@ include file="../menu/nav.jsp"%>
+    <%@ include file="../menu/footer.jsp"%>
+    <link rel="stylesheet" type="text/css" href="/css/vroomMain.css"> 
     <style>
-        .footer {
-            text-align: center; /* 가운데 정렬 */
-            margin-top: 20px; /* 위쪽 여백 */
-        }
-        
-        .footer hr {
-            border: 1px solid #ccc; /* 연한 회색 줄 */
-            margin: 10px 0; /* 상하 여백 */
-        }
-        
-        .footer-info {
-            font-size: 12px; /* 글자 크기 */
-            color: #aaa; /* 연한 회색 */
-        }
-        
-        .footer-info a {
-            color: #aaa; /* 연한 회색 링크 */
-            text-decoration: none; /* 밑줄 제거 */
-        }
-        
-        .footer-info a:hover {
-            text-decoration: underline; /* hover 시 밑줄 */
-        }
-        
-        .area {
-            position: absolute;
-            background: #fff;
-            border: 1px solid #888;
-            border-radius: 3px;
-            font-size: 12px;
-            top: -5px;
-            left: 15px;
-            padding: 2px;
-        }
 
-        .info {
-            font-size: 12px;
-            padding: 5px;
-        }
-        .info .title {
-            font-weight: bold;
-        }
         
         /* 지도 스타일 추가 */
         #map {
@@ -76,20 +37,7 @@
         </div>
     </div>
 
-    <div class="footer">
-        <a href="/vroom/policy?section=terms">이용약관</a>
-        <a href="/vroom/policy?section=privacy">개인정보 취급방침</a>
-        <a href="/vroom/policy?section=cookiePolicy">쿠키정책</a>
-        <a href="/vroom/policy?section=youthUsagePolicy">청소년 보호정책</a>
-        <a href="/vroom/policy">사이트 운영방식</a>
-        <a href="/cs/Center">고객센터</a>
-        <hr> <!-- 가로 줄 추가 -->
-        <div class="footer-info">
-            <p>© 2024 Vroom. All Rights Reserved</p>
-            <p>VroomCompany | 서울특별시 종로구 종로12길 15, 9층 902호</p>
-            <p>사업자등록번호 111-22-33333 | 고객 문의 02-2222-3333 | <a href="#">사업자정보 확인</a></p>
-        </div>
-    </div>
+
 
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=bc42aa044cb0d127af995d28498082d8"></script>
     <script>
