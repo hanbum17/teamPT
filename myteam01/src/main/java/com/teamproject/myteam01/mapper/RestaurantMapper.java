@@ -1,6 +1,7 @@
 package com.teamproject.myteam01.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
@@ -23,12 +24,19 @@ public interface RestaurantMapper {
 
 	public int updaterestreview(RestaurantsReviewVO restReviewVO);
 	
+	public List<RestaurantVO> selectRestListByGuName(@Param("guName") String guName, @Param("offset") Long offset, @Param("pageSize") Long pageSize);
+
+
+
+	
 	
 
 	//영범
 	public List<RestaurantsReviewVO> selectMoreReviews(RestaurantsReviewVO reviewVO);
 	public List<Long> selectReviewsForStar(Long fno);
+
 	public List<RestaurantVO> selectRegDate();
 	public List<RestaurantVO> selectRecentRest();
+
 	
 }
