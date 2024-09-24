@@ -197,6 +197,8 @@ public class RestaurantServiceImpl implements RestaurantService{
 		public List<RestaurantVO> recentRest(){
 			return restaurantMapper.selectRecentRest();
 		}
+		
+		
 	
 	
 }
