@@ -83,7 +83,8 @@
         WHERE USERID = #{userId}
     </update>
 
-	<!-- 영범 성별 통계 -->
+	<!-- 영범 -->
+	<!-- 성별 통계 -->
 	<select id="userGenderCount" resultType="com.teamproject.myteam01.domain.UserVO">
 		SELECT userGender from users
 	</select>
@@ -92,5 +93,11 @@
 		INSERT INTO USER_ACTIVITY 
 		VALUES(#{userId} , DEFAULT , '신규회원')
 	</insert>
-
+	<!-- 로그인시 db에 값 넣기 -->
+	<delete id="deleteUserActivity">
+	    DELETE FROM user_activity WHERE ACTIVITY = '현재로그인'
+	</delete>
+	<insert id="userIdInsert" parameterType="String">
+		INSERT INTO user_activity (USER_ID, ACCESS_TIME, ACTIVITY) VALUES (#{userId}, SYSTIMESTAMP, '현재로그인')
+	</insert>
 </mapper>

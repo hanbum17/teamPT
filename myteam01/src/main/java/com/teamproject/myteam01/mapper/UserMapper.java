@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import com.teamproject.myteam01.domain.UserVO;
 
@@ -41,5 +42,8 @@ public interface UserMapper {
     List<UserVO> userGenderCount();
     //신규회원 활동 저장
     void userRegisterActivity(UserVO userVO);
+    //현재 로그인 정보 db에 저장 (파이썬넘기기위해)
+    void deleteUserActivity();
+    void userIdInsert(String user);
     
 }

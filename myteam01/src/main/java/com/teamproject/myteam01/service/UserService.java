@@ -4,6 +4,7 @@ package com.teamproject.myteam01.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -76,21 +77,24 @@ public class UserService {
     }
     
     
-    //영범 성별 통계
+    //영범 
+    //성별 통계
     public UserVO countGender() {
-    	
     	List<UserVO> genderCount = userMapper.userGenderCount();
     	UserVO result = new UserVO(); // 초기화
-
-        for (UserVO user : genderCount) {
+    	for (UserVO user : genderCount) {
             if (user.getUserGender() == 'M') {
                 result.setMaleCnt(result.getMaleCnt() + 1L); 
             } else if (user.getUserGender() == 'F') {
                 result.setFemaleCnt(result.getFemaleCnt() + 1L);
             }
         }
-    	
     	return result;
+    }
+    //메인화면 접속시 로그인 되어있으면 파이썬에 아이디 넘기기 위해 db에 넣기
+    public void userIdInsert(String user) {
+    	userMapper.deleteUserActivity();
+    	userMapper.userIdInsert(user);
     }
 }
 

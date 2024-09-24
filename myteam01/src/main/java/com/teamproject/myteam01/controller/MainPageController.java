@@ -3,6 +3,8 @@ package com.teamproject.myteam01.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,6 +31,13 @@ public class MainPageController {
 	private EventService eventService ;
 	@Autowired
 	private RestaurantService restService;
+	
+	@GetMapping("/mypage")
+	public String test(@AuthenticationPrincipal UserDetails userDetails, Model model) {
+		String userName = userDetails.getUsername();
+		model.addAttribute("userName",userName);
+		return "admin_main/pythonTest";
+	}
 	
 	@GetMapping("/main")
 	public String main() {
