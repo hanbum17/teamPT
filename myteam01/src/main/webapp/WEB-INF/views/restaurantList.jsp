@@ -1,8 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-
-<%@ include file="./menu/nav.jsp"%>
+<%@ taglib uri="jakarta.tags.core" prefix="c" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath }"/>
-
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -283,10 +281,10 @@
 			        <img src="${contextPath}/images/bibimbab.jpg" alt="${restaurant.fname} Image">
 			        <div class="restaurant-info">
 			            <h3>${restaurant.fname}</h3>
-			            <p>Location: ${restaurant.faddress}</p>
-			            <p>Rating: ${restaurant.frating}</p>
-			            <p>Rating: ${restaurant.fxcoord}</p>
-			            <p>Rating: ${restaurant.fycoord}</p>
+			            <p>${restaurant.faddress}</p>
+			            <p>${restaurant.frating}</p>
+			            <p>${restaurant.fxcoord}</p>
+			            <p>${restaurant.fycoord}</p>
 			            
 			        </div>
 			    </div>
