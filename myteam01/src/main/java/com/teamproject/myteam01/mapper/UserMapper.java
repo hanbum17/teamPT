@@ -36,7 +36,10 @@ public interface UserMapper {
     // 사용자 정보를 업데이트
     void updateUser(UserVO userVO);
     
-    //영범 성별 통계
+    //영범 
+    //성별 통계
     List<UserVO> userGenderCount();
+    //신규회원 활동 저장
+    void userRegisterActivity(UserVO userVO);
     
 }

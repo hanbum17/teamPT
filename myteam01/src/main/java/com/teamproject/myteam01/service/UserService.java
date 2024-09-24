@@ -28,6 +28,7 @@ public class UserService {
         String encodedPassword = passwordEncoder().encode(user.getUserPw());
         user.setUserPw(encodedPassword);
         userMapper.insertUser(user);
+        userMapper.userRegisterActivity(user);
     }
 
     public void registerUserRole(String userId, String role) {

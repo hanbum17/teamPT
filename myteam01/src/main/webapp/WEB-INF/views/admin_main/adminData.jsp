@@ -8,6 +8,7 @@
 <%@ page import="java.util.HashMap" %>
 <%@ page import="java.util.stream.Collectors" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
 <%
     UserVO userCounts = (UserVO) request.getAttribute("user");
@@ -56,6 +57,45 @@
     <title>관리자 데이터</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
+         body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        #genderChart {
+            width: 300px !important;
+            height: 300px !important;
+        }
+        .container {
+            display: flex;
+            justify-content: space-between;
+        }
+        .chart-container {
+            width: 45%;
+        }
+        .board {
+            width: 45%;
+            margin-top: 20px;
+            border: 1px solid #ccc; /* 테두리 추가 */
+            border-radius: 5px; /* 모서리 둥글게 */
+            padding: 10px; /* 내부 여백 */
+            background-color: #f9f9f9; /* 배경색 */
+        }
+        .board h2 {
+            border-bottom: 2px solid #ddd; /* 제목 아래 선 추가 */
+            padding-bottom: 10px;
+        }
+        .board table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .board th, .board td {
+            border: 1px solid #ccc; /* 각 셀 테두리 */
+            padding: 10px;
+            text-align: left;
+        }
+        .board th {
+            background-color: #e9e9e9; /* 헤더 배경색 */
+        }
         #genderChart {
             width: 300px !important;
             height: 300px !important;
@@ -222,7 +262,7 @@
                         <c:if test="${not empty event.ename && not empty event.eregdate}">
                             <tr>
                                 <td>${event.ename}</td>
-                                <td>${sdf.format(event.eregdate)}</td>
+                                <td><fmt:formatDate value="${event.eregdate}" pattern="yyyy-MM-dd" /></td>
                             </tr>
                         </c:if>
                     </c:forEach>
@@ -231,24 +271,26 @@
         </div>
 
         <div class="board">
-            <h2>최근 등록된 식당글 10개</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>제목</th>
-                        <th>등록일</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <c:forEach var="restaurant" items="${recentRestaurants}">
-                        <tr>
-                            <td>${restaurant.fname}</td>
-                            <td>${sdf.format(restaurant.fregdate)}</td>
-                        </tr>
-                    </c:forEach>
-                </tbody>
-            </table>
-        </div>
+    		<h2>최근 등록된 식당글 10개</h2>
+		    <table>
+		        <thead>
+		            <tr>
+		                <th>제목</th>
+		                <th>등록일</th>
+		            </tr>
+		        </thead>
+		        <tbody>
+		            <c:forEach var="restaurant" items="${recentRestaurants}">
+					    <c:if test="${not empty restaurant.fname && not empty restaurant.fregdate}">
+					        <tr>
+					            <td>${restaurant.fname}</td>
+					            <td><fmt:formatDate value="${restaurant.fregdate}" pattern="yyyy-MM-dd" /></td>
+					        </tr>
+					    </c:if>
+					</c:forEach>
+				 </tbody>
+		    </table>
+		</div>
     </div>
 
 </body>
