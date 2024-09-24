@@ -156,10 +156,13 @@ public class RestaurantServiceImpl implements RestaurantService{
 			List<RestaurantVO> restList = restaurantMapper.selectRestList(restVO);
 			for (RestaurantVO restaurant : restList) {
 				if(restaurant.getUno()!=null) {
-					List<AttachFileDTO> attachFileList = restAttachFile.getAttachFilesByUno(restaurant.getUno());
-					restaurant.setAttachFileList(attachFileList); // 이미지 리스트를 restaurant에 추가
+		            List<AttachFileDTO> attachFileList = restAttachFile.getAttachFilesByUno(restaurant.getUno());
+		            restaurant.setAttachFileList(attachFileList); // 이미지 리스트를 restaurant에 추가
 				}
-			}
+	        }
+
+			System.out.println("테스트3");
+
 			return restList;
 		}
 		
