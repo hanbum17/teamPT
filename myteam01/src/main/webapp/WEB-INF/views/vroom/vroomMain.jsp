@@ -8,8 +8,6 @@
     <%@ include file="../menu/footer.jsp"%>
     <link rel="stylesheet" type="text/css" href="/css/vroomMain.css"> 
     <style>
-
-        
         /* 지도 스타일 추가 */
         #map {
             width: 100%;
@@ -31,28 +29,27 @@
     <div class="container">
         <div class="box">
             <div id="map"></div>
+            <button id="backButton">뒤로가기</button>
         </div>
         <div class="message">
             떠나고자 하는 지역을 선택해주세요
         </div>
-        <button id="backButton" style="display:none;">back</button> 
+        
     </div>
-
-
 
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=bc42aa044cb0d127af995d28498082d8"></script>
     <script>
-    // 카카오 지도 API 로드 후 실행
+ // 카카오 지도 API 로드 후 실행
     document.addEventListener('DOMContentLoaded', function () {
-    	
-    	var backButton = document.getElementById('backButton');
+        const initialCenter = new kakao.maps.LatLng(36.591186820098365, 128.19210633207655);
+        const initialLevel = 13; // 원래 확대 레벨
 
         // 서울시 영역 데이터를 가져옵니다
         fetch('/json/SIDO_MAP.json')
             .then(response => response.json())
             .then(data => {
                 console.log(data); // 데이터 구조 확인
-                
+
                 if (data.features && Array.isArray(data.features)) {
                     var areas = data.features.map(feature => ({
                         name: feature.properties.CTP_ENG_NM,
@@ -64,9 +61,9 @@
                     }));
 
                     var mapContainer = document.getElementById('map');
-                    var mapOption = { 
-                        center: new kakao.maps.LatLng(36.591186820098365, 128.19210633207655),
-                        level: 13,
+                    var mapOption = {
+                        center: initialCenter,
+                        level: initialLevel,
                         draggable: false,
                         scrollwheel: false,
                         disableDoubleClickZoom: true
@@ -89,38 +86,38 @@
                             strokeColor: '#004c80',
                             strokeOpacity: 0.8,
                             fillColor: '#fff',
-                            fillOpacity: 0.7 
+                            fillOpacity: 0.7
                         });
 
                         polygons.push(polygon);
 
-                        kakao.maps.event.addListener(polygon, 'mouseover', function(mouseEvent) {
+                        kakao.maps.event.addListener(polygon, 'mouseover', function (mouseEvent) {
                             polygon.setOptions({fillColor: '#09f'});
 
                             customOverlay.setContent('<div class="area">' + area.name + '</div>');
-                            customOverlay.setPosition(mouseEvent.latLng); 
+                            customOverlay.setPosition(mouseEvent.latLng);
                             customOverlay.setMap(map);
                         });
 
-                        kakao.maps.event.addListener(polygon, 'mousemove', function(mouseEvent) {
-                            customOverlay.setPosition(mouseEvent.latLng); 
+                        kakao.maps.event.addListener(polygon, 'mousemove', function (mouseEvent) {
+                            customOverlay.setPosition(mouseEvent.latLng);
                         });
 
-                        kakao.maps.event.addListener(polygon, 'mouseout', function() {
+                        kakao.maps.event.addListener(polygon, 'mouseout', function () {
                             if (highlightedPolygon !== polygon) {
                                 polygon.setOptions({fillColor: '#fff'});
                             }
                             customOverlay.setMap(null);
                         });
 
-                        kakao.maps.event.addListener(polygon, 'click', function(mouseEvent) {
-                            var content = '<div class="info">' + 
-                                        '   <div class="title">' + area.name + '</div>' +
-                                        '   <div class="size">총 면적 : 약 ' + Math.floor(polygon.getArea()) + ' m<sup>2</sup></div>' +
-                                        '</div>';
+                        kakao.maps.event.addListener(polygon, 'click', function (mouseEvent) {
+                            var content = '<div class="info">' +
+                                '   <div class="title">' + area.name + '</div>' +
+                                '   <div class="size">총 면적 : 약 ' + Math.floor(polygon.getArea()) + ' m<sup>2</sup></div>' +
+                                '</div>';
 
-                            infowindow.setContent(content); 
-                            infowindow.setPosition(mouseEvent.latLng); 
+                            infowindow.setContent(content);
+                            infowindow.setPosition(mouseEvent.latLng);
                             infowindow.setMap(map);
 
                             var bounds = new kakao.maps.LatLngBounds();
@@ -135,9 +132,6 @@
                             polygon.setOptions({fillColor: '#09f'});
 
                             polygons.forEach(p => p.setMap(null));
-                            
-                         	// 뒤로가기 버튼 표시
-                            backButton.style.display = 'block';
 
                             // 서울 클릭 시 구별 폴리곤 추가
                             if (area.name === 'Seoul') {
@@ -146,7 +140,7 @@
                                     .then(guData => {
                                         if (guData.features && Array.isArray(guData.features)) {
                                             var guAreas = guData.features.map(feature => ({
-                                            	name: feature.properties.name,
+                                                name: feature.properties.name,
                                                 path: feature.geometry.coordinates[0].map(coord => {
                                                     const lat = coord[1];
                                                     const lng = coord[0];
@@ -158,6 +152,9 @@
                                     })
                                     .catch(error => console.error('Error loading GU_MAP.json:', error));
                             }
+
+                            // 뒤로가기 버튼 표시
+                            backButton.style.display = 'block'; // 폴리곤 클릭 시 뒤로가기 버튼 표시
                         });
                     }
 
@@ -169,49 +166,61 @@
                             strokeColor: '#ff0000',
                             strokeOpacity: 0.8,
                             fillColor: '#ff0000',
-                            fillOpacity: 0.4 
+                            fillOpacity: 0.4
                         });
 
-                        kakao.maps.event.addListener(guPolygon, 'mouseover', function(mouseEvent) {
+                        kakao.maps.event.addListener(guPolygon, 'mouseover', function (mouseEvent) {
                             guPolygon.setOptions({fillColor: '#ff6666'});
 
                             customOverlay.setContent('<div class="area">' + guArea.name + '</div>');
-                            customOverlay.setPosition(mouseEvent.latLng); 
+                            customOverlay.setPosition(mouseEvent.latLng);
                             customOverlay.setMap(map);
                         });
 
-                        kakao.maps.event.addListener(guPolygon, 'mousemove', function(mouseEvent) {
-                            customOverlay.setPosition(mouseEvent.latLng); 
+                        kakao.maps.event.addListener(guPolygon, 'mousemove', function (mouseEvent) {
+                            customOverlay.setPosition(mouseEvent.latLng);
                         });
 
-                        kakao.maps.event.addListener(guPolygon, 'mouseout', function() {
+                        kakao.maps.event.addListener(guPolygon, 'mouseout', function () {
                             guPolygon.setOptions({fillColor: '#ff0000'});
                             customOverlay.setMap(null);
                         });
 
-                        kakao.maps.event.addListener(guPolygon, 'click', function() {
+                        kakao.maps.event.addListener(guPolygon, 'click', function () {
                             var guName = guArea.name; // 클릭한 구 이름
-                            console.log("구 이름:", guName); 
-                            window.location.href = '/vroom/restaurant?guName=' + encodeURIComponent(guName); 
+                            console.log("구 이름:", guName);
+                            window.location.href = '/vroom/restaurant?guName=' + encodeURIComponent(guName);
                         });
-
                     }
-                    
-                 // 뒤로가기 버튼 클릭 이벤트
-                    backButton.addEventListener('click', function() {
-                        backButton.style.display = 'none'; 
-                        polygons.forEach(p => p.setMap(map)); 
-                        map.setCenter(initialCenter);
-                        map.setLevel(initialLevel);
+
+                    // 뒤로가기 버튼 추가
+                    var backButton = document.createElement('button');
+                    backButton.id = 'backButton';
+                    backButton.innerText = '뒤로가기';
+                    backButton.style.display = 'none'; // 처음에는 숨김
+                    document.body.appendChild(backButton);
+
+                    // 뒤로가기 버튼 클릭 이벤트
+                    backButton.addEventListener('click', function () {
+                        backButton.style.display = 'none'; // 버튼 숨기기
+                        polygons.forEach(p => p.setMap(map)); // 시도 폴리곤 다시 표시
+                        map.setCenter(initialCenter); // 지도 중심을 원래대로
+                        map.setLevel(initialLevel); // 레벨 원래대로
+
                         if (highlightedPolygon) {
                             highlightedPolygon.setOptions({fillColor: '#fff'});
-                            highlightedPolygon = null;
+                            highlightedPolygon = null; // 강조된 폴리곤 초기화
                         }
                     });
+
                 }
             })
-            .catch(error => console.error('Error loading JSON:', error));
+            .catch(error => {
+                console.error('Error loading JSON:', error);
+                alert('데이터를 불러오는 중 오류가 발생했습니다.');
+            });
     });
+
 
     </script>
 </body>
