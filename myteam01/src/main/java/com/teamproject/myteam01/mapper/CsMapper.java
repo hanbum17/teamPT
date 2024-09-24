@@ -28,37 +28,37 @@ public interface CsMapper {
 	
 	
 	// Inquiry 목록
-	public List<CsVO> selectInquiryList();
+	public List<CsVO> selectINQList();
 	
 	// Inquiry 등록
-	public Integer registerInquiry(CsVO cs);
+	public Integer registerINQ(CsVO cs);
 	
 	// Inquiry 조회
-	public CsVO selectInquiry(Long ino);
+	public CsVO selectINQ(Long ino);
 	
 	// Inquiry 수정
-	public int updateInquiry(CsVO cs);
+	public int updateINQ(CsVO cs);
 	
 	// Inquiry 삭제
-	public int delInquiry(Long ibno);
+	public int delINQ(Long ibno);
 
 
 ///////////////////////////////////////////
 	
 	// Feedback 목록
-	public List<CsVO> selectFeedbackList();
+	public List<CsVO> selectFBList();
 	
 	// Feedback 등록
-	public Integer registerFeedback(CsVO cs);
+	public Integer registerFB(CsVO cs);
 	
 	// Feedback 조회
-	public CsVO selectFeedback(Long fbno);
+	public CsVO selectFB(Long fbno);
 		
 	// Feedback 수정
-	public int updateFeedback(CsVO cs);
+	public int updateFB(CsVO cs);
 
 	// Feedback 삭제
-	public int delFeedback(Long fbno);
+	public int delFB(Long fbno);
 	
 
 	

@@ -6,7 +6,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-
     <meta charset="UTF-8">
     <title>고객센터</title>
     <style>
@@ -136,8 +135,8 @@
                 </tr>
             </table>
             <button class="back-btn" onclick="hideDetail()">닫기</button>
-            <button class="edit-btn" onclick="editDetail()">수정</button>
-            <button class="delete-btn" onclick="confirmDelete()">삭제</button>
+            <button class="edit-btn" onclick="editDetail('faq')">수정</button>
+            <button class="delete-btn" onclick="confirmDelete('faq', ${cs.faqno})">삭제</button>
         </div>
     </div>
 
@@ -173,8 +172,7 @@
                 </c:forEach>
             </table>
         </div>
-    
-    
+
         <!-- 고객의소리 상세정보 표시할 공간 -->
         <div id="feedback-detail" class="feedback-detail" style="display: none; margin-top: 20px;">
             <table style="width: 100%; border-collapse: collapse;">
@@ -191,8 +189,10 @@
                 </tr>
             </table>
             <button class="back-btn" onclick="hideDetail()">닫기</button>
-            <button class="edit-btn" onclick="editDetail()">수정</button>
-            <button class="delete-btn" onclick="confirmDelete()">삭제</button>
+            <button class="edit-btn" onclick="editDetail('feedback')">수정</button>
+            <button class="delete-btn" onclick="confirmDelete('feedback', ${feeb.fbno})">삭제</button>
+
+
         </div>
   </div>
 
@@ -218,13 +218,13 @@
                     </c:if>
                     <c:if test="${inq.idelflag == 0}">
                         <tr>
-                            <td style="cursor: pointer;" onclick="showDetail('inquiry', '${inq.ino}', '${inq.ititle}', '${inq.icategory}', '${inq.icontent}')">
+                            <td style="cursor: pointer;" onclick="showDetail('inquiry', '${inq.ino}', '${inq.ititle}', '${inq.icategory}', '${inq.icontent}', '${inq.iresponse}')">
                                 <c:out value="${inq.ino}" />
                             </td>
-                            <td style="cursor: pointer;" onclick="showDetail('inquiry', '${inq.ino}', '${inq.ititle}', '${inq.icategory}', '${inq.icontent}')">
+                            <td style="cursor: pointer;" onclick="showDetail('inquiry', '${inq.ino}', '${inq.ititle}', '${inq.icategory}', '${inq.icontent}', '${inq.iresponse}')">
                                 <c:out value="${inq.icategory}" />
                             </td>
-                            <td style="cursor: pointer;" onclick="showDetail('inquiry', '${inq.ino}', '${inq.ititle}', '${inq.icategory}', '${inq.icontent}')">
+                            <td style="cursor: pointer;" onclick="showDetail('inquiry', '${inq.ino}', '${inq.ititle}', '${inq.icategory}', '${inq.icontent}', '${inq.iresponse}')">
                                 <c:out value="${inq.ititle}" />
                             </td>
                         </tr>
@@ -246,48 +246,60 @@
                     <th style="width: 15%; text-align: Center; padding: 10px; border-bottom: 1px solid #ddd;">내용</th>
                     <td colspan="3" id="inquiry-content" style="padding: 10px; border-bottom: 1px solid #ddd; white-space: pre-wrap;"></td>
                 </tr>
+                <tr>
+				    <th style="width: 15%; text-align: Center; padding: 10px; border-bottom: 1px solid #ddd;">답변</th>
+				    <td colspan="3" id="inquiry-response" style="padding: 10px; border-bottom: 1px solid #ddd; white-space: pre-wrap;"></td>
+				</tr>
             </table>
             <button class="back-btn" onclick="hideDetail()">닫기</button>
-            <button class="edit-btn" onclick="editDetail()">수정</button>
-            <button class="delete-btn" onclick="confirmDelete()">삭제</button>
+            <button class="edit-btn" onclick="editDetail('inquiry')">수정</button>
+            <button class="delete-btn" onclick="confirmDelete('inquiry', ${inq.ino})">삭제</button>
+
         </div>
     </div>
 
     <script>
-        function showSection(sectionId) {
-            var sections = document.querySelectorAll('.section');
-            sections.forEach(function(section) {
-                section.classList.remove('active');
-                section.style.display = 'none';
-            });
+    window.onload = function() {
+        // 페이지가 처음 로드될 때 FAQ 섹션만 보이도록 설정
+        showSection('faq');
+    };
+    
+    function showSection(sectionId) {
+        // 모든 섹션 숨기기
+        var sections = document.querySelectorAll('.section');
+        sections.forEach(function(section) {
+            section.classList.remove('active');
+            section.style.display = 'none';
+        });
 
-            var selectedSection = document.getElementById(sectionId);
-            if (selectedSection) {
-                selectedSection.classList.add('active');
-                selectedSection.style.display = 'block';
-            }
+        // 선택된 섹션 보이기
+        var selectedSection = document.getElementById(sectionId);
+        if (selectedSection) {
+            selectedSection.classList.add('active');
+            selectedSection.style.display = 'block';
         }
 
-        window.onload = function() {
-            showSection('faq'); // 기본적으로 FAQ 섹션을 보여줌
-        };
+        // 상세 보기 닫기 (초기화)
+        hideDetail();  // 상세 보기 창이 열려 있으면 닫음
+    }
 
-        function showDetail(type, no, title, category, content, regdate) {
-            // 글 목록을 숨기고 상세 페이지를 보여줌
-            //document.querySelector('.table-container').style.display = 'none';
+        function showDetail(type, no, title, category, content, response, regdate) {
+            // 모든 테이블 숨기기
+            var allTables = document.querySelectorAll('.table-container');
+            allTables.forEach(function(table) {
+                table.style.display = 'none';
+            });
+
             var detailSection;
 
             if (type === 'faq') {
                 detailSection = document.getElementById('faq-detail');
                 detailSection.style.display = 'block';
 
-                // 상세 정보 설정
                 document.getElementById('faq-title').innerText = title;
                 document.getElementById('faq-category').innerText = category;
-                var formattedContent = content.replace(/\n/g, '<br>');
-                document.getElementById('faq-content').innerHTML = formattedContent;
+                document.getElementById('faq-content').innerHTML = content.replace(/\n/g, '<br>');
 
-                // 수정 및 삭제 버튼에 게시글 번호 설정
                 document.querySelector('.edit-btn').setAttribute('data-faqno', no);
                 document.querySelector('.delete-btn').setAttribute('data-faqno', no);
                 
@@ -295,13 +307,11 @@
                 detailSection = document.getElementById('inquiry-detail');
                 detailSection.style.display = 'block';
 
-                // 상세 정보 설정
                 document.getElementById('inquiry-title').innerText = title;
                 document.getElementById('inquiry-category').innerText = category;
-                var formattedContent = content.replace(/\n/g, '<br>');
-                document.getElementById('inquiry-content').innerHTML = formattedContent;
-
-                // 수정 및 삭제 버튼에 게시글 번호 설정
+                document.getElementById('inquiry-content').innerHTML = content.replace(/\n/g, '<br>');
+                document.getElementById('inquiry-response').innerHTML = response.replace(/\n/g, '<br>');
+                
                 document.querySelector('.edit-btn').setAttribute('data-ino', no);
                 document.querySelector('.delete-btn').setAttribute('data-ino', no);
             }
@@ -309,61 +319,74 @@
                 detailSection = document.getElementById('feedback-detail');
                 detailSection.style.display = 'block';
 
-                // 상세 정보 설정
                 document.getElementById('feedback-title').innerText = title;
                 document.getElementById('feedback-regdate').innerText = regdate; 
                
-                var formattedContent = content.replace(/\n/g, '<br>');
-                document.getElementById('feedback-content').innerHTML = formattedContent;
+                document.getElementById('feedback-content').innerHTML = content.replace(/\n/g, '<br>');
 
-                // 수정 및 삭제 버튼에 게시글 번호 설정
                 document.querySelector('.edit-btn').setAttribute('data-fbno', no);
                 document.querySelector('.delete-btn').setAttribute('data-fbno', no);
             }
         }
 
         function hideDetail() {
-            // 상세 페이지를 숨기고 글 목록을 다시 보여줌
-            document.querySelector('.table-container').style.display = 'block';
+            // 테이블 다시 보이기
+            var allTables = document.querySelectorAll('.table-container');
+            allTables.forEach(function(table) {
+                table.style.display = 'block';
+            });
+
             document.getElementById('faq-detail').style.display = 'none';
             document.getElementById('inquiry-detail').style.display = 'none';
             document.getElementById('feedback-detail').style.display = 'none';
         }
-
-        function editDetail() {
-            // 수정 버튼 클릭 시 수정 페이지로 이동
+        
+        function editDetail(type) {
             var faqno = document.querySelector('.edit-btn').getAttribute('data-faqno');
             var ino = document.querySelector('.edit-btn').getAttribute('data-ino');
             var fbno = document.querySelector('.edit-btn').getAttribute('data-fbno');
-            if (faqno) {
-                window.location.href = '${contextPath}/cs/edit?faqno=' + faqno;
-            }else if (ino) {
-            	window.location.href = '${contextPath}/cs/edit?ino=' + ino;
-            }else if (fbno) {
-            	window.location.href = '${contextPath}/cs/edit?fbno=' + fbno;
-            }
             
-        }
-
-        function confirmDelete() {
-            var faqno = document.querySelector('.delete-btn').getAttribute('data-faqno');
-            var ino = document.querySelector('.delete-btn').getAttribute('data-inqno');
-            var fbno = document.querySelector('.delete-btn').getAttribute('data-fbno');
-
-            var deleteUrl;
             if (faqno) {
-                deleteUrl = '${contextPath}/cs/deleteFAQ?faqno=' + faqno;
+                window.location.href = '${contextPath}/cs/edit?faqno=' + faqno + '&type=faq';
             } else if (ino) {
-                deleteUrl = '${contextPath}/cs/deleteInquiry?ino=' + ino;
+                window.location.href = '${contextPath}/cs/edit?ino=' + ino + '&type=inquiry';
             } else if (fbno) {
-                deleteUrl = '${contextPath}/cs/deleteFeedback?fbno=' + fbno;
-            }
-
-            if (confirm("정말로 삭제하시겠습니까?")) {
-                window.location.href = deleteUrl;
+                window.location.href = '${contextPath}/cs/edit?fbno=' + fbno + '&type=feedback';
             }
         }
+
         
+
+        function confirmDelete(type, no) {
+            if (confirm("정말로 삭제하시겠습니까?")) {
+                // 컨트롤러로 바로 POST 요청 보내기
+                fetch(`${contextPath}/cs/deleteProc`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: new URLSearchParams({
+                        type: type,
+                        no: no
+                    })
+                })
+                .then(response => {
+                    if (response.ok) {
+                        alert("삭제되었습니다.");
+                        location.reload();  // 페이지 새로고침으로 목록 갱신
+                    } else {
+                        alert("삭제에 실패했습니다.");
+                    }
+                })
+                .catch(error => {
+                    console.error("삭제 요청 중 오류 발생:", error);
+                    alert("삭제 요청 중 오류가 발생했습니다.");
+                });
+            }
+        }
     </script>
+
+    </script>
+
 </body>
 </html>
