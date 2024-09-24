@@ -17,7 +17,7 @@
 
 .add-list-btn {
     padding: 10px 15px;
-    background-color: #007bff;
+    background-color: #009fff;
     color: #fff;
     border: none;
     border-radius: 5px;
@@ -30,7 +30,7 @@
 
 /* Scrollable grid */
 .favorite-list {
-    max-height: 630px; /* Adjust this value as needed */
+    max-height: 730px; /* Adjust this value as needed */
     overflow-y: auto;
 }
 

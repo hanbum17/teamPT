@@ -1,0 +1,70 @@
+@charset "UTF-8";
+
+        .footer {
+            text-align: center; /* 가운데 정렬 */
+        }
+        
+        .footer hr {
+            border: 1px solid #ccc; /* 연한 회색 줄 */
+            margin: 10px 0; /* 상하 여백 */
+        }
+        
+        .footer-info {
+            font-size: 12px; /* 글자 크기 */
+            color: #aaa; /* 연한 회색 */
+        }
+        
+        .footer-info a {
+            color: #aaa; /* 연한 회색 링크 */
+            text-decoration: none; /* 밑줄 제거 */
+        }
+        
+        .footer-info a:hover {
+            text-decoration: underline; /* hover 시 밑줄 */
+        }
+        
+        .area {
+            position: absolute;
+            background: #fff;
+            border: 1px solid #888;
+            border-radius: 3px;
+            font-size: 12px;
+            top: -5px;
+            left: 15px;
+            padding: 2px;
+        }
+
+        .info {
+            font-size: 12px;
+            padding: 5px;
+        }
+        .info .title {
+            font-weight: bold;
+        }
+
+.footer {
+	z-index:9998;
+	position: fixed;
+	bottom: -110px;
+	width : 100%;
+    background-color: #ffffff; /* 회색보다 살짝 더 진한 회색 */
+    padding: 20px 0;
+    text-align: center;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s;
+}
+
+.footer:hover {
+	bottom: 0px;
+}
+
+.footer a {
+    color: #0080ff; /* 글자 색상: 흰색 */
+    text-decoration: none;
+    margin: 0 10px;
+    font-size: 15px; /* 글자 크기 1.3배 줄임 */
+}
+
+.footer a:hover {
+    text-decoration: underline;
+}

@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.teamproject.myteam01.domain.EventReviewVO;
 import com.teamproject.myteam01.domain.EventVO;
+import com.teamproject.myteam01.domain.RestaurantVO;
 import com.teamproject.myteam01.domain.RestaurantsReviewVO;
 
 public interface EventService {
@@ -23,7 +24,8 @@ public interface EventService {
 	public List<EventReviewVO> modifyreview(EventReviewVO eventReviewVO);
 	public List<EventVO> getEventList(Long page , Long pageSize);
 	public List<EventReviewVO> selectMoreReviews(EventReviewVO eventReviewVO);
-	
+	public List<EventVO> eventRegDate();
+	public List<EventVO> recentEvent();
 	
 	//희준
 	//행사 목록

@@ -281,10 +281,11 @@
 			        <img src="${contextPath}/images/bibimbab.jpg" alt="${restaurant.fname} Image">
 			        <div class="restaurant-info">
 			            <h3>${restaurant.fname}</h3>
-			            <p>Location: ${restaurant.faddress}</p>
-			            <p>Rating: ${restaurant.frating}</p>
-			            <p>${restaurant.fxcoord}</p> 
+			            <p>${restaurant.faddress}</p>
+			            <p>${restaurant.frating}</p>
+			            <p>${restaurant.fxcoord}</p>
 			            <p>${restaurant.fycoord}</p>
+			            
 			        </div>
 			    </div>
 			</c:forEach>
@@ -397,7 +398,7 @@ const contextPath = "${contextPath}";
 //브라우저 시작되고 반응형 스크립트
 document.addEventListener('DOMContentLoaded', () => {
 	
-	
+	addMouseOverListenerToCards();
 	 const restaurantButton = document.getElementById('event-search-btn');
 
 	    restaurantButton.addEventListener('click', () => {
