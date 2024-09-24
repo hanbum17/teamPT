@@ -29,7 +29,7 @@
     <div class="container">
         <div class="box">
             <div id="map"></div>
-            <button id="backButton">뒤로가기</button>
+            <button id="backButton" style="display:none;">뒤로가기</button>
         </div>
         <div class="message">
             떠나고자 하는 지역을 선택해주세요
@@ -193,19 +193,15 @@
                         });
                     }
 
-                    // 뒤로가기 버튼 추가
-                    var backButton = document.createElement('button');
-                    backButton.id = 'backButton';
-                    backButton.innerText = '뒤로가기';
-                    backButton.style.display = 'none'; // 처음에는 숨김
-                    document.body.appendChild(backButton);
+                 // 뒤로가기 버튼 표시
+                    backButton.style.display = 'block'; // 버튼을 보이도록 설정
 
-                    // 뒤로가기 버튼 클릭 이벤트
+                 // 뒤로가기 버튼 클릭 이벤트
                     backButton.addEventListener('click', function () {
                         backButton.style.display = 'none'; // 버튼 숨기기
-                        polygons.forEach(p => p.setMap(map)); // 시도 폴리곤 다시 표시
-                        map.setCenter(initialCenter); // 지도 중심을 원래대로
-                        map.setLevel(initialLevel); // 레벨 원래대로
+                        polygons.forEach(p => p.setMap(map)); // 원래의 시도 폴리곤 다시 표시
+                        map.setCenter(initialCenter); // 지도 원래 중심으로
+                        map.setLevel(initialLevel); // 지도 원래 레벨로
 
                         if (highlightedPolygon) {
                             highlightedPolygon.setOptions({fillColor: '#fff'});

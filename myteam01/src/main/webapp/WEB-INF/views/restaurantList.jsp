@@ -263,6 +263,7 @@
     <div style="position: absolute; top: 10px; left: 10px; font-size: 16px;">
         <c:if test="${not empty user}">
             현재 로그인: <strong>${user.userId}</strong>
+            현재 구: <strong>${restVO.guName != null ? restVO.guName : 'N/A'}</strong>
         </c:if>
     </div>
 
