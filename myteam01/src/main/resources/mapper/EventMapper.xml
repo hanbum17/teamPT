@@ -11,7 +11,7 @@
 	
 	<!-- 영범 -->
 	<select id="selectRegDate" resultType="com.teamproject.myteam01.domain.EventVO">
-		SELECT eregdate from event
+		SELECT eregdate FROM event ORDER BY eregdate DESC FETCH FIRST 100 ROWS ONLY
 	</select>
 	<select id="selectRecentEvent" resultType="com.teamproject.myteam01.domain.EventVO">
 		SELECT *

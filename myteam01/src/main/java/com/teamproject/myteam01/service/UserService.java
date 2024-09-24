@@ -109,9 +109,10 @@ public class UserService {
     
     //사용자에게 추천할 행사 정보 리스트
     public List<EventVO> recomendEvent(String user) {
+    	
         List<UserActivityVO> recomendList = userMapper.selectRecommend(user);
         List<EventVO> eventList = new ArrayList<>(); // 이벤트 리스트 생성
-
+        
         for (UserActivityVO recomend : recomendList) {
             if (recomend.getEno() != null && recomend.getEno() != 0L) { // 조건 수정
                 EventVO event = eventMapper.eventDetail(recomend.getEno());
@@ -121,7 +122,7 @@ public class UserService {
                 }
             } 
         }
-        System.out.println(eventList);
+        
         return eventList; // 리스트 반환
     }
     

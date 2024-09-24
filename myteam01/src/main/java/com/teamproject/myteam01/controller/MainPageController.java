@@ -40,57 +40,38 @@ public class MainPageController {
 	public String test(@AuthenticationPrincipal UserDetails userDetails, Model model) {
 		String userName = userDetails.getUsername();
 		model.addAttribute("userName",userName);
+		
+		//행사 추천 리스트
 		List<EventVO> eventList = userService.recomendEvent(userName);
-		EventVO eRecoType = eventList.get(0);
-		model.addAttribute("eRecoType",eRecoType.getType());
 		model.addAttribute("eventList",eventList);
+		
+		//식당 추천 리스트
 		List<RestaurantVO> restList = userService.recomendRest(userName);
-		RestaurantVO fRecoType = restList.get(0);
-		model.addAttribute("fRecoType",fRecoType.getType());
 		model.addAttribute("restList",restList);
 		
+		//행사 추천 타입 ex) 지역추천 , 무료추천
+		if(!eventList.isEmpty()) {
+			EventVO eRecoType = eventList.get(0);
+			model.addAttribute("eRecoType",eRecoType.getType());
+		}
 		
+		//식당 추천 타입 ex) 지역추천 , 무료추천
+		if(!restList.isEmpty()) {
+			RestaurantVO fRecoType = restList.get(0);
+			model.addAttribute("fRecoType",fRecoType.getType());
+		}
 		return "admin_main/pythonTest";
 	}
-	//파이썬 추천 테스트
 	
-	@GetMapping("/executePythonScripts")
-    public ResponseEntity<String> executePythonScripts() {
-        StringBuilder output = new StringBuilder();
 
-        // 첫 번째 스크립트 실행
-        output.append(executeScript("C:/myPython/PyvirtualEnvs/PyWebCrawlingEnv/crawling/yourpro01/사용자_행사추천.py"));
-        
-        // 두 번째 스크립트 실행
-        output.append(executeScript("C:/myPython/PyvirtualEnvs/PyWebCrawlingEnv/crawling/yourpro01/사용자_행사추천.py"));
-
-        return ResponseEntity.ok(output.toString());
-    }
-
-    private String executeScript(String scriptPath) {
-        StringBuilder output = new StringBuilder();
-        try {
-            ProcessBuilder pb = new ProcessBuilder("python", scriptPath);
-            pb.redirectErrorStream(true);
-            Process process = pb.start();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-            String line;
-            while ((line = reader.readLine()) != null) {
-                output.append(line).append("\n");
-            }
-            process.waitFor();
-        } catch (Exception e) {
-            e.printStackTrace();
-            output.append("Error executing script at ").append(scriptPath).append(": ").append(e.getMessage()).append("\n");
-        }
-        return output.toString();
-    }
 	
 	@GetMapping("/main")
 	public String main() {
 		return "admin_main/adminMain" ;
 	}
 
+	
+	//오래걸리는건 db에서 가져올 때 모든 날짜를 가져오기 때문에 버퍼링이 걸린다.
 	@GetMapping("/data")
 	public String data(Model model) {
 		
@@ -101,6 +82,7 @@ public class MainPageController {
 		//행사 등록 모든 날짜 조회 (행사 등록 개수 그래프)
 		List<EventVO> eventRegDate = eventService.eventRegDate();
 		model.addAttribute("eventRegDate" , eventRegDate);
+		
 		//행사 최신순 10개 조회(최근 등록한 행사글 조회)
 		List<EventVO> event = eventService.recentEvent();
 		model.addAttribute("recentEvents" , event);
@@ -108,6 +90,7 @@ public class MainPageController {
 		//식당 등록 모든 날짜 조회 (식당 등록 개수 그래프)
 		List<RestaurantVO> restRegDate = restService.restRegDate();
 		model.addAttribute("restRegDate",restRegDate);
+		
 		//식당 최신순 10개 조회 (최근 등록한 식당글 조회)
 		List<RestaurantVO> rest = restService.recentRest();
 		model.addAttribute("recentRestaurants",rest);
