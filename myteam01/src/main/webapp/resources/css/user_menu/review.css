@@ -181,11 +181,12 @@ body {
 /* 토글 버튼 스타일 */
 .review-toggle-buttons {
     text-align: right; /* 오른쪽 정렬 */
+    
 }
 
 .toggle-button {
-    padding: 10px 20px;
-
+    padding: 8px 16px;
+    margin-right:5px;
     background-color: #fff;
     color: #000000;
     border: none;

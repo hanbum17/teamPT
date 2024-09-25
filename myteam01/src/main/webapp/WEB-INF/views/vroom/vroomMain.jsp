@@ -110,15 +110,16 @@
                             customOverlay.setMap(null);
                         });
 
-                        kakao.maps.event.addListener(polygon, 'click', function (mouseEvent) {
-                            var content = '<div class="info">' +
-                                '   <div class="title">' + area.name + '</div>' +
-                                '   <div class="size">총 면적 : 약 ' + Math.floor(polygon.getArea()) + ' m<sup>2</sup></div>' +
-                                '</div>';
 
-                            infowindow.setContent(content);
-                            infowindow.setPosition(mouseEvent.latLng);
-                            infowindow.setMap(map);
+                        kakao.maps.event.addListener(polygon, 'click', function(mouseEvent) {
+                            /* var content = '<div class="info">' + 
+                                        '   <div class="title">' + area.name + '</div>' +
+                                        '   <div class="size">총 면적 : 약 ' + Math.floor(polygon.getArea()) + ' m<sup>2</sup></div>' +
+                                        '</div>';
+
+                            infowindow.setContent(content);  
+                            infowindow.setPosition(mouseEvent.latLng); 
+
 
                             var bounds = new kakao.maps.LatLngBounds();
                             area.path.forEach(coord => bounds.extend(coord));
@@ -134,6 +135,7 @@
                             polygons.forEach(p => p.setMap(null));
 
                             // 서울 클릭 시 구별 폴리곤 추가
+
                             if (area.name === 'Seoul') {
                                 fetch('/json/GU_MAP.json')
                                     .then(response => response.json())
@@ -155,6 +157,7 @@
 
                             // 뒤로가기 버튼 표시
                             backButton.style.display = 'block'; // 폴리곤 클릭 시 뒤로가기 버튼 표시
+
                         });
                     }
 
@@ -174,6 +177,7 @@
 
                             customOverlay.setContent('<div class="area">' + guArea.name + '</div>');
                             customOverlay.setPosition(mouseEvent.latLng);
+
                             customOverlay.setMap(map);
                         });
 

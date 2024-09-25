@@ -11,7 +11,7 @@
 	
 	<!-- 영범 -->
 	<select id="selectRegDate" resultType="com.teamproject.myteam01.domain.EventVO">
-		SELECT eregdate from event
+		SELECT eregdate FROM event ORDER BY eregdate DESC FETCH FIRST 100 ROWS ONLY
 	</select>
 	<select id="selectRecentEvent" resultType="com.teamproject.myteam01.domain.EventVO">
 		SELECT *
@@ -103,15 +103,18 @@
 		UNO, EVIEWSCNT, ERATING, EXCOORD, EYCOORD, ETYPE 
 		FROM teampj.event ORDER BY ENO DESC 
 	</select>
+	
 	<!--  행사 등록  -->
 	<insert id="registerEvent" parameterType="com.teamproject.myteam01.domain.EventVO">
-	<selectKey keyProperty="eno" order="BEFORE" resultType="Long"> 
-		SELECT teampj.seq_event.nextval FROM dual 
-	</selectKey>
-		INSERT INTO teampj.event 
-		VALUES (#{eno}, #{ename}, #{eperiod}, #{ecost}, #{eaddress}, #{eplace}, #{esite}, #{ehost}, 
-				#{econtent}, DEFAULT, DEFAULT, DEFAULT, #{excoord}, #{eycoord}, DEFAULT,DEFAULT)
+	    <selectKey keyProperty="eno" order="BEFORE" resultType="Long"> 
+	        SELECT teampj.seq_event.nextval FROM dual 
+	    </selectKey>
+	    INSERT INTO teampj.event 
+	    (eno, ename, eperiod, ecost, eaddress, eplace, esite, ehost, econtent, eviewsCnt, erating, excoord, eycoord, etype, eregdate)
+	    VALUES (#{eno}, #{ename}, #{eperiod}, #{ecost}, #{eaddress}, #{eplace}, #{esite}, #{ehost}, 
+	            #{econtent}, DEFAULT, DEFAULT, #{excoord}, #{eycoord}, #{etype}, DEFAULT)
 	</insert>
+
 	<!--  행사 조회  -->
 	<select id="selectEvent" resultType="com.teamproject.myteam01.domain.EventVO"> 
 		SELECT ENO, ENAME, EPERIOD, ECOST, EADDRESS, EPLACE, ESITE, EHOST, 

@@ -112,7 +112,7 @@
 	</select>
 	
 	<select id="selectRegDate" resultType="com.teamproject.myteam01.domain.RestaurantVO">
-		SELECT fregdate from Restaurants
+		SELECT fregdate FROM Restaurants ORDER BY fregdate DESC FETCH FIRST 100 ROWS ONLY
 	</select>
 	<select id="selectRecentRest" resultType="com.teamproject.myteam01.domain.RestaurantVO">
 		SELECT *
