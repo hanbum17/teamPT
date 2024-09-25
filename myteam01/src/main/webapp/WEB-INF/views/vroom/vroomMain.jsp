@@ -126,7 +126,7 @@
                             var bounds = new kakao.maps.LatLngBounds();
                             area.path.forEach(coord => bounds.extend(coord));
                             map.setBounds(bounds);
-                            map.setLevel(9);
+                            map.setLevel(10);
 
                             if (highlightedPolygon) {
                                 highlightedPolygon.setOptions({fillColor: '#fff'});

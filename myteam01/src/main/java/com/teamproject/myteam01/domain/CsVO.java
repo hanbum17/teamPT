@@ -53,4 +53,13 @@ public class CsVO {
 	private Date notice_regdate;
 	private Date notice_moddate;
 	
+	////////
+	//행사
+	private String event_title;
+	private String event_content;
+	private Long event_num;
+	private Long event_delflag;
+	private Date event_regdate;
+	private Date event_moddate;
+	
 }//end

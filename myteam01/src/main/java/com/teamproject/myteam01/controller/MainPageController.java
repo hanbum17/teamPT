@@ -40,35 +40,6 @@ public class MainPageController {
 	@Autowired
 	private RestaurantService restService;
 	
-	//파이썬 추천 테스트
-	@GetMapping("/mypage")
-	public String test(@AuthenticationPrincipal UserDetails userDetails, Model model) {
-		String userName = userDetails.getUsername();
-		model.addAttribute("userName",userName);
-		
-		//행사 추천 리스트
-		List<EventVO> eventList = userService.recomendEvent(userName);
-		model.addAttribute("eventList",eventList);
-		
-		//식당 추천 리스트
-		List<RestaurantVO> restList = userService.recomendRest(userName);
-		model.addAttribute("restList",restList);
-		
-		//행사 추천 타입 ex) 지역추천 , 무료추천
-		if(!eventList.isEmpty()) {
-			EventVO eRecoType = eventList.get(0);
-			model.addAttribute("eRecoType",eRecoType.getEtype());
-		}
-		
-		//식당 추천 타입 ex) 지역추천 , 무료추천
-		if(!restList.isEmpty()) {
-			RestaurantVO fRecoType = restList.get(0);
-			model.addAttribute("fRecoType",fRecoType.getType());
-		}
-		return "admin_main/pythonTest";
-	}
-	
-
 	
 	@GetMapping("/main")
 	public String main() {
@@ -99,9 +70,8 @@ public class MainPageController {
 	
 	
 	//오래걸리는건 db에서 가져올 때 모든 날짜를 가져오기 때문에 버퍼링이 걸린다.
-	@GetMapping("/data")
-	public String data(Model model) {
-		
+	@GetMapping("/main")
+	public String main(Model model) {
 		//성별 통계 남자수, 여자수
 		UserVO user = userService.countGender();
 		model.addAttribute("user" , user);
@@ -122,14 +92,7 @@ public class MainPageController {
 		List<RestaurantVO> rest = restService.recentRest();
 		model.addAttribute("recentRestaurants",rest);
 		
-		//최근 등록된 댓글 10개 보류;
-		
-		return "admin_main/adminData";
+		return "admin_main/adminMain" ;
 	}
-	
-//	@GetMapping("/map")
-//	public String main2() {
-//		return "KaKaoTest" ;
-//	}
 	
 }
