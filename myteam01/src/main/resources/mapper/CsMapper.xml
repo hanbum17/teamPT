@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.teamproject.myteam01.mapper.CsMapper">
 
-    <!-- FAQ 조회 -->
+    <!-- FAQ 목록 -->
     <select id="selectFAQList" resultType="com.teamproject.myteam01.domain.CsVO">
         SELECT FAQNO, FAQCATEGORY, FAQTITLE, FAQCONTENT, FAQREGDATE, FAQMODDATE, FAQDELFLAG
         FROM teampj.FAQ 
@@ -42,8 +42,8 @@
         WHERE FAQNO = #{faqno}
     </delete>
 
-    <!-- Inquiry 조회 -->
-    <select id="selectInquiryList" resultType="com.teamproject.myteam01.domain.CsVO">
+    <!-- Inquiry 목록 -->
+    <select id="selectINQList" resultType="com.teamproject.myteam01.domain.CsVO">
         SELECT INO, ICATEGORY, ITITLE, ICONTENT, IREGDATE, IDELFLAG, IRESPONSE
         FROM teampj.INQUIRY 
         WHERE IDELFLAG = 0
@@ -51,7 +51,7 @@
     </select>
 
     <!-- Inquiry 등록 -->
-    <insert id="registerInquiry" parameterType="com.teamproject.myteam01.domain.CsVO">
+    <insert id="registerINQ" parameterType="com.teamproject.myteam01.domain.CsVO">
         <selectKey keyProperty="ino" order="BEFORE" resultType="Long">
             SELECT teampj.seq_INQUIRY.nextval FROM dual
         </selectKey>
@@ -66,12 +66,13 @@
         WHERE INO = #{ino}
     </select>
 
-    <!-- Inquiry 수정 -->
+<!-- Inquiry 수정 -->
     <update id="updateINQ">
         UPDATE teampj.INQUIRY
         SET ICATEGORY = #{icategory},
             ITITLE = #{ititle},
-            ICONTENT = #{icontent}
+            ICONTENT = #{icontent},
+            IRESPONSE = #{iresponse}
         WHERE INO = #{ino}
     </update>
     
@@ -81,8 +82,8 @@
         WHERE INO = #{ino}
     </delete>
 
-    <!-- Feedback 조회 -->
-    <select id="selectFeedbackList" resultType="com.teamproject.myteam01.domain.CsVO">
+    <!-- Feedback 목록 -->
+    <select id="selectFBList" resultType="com.teamproject.myteam01.domain.CsVO">
         SELECT FBNO, FBTITLE, FBCONTENT, FBREGDATE, FBDELFLAG
         FROM teampj.FEEDBACK 
         WHERE FBDELFLAG = 0
@@ -90,7 +91,7 @@
     </select>
 
     <!-- Feedback 등록 -->
-    <insert id="registerFeedback" parameterType="com.teamproject.myteam01.domain.CsVO">
+    <insert id="registerFB" parameterType="com.teamproject.myteam01.domain.CsVO">
         <selectKey keyProperty="fbno" order="BEFORE" resultType="Long">
             SELECT teampj.seq_FEEDBACK.nextval FROM dual
         </selectKey>
@@ -99,28 +100,28 @@
     </insert>
 
     <!-- Feedback 조회 -->
-    <select id="selectFeedback" resultType="com.teamproject.myteam01.domain.CsVO">
+    <select id="selectFB" resultType="com.teamproject.myteam01.domain.CsVO">
         SELECT FBNO, FBTITLE, FBCONTENT, FBREGDATE, FBDELFLAG
         FROM teampj.FEEDBACK
         WHERE FBNO = #{fbno}
     </select>
 
     <!-- Feedback 수정 -->
-    <update id="updateFeedback">
+    <update id="updateFB">
         UPDATE teampj.FEEDBACK
         SET FBTITLE = #{fbtitle},
-            FBCONTENT = #{fbcontent},
-            FBMODDATE = DEFAULT
+            FBCONTENT = #{fbcontent}
         WHERE FBNO = #{fbno}
     </update>
     
     <!-- Feedback 삭제 -->
-    <delete id="delFeedback">
+    <delete id="delFB">
         DELETE FROM teampj.FEEDBACK
         WHERE FBNO = #{fbno}
     </delete>
 
-	<!-- 공지사항등록 -->
+
+<!-- 공지사항등록 -->
 
 	<insert id="insertNotice" parameterType="com.teamproject.myteam01.domain.CsVO">
 		INSERT INTO notice(NOTICE_NUM, NOTICE_TITLE, NOTICE_CONTENT, NOTICE_REGDATE, NOTICE_MODDATE, UNO , NOTICE_DELFLAG)
@@ -137,5 +138,7 @@
 		SELECT * FROM notice WHERE #{notice_num}
 	</select>
 
-	
+
 </mapper>
+
+	
