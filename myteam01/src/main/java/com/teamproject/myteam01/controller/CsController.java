@@ -128,6 +128,8 @@ public class CsController {
 
     @GetMapping("/Center")
     public String csList(Model model) {
+
+		System.out.println("________________________"+csService.getNoticeList());
     	model.addAttribute("notice",csService.getNoticeList()); //공지사항 목록
         model.addAttribute("CsList", csService.csList()); // FAQ 목록
         model.addAttribute("feedbackList", csService.csFBList()); // 고객의 소리 목록
@@ -142,12 +144,17 @@ public class CsController {
 
     @PostMapping("/registerProc")
     public String regiFAQ(@RequestParam(value = "type") String type, CsVO csvo) {
+    	
+    	System.out.println(type);
+    	
         if ("faq".equals(type)) {
             csService.regiFAQ(csvo);
         } else if ("feedback".equals(type)) {
             csService.regiFB(csvo); // 고객의 소리 등록 메서드
         } else if ("inquiry".equals(type)) {
             csService.regiIn(csvo); // 1:1 문의 등록 메서드
+        } else if ("notice".equals(type)) {
+        	csService.regNotice(csvo);
         }
         return "redirect:/cs/Center";
     }

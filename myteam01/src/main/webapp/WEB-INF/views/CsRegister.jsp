@@ -109,15 +109,26 @@ label {
                     <option value="기타">기타</option>
                 </select>
             </div>
-            <div class="form-group">
-                <label>질문 제목</label>
-                <input type="text" id="faqtitle" name="faqtitle" class="form-control" />
-            </div>
-            <div class="form-group">
-                <label>답변 내용</label>
-                <textarea id="faqcontent" name="faqcontent" rows="5" class="form-control"></textarea>
-            </div>
+           <div class="form-group">
+               <label>질문 제목</label>
+               <input type="text" id="faqtitle" name="faqtitle" class="form-control" />
+           </div>
+           <div class="form-group">
+               <label>답변 내용</label>
+               <textarea id="faqcontent" name="faqcontent" rows="5" class="form-control"></textarea>
+           </div>
         </div>
+
+		<div id="noticeSection" class="section">
+			<div class="form-group">
+			 	<label for="noticeTitle">공지사항 제목</label>
+                <input type="text" id="noticeTitle" name="nctitle" class="form-control" />
+			</div>
+			<div class="form-group">
+                <label for="noticeContent">공지사항 내용</label>
+                <textarea id="noticeContent" name="nccontent" rows="5" class="form-control"></textarea>
+            </div>
+		</div>
 
         <div id="feedbackSection" class="section">
 
@@ -200,6 +211,12 @@ function checkFormValues() {
         var regExp = /^\s+$/;
         isValid = inquiryTitle && inquiryContent && !regExp.test(inquiryTitle) && !regExp.test(inquiryContent);
         document.getElementById("inquiryContent").value = inquiryContent;
+    } else if (type === "notice"){
+    	var nctitle = document.getElementById("nctitle").value;
+    	var nccontent = convertNewlinesToBr(document.getElementById("nccontent").value);
+    	var regExp = /^\s+$/;
+    	isValid = noticeTitle && noticeContent && !regExp.test(noticeTitle) && !regExp.test(noticeContent);
+        document.getElementById("noticeContent").value = noticeContent;
     }
 
     return isValid;
@@ -228,6 +245,8 @@ $(document).ready(function() {
         showSection('feedbackSection');
     } else if (type === "inquiry") {
         showSection('inquirySection');
+    } else if (type === "notice") {
+    	showSection('noticeSection');
     }
 });
 </script>

@@ -3,6 +3,7 @@
     <%@ include file="./menu/nav.jsp"%>
     <%@ include file="./menu/footer.jsp"%>
 <c:set var="contextPath" value="${pageContext.request.contextPath }"/>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -50,6 +51,8 @@
             transition: background-color 0.3s ease;
         }
 
+		.btnNotice { background-color: red; }
+		.btnCsEvent {background-color: black; }
         .btnFAQ { background-color: #28a745; }
         .btnFeedback { background-color: #007bff; }
         .btnInquiry { background-color: #dc3545; }
@@ -177,20 +180,18 @@
     <!-- Section Buttons -->
     <div class="btn-container">
     	<button class="btnNotice" onclick="showSection('notice')">공지사항</button>
-
-        <button class="btnCsEvent" onclick="showSection('csevent')">이벤트</button>
-
+		<button class="btnCsEvent" onclick="showSection('csevent')">이벤트</button>
         <button class="btnFAQ" onclick="showSection('faq')">자주 묻는 질문(FAQ)</button>
         <button class="btnFeedback" onclick="showSection('feedback')">고객의 소리(건의사항)</button>
         <button class="btnInquiry" onclick="showSection('inquiry')">1:1 문의</button>
     </div>
 
 
-	<!-- Notice Section -->
-    <div id="Notice" class="section active">
+	 <!-- Notice Section -->
+    <div id="notice" class="section active">
         <div class="section-header">
             <h3>공지사항</h3>
-            <button class="register-btn" onclick="location.href='${contextPath}/cs/register?type=notice'">공지사항 등록</button>
+            <button type="button" class="register-btn" onclick="location.href='${contextPath}/cs/register?type=notice'">공지사항 등록</button>
         </div>
         <div class="table-container">
             <table>
@@ -206,15 +207,35 @@
                         </tr>
                     </c:if>
                     <c:if test="${nc.notice_delflag == 0}">
-                        <tr onclick="showDetail('notice', '${nc.notice_num}', '${nc.notice_title}', '${nc.notice_content}', '${nc.notice_moddate}')">
+                        <tr onclick="showDetail('notice', '${nc.notice_num}', '${nc.notice_title}','', '${nc.notice_content}', '','${nc.notice_moddate}')">
                             <td><c:out value="${nc.notice_title}" /></td>
-                            <td><c:out value="${nc.notice_moddate}" /></td>
+                            <td><c:out value="${nc.notice_regdate}" /></td>
                         </tr>
                     </c:if>
                 </c:forEach>
             </table>
         </div>
-	</div>
+
+        <!-- notice Detail Section -->
+        <div id="notice-detail" class="detail-view" style="display: none;">
+            <h3>공지사항 상세보기</h3>
+            <table style="width: 100%; border-collapse: collapse;">
+                <tr>
+                    <th style="width: 15%;">제목</th>
+                    <td id="notice-title"></td>
+                    <th style="width: 15%;">등록일</th>
+                    <td id="notice-category"></td>
+                </tr>
+                <tr>
+                    <th style="width: 15%;">내용</th>
+                    <td colspan="3" id="notice-content" style="white-space: pre-wrap;"></td>
+                </tr>
+            </table>
+            <button class="back-btn" onclick="hideDetail()">닫기</button>
+            <button class="edit-btn" onclick="editDetail('notice')">수정</button>
+            <button class="delete-btn" onclick="confirmDelete('notice', ${nc.notice_num})">삭제</button>
+        </div>
+    </div>
 
     <!-- FAQ Section -->
     <div id="faq" class="section active">
@@ -447,7 +468,7 @@
                 document.querySelector('.edit-btn').setAttribute('data-ino', no);
                 document.querySelector('.delete-btn').setAttribute('data-ino', no);
             }
-            else{
+            else if (type === 'feedback'){
                 detailSection = document.getElementById('feedback-detail');
                 detailSection.style.display = 'block';
 
@@ -458,6 +479,17 @@
 
                 document.querySelector('.edit-btn').setAttribute('data-fbno', no);
                 document.querySelector('.delete-btn').setAttribute('data-fbno', no);
+            } else if (type ==='notice'){
+            	detailSection = document.getElementById('notice-detail');
+                detailSection.style.display = 'block';
+
+                document.getElementById('notice-title').innerText = title;
+                document.getElementById('notice-regdate').innerText = regdate; 
+               
+                document.getElementById('notice-content').innerHTML = content.replace(/\n/g, '<br>');
+
+                document.querySelector('.edit-btn').setAttribute('data-notice_num', no);
+                document.querySelector('.delete-btn').setAttribute('data-notice_num', no);
             }
 
         }
