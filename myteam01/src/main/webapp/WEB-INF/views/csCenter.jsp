@@ -177,10 +177,42 @@
 
     <!-- Section Buttons -->
     <div class="btn-container">
+    	<button class="btnNotice" onclick="showSection('notice')">공지사항</button>
+    	<button class="btnCsEvent" onclick="csevent">이벤트</button>
         <button class="btnFAQ" onclick="showSection('faq')">자주 묻는 질문(FAQ)</button>
         <button class="btnFeedback" onclick="showSection('feedback')">고객의 소리(건의사항)</button>
         <button class="btnInquiry" onclick="showSection('inquiry')">1:1 문의</button>
     </div>
+
+	<div id="csEvent" class="section active">
+		<div class="section-header">
+			<h3>공지사항</h3>
+			<button class="register-btn" onclick="location.href=''">공지사항 등록</button>
+		</div>
+		<div class="table-container">
+			<table>
+                <tr>
+                    <th>제목</th>
+                    <th>등록일</th>
+                </tr>
+                <c:forEach items="${CsList}" var="cs">
+                    <c:if test="${cs.faqdelflag == 1}">
+                        <tr>
+                            <td><c:out value="${cs.faqno}" /></td>
+                            <td colspan="2"><em>삭제된 게시글입니다.</em></td>
+                        </tr>
+                    </c:if>
+                    <c:if test="${cs.faqdelflag == 0}">
+                        <tr onclick="showDetail('faq', '${cs.faqno}', '${cs.faqtitle}', '${cs.faqcategory}', '${cs.faqcontent}')">
+                            <td><c:out value="${cs.faqno}" /></td>
+                            <td><c:out value="${cs.faqcategory}" /></td>
+                            <td><c:out value="${cs.faqtitle}" /></td>
+                        </tr>
+                    </c:if>
+                </c:forEach>
+            </table>
+		</div>
+	</div>
 
     <!-- FAQ Section -->
     <div id="faq" class="section active">
@@ -338,6 +370,7 @@
 </main>
 
 <script>
+	//영역나누기
     function showSection(sectionId) {
         var sections = document.querySelectorAll('.section');
         sections.forEach(function(section) {
@@ -354,6 +387,8 @@
         showSection('faq'); // 기본적으로 FAQ 섹션을 보여줌
     };
 
+    
+    //클릭시 디테일함수
     function showDetail(type, no, title, category, content, regdate) {
         var detailSection;
         if (type === 'faq') {
@@ -375,12 +410,14 @@
         detailSection.style.display = 'block';
     }
 
+    //디테일 평소 숨김
     function hideDetail() {
         document.getElementById('faq-detail').style.display = 'none';
         document.getElementById('feedback-detail').style.display = 'none';
         document.getElementById('inquiry-detail').style.display = 'none';
     }
 
+    //수정버튼
     function editDetail() {
         var faqno = document.querySelector('.edit-btn').getAttribute('data-faqno');
         var ino = document.querySelector('.edit-btn').getAttribute('data-ino');
@@ -394,6 +431,7 @@
         }
     }
 
+    //삭제버튼
     function confirmDelete() {
         var faqno = document.querySelector('.delete-btn').getAttribute('data-faqno');
         var ino = document.querySelector('.delete-btn').getAttribute('data-inqno');
