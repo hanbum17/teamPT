@@ -43,4 +43,14 @@ public class CsVO {
 	private Integer idelflag; // inquiry 상태 0 = 존재,  1 = 삭제
 	private String iresponse; // inquiry 답변
 	
+	
+	///////
+	//공지사항
+	private String notice_title;
+	private String notice_content;
+	private Long notice_num;
+	private Long notice_delflag;
+	private Date notice_regdate;
+	private Date notice_moddate;
+	
 }//end

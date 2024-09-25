@@ -1,8 +1,9 @@
 package com.teamproject.myteam01.controller;
 
+import java.util.List;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,7 +13,6 @@ import com.teamproject.myteam01.domain.CsVO;
 import com.teamproject.myteam01.service.CsService;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 
 @Controller
@@ -25,6 +25,7 @@ public class CsController {
 
     @GetMapping("/Center")
     public String csList(Model model) {
+
         model.addAttribute("FAQList", csService.csList()); // FAQ 목록
         model.addAttribute("feedbackList", csService.csFBList()); // 고객의 소리 목록
         model.addAttribute("inquiryList", csService.csInList()); // 1:1 문의 내역 목록
@@ -107,5 +108,7 @@ public class CsController {
         return "redirect:/cs/Center"; // 삭제 후 리다이렉트
     }
 
+
 } //end
+
 
