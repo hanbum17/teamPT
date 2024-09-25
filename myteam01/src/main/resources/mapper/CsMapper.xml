@@ -121,10 +121,21 @@
     </delete>
 
 	<!-- 공지사항등록 -->
-	<insert>
-		INSERT INTO notice(NOTICE_NUM, NOTICE_TITLE, NOTICE_CONTENT, NOTICE_REGDATE, NOTICE_MODDATE, UNO)
-		VALUES (notice_seq, #{} , #{}, DEFAULT , DEFAULT , DEFAULT)
+
+	<insert id="insertNotice" parameterType="com.teamproject.myteam01.domain.CsVO">
+		INSERT INTO notice(NOTICE_NUM, NOTICE_TITLE, NOTICE_CONTENT, NOTICE_REGDATE, NOTICE_MODDATE, UNO , NOTICE_DELFLAG)
+		VALUES (notice_seq, #{notice_title} , #{notice_content}, DEFAULT , DEFAULT , DEFAULT , DEFAULT)
 	</insert>
-	<!-- 공지사항조회 -->
+	
+	<!-- 공지사항 목록조회 -->
+	<select id="selectNoticeList" resultType="com.teamproject.myteam01.domain.CsVO">
+		SELECT * FROM notice
+	</select>
+	
+	<!-- 공지사항 상세조회 -->
+	<select id="selectNoticeDetail" resultType="com.teamproject.myteam01.domain.CsVO">
+		SELECT * FROM notice WHERE #{notice_num}
+	</select>
+
 	
 </mapper>

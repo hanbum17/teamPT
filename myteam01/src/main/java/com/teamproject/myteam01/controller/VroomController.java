@@ -94,7 +94,7 @@ public class VroomController {
         }
         
         // 식당 목록 추가
-        Long restPage = 0L; // 0-based offset
+        Long restPage = 1L; // 0-based offset
         Long restPageSize = 10L;
 
         List<RestaurantVO> restList;

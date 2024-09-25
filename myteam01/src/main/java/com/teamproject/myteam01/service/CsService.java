@@ -57,5 +57,15 @@ public interface CsService {
 	//FeedBack 삭제
 	public boolean removeFB(Long fbno);
 	
+/////////////////////////////////////////////////////////////
+	
+	//공지사항 등록
+	public void regNotice(CsVO notice);
+	
+	//공지사항 목록조회
+	public List<CsVO> getNoticeList();
+	
+	//공지사항 상세조회
+	public CsVO getNoticeDetail(Long num);
 	
 }

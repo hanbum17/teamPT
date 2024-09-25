@@ -35,6 +35,7 @@
         <div class="message">
             떠나고자 하는 지역을 선택해주세요
         </div>
+        <button id="backButton" style="display:none;">back</button> 
     </div>
 
 
@@ -43,6 +44,9 @@
     <script>
     // 카카오 지도 API 로드 후 실행
     document.addEventListener('DOMContentLoaded', function () {
+    	
+    	var backButton = document.getElementById('backButton');
+
         // 서울시 영역 데이터를 가져옵니다
         fetch('/json/SIDO_MAP.json')
             .then(response => response.json())
@@ -131,8 +135,12 @@
                             polygon.setOptions({fillColor: '#09f'});
 
                             polygons.forEach(p => p.setMap(null));
+                            
+                         	// 뒤로가기 버튼 표시
+                            backButton.style.display = 'block';
 
                             // 서울 클릭 시 구별 폴리곤 추가
+
 							if (area.name === 'Seoul') {
 							    fetch('/json/GU_MAP.json')
 							        .then(response => response.json())
@@ -151,6 +159,7 @@
 							        })
 							        .catch(error => console.error('Error loading GU_MAP.json:', error));
 							} 
+
                         });
                     }
 
@@ -183,9 +192,24 @@
                         });
 
                         kakao.maps.event.addListener(guPolygon, 'click', function() {
-                            window.location.href = 'http://localhost:8080/vroom/restaurant'; // 링크로 이동
+                            var guName = guArea.name; // 클릭한 구 이름
+                            console.log("구 이름:", guName); 
+                            window.location.href = '/vroom/restaurant?guName=' + encodeURIComponent(guName); 
                         });
+
                     }
+                    
+                 // 뒤로가기 버튼 클릭 이벤트
+                    backButton.addEventListener('click', function() {
+                        backButton.style.display = 'none'; 
+                        polygons.forEach(p => p.setMap(map)); 
+                        map.setCenter(initialCenter);
+                        map.setLevel(initialLevel);
+                        if (highlightedPolygon) {
+                            highlightedPolygon.setOptions({fillColor: '#fff'});
+                            highlightedPolygon = null;
+                        }
+                    });
                 }
             })
             .catch(error => console.error('Error loading JSON:', error));
