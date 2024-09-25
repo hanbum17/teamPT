@@ -76,19 +76,6 @@
         WHERE INO = #{ino}
     </update>
     
-<!--     Inquiry 수정
-<update id="updateINQ">
-    UPDATE teampj.INQUIRY
-    SET ICATEGORY = #{icategory},
-        ITITLE = #{ititle},
-        ICONTENT = #{icontent},
-        IRESPONSE = CASE 
-                      WHEN #{iresponse} IS NULL THEN IRESPONSE 
-                      ELSE #{iresponse} 
-                    END
-    WHERE INO = #{ino}
-</update> -->
-    
     <!-- Inquiry 삭제 -->
     <delete id="delINQ">
         DELETE FROM teampj.INQUIRY
