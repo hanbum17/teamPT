@@ -115,89 +115,12 @@
                                     '   <div class="size">총 면적 : 약 ' + Math.floor(polygon.getArea()) + ' m<sup>2</sup></div>' +
                                     '</div>';
 
-                                infowindow.setContent(content);
-                                infowindow.setPosition(mouseEvent.latLng);
-                                infowindow.setMap(map);
 
-                                var bounds = new kakao.maps.LatLngBounds();
-                                area.path.forEach(coord => bounds.extend(coord));
-                                map.setBounds(bounds);
-                                map.setLevel(9);
+                            var bounds = new kakao.maps.LatLngBounds();
+                            area.path.forEach(coord => bounds.extend(coord));
+                            map.setBounds(bounds);
+                            map.setLevel(10);
 
-                                if (highlightedPolygon) {
-                                    highlightedPolygon.setOptions({fillColor: '#fff'});
-                                }
-                                highlightedPolygon = polygon;
-                                polygon.setOptions({fillColor: '#09f'});
-
-                                polygons.forEach(p => p.setMap(null));
-
-                                // 서울 클릭 시 구별 폴리곤 추가
-                                if (area.name === 'Seoul') {
-                                    fetch('/json/GU_MAP.json')
-                                        .then(response => response.json())
-                                        .then(guData => {
-                                            if (guData.features && Array.isArray(guData.features)) {
-                                                var guAreas = guData.features.map(feature => ({
-                                                    name: feature.properties.name,
-                                                    path: feature.geometry.coordinates[0].map(coord => {
-                                                        const lat = coord[1];
-                                                        const lng = coord[0];
-                                                        return new kakao.maps.LatLng(lat, lng);
-                                                    })
-                                                }));
-                                                guAreas.forEach(guArea => displayGuArea(guArea));
-                                            }
-                                        })
-                                        .catch(error => console.error('Error loading GU_MAP.json:', error));
-                                }
-
-                                // 뒤로가기 버튼 표시
-                                backButton.style.display = 'block'; // 폴리곤 클릭 시 뒤로가기 버튼 표시
-                            });
-                        }
-
-                        function displayGuArea(guArea) {
-                            var guPolygon = new kakao.maps.Polygon({
-                                map: map,
-                                path: guArea.path,
-                                strokeWeight: 2,
-                                strokeColor: '#ff0000',
-                                strokeOpacity: 0.8,
-                                fillColor: '#ff0000',
-                                fillOpacity: 0.4
-                            });
-
-                            kakao.maps.event.addListener(guPolygon, 'mouseover', function (mouseEvent) {
-                                guPolygon.setOptions({fillColor: '#ff6666'});
-
-                                customOverlay.setContent('<div class="area">' + guArea.name + '</div>');
-                                customOverlay.setPosition(mouseEvent.latLng);
-                                customOverlay.setMap(map);
-                            });
-
-                            kakao.maps.event.addListener(guPolygon, 'mousemove', function (mouseEvent) {
-                                customOverlay.setPosition(mouseEvent.latLng);
-                            });
-
-                            kakao.maps.event.addListener(guPolygon, 'mouseout', function () {
-                                guPolygon.setOptions({fillColor: '#ff0000'});
-                                customOverlay.setMap(null);
-                            });
-
-                            kakao.maps.event.addListener(guPolygon, 'click', function () {
-                                var guName = guArea.name; // 클릭한 구 이름
-                                console.log("구 이름:", guName);
-                                window.location.href = '/vroom/restaurant?guName=' + encodeURIComponent(guName);
-                            });
-                        }
-
-                        // 뒤로가기 버튼 클릭 이벤트
-                        backButton.addEventListener('click', function () {
-                            backButton.style.display = 'none'; // 버튼 숨기기
-                            polygons.forEach(p => p.setMap(map)); // 원래의 시도 폴리곤 다시 표시
-                            map.setCenter(initialCenter); // 지도 원래 중심으로
-                            map.setLevel(initialLevel); // 지도 원래 레벨로
 
                             if (highlightedPolygon) {
                                 highlightedPolygon.setOptions({fillColor: '#fff'});

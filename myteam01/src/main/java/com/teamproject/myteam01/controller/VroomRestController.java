@@ -1,6 +1,10 @@
 package com.teamproject.myteam01.controller;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
@@ -93,7 +97,7 @@ public class VroomRestController {
     }
 
     //스크롤시 추가 데이터 보내기
-    @GetMapping("/restaurant")
+    @GetMapping("/restaurant/more")
     public List<RestaurantVO> restMain(@AuthenticationPrincipal UserDetails userDetails, 
                            @RequestParam(value = "page", defaultValue = "1") Long page, 
                            @RequestParam(value = "pageSize", defaultValue = "12") Long pageSize,
@@ -165,4 +169,45 @@ public class VroomRestController {
         }
     }
 
+    @GetMapping("/executePythonScripts")
+    @ResponseBody
+    public Map<String, Object> executePythonScripts() {
+        Map<String, Object> response = new HashMap<>();
+        StringBuilder combinedOutput = new StringBuilder();
+
+        try {
+            // 첫 번째 Python 스크립트 실행
+            ProcessBuilder processBuilder1 = new ProcessBuilder("python", "C:/myPython/PyvirtualEnvs/PyWebCrawlingEnv/crawling/yourpro01/사용자_식당추천.py");
+            Process process1 = processBuilder1.start();
+            
+            // 결과 읽기
+            BufferedReader reader1 = new BufferedReader(new InputStreamReader(process1.getInputStream()));
+            String line;
+            while ((line = reader1.readLine()) != null) {
+                combinedOutput.append(line).append("\n");
+            }
+            int exitCode1 = process1.waitFor();
+            response.put("exitCode1", exitCode1);
+            
+            // 두 번째 Python 스크립트 실행
+            ProcessBuilder processBuilder2 = new ProcessBuilder("python", "C:/myPython/PyvirtualEnvs/PyWebCrawlingEnv/crawling/yourpro01/사용자_행사추천.py");
+            Process process2 = processBuilder2.start();
+            
+            // 결과 읽기
+            BufferedReader reader2 = new BufferedReader(new InputStreamReader(process2.getInputStream()));
+            while ((line = reader2.readLine()) != null) {
+                combinedOutput.append(line).append("\n");
+            }
+            int exitCode2 = process2.waitFor();
+            response.put("exitCode2", exitCode2);
+
+            // 두 스크립트의 출력 통합
+            response.put("output", combinedOutput.toString());
+        } catch (Exception e) {
+            response.put("error", e.getMessage());
+        }
+        return response;
+    }
+
+    
 }
