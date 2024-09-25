@@ -92,40 +92,6 @@
 		    white-space: nowrap; /* 텍스트를 한 줄로 표시 */
 		}
 
-        .panel {
-            position: absolute;
-            top: 50px;
-            width: 28%;
-            height: calc(100vh - 100px);
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-            background-color: #fff;
-            padding: 20px;
-            box-sizing: border-box;
-            display: none;
-        }
-
-        .left-panel {
-            left: 5%;
-            border: 1px solid #ddd;
-            padding: 20px;
-            box-sizing: border-box;
-        }
-
-        .right-panel {
-            right: 5%;
-            border: 1px solid #ddd;
-            padding: 20px;
-            box-sizing: border-box;
-        }
-
-        .panel h2 {
-            margin-bottom: 20px;
-        }
-
-        .panel p {
-            margin-bottom: 10px;
-        }
 
         .container::-webkit-scrollbar {
             display: none;
@@ -290,7 +256,7 @@
 			         data-fno="${restaurant.fno}" 
 			         data-fxcoord="${restaurant.fxcoord}" 
 			         data-fycoord="${restaurant.fycoord}" 
-			         onclick="window.location.href='${contextPath}/vroom/restaurant/details?fno=${restaurant.fno}'">
+			         onclick="window.location.href='${contextPath}/vroom/restaurant/details?fno=${restaurant.fno}&lat=${restaurant.fxcoord}&lng=${restaurant.fycoord}'">
 			        <img src="${contextPath}/images/bibimbab.jpg" alt="${restaurant.fname} Image">
 			        <div class="restaurant-info">
 			            <h3>${restaurant.fname}</h3>
@@ -327,7 +293,6 @@ var map = new kakao.maps.Map(mapContainer, mapOption);
 
 // 기본 마커 생성
 var marker = new kakao.maps.Marker({
-    position: map.getCenter(),
     draggable: true // 마커를 드래그 가능하게 설정
 });
 
