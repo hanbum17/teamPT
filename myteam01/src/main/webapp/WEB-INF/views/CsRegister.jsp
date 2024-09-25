@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib uri="jakarta.tags.core" prefix="c" %>
+<%@ include file="./menu/nav.jsp"%>
+<%@ include file="./menu/footer.jsp"%>
 <%@ taglib uri="jakarta.tags.fmt" prefix="fmt" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath }"/>
 <!DOCTYPE html>
@@ -7,93 +8,10 @@
 <head>
 <meta charset="UTF-8">
 <title>고객센터 등록 페이지</title>
-<style>
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    margin: 0;
-    overflow-x: hidden;
-}
-
-button {
-    padding: 10px 20px;
-    margin: 5px;
-    border: none;
-    border-radius: 4px;
-    color: #fff;
-    font-size: 16px;
-    cursor: pointer;
-}
-
-.btnRegister {
-    background-color: #28a745;
-}
-
-.btnCancel {
-    background-color: #dc3545;
-}
-
-button:hover {
-    opacity: 0.9;
-}
-
-.section {
-    display: none;
-}
-
-.section.active {
-    display: block;
-}
-
-form {
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 600px;
-    margin: 0 auto;
-    position: relative;
-    z-index: 1;
-}
-
-.form-group {
-    margin-bottom: 15px;
-}
-
-label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
-}
-
-.form-control {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-}
-
-.btnRegister, .btnCancel {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    color: #fff;
-    font-size: 16px;
-    cursor: pointer;
-}
-
-.btnRegister:hover, .btnCancel:hover {
-    opacity: 0.9;
-}
-
-.btnCancel {
-    margin-left: 10px;
-}
-</style>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/csCenter/regist&edit.css">
 </head>
 <body>
-    <%@ include file="/WEB-INF/views/admin_main/header.jsp" %>
+
     <h1 style="text-align: center;">고객센터 통합 등록</h1>
 
     <form id="frmRegister" name="frmRegister" method="post" action="${contextPath}/cs/registerProc">
@@ -155,7 +73,6 @@ label {
         <button type="button" class="btnCancel" onclick="history.back();">취소</button>
     </form>
 
-    <%@ include file="/WEB-INF/views/admin_main/footer.jsp" %>
 </body>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

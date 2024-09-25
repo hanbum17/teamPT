@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.teamproject.myteam01.domain.UserActivityVO;
 import com.teamproject.myteam01.domain.UserVO;
 
 @Mapper
@@ -47,5 +48,7 @@ public interface UserMapper {
     //현재 로그인 정보 db에 저장 (파이썬넘기기위해)
     void deleteUserActivity();
     void userIdInsert(String user);
+    //사용자 추천 정보
+    List<UserActivityVO> selectRecommend(String user);
     
 }

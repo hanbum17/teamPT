@@ -1,22 +1,31 @@
 
 package com.teamproject.myteam01.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.teamproject.myteam01.domain.EventVO;
+import com.teamproject.myteam01.domain.RestaurantVO;
+import com.teamproject.myteam01.domain.UserActivityVO;
 import com.teamproject.myteam01.domain.UserVO;
+import com.teamproject.myteam01.mapper.EventMapper;
+import com.teamproject.myteam01.mapper.RestaurantMapper;
 import com.teamproject.myteam01.mapper.UserMapper;
 
 @Service
 public class UserService {
 
-	 @Autowired
+    @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private EventMapper eventMapper;
+    @Autowired
+    private RestaurantMapper restMapper;
 	 
 	public List<UserVO> selectUserList(){
 		List<UserVO> userList = userMapper.selectUserList();
@@ -25,10 +34,11 @@ public class UserService {
 		}
 		return userList ;
 	}
+	
 	 
-	private PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
+	 private PasswordEncoder passwordEncoder() {
+	        return new BCryptPasswordEncoder();
+	    }
 
     // PasswordEncoder를 바로 호출
     public void registerUser(UserVO user) {
@@ -90,7 +100,9 @@ public class UserService {
     }
     
     
-    //영범 
+    
+    //영범
+    
     //성별 통계
     public UserVO countGender() {
     	List<UserVO> genderCount = userMapper.userGenderCount();
@@ -104,10 +116,51 @@ public class UserService {
         }
     	return result;
     }
+    
     //메인화면 접속시 로그인 되어있으면 파이썬에 아이디 넘기기 위해 db에 넣기
     public void userIdInsert(String user) {
     	userMapper.deleteUserActivity();
     	userMapper.userIdInsert(user);
     }
+    
+    //사용자에게 추천할 행사 정보 리스트
+    public List<EventVO> recomendEvent(String user) {
+    	
+        List<UserActivityVO> recomendList = userMapper.selectRecommend(user);
+        List<EventVO> eventList = new ArrayList<>(); // 이벤트 리스트 생성
+        
+        for (UserActivityVO recomend : recomendList) {
+            if (recomend.getEno() != null && recomend.getEno() != 0L) { // 조건 수정
+                EventVO event = eventMapper.eventDetail(recomend.getEno());
+                event.setEtype(recomend.getType());
+                if (event != null) {
+                    eventList.add(event); // 이벤트를 리스트에 추가
+                }
+            } 
+        }
+        
+        return eventList; // 리스트 반환
+    }
+    
+    //상용자에게 추천할 행사 정보 리스트
+    public List<RestaurantVO> recomendRest(String user){
+    	List<UserActivityVO> recomendList = userMapper.selectRecommend(user);
+    	List<RestaurantVO> restList = new ArrayList<>();
+    	
+    	for(UserActivityVO recomend : recomendList) {
+    		if(recomend.getFno() != null && recomend.getFno() != 0L) {
+    			RestaurantVO rest = restMapper.restaurantDetail(recomend.getFno());
+    			System.out.println("_______________________________"+restMapper.restaurantDetail(recomend.getFno()));
+    			System.out.println("_______________________________"+rest);
+    			rest.setType(recomend.getType());
+    			if(rest != null) {
+    				restList.add(rest);
+    			}
+    		}
+    	}
+    	return restList;
+    }
+
+    
 }
 

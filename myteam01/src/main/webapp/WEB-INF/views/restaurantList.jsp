@@ -215,7 +215,7 @@
     align-items: center;
     padding: 10px 20px; /* 패딩을 줄여서 내용이 위로 이동하도록 설정 */
     background-color: transparent; /* 상단 바 배경 제거 */
-    color: #ffffff;
+    color: #000;
     border-bottom: none; /* 흰색 줄 제거 */
     height: 60px; /* 헤더의 높이를 적절히 설정 */
     position: fixed; /* 헤더를 페이지 상단에 고정 */
@@ -237,7 +237,7 @@
 	}
 	
 	.header .nav a {
-	    color: #ffffff;
+	    color: #000;
 	    text-decoration: none;
 	    margin: 0 15px; /* 글자 사이 간격 조정 */
 	}
@@ -340,9 +340,9 @@ function setMarker(lng, lat) {
     map.setCenter(new kakao.maps.LatLng(lat, lng));
 
     // 디버깅 로그 추가
-    console.log('setMarker 함수: lat ' + lat + ', lng ' + lng);
-    console.log('지도 중심:', map.getCenter());
-    console.log('마커 배열:', markers);
+    //console.log('setMarker 함수: lat ' + lat + ', lng ' + lng);
+    //console.log('지도 중심:', map.getCenter());
+    //console.log('마커 배열:', markers);
 }
 
 
@@ -356,7 +356,7 @@ function addMouseOverListenerToCards() {
 
             if (!isNaN(lat) && !isNaN(lng)) {
                 setMarker(lat, lng);
-                console.log('Mouse over at card: Latitude ' + lat + ', Longitude ' + lng);
+                //console.log('Mouse over at card: Latitude ' + lat + ', Longitude ' + lng);
             } else {
                 console.error('Invalid lat or lng values:', lat, lng);
             }
@@ -410,7 +410,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function loadMoreRestaurants() {
         if (isLoading) return;
         isLoading = true;
-
+		
         fetch(contextPath + "/api/restaurant?page=" + restPage + "&pageSize=" + restPageSize)
             .then(response => {
                 if (!response.ok) {
@@ -429,6 +429,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.error('Error fetching data:', error);
                 isLoading = false;
             });
+        
 
     }
     
@@ -439,7 +440,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
  function appendRestaurants(restaurants) {
     restaurants.forEach(restaurant => {
-    	console.log('Restaurant Data:', restaurant.fxcoord, restaurant.fycoord);
+    	//console.log('Restaurant Data:', restaurant.fxcoord, restaurant.fycoord);
     	
         const restaurantCard = document.createElement('div');
         restaurantCard.className = 'restaurant-card'; // 스타일 적용

@@ -17,7 +17,7 @@
     background-color: #fff;
     overflow-y: auto; /* 세로 스크롤 허용 */
     flex: 1; /* 남은 공간을 차지 */
-    max-height: calc(100vh - 250px); /* 상단 영역의 높이를 제외한 최대 높이 */
+    max-height: calc(100vh - 300px); /* 상단 영역의 높이를 제외한 최대 높이 */
     padding: 0 10px;
 }
 
@@ -355,7 +355,7 @@
     border-radius: 4px;
     background-color: #fff;
     font-size: 14px;
-    width: 105px;
+    width: 116px;
 	margin: 3px 0;
 
 }

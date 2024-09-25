@@ -1,9 +1,11 @@
 package com.teamproject.myteam01.controller;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -112,20 +114,34 @@ public class EventController {
 	}
 	
     // 행사 등록 - 처리
-    @PostMapping("/register")
-    public String regiEvent(EventVO event, RedirectAttributes redirAttr, @AuthenticationPrincipal UserDetails userDetails) {
-        System.out.println("컨트롤러 : 이벤트 등록 처리" + event);
+	@PostMapping("/register")
+	public String regiEvent(EventVO event, RedirectAttributes redirAttr, @AuthenticationPrincipal UserDetails userDetails) {
+	    System.out.println("컨트롤러 : 이벤트 등록 처리" + event);
 
-        Long eno = eventService.regiEvent(event);
-        System.out.println("등록된 이벤트 eno : " + eno);
+	    // 사용자 권한에 따라 etype 값을 설정
+	    Collection<? extends GrantedAuthority> authorities = userDetails.getAuthorities();
+	    
+	    if (authorities.stream().anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"))) {
+	        event.setEtype("0"); // 관리자일 경우 etype을 0으로 설정
+	    } else if (authorities.stream().anyMatch(auth -> 
+	                auth.getAuthority().equals("ROLE_USER") || auth.getAuthority().equals("ROLE_BUSINESS"))) {
+	        event.setEtype("1"); // USER나 BUSINESS일 경우 etype을 1로 설정
+	    } else {
+	        // 기본적으로 USER나 BUSINESS로 간주하여 etype을 1로 설정
+	        event.setEtype("1");
+	    }
 
-        // USER_REGISTRATIONS 테이블에 등록
-        userRegistrationService.registerUserEvent(userDetails.getUsername(), eno);
+	    // 이벤트 등록 로직
+	    Long eno = eventService.regiEvent(event);
+	    System.out.println("등록된 이벤트 eno : " + eno);
 
-        redirAttr.addAttribute("result", eno);
+	    // USER_REGISTRATIONS 테이블에 등록
+	    userRegistrationService.registerUserEvent(userDetails.getUsername(), eno);
 
-        return "redirect:/event/list";
-    }
+	    redirAttr.addAttribute("result", eno);
+
+	    return "redirect:/event/list";
+	}
 	
 	//행사 수정 - 호출
 	@GetMapping("/modify")
