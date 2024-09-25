@@ -1,8 +1,10 @@
 package com.teamproject.myteam01.mapper;
 
 import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import com.teamproject.myteam01.domain.UserVO;
 
@@ -31,10 +33,19 @@ public interface UserMapper {
     // 마지막 로그인 날짜를 업데이트
     void updateLastLoginDate(String userId);
     
- // 사용자 비밀번호 업데이트
+    // 사용자 비밀번호 업데이트
     void updateUserPassword(UserVO user);
 
     // 사용자 정보를 업데이트
     void updateUser(UserVO userVO);
-
+    
+    //영범 
+    //성별 통계
+    List<UserVO> userGenderCount();
+    //신규회원 활동 저장
+    void userRegisterActivity(UserVO userVO);
+    //현재 로그인 정보 db에 저장 (파이썬넘기기위해)
+    void deleteUserActivity();
+    void userIdInsert(String user);
+    
 }

@@ -30,7 +30,7 @@
 
 /* Scrollable grid */
 .favorite-list {
-    max-height: 630px; /* Adjust this value as needed */
+    max-height: 730px; /* Adjust this value as needed */
     overflow-y: auto;
 }
 

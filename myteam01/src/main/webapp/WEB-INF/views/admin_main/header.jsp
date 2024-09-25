@@ -284,6 +284,9 @@ pageEncoding="UTF-8"%>
       </section>
       <ul>
         <li>
+          <a href="/admin/data"><i class="fa-solid fa-cat"></i> 대시보드</a>
+        </li>
+        <li>
           <a href="#"><i class="fa-solid fa-cat"></i> 글관리</a>
           <ul>
             <li><a href="/list">행사,식당목록</a></li>

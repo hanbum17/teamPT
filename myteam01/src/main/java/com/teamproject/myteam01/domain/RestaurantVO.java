@@ -1,5 +1,7 @@
 package com.teamproject.myteam01.domain;
 
+
+import java.util.Date;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
@@ -26,6 +28,7 @@ public class RestaurantVO {
     private String fcategory;   // 음식점 카테고리
     private String fname;       // 음식점 이름
     private String faddress;    // 음식점 주소
+    private Date fregdate;
     
     private Long ftype;
     private List<AttachFileDTO> attachFileList;
@@ -37,6 +40,8 @@ public class RestaurantVO {
 	
 	 private Double lat; // 위도
 	 private Double lng; 
+	 
+	 private String guName;
 	
    
 

@@ -1,5 +1,6 @@
 package com.teamproject.myteam01.domain;
 
+import java.util.Date;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
@@ -29,7 +30,7 @@ public class EventVO {
     private float erating;      // 행사 평점
     private String excoord;     // 행사 X좌표
     private String eycoord;     // 행사 Y좌표
-    
+    private Date eregdate;
 
     
     public EventVO(String ehost, String excoord, String eycoord) {
