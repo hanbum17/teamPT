@@ -79,6 +79,7 @@
     padding: 8px 16px; /* 내부 여백 */
     font-size: 14px; /* 폰트 크기 */
     cursor: pointer; /* 커서 변경 */
+    margin-right: 5px;
 }
 
 .add-trip-btn:hover {

@@ -68,4 +68,9 @@ public interface CsService {
 	//공지사항 상세조회
 	public CsVO getNoticeDetail(Long num);
 	
+////////////////////////////////////////////////////////
+	
+	List<CsVO> getUserInquiries(String userId);  // 사용자 1대1 문의 조회
+
+	
 }

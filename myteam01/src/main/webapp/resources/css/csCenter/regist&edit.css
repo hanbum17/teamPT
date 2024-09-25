@@ -1,0 +1,129 @@
+/* 전체적인 배경과 기본 설정 */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    overflow-x: hidden;
+}
+
+/* 메인 컨텐츠 박스 */
+main {
+    max-width: 1200px;
+    margin: 100px auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    margin-bottom: 100px;
+}
+
+/* 제목 스타일 */
+h1 {
+    text-align: center;
+    font-size: 26px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* 버튼 스타일 */
+button {
+    padding: 10px 20px;
+    margin: 5px;
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* 저장 버튼과 취소 버튼 각각의 색상 */
+.btnSave, .btnRegister {
+    background-color: #007bff;
+}
+
+.btnCancel {
+    background-color: #dc3545;
+}
+
+/* 버튼 호버 효과 */
+button:hover {
+    opacity: 0.9;
+}
+
+/* 각 섹션의 공통 스타일 */
+.section {
+    display: none;
+}
+
+.section.active {
+    display: block;
+}
+
+/* 폼 스타일 */
+form {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #333;
+}
+
+.form-control {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+/* 버튼 그룹을 스타일링하여 동일한 간격으로 배치 */
+button {
+    margin: 10px 5px;
+}
+
+.btnRegister, .btnCancel {
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.btnCancel {
+    margin-left: 10px;
+}
+
+/* 미디어 쿼리 - 반응형 디자인 */
+@media (max-width: 768px) {
+    form {
+        width: 90%;
+        padding: 15px;
+    }
+    
+    .form-group label {
+        font-size: 14px;
+    }
+
+    .form-control {
+        padding: 6px;
+        font-size: 14px;
+    }
+
+    button {
+        padding: 8px 16px;
+        font-size: 14px;
+    }
+}
