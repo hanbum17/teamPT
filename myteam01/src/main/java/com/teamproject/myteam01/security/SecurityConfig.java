@@ -39,11 +39,11 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(authz -> authz
-            	.requestMatchers("/css/**", "/js/**", "/image/**", "/json/**").permitAll() 
-            	.requestMatchers("/WEB-INF/views/vroom/**", "/WEB-INF/views/**").permitAll() 
-                .requestMatchers("/vroom/**", "user/**", "/resources/**", "/images/**").permitAll()
-                .requestMatchers("/WEB-INF/views/user/login.jsp", "/WEB-INF/views/user/register.jsp", "/WEB-INF/views/user/registerSelect.jsp").anonymous()
-                .requestMatchers("/admin_main/**").hasRole("ADMIN")
+                .requestMatchers("/css/**", "/js/**", "/image/**", "/json/**").permitAll()
+                .requestMatchers("/WEB-INF/views/vroom/**", "/WEB-INF/views/**").permitAll()
+                .requestMatchers("/vroom/**", "/user/**", "/resources/**", "/images/**", "/api/**").permitAll()
+                .requestMatchers("user/login", "/WEB-INF/views/user/register.jsp", "/WEB-INF/views/user/registerSelect.jsp").anonymous()
+                .requestMatchers("/admin/main/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
             )
             .formLogin(form -> form
@@ -52,11 +52,11 @@ public class SecurityConfig {
                 .usernameParameter("userId")
                 .passwordParameter("password")
                 .successHandler(successHandler)
-                .failureHandler(failureHandler) 
+                .failureHandler(failureHandler)
                 .permitAll()
             )
             .rememberMe(rememberMe -> rememberMe
-                .tokenValiditySeconds(86400) // 1일 동안 유지
+                .tokenValiditySeconds(86400)
                 .userDetailsService(customUserDetailsService)
             )
             .logout(logout -> logout
@@ -67,7 +67,7 @@ public class SecurityConfig {
                 .permitAll()
             )
             .exceptionHandling(exception -> exception
-                .accessDeniedHandler(accessDeniedHandler)  // AccessDeniedHandler 추가
+                .accessDeniedHandler(accessDeniedHandler) // 여기에 AccessDeniedHandler를 설정
             );
 
         return http.build();
