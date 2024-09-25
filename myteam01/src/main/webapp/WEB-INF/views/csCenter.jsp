@@ -382,10 +382,10 @@
 </main>
 
 
-    <script>
+ <script>
     window.onload = function() {
         // 페이지가 처음 로드될 때 FAQ 섹션만 보이도록 설정
-        showSection('faq');
+        showSection('notice');
     };
     
     function showSection(sectionId) {
@@ -570,6 +570,6 @@
 
    
 
-
+</script>
 </body>
 </html>
