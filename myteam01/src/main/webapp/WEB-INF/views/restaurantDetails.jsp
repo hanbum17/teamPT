@@ -14,15 +14,22 @@
             font-family: Arial, sans-serif;
             height: 100vh;
             background-color: #f7f7f7;
-             background-image: url('/image/kakaoMAP.jpg');
-            background-size: cover; /* 배경 이미지가 요소의 전체를 덮도록 설정 */
-   			 background-position: center; /* 이미지의 위치를 중앙으로 설정 */
-    		background-repeat: no-repeat; /* 이미지 반복을 방지 */
+             /* background-image: url('/image/kakaoMAP.jpg'); */
+            /* background-size: cover; /* 배경 이미지가 요소의 전체를 덮도록 설정 */
+   			/* background-position: center; /* 이미지의 위치를 중앙으로 설정 */
+    		/* background-repeat: no-repeat; /* 이미지 반복을 방지 */
             display: flex;
             flex-direction: column;
             justify-content: flex-end;
         }
-
+#map {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0; /* 지도를 배경으로 만들기 위해 z-index 설정 */
+}
         .container {
             display:  flex;
             overflow-x: auto;
@@ -199,7 +206,9 @@
             현재 로그인: <strong>${user.userId}</strong>
         </c:if>
     </div>
-
+ <!-- 지도를 표시할 div -->
+    <div id="map"></div>
+    
     <!-- 왼쪽 패널: 식당 정보 -->
     <div class="panel left-panel" id="left-panel">
         <img id="panel-image" src="" alt="Detail Image" style="width: 100%; height: auto; border-radius: 10px; margin-bottom: 20px;">
@@ -669,6 +678,40 @@
                input.value = value;
                return input;
            }
+           
+           <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=YOUR_APP_KEY&libraries=services"></script>
+           <script>
+               // URL 파라미터에서 lat과 lng 값을 가져옵니다.
+               const urlParams = new URLSearchParams(window.location.search);
+               let lat = urlParams.get('lat');
+               let lng = urlParams.get('lng');
+
+               // 만약 lat과 lng가 없으면 기본값으로 서울의 좌표를 사용합니다.
+               if (!lat || !lng) {
+                   lat = 37.5665;  // 서울의 위도
+                   lng = 126.9780; // 서울의 경도
+               }
+
+               // 카카오 지도 초기화
+               var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+                   mapOption = {
+                       center: new kakao.maps.LatLng(lat, lng), // 전달받은 좌표로 중심 설정
+                       level: 3 // 확대 레벨
+                   };
+
+               var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성
+
+               var markerPosition  = new kakao.maps.LatLng(lat, lng); // 마커 위치를 설정
+
+               // 마커를 생성합니다
+               var marker = new kakao.maps.Marker({
+                   position: markerPosition
+               });
+
+               // 마커를 지도에 표시합니다
+               marker.setMap(map);
+
+               console.log(`지도 초기화 완료 - 위도: ${lat}, 경도: ${lng}`);
     </script>
 </body>
 </html>

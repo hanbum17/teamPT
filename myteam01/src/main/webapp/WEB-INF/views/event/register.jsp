@@ -91,8 +91,12 @@
 // 지도 생성 및 마커 표시
 var mapContainer = document.getElementById('map'),
     mapOption = {
+<<<<<<< HEAD
 
         center: new kakao.maps.LatLng(37.5693656626833, 126.986022414113), // 지도의 초기 중심좌표 : 솔데스크 학원으로 고정해놓음.
+=======
+        center: new kakao.maps.LatLng(37.5693656626833, 126.986022414113), // 지도의 초기 중심좌표
+>>>>>>> parent of 005d47c (임시저장)
         level: 3 // 지도의 확대 레벨
     };
 
