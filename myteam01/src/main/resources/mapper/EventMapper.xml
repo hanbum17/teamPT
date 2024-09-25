@@ -10,6 +10,15 @@
 	</select>
 	
 	<!-- 영범 -->
+	<select id="selectRegDate" resultType="com.teamproject.myteam01.domain.EventVO">
+		SELECT eregdate FROM event ORDER BY eregdate DESC FETCH FIRST 100 ROWS ONLY
+	</select>
+	<select id="selectRecentEvent" resultType="com.teamproject.myteam01.domain.EventVO">
+		SELECT *
+		FROM EVENT
+		ORDER BY eregdate DESC
+		FETCH FIRST 10 ROWS ONLY
+	</select>
 	<update id="updaterestreview">
 	    UPDATE event_reviews 
 	    SET eRTITLE = #{ertitle},
@@ -101,7 +110,7 @@
 	</selectKey>
 		INSERT INTO teampj.event 
 		VALUES (#{eno}, #{ename}, #{eperiod}, #{ecost}, #{eaddress}, #{eplace}, #{esite}, #{ehost}, 
-				#{econtent}, DEFAULT, DEFAULT, DEFAULT, #{excoord}, #{eycoord}, DEFAULT)
+				#{econtent}, DEFAULT, DEFAULT, DEFAULT, #{excoord}, #{eycoord}, DEFAULT,DEFAULT)
 	</insert>
 	<!--  행사 조회  -->
 	<select id="selectEvent" resultType="com.teamproject.myteam01.domain.EventVO"> 

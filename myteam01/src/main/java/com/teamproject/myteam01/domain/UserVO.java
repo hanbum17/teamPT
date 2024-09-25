@@ -35,6 +35,10 @@ public class UserVO implements UserDetails {
     private Timestamp lastLoginDate; 
     private List<String> roles; 
 
+    //영범 성별 통계
+    private Long maleCnt = 0L ;
+    private Long femaleCnt = 0L;
+    
     // Spring Security의 UserDetails에서 제공하는 메서드
     @Override
     public boolean isEnabled() {

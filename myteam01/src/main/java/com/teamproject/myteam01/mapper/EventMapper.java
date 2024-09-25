@@ -23,6 +23,8 @@ public interface EventMapper {
 	public int updaterestreview(EventReviewVO eventReviewVO);
 	public List<EventReviewVO> selectMoreReviews(EventReviewVO reviewVO);
 	public List<Long> selectReviewsForStar(Long eno);
+	public List<EventVO> selectRegDate();
+	public List<EventVO> selectRecentEvent();
 	
 	//희준
 	//행사 목록

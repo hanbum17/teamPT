@@ -98,6 +98,7 @@ public class VroomRestController {
                            @RequestParam(value = "page", defaultValue = "1") Long page, 
                            @RequestParam(value = "pageSize", defaultValue = "12") Long pageSize,
                            Model model) {
+    	
         // 현재 로그인된 사용자의 ID를 이용해 사용자 정보 조회
         if (userDetails != null) {
             String userId = userDetails.getUsername();

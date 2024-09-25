@@ -32,8 +32,8 @@
       <selectKey keyProperty="fno,uno" order="BEFORE" resultType="com.teamproject.myteam01.domain.RestaurantVO">
           SELECT teampj.SEQ_RESTAURANTS.nextval AS fno, teampj.SEQ_UNO.nextval AS uno FROM DUAL
        </selectKey>
-       INSERT INTO teampj.RESTAURANTS(fno,fcategory,fname,faddress,uno,fviewscnt,frating,fxcoord,fycoord,ftype)
-      VALUES (#{fno}, #{fcategory},#{fname}, #{faddress}, #{uno},DEFAULT,#{frating},#{fxcoord}, #{fycoord},#{ftype})
+       INSERT INTO teampj.RESTAURANTS(fno,fcategory,fname,faddress,uno,fviewscnt,frating,fxcoord,fycoord,ftype,fregdate)
+      VALUES (#{fno}, #{fcategory},#{fname}, #{faddress}, #{uno},DEFAULT,#{frating},#{fxcoord}, #{fycoord},#{ftype},DEFAULT)
    </insert>
    
    <!-- <select id="selectRestList" resultType="com.teamproject.myteam01.domain.RestaurantVO">
@@ -56,11 +56,26 @@
 	        FRMODDATE = DEFAULT
 	    WHERE frno = #{frno}
 	</update>
-    
+	
+	<select id="selectRestListByGuName" resultType="com.teamproject.myteam01.domain.RestaurantVO">
+	    SELECT *
+	    FROM restaurants
+	    WHERE faddress LIKE '%' || #{guName} || '%'
+	    ORDER BY FNO
+	    OFFSET #{offset} ROWS
+	    FETCH NEXT #{pageSize} ROWS ONLY
+	</select>
+
+
+
+
+
+
 
 
    
    <!-- 영범  -->
+   
 	<select id="selectMoreReviews" resultType="com.teamproject.myteam01.domain.RestaurantsReviewVO">
 		SELECT *
 		FROM (
@@ -73,6 +88,16 @@
 	</select>
 	<select id="selectReviewsForStar" resultType="Long"> 
 		SELECT FRRATING FROM restaurants_reviews WHERE FNO = #{fno} ORDER BY FRNO DESC 
+	</select>
+	
+	<select id="selectRegDate" resultType="com.teamproject.myteam01.domain.RestaurantVO">
+		SELECT fregdate FROM Restaurants ORDER BY fregdate DESC FETCH FIRST 100 ROWS ONLY
+	</select>
+	<select id="selectRecentRest" resultType="com.teamproject.myteam01.domain.RestaurantVO">
+		SELECT *
+		FROM Restaurants
+		ORDER BY fregdate DESC
+		FETCH FIRST 10 ROWS ONLY
 	</select>
 	
 
