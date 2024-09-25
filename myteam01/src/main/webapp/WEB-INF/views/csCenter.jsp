@@ -2,7 +2,6 @@
 
     <%@ include file="./menu/nav.jsp"%>
     <%@ include file="./menu/footer.jsp"%>
-    <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath }"/>
 <!DOCTYPE html>
 <html>
@@ -230,7 +229,7 @@
                     <th>카테고리</th>
                     <th>제목</th>
                 </tr>
-                <c:forEach items="${FAQList}" var="cs">
+                <c:forEach items="${CsList}" var="cs">
                     <c:if test="${cs.faqdelflag == 1}">
                         <tr>
                             <td><c:out value="${cs.faqno}" /></td>
@@ -280,7 +279,6 @@
                 <tr>
                     <th>번호</th>
                     <th>제목</th>
-                    <th>등록일</th>
                 </tr>
                 <c:forEach items="${feedbackList}" var="feeb">
                     <c:if test="${feeb.fbdelflag == 1}">
@@ -293,9 +291,6 @@
                         <tr onclick="showDetail('feedback', '${feeb.fbno}', '${feeb.fbtitle}', '${feeb.fbRegDate}', '${feeb.fbcontent}')">
                             <td><c:out value="${feeb.fbno}" /></td>
                             <td><c:out value="${feeb.fbtitle}" /></td>
-                            <td><fmt:formatDate pattern="yyyy/MM/dd" value="${feeb.fbRegDate}" />
-                            	${feeb.fbRegDate}
-                            </td>
                         </tr>
                     </c:if>
                 </c:forEach>
@@ -496,13 +491,11 @@
             }
         }
 
-       
         
+
         function confirmDelete(type, no) {
             if (confirm("정말로 삭제하시겠습니까?")) {
                 // 컨트롤러로 바로 POST 요청 보내기
-                console.log("삭제 요청 데이터:", type, no); // 전달 데이터 로그 출력
-
                 fetch(`${contextPath}/cs/deleteProc`, {
                     method: 'POST',
                     headers: {
@@ -510,7 +503,7 @@
                     },
                     body: new URLSearchParams({
                         type: type,
-                        no: no // 'no' 대신에 삭제할 항목의 정확한 이름을 사용해야 함
+                        no: no
                     })
                 })
                 .then(response => {
@@ -527,7 +520,6 @@
                 });
             }
         }
-
     </script>
 
    
