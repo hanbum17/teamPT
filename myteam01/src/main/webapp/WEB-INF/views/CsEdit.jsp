@@ -77,7 +77,7 @@ label {
     </div>
     <div class="form-group">
         <label>질문 제목</label>
-        <input type="text" id="faqtitle" name="faqtitle" class="form-control" value="${cs.faqtitle != null ? cs.faqtitle : ''}" required />
+        <input type="text" id="faqtitle" name="faqtitle" class="form-control" value="${cs.faqtitle != null ? cs.faqtitle : ''}" />
     </div>
     <div class="form-group">
         <label>답변 내용</label>
@@ -129,52 +129,42 @@ label {
 </form>
 
 </body>
-</html>
-
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-/*     function checkFormValues() {
-        var type = "${param.type}";
-        var isValid = false;
 
-        if (type === "faq") {
-            var faqtitle = document.getElementById("faqtitle").value.trim();
-            var faqcontent = document.getElementById("faqcontent").value.trim();
-            
-            if (!faqtitle || !faqcontent) {
-                alert("FAQ 제목과 내용을 모두 입력해주세요.");
-                return false;
-            }
-            isValid = true;
-            
-        } else if (type === "feedback") {
-            var fbtitle = document.getElementById("feedbackTitle").value.trim();
-            var fbcontent = document.getElementById("feedbackContent").value.trim();
-            
-            if (!fbtitle || !fbcontent) {
-                alert("건의사항 제목과 내용을 모두 입력해주세요.");
-                return false;
-            }
-            isValid = true;
-            
-        } else if (type === "inquiry") {
-            var ititle = document.getElementById("inquiryTitle").value.trim();
-            var icontent = document.getElementById("inquiryContent").value.trim();
-            var iresponse = document.getElementById("inquiryResponse").value.trim();
-            
-            if (!ititle || !icontent || !iresponse) {
-                alert("1:1 문의 제목, 내용, 그리고 답변을 모두 입력해주세요.");
-                return false;
-            }
-            isValid = true;
+/*     $("#frmEdit").on("submit", function(event) {
+        if (!checkFormValues()) {
+            event.preventDefault(); // 제출 방지
+        }
+    }); */
+    
+    $("#frmEdit").on("submit", function(event) {
+        // 섹션별로 보여지는 필드의 required 속성을 설정
+        if ($("#faqSection").is(":visible")) {
+            $("#faqtitle").prop("required", true);
+        } else {
+            $("#faqtitle").prop("required", false);
         }
 
-        return isValid;
-    }
- */
-    $("#frmEdit").on("submit", function(event) {
+        if ($("#feedbackSection").is(":visible")) {
+            $("#feedbackTitle").prop("required", true);
+        } else {
+            $("#feedbackTitle").prop("required", false);
+        }
+
+        if ($("#inquirySection").is(":visible")) {
+            $("#inquiryTitle").prop("required", true);
+        } else {
+            $("#inquiryTitle").prop("required", false);
+        }
+
+        // 유효성 검사 함수가 제대로 동작하는지 확인
         if (!checkFormValues()) {
             event.preventDefault(); // 제출 방지
         }
     });
+
 </script>
+</html>
+
+

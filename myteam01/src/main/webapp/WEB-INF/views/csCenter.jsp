@@ -424,8 +424,8 @@
             }
 
         }
-    }
-</script>
+   
+
 
 
         function hideDetail() {
