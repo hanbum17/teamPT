@@ -79,8 +79,9 @@ public class VroomController {
 
     @GetMapping("/restaurant")
     public String restMain(@AuthenticationPrincipal UserDetails userDetails, @RequestParam(required = false) String guName, Model model) {
+        RestaurantVO restVO = new RestaurantVO();
         boolean userBoolean;
-        
+
         // 현재 로그인된 사용자의 ID를 이용해 사용자 정보 조회
         if (userDetails != null) {
             userBoolean = true;
@@ -92,13 +93,13 @@ public class VroomController {
             userBoolean = false;
             model.addAttribute("userBoolean", userBoolean);
         }
-        
+
         // 식당 목록 추가
         Long restPage = 1L; // 0-based offset
         Long restPageSize = 10L;
 
         List<RestaurantVO> restList;
-        
+
         // Map으로 파라미터 묶기
         Map<String, Object> params = new HashMap<>();
         params.put("guName", guName);
@@ -108,19 +109,20 @@ public class VroomController {
         if (guName != null && !guName.isEmpty()) {
             // 특정 구의 식당 목록을 가져옴
             restList = restService.getRestListByGuName(params);
+            restVO.setGuName(guName); // 구 이름 설정
         } else {
             // 전체 식당 목록을 가져옴
             restList = restService.getRestList(restPage, restPageSize);
         }
 
-
         model.addAttribute("restList", restList);
+        model.addAttribute("restaurant", restVO); // restVO를 모델에 추가
         System.out.println("컨트롤러에 전달된 restaurantList 값: " + restList);
         System.out.println("전달받은 guName: " + guName);
-        
 
         return "restaurantList";
     }
+
 
 
 
