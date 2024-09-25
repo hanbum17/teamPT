@@ -44,12 +44,16 @@ $("#selectUserList").on("click", function (e) {
 // 데이터를 테이블에 표시하는 함수
 function displayData(data) {
     const lastLoginFormatted = formatDate(data.lastLoginDate); // 마지막 접속일 포맷 적용
+
+    // 성별 표시 변경 (M -> 남자, F -> 여자)
+    let genderText = data.userGender === 'M' ? '남자' : '여자';
+
     let td = `
         <tr data-user-id="${data.userId}">
             <td>${data.userNo}</td>
             <td><a href="#" class="user-link" data-user-id="${data.userId}">${data.userId}</a></td>
             <td>${data.username}</td>
-            <td>${data.userGender}</td>
+            <td>${genderText}</td>
             <td>${lastLoginFormatted}</td>
             <td>${data.roles}</td>
         </tr>`;
@@ -57,6 +61,7 @@ function displayData(data) {
     // <tbody>에 행 추가
     document.querySelector('table.user-table tbody').innerHTML += td;
 }
+
 
 $(document).ready(function() {
     // 클릭 시 사용자 정보 요청 (a 태그 클릭 시 작동)

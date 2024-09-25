@@ -95,22 +95,22 @@
             display: none;
         }
 
-        .back-button {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
+        .restaurant-search-btn {
+	    position: absolute;
+	    top: 700px; /* 컨테이너 상단과의 거리 */
+	    right: 10px; /* 컨테이너 우측과의 거리 */
+	    padding: 10px 20px;
+	    background-color: #007bff;
+	    color: #fff;
+	    border: none;
+	    border-radius: 5px;
+	    cursor: pointer;
+	    z-index: 1000; /* 버튼이 다른 요소 위에 표시되도록 설정 */
+	}
 
-        .back-button:hover {
-            background-color: #0056b3;
-        }
+	.restaurant-search-btn:hover {
+    	background-color: #0056b3;
+	}
 
     </style>
 </head>
@@ -135,7 +135,7 @@
         </c:if>
     </div>
 
-<button class="event-search-btn" id="event-search-btn">행사 조회</button>
+<button class="restaurant-search-btn" id="restaurant-search-btn">식당 조회</button>
 
 <div class="container" id="event-container">
     <!-- 이벤트 카드 반복문으로 생성 -->
@@ -170,6 +170,10 @@
 
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=fe9306b4adbbf3249d28d6b7a2c37c0a&libraries=services"></script>
 <script>
+// 식당 조회 버튼 클릭 이벤트 처리
+document.getElementById('restaurant-search-btn').addEventListener('click', () => {
+    window.location.href = '${contextPath}/vroom/restaurant';
+});
 
 // 카카오 지도 초기화
 var mapContainer = document.getElementById('map'),
@@ -241,6 +245,8 @@ let startX;
 let scrollLeft;
 
 const container = document.getElementById('event-container');
+
+
 
 // 드래그 시작
 container.addEventListener('mousedown', (e) => {
