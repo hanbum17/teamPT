@@ -1,6 +1,7 @@
 package com.teamproject.myteam01.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.teamproject.myteam01.domain.AttachFileDTO;
 import com.teamproject.myteam01.domain.RestaurantVO;
@@ -19,7 +20,9 @@ public interface RestaurantService {
 	public Long registerRest(RestaurantVO rest, AttachFileDTO attach);
 	public List<RestaurantVO> getRestList(Long page, Long pageSize);
 	public List<RestaurantsReviewVO> modifyreview(RestaurantsReviewVO restReviewVO);
+	public List<RestaurantVO> getRestListByGuName(Map<String, Object> params) ;
 	//영범
 	public List<RestaurantsReviewVO> selectMoreReviews(RestaurantsReviewVO restReviewVO);
-
+	public List<RestaurantVO> restRegDate();
+	public List<RestaurantVO> recentRest();
 }

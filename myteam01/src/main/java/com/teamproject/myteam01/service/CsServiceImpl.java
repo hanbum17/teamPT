@@ -90,7 +90,7 @@ public class CsServiceImpl implements CsService{
 	@Override
 	public boolean removeIn(Long ino) {
 		System.out.println("서비스 : Inquiry 삭제");
-		return csMapper.delFAQ(ino) == 1;
+		return csMapper.delINQ(ino) == 1;
 		
 	}
 

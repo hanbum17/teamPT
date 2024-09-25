@@ -66,28 +66,15 @@
         WHERE INO = #{ino}
     </select>
 
-<!--     Inquiry 수정
+<!-- Inquiry 수정 -->
     <update id="updateINQ">
         UPDATE teampj.INQUIRY
         SET ICATEGORY = #{icategory},
             ITITLE = #{ititle},
-            ICONTENT = #{icontent}
+            ICONTENT = #{icontent},
             IRESPONSE = #{iresponse}
         WHERE INO = #{ino}
-    </update> -->
-    
-    <!-- Inquiry 수정 -->
-<update id="updateINQ">
-    UPDATE teampj.INQUIRY
-    SET ICATEGORY = #{icategory},
-        ITITLE = #{ititle},
-        ICONTENT = #{icontent},
-        IRESPONSE = CASE 
-                      WHEN #{iresponse} IS NULL THEN IRESPONSE 
-                      ELSE #{iresponse} 
-                    END
-    WHERE INO = #{ino}
-</update>
+    </update>
     
     <!-- Inquiry 삭제 -->
     <delete id="delINQ">
@@ -123,8 +110,7 @@
     <update id="updateFB">
         UPDATE teampj.FEEDBACK
         SET FBTITLE = #{fbtitle},
-            FBCONTENT = #{fbcontent},
-            FBMODDATE = DEFAULT
+            FBCONTENT = #{fbcontent}
         WHERE FBNO = #{fbno}
     </update>
     
