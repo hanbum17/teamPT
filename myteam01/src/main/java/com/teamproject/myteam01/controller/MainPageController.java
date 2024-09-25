@@ -40,12 +40,10 @@ public class MainPageController {
 	@Autowired
 	private RestaurantService restService;
 	
-	
-	@GetMapping("/main")
-	public String main() {
-		return "admin_main/adminMain";
+	@GetMapping("/manage/adminUserManage")
+	public String adminUserManage() {
+		return "admin_main/adminUserManage";
 	}
-
 	@GetMapping("/manage/userList")
 	@ResponseBody
 	public ResponseEntity<List<UserVO>> userList() {

@@ -268,19 +268,19 @@ pageEncoding="UTF-8"%>
           margin-bottom: 20px; /* 테이블 하단 여백 */
       }
 
-      <<<<<<< HEAD
+
       .user-table th,
       .user-table td {
           padding: 12px 15px; /* 셀 내 여백 */
           border: 1px solid #ddd; /* 셀 경계선 */
           text-align: center; /* 텍스트 중앙 정렬 */
           font-size: 14px; /* 폰트 크기 */
-      =======
+
       /* 사이트의 높이를 5000px로 만들어 스크롤 생성 */
       body {
         height: 500px;
         background-color: #444;
-      >>>>>>> origin/mainKYB
+
       }
 
       .user-table th {
