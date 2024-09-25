@@ -1,6 +1,8 @@
 package com.teamproject.myteam01.controller;
 
 import com.teamproject.myteam01.domain.CsVO;
+import com.teamproject.myteam01.domain.EventVO;
+import com.teamproject.myteam01.domain.RestaurantVO;
 import com.teamproject.myteam01.domain.TripPlanVO;
 import com.teamproject.myteam01.domain.UserVO;
 import com.teamproject.myteam01.service.CsService;
@@ -171,6 +173,35 @@ public class UserController {
     public String userReservationPage() {
         return "user_main/user_menu/user_reservation";
     }
+    
+    // 추천 목록 페이지로 이동
+    @GetMapping("/user/user_recommend")
+	public String userRecommend(@AuthenticationPrincipal UserDetails userDetails, Model model) {
+		String userName = userDetails.getUsername();
+		model.addAttribute("userName",userName);
+		
+		//행사 추천 리스트
+		List<EventVO> eventList = userService.recomendEvent(userName);
+		model.addAttribute("eventList",eventList);
+		
+		//식당 추천 리스트
+		List<RestaurantVO> restList = userService.recomendRest(userName);
+		model.addAttribute("restList",restList);
+		
+		//행사 추천 타입 ex) 지역추천 , 무료추천
+		if(!eventList.isEmpty()) {
+			EventVO eRecoType = eventList.get(0);
+			model.addAttribute("eRecoType",eRecoType.getEtype());
+		}
+		
+		//식당 추천 타입 ex) 지역추천 , 무료추천
+		if(!restList.isEmpty()) {
+			RestaurantVO fRecoType = restList.get(0);
+			model.addAttribute("fRecoType",fRecoType.getType());
+		}
+		return "user_main/user_menu/user_recommend";
+	}
+   
 
     // 결제 내역 페이지로 이동
     @GetMapping("/user/user_pay")

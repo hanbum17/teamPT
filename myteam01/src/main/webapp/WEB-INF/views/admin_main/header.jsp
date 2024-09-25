@@ -28,7 +28,7 @@ a {
 
 /* 사이트의 높이를 5000px로 만들어 스크롤 생성 */
 body {
-  height: 5000px;
+  height: 500px;
   background-color: #444;
 }
 
@@ -275,7 +275,7 @@ $("#enter_chat").on("click", function(){
   </section>
   <ul>
   	<li>
-  		<a href="/admin/data"><i class="fa-solid fa-cat"></i> 대시보드</a>
+  		<a href="/admin/main"><i class="fa-solid fa-cat"></i> 대시보드</a>
   	</li>
   	<li>
     	<a href="#"><i class="fa-solid fa-cat"></i> 글관리</a>

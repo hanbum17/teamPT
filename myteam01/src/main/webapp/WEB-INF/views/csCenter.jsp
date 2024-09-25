@@ -3,7 +3,7 @@
     <%@ include file="./menu/nav.jsp"%>
     <%@ include file="./menu/footer.jsp"%>
 <c:set var="contextPath" value="${pageContext.request.contextPath }"/>
-
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <!DOCTYPE html>
@@ -185,7 +185,7 @@
     <!-- Section Buttons -->
     <div class="btn-container">
     	<button class="btnNotice" onclick="showSection('notice')">공지사항</button>
-		<button class="btnCsEvent" onclick="showSection('csevent')">이벤트</button>
+		<button class="btnCsEvent" onclick="showSection('event')">이벤트</button>
         <button class="btnFAQ" onclick="showSection('faq')">자주 묻는 질문(FAQ)</button>
         <button class="btnFeedback" onclick="showSection('feedback')">고객의 소리(건의사항)</button>
         <button class="btnInquiry" onclick="showSection('inquiry')">1:1 문의</button>
@@ -212,9 +212,9 @@
                         </tr>
                     </c:if>
                     <c:if test="${nc.notice_delflag == 0}">
-                        <tr onclick="showDetail('notice', '${nc.notice_num}', '${nc.notice_title}','', '${nc.notice_content}', '','${nc.notice_moddate}')">
+                        <tr onclick="showDetail('notice', '${nc.notice_num}', '${nc.notice_title}',' ', '${nc.notice_content}', '','${nc.notice_regdate}')">
                             <td><c:out value="${nc.notice_title}" /></td>
-                            <td><c:out value="${nc.notice_regdate}" /></td>
+                            <td> <fmt:formatDate pattern="yyyy/MM/dd" value="${nc.notice_regdate}" /></td>
                         </tr>
                     </c:if>
                 </c:forEach>
@@ -229,7 +229,7 @@
                     <th style="width: 15%;">제목</th>
                     <td id="notice-title"></td>
                     <th style="width: 15%;">등록일</th>
-                    <td id="notice-category"></td>
+                    <td id="notice-regdate"></td>
                 </tr>
                 <tr>
                     <th style="width: 15%;">내용</th>
@@ -241,6 +241,57 @@
             <button class="delete-btn" onclick="confirmDelete('notice', ${nc.notice_num})">삭제</button>
         </div>
     </div>
+    
+    <div id="event" class="section active">
+        <div class="section-header">
+            <h3>행사</h3>
+            <button type="button" class="register-btn" onclick="location.href='${contextPath}/cs/register?type=event'">행사 등록</button>
+        </div>
+        <div class="table-container">
+            <table>
+                <tr>
+                    <th>제목</th>
+                    <th>등록일</th>
+                </tr>
+                <c:forEach items="${event}" var="ev">
+                    <c:if test="${ev.event_delflag == 1}">
+                        <tr>
+                            <td><c:out value="${ev.event_num}" /></td>
+                            <td colspan="2"><em>삭제된 게시글입니다.</em></td>
+                        </tr>
+                    </c:if>
+                    <c:if test="${ev.event_delflag == 0}">
+                        <tr onclick="showDetail('event', '${ev.event_num}', '${ev.event_title}',' ', '${ev.event_content}', '','${ev.event_regdate}')">
+                            <td><c:out value="${ev.event_title}" /></td>
+                            <td> <fmt:formatDate pattern="yyyy/MM/dd" value="${ev.event_regdate}" /></td>
+                        </tr>
+                    </c:if>
+                </c:forEach>
+            </table>
+        </div>
+
+        <!-- notice Detail Section -->
+        <div id="event-detail" class="detail-view" style="display: none;">
+            <h3>행사 상세보기</h3>
+            <table style="width: 100%; border-collapse: collapse;">
+                <tr>
+                    <th style="width: 15%;">제목</th>
+                    <td id="event-title"></td>
+                    <th style="width: 15%;">등록일</th>
+                    <td id="event-regdate"></td>
+                </tr>
+                <tr>
+                    <th style="width: 15%;">내용</th>
+                    <td colspan="3" id="event-content" style="white-space: pre-wrap;"></td>
+                </tr>
+            </table>
+            <button class="back-btn" onclick="hideDetail()">닫기</button>
+            <button class="edit-btn" onclick="editDetail('event')">수정</button>
+            <button class="delete-btn" onclick="confirmDelete('notice', ${ev.event_num})">삭제</button>
+        </div>
+    </div>
+    
+    
 
     <!-- FAQ Section -->
     <div id="faq" class="section">
@@ -406,15 +457,22 @@
         </div>
     </div>
 </main>
-
-
-
- <script>
+<script>
     window.onload = function() {
-        // 페이지가 처음 로드될 때 FAQ 섹션만 보이도록 설정
-        showSection('notice');
+        
+    	// 현재 페이지의 URL을 가져옵니다.
+    	const urlParams = new URLSearchParams(window.location.search);
+    	
+    	// 'type' 파라미터의 값을 가져옵니다.
+    	const type = urlParams.get('type');
+    	
+    	// 페이지가 처음 로드될 때 notice 섹션만 보이도록 설정
+    	if(!type){
+    		showSection('notice')
+    	} else {
+        	showSection(type);
+    	}
     };
-    
 
     function showSection(sectionId) {
         // 모든 섹션 숨기기
@@ -435,175 +493,151 @@
         hideDetail();  // 상세 보기 창이 열려 있으면 닫음
     }
 
-        function showDetail(type, no, title, category, content, response, regdate) {
-            // 모든 테이블 숨기기
-            var allTables = document.querySelectorAll('.table-container');
-            allTables.forEach(function(table) {
-                table.style.display = 'none';
-            });
+    function showDetail(type, no, title, category, content, response, regdate) {
+        // 모든 테이블 숨기기
+        var allTables = document.querySelectorAll('.table-container');
+        allTables.forEach(function(table) {
+            table.style.display = 'none';
+        });
 
-            var detailSection;
+        var detailSection;
 
-            if (type === 'faq') {
-                detailSection = document.getElementById('faq-detail');
-                detailSection.style.display = 'block';
+        // 각 타입별 상세 보기 처리
+        if (type === 'faq') {
+            detailSection = document.getElementById('faq-detail');
+            detailSection.style.display = 'block';
 
-                document.getElementById('faq-title').innerText = decodeURIComponent(title);
-                document.getElementById('faq-category').innerText = decodeURIComponent(category);
-                document.getElementById('faq-content').innerHTML = decodeURIComponent(content).replace(/\n/g, '<br>');
+            document.getElementById('faq-title').innerText = decodeURIComponent(title || '');
+            document.getElementById('faq-category').innerText = decodeURIComponent(category || '');
+            document.getElementById('faq-content').innerHTML = decodeURIComponent(content || '').replace(/\n/g, '<br>');
 
-                document.querySelector('.edit-btn').setAttribute('data-faqno', no);
-                document.querySelector('.delete-btn').setAttribute('data-faqno', no);
-                
-            } else if (type === 'inquiry') {
-                detailSection = document.getElementById('inquiry-detail');
-                detailSection.style.display = 'block';
-
-                document.getElementById('inquiry-title').innerText = decodeURIComponent(title);
-                document.getElementById('inquiry-category').innerText = decodeURIComponent(category);
-                document.getElementById('inquiry-content').innerHTML = decodeURIComponent(content).replace(/\n/g, '<br>');
-                document.getElementById('inquiry-response').innerHTML = decodeURIComponent(response).replace(/\n/g, '<br>');
-                
-                document.querySelector('.edit-btn').setAttribute('data-ino', no);
-                document.querySelector('.delete-btn').setAttribute('data-ino', no);
-            }
-            else if (type === 'feedback'){
-                detailSection = document.getElementById('feedback-detail');
-                detailSection.style.display = 'block';
-
-                document.getElementById('feedback-title').innerText = decodeURIComponent(title);
-                document.getElementById('feedback-regdate').innerText = decodeURIComponent(regdate);
-                document.getElementById('feedback-content').innerHTML = decodeURIComponent(content).replace(/\n/g, '<br>');
-
-                document.querySelector('.edit-btn').setAttribute('data-fbno', no);
-                document.querySelector('.delete-btn').setAttribute('data-fbno', no);
-            } else if (type ==='notice'){
-            	detailSection = document.getElementById('notice-detail');
-                detailSection.style.display = 'block';
-
-                document.getElementById('notice-title').innerText = title;
-                document.getElementById('notice-regdate').innerText = regdate; 
-               
-                document.getElementById('notice-content').innerHTML = content.replace(/\n/g, '<br>');
-
-                document.querySelector('.edit-btn').setAttribute('data-notice_num', no);
-                document.querySelector('.delete-btn').setAttribute('data-notice_num', no);
-            }
-
-        }
-   
-
-
-
-        function hideDetail() {
-            // 테이블 다시 보이기
-            var allTables = document.querySelectorAll('.table-container');
-            allTables.forEach(function(table) {
-                table.style.display = 'block';
-            });
-
-            document.getElementById('faq-detail').style.display = 'none';
-            document.getElementById('inquiry-detail').style.display = 'none';
-            document.getElementById('feedback-detail').style.display = 'none';
-        }
-        
-        function editDetail(type) {
-            var faqno = document.querySelector('.edit-btn').getAttribute('data-faqno');
-            var ino = document.querySelector('.edit-btn').getAttribute('data-ino');
-            var fbno = document.querySelector('.edit-btn').getAttribute('data-fbno');
+            document.querySelector('.edit-btn').setAttribute('data-faqno', no);
+            document.querySelector('.delete-btn').setAttribute('data-faqno', no);
             
+        } else if (type === 'inquiry') {
+            detailSection = document.getElementById('inquiry-detail');
+            detailSection.style.display = 'block';
+
+            document.getElementById('inquiry-title').innerText = decodeURIComponent(title || '');
+            document.getElementById('inquiry-category').innerText = decodeURIComponent(category || '');
+            document.getElementById('inquiry-content').innerHTML = decodeURIComponent(content || '').replace(/\n/g, '<br>');
+            document.getElementById('inquiry-response').innerHTML = decodeURIComponent(response || '').replace(/\n/g, '<br>');
+            
+            document.querySelector('.edit-btn').setAttribute('data-ino', no);
+            document.querySelector('.delete-btn').setAttribute('data-ino', no);
+        } else if (type === 'feedback') {
+            detailSection = document.getElementById('feedback-detail');
+            detailSection.style.display = 'block';
+
+            document.getElementById('feedback-title').innerText = decodeURIComponent(title || '');
+            document.getElementById('feedback-regdate').innerText = decodeURIComponent(regdate || '');
+            document.getElementById('feedback-content').innerHTML = decodeURIComponent(content || '').replace(/\n/g, '<br>');
+
+            document.querySelector('.edit-btn').setAttribute('data-fbno', no);
+            document.querySelector('.delete-btn').setAttribute('data-fbno', no);
+        } else if (type === 'notice') {
+            detailSection = document.getElementById('notice-detail');
+            detailSection.style.display = 'block';
+
+            document.getElementById('notice-title').innerText = title || '';
+            document.getElementById('notice-regdate').innerText = regdate || '';
+            document.getElementById('notice-content').innerHTML = content.replace(/\n/g, '<br>');
+
+            document.querySelector('.edit-btn').setAttribute('data-notice_num', no);
+            document.querySelector('.delete-btn').setAttribute('data-notice_num', no);
+        } else if (type === 'event') {
+            detailSection = document.getElementById('event-detail');
+            detailSection.style.display = 'block';
+
+            document.getElementById('event-title').innerText = title || '';
+            document.getElementById('event-regdate').innerText = regdate || '';
+            document.getElementById('event-content').innerHTML = content.replace(/\n/g, '<br>');
+
+            document.querySelector('.edit-btn').setAttribute('data-event_num', no);
+            document.querySelector('.delete-btn').setAttribute('data-event_num', no);
+        }
+    }
+
+    function hideDetail() {
+        // 테이블 다시 보이기
+        var allTables = document.querySelectorAll('.table-container');
+        allTables.forEach(function(table) {
+            table.style.display = 'block';
+        });
+        document.getElementById('faq-detail').style.display = 'none';
+        document.getElementById('inquiry-detail').style.display = 'none';
+        document.getElementById('feedback-detail').style.display = 'none';
+        document.getElementById('notice-detail').style.display = 'none';
+        document.getElementById('event-detail').style.display = 'none';
+    }
+
+    function editDetail() {
+        var faqno = document.querySelector('.edit-btn')?.getAttribute('data-faqno');
+        var ino = document.querySelector('.edit-btn')?.getAttribute('data-ino');
+        var fbno = document.querySelector('.edit-btn')?.getAttribute('data-fbno');
+        var notice_num = document.querySelector('.edit-btn')?.getAttribute('data-notice_num');
+        var event_num = document.querySelector('.edit-btn')?.getAttribute('data-event_num');
+
+        if (faqno) {
+            window.location.href = `${contextPath}/cs/edit?faqno=${faqno}&type=faq`;
+        } else if (ino) {
+            window.location.href = `${contextPath}/cs/edit?ino=${ino}&type=inquiry`;
+        } else if (fbno) {
+            window.location.href = `${contextPath}/cs/edit?fbno=${fbno}&type=feedback`;
+        } else if (notice_num) {
+            window.location.href = `${contextPath}/cs/edit?notice_num=${notice_num}&type=notice`;
+        } else if (event_num) {
+            window.location.href = `${contextPath}/cs/edit?event_num=${event_num}&type=event`;
+        }
+    }
+
+    function confirmDelete() {
+        var faqno = document.querySelector('.delete-btn')?.getAttribute('data-faqno');
+        var ino = document.querySelector('.delete-btn')?.getAttribute('data-ino');
+        var fbno = document.querySelector('.delete-btn')?.getAttribute('data-fbno');
+        var notice_num = document.querySelector('.delete-btn')?.getAttribute('data-notice_num');
+        var event_num = document.querySelector('.delete-btn')?.getAttribute('data-event_num');
+
+        if (confirm("정말로 삭제하시겠습니까?")) {
+            let deleteUrl = `${contextPath}/cs/deleteProc`;
+
+            let params;
             if (faqno) {
-                window.location.href = '${contextPath}/cs/edit?faqno=' + faqno + '&type=faq';
+                params = { type: 'faq', no: faqno };
             } else if (ino) {
-                window.location.href = '${contextPath}/cs/edit?ino=' + ino + '&type=inquiry';
+                params = { type: 'inquiry', no: ino };
             } else if (fbno) {
-                window.location.href = '${contextPath}/cs/edit?fbno=' + fbno + '&type=feedback';
+                params = { type: 'feedback', no: fbno };
+            } else if (notice_num) {
+                params = { type: 'notice', no: notice_num };
+            } else if (event_num) {
+                params = { type: 'event', no: event_num };
+            }
+
+            if (params) {
+                fetch(deleteUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: new URLSearchParams(params)
+                })
+                .then(response => {
+                    if (response.ok) {
+                        alert("삭제되었습니다.");
+                        location.reload();
+                    } else {
+                        alert("삭제에 실패했습니다.");
+                    }
+                })
+                .catch(error => {
+                    console.error("삭제 중 오류 발생:", error);
+                    alert("삭제에 실패했습니다.");
+                });
             }
         }
-
-
-
-        function confirmDelete(type) {
-            var faqno = document.querySelector('.delete-btn').getAttribute('data-faqno');
-            var ino = document.querySelector('.delete-btn').getAttribute('data-ino');
-            var fbno = document.querySelector('.delete-btn').getAttribute('data-fbno');
-            
-            if (confirm("정말로 삭제하시겠습니까?")) {
-                let deleteUrl = `${contextPath}/cs/deleteProc`;
-
-                if (faqno) {
-                    fetch(deleteUrl, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded',
-                        },
-                        body: new URLSearchParams({
-                            type: 'faq',
-                            no: faqno
-                        })
-                    })
-                    .then(response => {
-                        if (response.ok) {
-                            alert("삭제되었습니다.");
-                            location.reload();
-                        } else {
-                            alert("삭제에 실패했습니다.");
-                        }
-                    })
-                    .catch(error => {
-                        console.error("FAQ 삭제 중 오류 발생:", error);
-                        alert("삭제에 실패했습니다.");
-                    });
-                } else if (ino) {
-                    fetch(deleteUrl, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded',
-                        },
-                        body: new URLSearchParams({
-                            type: 'inquiry',
-                            no: ino
-                        })
-                    })
-                    .then(response => {
-                        if (response.ok) {
-                            alert("삭제되었습니다.");
-                            location.reload();
-                        } else {
-                            alert("삭제에 실패했습니다.");
-                        }
-                    })
-                    .catch(error => {
-                        console.error("1:1 문의 삭제 중 오류 발생:", error);
-                        alert("삭제에 실패했습니다.");
-                    });
-                } else if (fbno) {
-                    fetch(deleteUrl, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded',
-                        },
-                        body: new URLSearchParams({
-                            type: 'feedback',
-                            no: fbno
-                        })
-                    })
-                    .then(response => {
-                        if (response.ok) {
-                            alert("삭제되었습니다.");
-                            location.reload();
-                        } else {
-                            alert("삭제에 실패했습니다.");
-                        }
-                    })
-                    .catch(error => {
-                        console.error("고객의 소리 삭제 중 오류 발생:", error);
-                        alert("삭제에 실패했습니다.");
-                    });
-                }
-            }
-        }
-
+    }
 </script>
+
 </body>
 </html>

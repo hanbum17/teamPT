@@ -134,6 +134,7 @@ public class CsController {
 
 		System.out.println("________________________"+csService.getNoticeList());
     	model.addAttribute("notice",csService.getNoticeList()); //공지사항 목록
+    	model.addAttribute("event", csService.getEventList());
         model.addAttribute("CsList", csService.csList()); // FAQ 목록
         model.addAttribute("feedbackList", csService.csFBList()); // 고객의 소리 목록
         model.addAttribute("inquiryList", csService.csInList()); // 1:1 문의 내역 목록
@@ -161,7 +162,8 @@ public class CsController {
             csService.regiIn(csvo); // 1:1 문의 등록 메서드
         } else if ("notice".equals(type)) {
         	csService.regNotice(csvo);
-
+        } else if ("event".equals(type)) {
+        	csService.regEvent(csvo);
         }
         
         redirectAttributes.addFlashAttribute("message", "등록이 성공적으로 완료되었습니다.");
@@ -219,26 +221,16 @@ public class CsController {
 
     @PostMapping("/deleteProc")
     public String deleteProc(@RequestParam("type") String type, @RequestParam("no") Long no) {
-        boolean success = false;
-
-        if ("faq".equals(type)) {
-            success = csService.removeFAQ(no);
-        } else if ("feedback".equals(type)) {
-            success = csService.removeFB(no);
-        } else if ("inquiry".equals(type)) {
-            success = csService.removeIn(no);
+        if (type.equals("faq")) {
+            csService.removeFAQ(no);
+        } else if (type.equals("feedback")) {
+            csService.removeFB(no);
+        } else if (type.equals("inquiry")) {
+            csService.removeIn(no);
         }
-
-        if (success) {
-            return "success";  // 성공하면 success 반환
-        } else {
-            return "failure";  // 실패하면 failure 반환
-        }
-
         return "redirect:/cs/Center"; // 삭제 후 리다이렉트
-
     }
-    
+
     
     /////////////////////////////////
     

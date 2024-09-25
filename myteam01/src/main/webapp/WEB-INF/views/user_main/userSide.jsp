@@ -44,6 +44,11 @@
                         </form>
                     </li>
                     <li class="menu-item">
+                        <form action="/user/user_recommend" method="get">
+                            <button type="submit"><i class="fa-solid fa-bookmark"></i> 추천 목록</button>
+                        </form>
+                    </li>
+                    <li class="menu-item">
                         <form action="/user/user_trip" method="get">
                             <button type="submit"><i class="fa-regular fa-calendar-days"></i> 여행계획 짜기</button>
                         </form>
