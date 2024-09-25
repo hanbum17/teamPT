@@ -13,10 +13,7 @@
             font-family: Arial, sans-serif;
             height: 100vh;
             background-color: #f7f7f7;
-             background-image: url('/image/kakaoMAP.jpg');
-            background-size: cover; /* 배경 이미지가 요소의 전체를 덮도록 설정 */
-   			 background-position: center; /* 이미지의 위치를 중앙으로 설정 */
-    		background-repeat: no-repeat; /* 이미지 반복을 방지 */
+  
             display: flex;
             flex-direction: column;
             justify-content: flex-end;
@@ -449,7 +446,8 @@ document.addEventListener('DOMContentLoaded', () => {
         restaurantCard.dataset.fxcoord = restaurant.fxcoord; 
         restaurantCard.dataset.fycoord = restaurant.fycoord;  
         restaurantCard.onclick = () => {
-            window.location.href = contextPath + '/vroom/restaurant/details?fno=' + restaurant.fno;
+        	setMarker(restaurant.fxcoord, restaurant.fycoord); // 클릭한 식당의 좌표로 마커 이동
+            //window.location.href = contextPath + '/vroom/restaurant/details?fno=' + restaurant.fno;
         };
 
         restaurantCard.innerHTML = 

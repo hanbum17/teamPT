@@ -350,7 +350,7 @@ $('#fileInput').on('change', function() {
 // 지도를 생성하는 코드
 var mapContainer = document.getElementById('map'), // 지도를 표시할 div
     mapOption = {
-        center: new kakao.maps.LatLng(37.5693656626833, 126.986022414113), // 지도의 초기 중심좌표
+        center: new kakao.maps.LatLng(37.5693656626833, 126.986022414113), // 지도의 초기 중심좌표 : 솔데스크 학원으로 고정해놓음.
         level: 3 // 지도의 확대 레벨
     };
 
