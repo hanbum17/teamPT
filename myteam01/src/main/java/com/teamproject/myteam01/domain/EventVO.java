@@ -31,7 +31,7 @@ public class EventVO {
     private String excoord;     // 행사 X좌표
     private String eycoord;     // 행사 Y좌표
     private Date eregdate;		// 행사 생성일
-    private String type;        // 행사 추천 종류
+    private String etype;        // 행사 추천 종류
     
     public EventVO(String ehost, String excoord, String eycoord) {
         this.ehost = ehost;

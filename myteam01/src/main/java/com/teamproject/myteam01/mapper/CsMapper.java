@@ -72,4 +72,13 @@ public interface CsMapper {
 	
 	//공지사항 상세 조회
 	public CsVO selectNoticeDetail(Long noticeNum);
+	
+//////////////////////////////////////////////
+	
+	// 1대1 문의 내역 조회 - 사용자별
+	public List<CsVO> selectUserInquiries(String userId);
+
+	// 건의사항 내역 조회 - 사용자별
+	public List<CsVO> selectUserFeedbacks(String userId);
+	
 }

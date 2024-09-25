@@ -52,7 +52,7 @@ public class MainPageController {
 		//행사 추천 타입 ex) 지역추천 , 무료추천
 		if(!eventList.isEmpty()) {
 			EventVO eRecoType = eventList.get(0);
-			model.addAttribute("eRecoType",eRecoType.getType());
+			model.addAttribute("eRecoType",eRecoType.getEtype());
 		}
 		
 		//식당 추천 타입 ex) 지역추천 , 무료추천

@@ -30,10 +30,10 @@
             <sec:authorize access="isAuthenticated()">
 	            <!-- 여행 메뉴 -->
 	            <li class="nav-item">
-	                <a href="#">여행</a>
+	                <a href="#">등록</a>
 	                <ul class="dropdown">
-	                    <li><a href="#">행사찾기</a></li>
-	                    <li><a href="#">행사등록</a></li>
+	                    <li><a href="/event/register">행사</a></li>
+	                    <li><a href="/restaurant/rest_register">음식점</a></li>
 	                </ul>
 	            </li>
 	            <!-- 운행 메뉴 -->
