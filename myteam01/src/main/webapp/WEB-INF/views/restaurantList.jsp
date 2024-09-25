@@ -224,7 +224,7 @@
     align-items: center;
     padding: 10px 20px; /* 패딩을 줄여서 내용이 위로 이동하도록 설정 */
     background-color: transparent; /* 상단 바 배경 제거 */
-    color: #ffffff;
+    color: #000;
     border-bottom: none; /* 흰색 줄 제거 */
     height: 60px; /* 헤더의 높이를 적절히 설정 */
     position: fixed; /* 헤더를 페이지 상단에 고정 */
@@ -246,7 +246,7 @@
 	}
 	
 	.header .nav a {
-	    color: #ffffff;
+	    color: #000;
 	    text-decoration: none;
 	    margin: 0 15px; /* 글자 사이 간격 조정 */
 	}
