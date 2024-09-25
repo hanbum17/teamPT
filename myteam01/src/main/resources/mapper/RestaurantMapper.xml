@@ -42,7 +42,16 @@
     </select> -->
     
     <select id="selectRestList" resultType="com.teamproject.myteam01.domain.RestaurantVO">
-    	SELECT FNO, FCATEGORY, FNAME, FADDRESS, UNO, FVIEWSCNT, FRATING, FXCOORD, FYCOORD, FTYPE
+    	SELECT 
+    		FNO, 
+	        FCATEGORY, 
+	        FNAME, 
+	        TRIM(REGEXP_REPLACE(REPLACE(FADDRESS, '서울특별시 ', ''), '\s*\([^)]*\)', '')) AS FADDRESS,  -- "(수유동)" 제거
+	        UNO, 
+	        FVIEWSCNT, 
+	        FRATING, 
+	        FXCOORD, 
+	        FYCOORD
 		FROM teampj.RESTAURANTS
 		ORDER BY FNO DESC
 		OFFSET #{offset} ROWS
@@ -58,10 +67,22 @@
 	</update>
 	
 	<select id="selectRestListByGuName" resultType="com.teamproject.myteam01.domain.RestaurantVO">
-	    SELECT *
-	    FROM restaurants
-	    WHERE faddress LIKE '%' || #{guName} || '%'
-	    ORDER BY FNO
+	    SELECT 
+	        FNO, 
+	        FCATEGORY, 
+	        FNAME, 
+	        TRIM(REGEXP_REPLACE(REPLACE(FADDRESS, '서울특별시 ', ''), '\s*\([^)]*\)', '')) AS FADDRESS,  -- "(수유동)" 제거
+	        UNO, 
+	        FVIEWSCNT, 
+	        FRATING, 
+	        FXCOORD, 
+	        FYCOORD
+	    FROM 
+	        restaurants
+	    WHERE 
+	        FADDRESS LIKE '%' || #{guName} || '%'
+	    ORDER BY 
+	        FNO
 	    OFFSET #{offset} ROWS
 	    FETCH NEXT #{pageSize} ROWS ONLY
 	</select>

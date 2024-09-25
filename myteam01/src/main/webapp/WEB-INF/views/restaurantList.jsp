@@ -47,20 +47,20 @@
         }
 
         .restaurant-card {
-            display: inline-block;
-            width: 200px;
-            height: 280px;
-            margin-right: 20px;
-            background-color: #f0f0f0;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            padding: 10px;
-            box-sizing: border-box;
-            cursor: pointer;
-            flex-shrink: 0;
-        }
-
+		    display: inline-block;
+		    width: 210px; /* 너비 */
+		    height: 290px; /* 높이 */
+		    margin-right: 20px;
+		    background-color: #f0f0f0;
+		    border-radius: 10px;
+		    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+		    text-align: center;
+		    padding: 10px;
+		    box-sizing: border-box;
+		    cursor: pointer;
+		    flex-shrink: 0;
+		    overflow: hidden; /* 넘치는 내용 숨기기 */
+		}
         .restaurant-card img {
             width: 100%;
             height: 60%;
@@ -69,19 +69,28 @@
         }
 
         .restaurant-info {
-            padding: 20px;
-        }
+		    padding: 20px;
+		    overflow: hidden; /* 넘치는 내용 숨기기 */
+		    text-overflow: ellipsis; /* 넘치는 텍스트를 '...'로 표시 */
+		    white-space: nowrap; /* 텍스트를 한 줄로 표시 */
+		}
 
         .restaurant-info h3 {
-            margin: 1px 0;
-            font-size: 18px;
-        }
+		    margin: 1px 0;
+		    font-size: 18px;
+		    word-break: break-word; /* 단어가 길 경우 줄바꿈 허용 */
+		    word-break: keep-all; /* 단어가 중간에 끊기지 않도록 설정 */s
+		    white-space: normal; /* 제목은 여러 줄로 표시 가능 */
+		}
 
         .restaurant-info p {
-            margin: 5px 0;
-            font-size: 14px;
-            color: #555;
-        }
+		    margin: 5px 0;
+		    font-size: 14px;
+		    color: #555;
+		    overflow: hidden; /* 넘치는 내용 숨기기 */
+		    text-overflow: ellipsis; /* 넘치는 텍스트를 '...'로 표시 */
+		    white-space: nowrap; /* 텍스트를 한 줄로 표시 */
+		}
 
         .panel {
             position: absolute;
@@ -241,6 +250,9 @@
 	    text-decoration: none;
 	    margin: 0 15px; /* 글자 사이 간격 조정 */
 	}
+	
+}
+	
 
     </style>
 </head>
@@ -284,8 +296,6 @@
 			            <h3>${restaurant.fname}</h3>
 			            <p>${restaurant.faddress}</p>
 			            <p>${restaurant.frating}</p>
-			            <p>${restaurant.fxcoord}</p>
-			            <p>${restaurant.fycoord}</p>
 			            
 			        </div>
 			    </div>
@@ -297,8 +307,8 @@
                 <img src="${contextPath}/images/bibimbab.jpg" alt="No Data Image">
                 <div class="restaurant-info">
                     <h3>No Restaurants Available</h3>
-                    <p>Location: N/A</p>
-                    <p>Rating: N/A</p>
+                    <p> N/A</p>
+                    <p>N/A</p>
                 </div>
             </div>
         </c:if>
@@ -456,8 +466,8 @@ document.addEventListener('DOMContentLoaded', () => {
             "<img src='" + contextPath + "/images/bibimbab.jpg' alt='" + restaurant.fname + " Image'>" +
             "<div class='restaurant-info'>" +
             "    <h3>" + restaurant.fname + "</h3>" +
-            "    <p>Location: " + restaurant.faddress + "</p>" +
-            "    <p>Rating: " + restaurant.frating + "</p>" +
+            "    <p>" + restaurant.faddress + "</p>" +
+            "    <p>" + restaurant.frating + "</p>" +
             "</div>";
 
         container.appendChild(restaurantCard);
