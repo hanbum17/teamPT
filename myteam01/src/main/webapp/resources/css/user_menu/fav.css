@@ -16,7 +16,8 @@
 }
 
 .add-list-btn {
-    padding: 10px 15px;
+    padding: 8px 16px;
+    margin-right:5px;
     background-color: #009fff;
     color: #fff;
     border: none;

@@ -3,7 +3,9 @@
     <%@ include file="./menu/nav.jsp"%>
     <%@ include file="./menu/footer.jsp"%>
 <c:set var="contextPath" value="${pageContext.request.contextPath }"/>
+
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -171,6 +173,9 @@
 
     </style>
 
+
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/csCenter/center.css">
+
 </head>
 <body>
 
@@ -238,7 +243,7 @@
     </div>
 
     <!-- FAQ Section -->
-    <div id="faq" class="section active">
+    <div id="faq" class="section">
         <div class="section-header">
             <h3>자주 묻는 질문 (FAQ)</h3>
             <button class="register-btn" onclick="location.href='${contextPath}/cs/register?type=faq'">FAQ 등록</button>
@@ -309,9 +314,11 @@
                         </tr>
                     </c:if>
                     <c:if test="${feeb.fbdelflag == 0}">
-                        <tr onclick="showDetail('feedback', '${feeb.fbno}', '${feeb.fbtitle}', '${feeb.fbRegDate}', '${feeb.fbcontent}')">
+                        <tr onclick="showDetail('feedback', '${feeb.fbno}', '${feeb.fbtitle}', '', '${feeb.fbcontent}', '', '${feeb.fbRegDate}', )">
                             <td><c:out value="${feeb.fbno}" /></td>
                             <td><c:out value="${feeb.fbtitle}" /></td>
+                            <td><fmt:formatDate pattern="yyyy/MM/dd" value="${feeb.fbRegDate}" />
+                            </td>
                         </tr>
                     </c:if>
                 </c:forEach>
@@ -321,8 +328,8 @@
 
         <!-- 고객의소리 상세정보 표시할 공간 -->
         <div id="feedback-detail" class="feedback-detail" style="display: none; margin-top: 20px;">
-
-            <table style="width: 100%; border-collapse: collapse;">
+			<h3>고객의 소리 상세보기</h3>
+            <table style="width: 100%; border-collapse: collapse; border: 1px solid #ddd;">
                 <tr>
                     <th style="width: 15%;">제목</th>
                     <td id="feedback-title"></td>
@@ -363,18 +370,10 @@
                         </tr>
                     </c:if>
                     <c:if test="${inq.idelflag == 0}">
-
-                        <tr>
-                            <td style="cursor: pointer;" onclick="showDetail('inquiry', '${inq.ino}', '${inq.ititle}', '${inq.icategory}', '${inq.icontent}', '${inq.iresponse}')">
-                                <c:out value="${inq.ino}" />
-                            </td>
-                            <td style="cursor: pointer;" onclick="showDetail('inquiry', '${inq.ino}', '${inq.ititle}', '${inq.icategory}', '${inq.icontent}', '${inq.iresponse}')">
-                                <c:out value="${inq.icategory}" />
-                            </td>
-                            <td style="cursor: pointer;" onclick="showDetail('inquiry', '${inq.ino}', '${inq.ititle}', '${inq.icategory}', '${inq.icontent}', '${inq.iresponse}')">
-                                <c:out value="${inq.ititle}" />
-                            </td>
-
+                        <tr onclick="showDetail('inquiry', '${inq.ino}', '${inq.ititle}', '${inq.icategory}', '${inq.icontent}', '${inq.iresponse}')">
+                            <td> <c:out value="${inq.ino}" /></td>
+                            <td> <c:out value="${inq.icategory}" /></td>
+                            <td> <c:out value="${inq.ititle}" /></td>
                         </tr>
                     </c:if>
                 </c:forEach>
@@ -410,10 +409,10 @@
 
 
 
-    <script>
+ <script>
     window.onload = function() {
         // 페이지가 처음 로드될 때 FAQ 섹션만 보이도록 설정
-        showSection('faq');
+        showSection('notice');
     };
     
 
@@ -449,9 +448,9 @@
                 detailSection = document.getElementById('faq-detail');
                 detailSection.style.display = 'block';
 
-                document.getElementById('faq-title').innerText = title;
-                document.getElementById('faq-category').innerText = category;
-                document.getElementById('faq-content').innerHTML = content.replace(/\n/g, '<br>');
+                document.getElementById('faq-title').innerText = decodeURIComponent(title);
+                document.getElementById('faq-category').innerText = decodeURIComponent(category);
+                document.getElementById('faq-content').innerHTML = decodeURIComponent(content).replace(/\n/g, '<br>');
 
                 document.querySelector('.edit-btn').setAttribute('data-faqno', no);
                 document.querySelector('.delete-btn').setAttribute('data-faqno', no);
@@ -460,10 +459,10 @@
                 detailSection = document.getElementById('inquiry-detail');
                 detailSection.style.display = 'block';
 
-                document.getElementById('inquiry-title').innerText = title;
-                document.getElementById('inquiry-category').innerText = category;
-                document.getElementById('inquiry-content').innerHTML = content.replace(/\n/g, '<br>');
-                document.getElementById('inquiry-response').innerHTML = response.replace(/\n/g, '<br>');
+                document.getElementById('inquiry-title').innerText = decodeURIComponent(title);
+                document.getElementById('inquiry-category').innerText = decodeURIComponent(category);
+                document.getElementById('inquiry-content').innerHTML = decodeURIComponent(content).replace(/\n/g, '<br>');
+                document.getElementById('inquiry-response').innerHTML = decodeURIComponent(response).replace(/\n/g, '<br>');
                 
                 document.querySelector('.edit-btn').setAttribute('data-ino', no);
                 document.querySelector('.delete-btn').setAttribute('data-ino', no);
@@ -472,10 +471,9 @@
                 detailSection = document.getElementById('feedback-detail');
                 detailSection.style.display = 'block';
 
-                document.getElementById('feedback-title').innerText = title;
-                document.getElementById('feedback-regdate').innerText = regdate; 
-               
-                document.getElementById('feedback-content').innerHTML = content.replace(/\n/g, '<br>');
+                document.getElementById('feedback-title').innerText = decodeURIComponent(title);
+                document.getElementById('feedback-regdate').innerText = decodeURIComponent(regdate);
+                document.getElementById('feedback-content').innerHTML = decodeURIComponent(content).replace(/\n/g, '<br>');
 
                 document.querySelector('.edit-btn').setAttribute('data-fbno', no);
                 document.querySelector('.delete-btn').setAttribute('data-fbno', no);
@@ -523,39 +521,89 @@
             }
         }
 
-        
 
-        function confirmDelete(type, no) {
+
+        function confirmDelete(type) {
+            var faqno = document.querySelector('.delete-btn').getAttribute('data-faqno');
+            var ino = document.querySelector('.delete-btn').getAttribute('data-ino');
+            var fbno = document.querySelector('.delete-btn').getAttribute('data-fbno');
+            
             if (confirm("정말로 삭제하시겠습니까?")) {
-                // 컨트롤러로 바로 POST 요청 보내기
-                fetch(`${contextPath}/cs/deleteProc`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                    },
-                    body: new URLSearchParams({
-                        type: type,
-                        no: no
+                let deleteUrl = `${contextPath}/cs/deleteProc`;
+
+                if (faqno) {
+                    fetch(deleteUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: new URLSearchParams({
+                            type: 'faq',
+                            no: faqno
+                        })
                     })
-                })
-                .then(response => {
-                    if (response.ok) {
-                        alert("삭제되었습니다.");
-                        location.reload();  // 페이지 새로고침으로 목록 갱신
-                    } else {
+                    .then(response => {
+                        if (response.ok) {
+                            alert("삭제되었습니다.");
+                            location.reload();
+                        } else {
+                            alert("삭제에 실패했습니다.");
+                        }
+                    })
+                    .catch(error => {
+                        console.error("FAQ 삭제 중 오류 발생:", error);
                         alert("삭제에 실패했습니다.");
-                    }
-                })
-                .catch(error => {
-                    console.error("삭제 요청 중 오류 발생:", error);
-                    alert("삭제 요청 중 오류가 발생했습니다.");
-                });
+                    });
+                } else if (ino) {
+                    fetch(deleteUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: new URLSearchParams({
+                            type: 'inquiry',
+                            no: ino
+                        })
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            alert("삭제되었습니다.");
+                            location.reload();
+                        } else {
+                            alert("삭제에 실패했습니다.");
+                        }
+                    })
+                    .catch(error => {
+                        console.error("1:1 문의 삭제 중 오류 발생:", error);
+                        alert("삭제에 실패했습니다.");
+                    });
+                } else if (fbno) {
+                    fetch(deleteUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: new URLSearchParams({
+                            type: 'feedback',
+                            no: fbno
+                        })
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            alert("삭제되었습니다.");
+                            location.reload();
+                        } else {
+                            alert("삭제에 실패했습니다.");
+                        }
+                    })
+                    .catch(error => {
+                        console.error("고객의 소리 삭제 중 오류 발생:", error);
+                        alert("삭제에 실패했습니다.");
+                    });
+                }
             }
         }
-    </script>
 
-   
-
-
+</script>
 </body>
 </html>

@@ -116,7 +116,7 @@ public class UserService {
         for (UserActivityVO recomend : recomendList) {
             if (recomend.getEno() != null && recomend.getEno() != 0L) { // 조건 수정
                 EventVO event = eventMapper.eventDetail(recomend.getEno());
-                event.setType(recomend.getType());
+                event.setEtype(recomend.getType());
                 if (event != null) {
                     eventList.add(event); // 이벤트를 리스트에 추가
                 }

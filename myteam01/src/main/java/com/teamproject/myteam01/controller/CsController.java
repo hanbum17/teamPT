@@ -105,12 +105,15 @@ package com.teamproject.myteam01.controller;
 
 import java.util.List;
 
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.teamproject.myteam01.domain.CsVO;
 import com.teamproject.myteam01.service.CsService;
@@ -142,20 +145,26 @@ public class CsController {
         return "CsRegister";
     }
 
+ // 문의/건의사항 등록 처리
     @PostMapping("/registerProc")
-    public String regiFAQ(@RequestParam(value = "type") String type, CsVO csvo) {
-    	
-    	System.out.println(type);
-    	
+
+    public String regiFAQ(@RequestParam(value = "type") String type, CsVO csvo, @AuthenticationPrincipal UserDetails userDetails, RedirectAttributes redirectAttributes) {
+        String userId = userDetails.getUsername(); // 로그인된 사용자의 ID 가져오기
+        csvo.setUserid(userId); // 문의나 건의사항에 USERID 추가
+
+
         if ("faq".equals(type)) {
             csService.regiFAQ(csvo);
         } else if ("feedback".equals(type)) {
-            csService.regiFB(csvo); // 고객의 소리 등록 메서드
+            csService.regiFB(csvo); // 고객의 소리 등록
         } else if ("inquiry".equals(type)) {
             csService.regiIn(csvo); // 1:1 문의 등록 메서드
         } else if ("notice".equals(type)) {
         	csService.regNotice(csvo);
+
         }
+        
+        redirectAttributes.addFlashAttribute("message", "등록이 성공적으로 완료되었습니다.");
         return "redirect:/cs/Center";
     }
 
@@ -205,6 +214,9 @@ public class CsController {
         return "redirect:/cs/Center"; // 기본 리다이렉트 (예외 처리)
     }
 
+
+
+
     @PostMapping("/deleteProc")
     public String deleteProc(@RequestParam("type") String type, @RequestParam("no") Long no) {
         boolean success = false;
@@ -222,6 +234,9 @@ public class CsController {
         } else {
             return "failure";  // 실패하면 failure 반환
         }
+
+        return "redirect:/cs/Center"; // 삭제 후 리다이렉트
+
     }
     
     

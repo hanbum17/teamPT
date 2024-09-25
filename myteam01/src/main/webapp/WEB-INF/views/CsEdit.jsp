@@ -1,12 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib uri="jakarta.tags.core" prefix="c" %>
+<%@ include file="./menu/nav.jsp"%>
+<%@ include file="./menu/footer.jsp"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>고객센터 수정 페이지</title>
 <style>
-/* 스타일은 기존과 동일 */
 body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
@@ -132,11 +132,6 @@ label {
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 
-/*     $("#frmEdit").on("submit", function(event) {
-        if (!checkFormValues()) {
-            event.preventDefault(); // 제출 방지
-        }
-    }); */
     
     $("#frmEdit").on("submit", function(event) {
         // 섹션별로 보여지는 필드의 required 속성을 설정
