@@ -343,9 +343,9 @@ function setMarker(lng, lat) {
     map.setCenter(new kakao.maps.LatLng(lat, lng));
 
     // 디버깅 로그 추가
-    console.log('setMarker 함수: lat ' + lat + ', lng ' + lng);
-    console.log('지도 중심:', map.getCenter());
-    console.log('마커 배열:', markers);
+    //console.log('setMarker 함수: lat ' + lat + ', lng ' + lng);
+    //console.log('지도 중심:', map.getCenter());
+    //console.log('마커 배열:', markers);
 }
 
 
@@ -359,7 +359,7 @@ function addMouseOverListenerToCards() {
 
             if (!isNaN(lat) && !isNaN(lng)) {
                 setMarker(lat, lng);
-                console.log('Mouse over at card: Latitude ' + lat + ', Longitude ' + lng);
+                //console.log('Mouse over at card: Latitude ' + lat + ', Longitude ' + lng);
             } else {
                 console.error('Invalid lat or lng values:', lat, lng);
             }
@@ -413,7 +413,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function loadMoreRestaurants() {
         if (isLoading) return;
         isLoading = true;
-
+		
         fetch(contextPath + "/api/restaurant?page=" + restPage + "&pageSize=" + restPageSize)
             .then(response => {
                 if (!response.ok) {
@@ -432,6 +432,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.error('Error fetching data:', error);
                 isLoading = false;
             });
+        
 
     }
     
@@ -442,7 +443,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
  function appendRestaurants(restaurants) {
     restaurants.forEach(restaurant => {
-    	console.log('Restaurant Data:', restaurant.fxcoord, restaurant.fycoord);
+    	//console.log('Restaurant Data:', restaurant.fxcoord, restaurant.fycoord);
     	
         const restaurantCard = document.createElement('div');
         restaurantCard.className = 'restaurant-card'; // 스타일 적용
