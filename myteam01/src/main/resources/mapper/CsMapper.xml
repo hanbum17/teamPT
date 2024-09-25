@@ -51,13 +51,13 @@
     </select>
 
     <!-- Inquiry 등록 -->
-    <insert id="registerINQ" parameterType="com.teamproject.myteam01.domain.CsVO">
-        <selectKey keyProperty="ino" order="BEFORE" resultType="Long">
-            SELECT teampj.seq_INQUIRY.nextval FROM dual
-        </selectKey>
-        INSERT INTO teampj.INQUIRY (INO, ICATEGORY, ITITLE, ICONTENT, IREGDATE, IDELFLAG, IRESPONSE)
-        VALUES (#{ino}, #{icategory}, #{ititle}, #{icontent}, DEFAULT, 0, '빠른 확인 후 답변드리겠습니다.')
-    </insert>
+	<insert id="registerINQ" parameterType="com.teamproject.myteam01.domain.CsVO">
+	    <selectKey keyProperty="ino" order="BEFORE" resultType="Long">
+	        SELECT seq_INQUIRY.nextval FROM dual
+	    </selectKey>
+	    INSERT INTO INQUIRY (INO, ICATEGORY, ITITLE, ICONTENT, IREGDATE, IDELFLAG, IRESPONSE, USERID)
+	    VALUES (#{ino}, #{icategory}, #{ititle}, #{icontent}, DEFAULT, 0, '빠른 확인 후 답변드리겠습니다.', #{userid})
+	</insert>
 
     <!-- Inquiry 조회 -->
     <select id="selectINQ" resultType="com.teamproject.myteam01.domain.CsVO">
@@ -135,6 +135,17 @@
 	<select id="selectNoticeDetail" resultType="com.teamproject.myteam01.domain.CsVO">
 		SELECT * FROM notice WHERE #{notice_num}
 	</select>
+	
+	
+	<!-- 1대1 문의 내역 조회 -->
+    <select id="selectUserInquiries" parameterType="String" resultType="com.teamproject.myteam01.domain.CsVO">
+        SELECT INO, ICATEGORY, ITITLE, ICONTENT, IREGDATE, IRESPONSE
+        FROM INQUIRY
+        WHERE USERID = #{userId} AND IDELFLAG = 0
+        ORDER BY IREGDATE DESC
+    </select>
+
+
 
 
 </mapper>

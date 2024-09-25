@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib uri="jakarta.tags.core" prefix="c" %>
+
+    <%@ include file="./menu/nav.jsp"%>
+    <%@ include file="./menu/footer.jsp"%>
 <c:set var="contextPath" value="${pageContext.request.contextPath }"/>
 <!DOCTYPE html>
 <html lang="ko">
@@ -12,120 +14,11 @@
         var contextPath = "${contextPath}"; // contextPath 변수 설정
         console.log("Context Path: " + contextPath); // 로그로 확인
     </script>
-
-    <style>
-        body {
-            background-color: #f0f2f5; /* 부드러운 배경색 */
-            font-family: 'Helvetica Neue', Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-        .container {
-            width: 50%;
-            margin: 50px auto;
-            background-color: #ffffff; /* 흰색 배경 */
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-        .page-header {
-            margin-bottom: 30px;
-            color: #333; /* 헤더 색상 */
-            text-align: center;
-            font-size: 24px;
-        }
-        .form-group {
-            margin-bottom: 20px;
-        }
-        .form-group label {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 8px;
-            color: #555;
-        }
-        .form-control {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            background-color: #f9f9f9; /* 입력 필드 배경색 */
-            color: #333;
-            font-size: 16px;
-            box-sizing: border-box; /* 박스 사이징 수정 */
-        }
-        .btn {
-            display: block;
-            width: 100%;
-            padding: 12px;
-            border: none;
-            border-radius: 5px;
-            background-color: #f7a14a; /* 버튼 배경색 */
-            color: #fff;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        .btn:hover {
-            background-color: #218838; /* 버튼 호버 색상 */
-        }
-        .radio-group {
-            display: flex;
-            justify-content: flex-start; /* 왼쪽 정렬 */
-            margin-top: 10px;
-        }
-        .radio-group label {
-            font-weight: normal;
-            color: #555;
-            margin-right: 20px; /* 라디오 버튼 간격 */
-        }
-        .fileUploadResult ul {
-            list-style-type: none;
-            padding: 0;
-            margin: 0;
-            color: #555;
-        }
-
-        /* 파일 첨부 버튼 스타일 */
-        .fileInput {
-            display: none; /* 파일 입력 필드 숨기기 */
-        }
-
-        .custom-file-upload {
-            display: inline-block;
-            padding: 10px 20px;
-            cursor: pointer;
-            border: 1px solid #ccc; /* 테두리 색상 */
-            border-radius: 5px;
-            background-color: #d3d3d3; /* 회색 배경색 */
-            color: black; /* 텍스트 색상 */
-            transition: background-color 0.3s;
-            margin-top: 10px;
-        }
-
-        .custom-file-upload:hover {
-            background-color: #a9a9a9; /* 호버 시 색상 (어두운 회색) */
-        }
-        .custom-delete {
-            color: red;
-            cursor: pointer;
-            margin-left: 10px;
-            font-weight: bold;
-            text-decoration: underline; /* 밑줄 추가 */
-        }
-        .custom-delete:hover {
-            color: darkred; /* 호버 시 색상 변경 */
-        }
-
-        #map {
-            width: 100%;
-            height: 350px;
-            margin-top: 20px;
-        }
-    </style>
+	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/restaurant/rest_register.css">
 </head>
 <body>
     <div class="container">
-        <h4 class="page-header">식당 등록</h4>
+        <h4 class="page-header">음식점 등록</h4>
         <form role="form" action="${contextPath}/restaurant/rest_register" method="post" id="frmRegister" enctype="multipart/form-data">
             <div class="form-group">
                 <label for="fcategory">카테고리</label>
@@ -143,6 +36,8 @@
                 <label for="frating">별점</label>
                 <input type="number" class="form-control" id="frating" name="frating" placeholder="별점을 입력하세요 (0-5)" min="0" max="5" step="0.1">
             </div>
+            <div id="map"></div>
+    		<p><em>핀을 클릭하여 위치를 조정하세요.</em></p>
             <div class="form-group">
                 <label for="fxcoord">x좌표</label>
 
@@ -177,8 +72,7 @@
             <button type="button" class="btn" id="btnRegister">등록</button>
         </form>
     </div>
-    <div id="map"></div>
-    <p><em>핀을 클릭하여 위치를 조정하세요.</em></p>
+    
 
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=fe9306b4adbbf3249d28d6b7a2c37c0a&libraries=services"></script>
     <script>

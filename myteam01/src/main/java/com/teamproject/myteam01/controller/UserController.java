@@ -1,7 +1,9 @@
 package com.teamproject.myteam01.controller;
 
+import com.teamproject.myteam01.domain.CsVO;
 import com.teamproject.myteam01.domain.TripPlanVO;
 import com.teamproject.myteam01.domain.UserVO;
+import com.teamproject.myteam01.service.CsService;
 import com.teamproject.myteam01.service.TripService;
 import com.teamproject.myteam01.service.UserRegistrationService;
 import com.teamproject.myteam01.service.UserService;
@@ -31,6 +33,11 @@ public class UserController {
     
     @Autowired
     private TripService tripService;
+    
+    @Autowired
+    private CsService csService;
+    
+    
 
     @GetMapping("/user/registerSelect")
     public String showRegisterSelectPage() {
@@ -173,8 +180,16 @@ public class UserController {
 
     // 문의 내역 페이지로 이동
     @GetMapping("/user/user_inquiry")
-    public String userInquiryPage() {
-        return "user_main/user_menu/user_inquiry";
+    public String userInquiryPage(@AuthenticationPrincipal UserDetails userDetails, Model model) {
+        String userId = userDetails.getUsername();
+        
+        // 1대1 문의 내역 조회
+        List<CsVO> inquiries = csService.getUserInquiries(userId);
+        model.addAttribute("inquiries", inquiries);
+        
+
+        
+        return "user_main/user_menu/user_inquiry";  // 1대1 문의 및 건의사항 페이지로 이동
     }
 
     // 비지니스 - 등록된 사업 정보 페이지로 이동 (ADMIN, BUSINESS 권한만)

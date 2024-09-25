@@ -152,5 +152,15 @@ public class CsServiceImpl implements CsService{
 		return csMapper.selectNoticeDetail(num);
 	}
 	
+////////////////////////////////////////////////////////////////
+	
+	@Override
+    public List<CsVO> getUserInquiries(String userId) {
+        return csMapper.selectUserInquiries(userId);
+    }
+
+
+
+    
 	
 }

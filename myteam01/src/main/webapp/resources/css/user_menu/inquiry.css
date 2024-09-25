@@ -1,1 +1,84 @@
-@charset "UTF-8";
+.content-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fff;
+    margin-bottom: 20px;
+}
+
+
+.register-btn {
+	padding: 8px 16px;
+    margin-right:5px;
+    background-color: #009fff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+
+    .content-container {
+        display: flex;
+        flex-direction: column; /* 위아래 배치 */
+        justify-content: space-between;
+        height: 88%; /* 전체 높이를 차지 */
+    }
+
+    /* 테이블 영역 스타일 */
+    .table-container {
+        flex: 1;
+        overflow-y: auto;
+    }
+
+    .table-container table {
+        width: 100%;
+        
+        border-collapse: collapse;
+        background-color: #fff;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      
+    }
+
+    .table-container th, .table-container td {
+        padding: 10px;
+        text-align: center;
+        border: 1px solid #ddd;
+    }
+
+    .table-container th {
+        background-color: #00a2ff;
+        color: white;
+    }
+
+    .table-container tr:hover {
+        background-color: #e6f7ff;
+        cursor: pointer;
+    }
+
+    /* 답변 박스 스타일 */
+    .response-box {
+        flex: 1;
+        background-color: #d4edda;
+
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        display: none; /* 기본적으로 숨김 */
+        overflow-y: auto;
+    }
+
+    .response-box h4 {
+        font-size: 18px;
+        margin-bottom: 10px;
+        color: #155724;
+    }
+
+    .response-box p {
+        font-size: 16px;
+        color: #333;
+        white-space: pre-wrap;
+    }
+    
+    
+    
