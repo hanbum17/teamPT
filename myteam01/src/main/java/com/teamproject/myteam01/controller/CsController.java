@@ -103,9 +103,10 @@
 
 package com.teamproject.myteam01.controller;
 
+import java.util.List;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -115,7 +116,6 @@ import com.teamproject.myteam01.domain.CsVO;
 import com.teamproject.myteam01.service.CsService;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 
 @Controller
@@ -128,6 +128,7 @@ public class CsController {
 
     @GetMapping("/Center")
     public String csList(Model model) {
+    	model.addAttribute("notice",csService.getNoticeList()); //공지사항 목록
         model.addAttribute("CsList", csService.csList()); // FAQ 목록
         model.addAttribute("feedbackList", csService.csFBList()); // 고객의 소리 목록
         model.addAttribute("inquiryList", csService.csInList()); // 1:1 문의 내역 목록
@@ -215,5 +216,29 @@ public class CsController {
             return "failure";  // 실패하면 failure 반환
         }
     }
+    
+    
+    /////////////////////////////////
+    
+    @PostMapping("/register/notice")
+    public void regiNotice (@RequestParam("notice_title") String nctitle,
+    						@RequestParam("notice_content") String nccontent) {
+    	CsVO cs = new CsVO();
+    	cs.setNotice_title(nctitle);
+    	cs.setNotice_content(nccontent);
+    	csService.regNotice(cs);
+    }
+    
+    @GetMapping("/get/notice/detail")
+    public List<CsVO> getNoiceList(){
+    	return null;
+    }
+    
+    @GetMapping("/get/notice/list")
+    public CsVO geNoticeDetail(@RequestParam("nno") Long nno) {
+        return csService.getNoticeDetail(nno);
+    }
+    
+    
 }
 

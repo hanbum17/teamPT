@@ -132,4 +132,25 @@ public class CsServiceImpl implements CsService{
 		
 	}
 	
+/////////////////////////////////////////////////////////////
+	
+	//공지사항 등록
+	@Override
+	public void regNotice(CsVO notice) {
+		csMapper.insertNotice(notice);
+	}
+	
+	//공지사항 목록조회
+	@Override
+	public List<CsVO> getNoticeList(){
+		return csMapper.selectNoticeList();
+	}
+	
+	//공지사항 상세조회
+	@Override
+	public CsVO getNoticeDetail(Long num) {
+		return csMapper.selectNoticeDetail(num);
+	}
+	
+	
 }

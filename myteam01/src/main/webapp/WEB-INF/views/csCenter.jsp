@@ -176,11 +176,43 @@
 
     <!-- Section Buttons -->
     <div class="btn-container">
+    	<button class="btnNotice" onclick="showSection('notice')">공지사항</button>
+        <button class="btnCsEvent" onclick="showSection('csevent')">이벤트</button>
         <button class="btnFAQ" onclick="showSection('faq')">자주 묻는 질문(FAQ)</button>
         <button class="btnFeedback" onclick="showSection('feedback')">고객의 소리(건의사항)</button>
         <button class="btnInquiry" onclick="showSection('inquiry')">1:1 문의</button>
     </div>
 
+	<!-- Notice Section -->
+    <div id="Notice" class="section active">
+        <div class="section-header">
+            <h3>공지사항</h3>
+            <button class="register-btn" onclick="location.href='${contextPath}/cs/register?type=notice'">공지사항 등록</button>
+        </div>
+        <div class="table-container">
+            <table>
+                <tr>
+                    <th>제목</th>
+                    <th>등록일</th>
+                </tr>
+                <c:forEach items="${notice}" var="nc">
+                    <c:if test="${nc.notice_delflag == 1}">
+                        <tr>
+                            <td><c:out value="${nc.notice_num}" /></td>
+                            <td colspan="2"><em>삭제된 게시글입니다.</em></td>
+                        </tr>
+                    </c:if>
+                    <c:if test="${nc.notice_delflag == 0}">
+                        <tr onclick="showDetail('notice', '${nc.notice_num}', '${nc.notice_title}', '${nc.notice_content}', '${nc.notice_moddate}')">
+                            <td><c:out value="${nc.notice_title}" /></td>
+                            <td><c:out value="${nc.notice_moddate}" /></td>
+                        </tr>
+                    </c:if>
+                </c:forEach>
+            </table>
+        </div>
+	</div>
+	
     <!-- FAQ Section -->
     <div id="faq" class="section active">
         <div class="section-header">

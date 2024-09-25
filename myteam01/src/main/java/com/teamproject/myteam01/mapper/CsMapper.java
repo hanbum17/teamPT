@@ -62,7 +62,14 @@ public interface CsMapper {
 	
 
 	
+///////////////////////////////////////////
 	
+	//공지사항 등록
+	public void insertNotice(CsVO cs);
 	
+	//공지사항 목록 조회
+	public List<CsVO> selectNoticeList();
 	
+	//공지사항 상세 조회
+	public CsVO selectNoticeDetail(Long noticeNum);
 }
