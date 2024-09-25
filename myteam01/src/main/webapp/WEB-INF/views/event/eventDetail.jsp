@@ -315,7 +315,7 @@ function closeOverlay() {
 	                    Swal.fire({
 	                        title: '즐겨찾기 목록 선택',
 	                        html: 
-	                            "<label>즐겨찾기 목록 : </label>" +
+	                            "<label>즐겨찾기 목록:</label>" +
 	                            "<select id='favoriteListSelect' class='swal2-input'>" +
 	                            optionsHtml +
 	                            "</select>" +
@@ -356,27 +356,26 @@ function closeOverlay() {
 
 
 	                    $(document).on('click', '#addNewListBtn', function() {
-	                    	Swal.fire({
-	                    	    title: '새 즐겨찾기 목록 추가',
-	                    	    html: 
-	                    	        '<input type="text" id="newListName" class="swal2-input" placeholder="목록 이름" required>' +
-	                    	        '<div style="display: flex; flex-direction: column; align-items: center;">' +
-	                    	        '<label for="listColor" style="margin-top: 10px;">목록 색상:</label>' +
-	                    	        '<input type="color" id="listColor" class="swal2-input" style="width: 280px; margin-top: 5px;" value="#007bff">' +
-	                    	        '</div>',
-	                    	    confirmButtonText: '추가',
-	                    	    showCancelButton: true,
-	                    	    preConfirm: () => {
-	                    	        const newListName = Swal.getPopup().querySelector('#newListName').value;
-	                    	        const listColor = Swal.getPopup().querySelector('#listColor').value;
+	                        Swal.fire({
+	                            title: '새 즐겨찾기 목록 추가',
+	                            html: `
+	                                <input type="text" id="newListName" class="swal2-input" placeholder="목록 이름" required>
+	                                <label for="listColor">목록 색상:</label>
+	                                <input type="color" id="listColor" class="swal2-input" value="#007bff">
+	                            `,
+	                            confirmButtonText: '추가',
+	                            showCancelButton: true,
+	                            preConfirm: () => {
+	                                const newListName = Swal.getPopup().querySelector('#newListName').value;
+	                                const listColor = Swal.getPopup().querySelector('#listColor').value;
+	                                
+	                                if (!newListName || !listColor) {
+	                                    Swal.showValidationMessage('목록 이름과 색상을 입력해주세요.');
+	                                }
 
-	                    	        if (!newListName || !listColor) {
-	                    	            Swal.showValidationMessage('목록 이름과 색상을 입력해주세요.');
-	                    	        }
-
-	                    	        return { newListName, listColor };
-	                    	    }
-	                    	}).then((result) => {
+	                                return { newListName, listColor };
+	                            }
+	                        }).then((result) => {
 	                            if (result.isConfirmed) {
 	                                const { newListName, listColor } = result.value;
 

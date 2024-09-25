@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<%@ include file="./menu/nav.jsp"%>
     <meta charset="UTF-8">
     <title>Restaurant Detail</title>
     <style>

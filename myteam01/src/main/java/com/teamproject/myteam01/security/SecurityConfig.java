@@ -39,9 +39,8 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(authz -> authz
-            	.requestMatchers("/css/**", "/js/**", "/image/**", "/json/**").permitAll() 
-            	.requestMatchers("/WEB-INF/views/vroom/**", "/WEB-INF/views/**").permitAll() 
-                .requestMatchers("/vroom/**", "user/**", "/resources/**", "/images/**").permitAll()
+
+                .requestMatchers("/resources/**", "/images/**").permitAll()
                 .requestMatchers("/WEB-INF/views/user/login.jsp", "/WEB-INF/views/user/register.jsp", "/WEB-INF/views/user/registerSelect.jsp").anonymous()
                 .requestMatchers("/admin_main/**").hasRole("ADMIN")
                 .anyRequest().authenticated()

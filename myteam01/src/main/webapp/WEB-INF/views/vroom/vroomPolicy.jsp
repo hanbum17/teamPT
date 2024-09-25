@@ -1,49 +1,78 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<<<<<<< HEAD
 
     <%@ include file="../menu/nav.jsp"%>
 	<%@ include file="../menu/footer.jsp"%>
 	<link rel="stylesheet" type="text/css" href="/css/vroomPolicy.css"> 
 <c:set var="contextPath" value="${pageContext.request.contextPath }"/>
+=======
+>>>>>>> parent of a63d1f5 (Merge branch 'bobo's0923')
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
     <title>Vroom Policy</title>
+<<<<<<< HEAD
 
+=======
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        h1 { color: #333; font-size: 24px; }
+        h2 { color: #555; }
+        p { line-height: 1.5; }
+        .section { display: none; }
+        .menu { margin-bottom: 20px; }
+        .menu a {
+            margin-right: 20px;
+            cursor: pointer;
+            text-decoration: none;
+            color: #007BFF;
+        }
+        .menu a:hover {
+            text-decoration: underline;
+        }
+        .divider { border-top: 1px solid #ccc; margin: 10px 0; }
+    </style>
+>>>>>>> parent of a63d1f5 (Merge branch 'bobo's0923')
     <script>
         function showSection(sectionId) {
-            // 모든 섹션을 숨김
+            // 모든 섹션 숨기기
             var sections = document.querySelectorAll('.section');
-            sections.forEach(function (section) {
-                section.classList.remove('active');
+            sections.forEach(function(section) {
+                section.style.display = 'none';
             });
-
-            // 선택된 섹션을 보여줌
-            var targetSection = document.getElementById(sectionId);
-            targetSection.classList.add('active');
+            // 선택된 섹션 표시
+            document.getElementById(sectionId).style.display = 'block';
         }
-
-        window.onload = function () {
-            var sectionFromServer = '<%= request.getParameter("section") != null ? request.getParameter("section") : "terms" %>';
-            showSection(sectionFromServer);
+        
+        
+        // URL의 쿼리 파라미터에서 'section' 값을 가져옵니다.
+        <%String section = request.getParameter("section");%>
+     	// 페이지 로드 시 URL 파라미터를 확인하여 해당 섹션을 표시합니다.
+        window.onload = function() {
+            <% if (section != null) { %>
+                showSection("<%= section %>");
+            <% } else { %>
+                showSection('terms'); // 기본 섹션
+            <% } %>
         };
     </script>
 </head>
 <body>
-    <div class="container">
-        <h1 class="title">Vroom_정책</h1>
-
-        <div class="menu">
-            <a href="javascript:void(0);" onclick="showSection('terms')">이용약관</a>
-            <a href="javascript:void(0);" onclick="showSection('privacy')">개인정보 취급방침</a>
-            <a href="javascript:void(0);" onclick="showSection('cookiePolicy')">쿠키 정책</a>
-            <a href="javascript:void(0);" onclick="showSection('youthUsagePolicy')">청소년 보호정책</a>
-            <a href="javascript:void(0);" onclick="showSection('sitePolicy')">사이트 운영 방식</a>
-        </div>
-
-        <div class="section" id="terms">
-            <h2>이용약관</h2>
+    <h1>Vroom_정책</h1>
+    <h2>Vroom 약관 및 개인정보 보호</h2>
+    <div class="divider"></div>
+    
+    <div class="menu">
+        <a href="javascript:void(0);" onclick="showSection('terms')">이용약관</a>
+        <a href="javascript:void(0);" onclick="showSection('privacy')">개인정보 취급방침</a>
+        <a href="javascript:void(0);" onclick="showSection('cookiePolicy')">쿠키 정책</a>
+        <a href="javascript:void(0);" onclick="showSection('youthUsagePolicy')">청소년 보호정책</a>
+        <a href="javascript:void(0);" onclick="showSection('sitePolicy')">사이트 운영 방식</a>
+    </div>
+	<%--이용약관 --%>
+    <div class="section" id="terms">
+        <h2>이용약관</h2>
         
 	        <h3>제 1조 [목 적]</h3>
 	        	<p>본 약관은 대전천변도시고속화도로(이하 "회사"라 합니다.)가 제공하는 대전천변도시고속화도로 홈페이지 서비스(이하 "서비스”라 합니다.)를 이용함에 있어 이용 조건 및 절차에 관한 기본적인 사항을 규정하는 것을 목적으로 합니다.</p>
@@ -138,10 +167,10 @@
 	        	<br>
 	        <h3>[부칙]제 1 조 [시행일]</h3>
 	        <h3>이 약관은 2024년 9월 20일부터 시행합니다.</h3>
-        </div>
-
-        <div class="section" id="privacy">
-            <h2>개인정보 취급방침</h2>
+    </div>
+	<%-- 개인정보 취급방침 --%>
+	<div class="section" id="privacy">
+		<h2>개인정보 취급방침</h2>
 		        <p>
 		        	Vroom 개인정보 처리방침.
 		        </p>
@@ -193,10 +222,10 @@
 				   <br>- 보안, 프라이버시, 안전 측면에서 이용자가 안심하고 이용할 수 있는 서비스 이용환경 구축을 위해 개인정보를 이용합니다.
 				</p>
 				<h4>Vroom는 수집한 개인정보를 특정 개인을 알아볼 수 없도록 가명처리하여 통계작성, 과학적 연구, 공익적 기록 보존 등을 위하여 처리할 수 있습니다. 이 때 가명정보는 재식별되지 않도록 추가정보와 분리하여 별도 저장·관리하고 필요한 기술적·관리적 보호조치를 취합니다</h4>
-        </div>
-
-        <div class="section" id="cookiePolicy">
-            <h2>쿠키 정책</h2>
+	</div>
+	<%-- 쿠키정책 --%>
+    <div class="section" id="cookiePolicy">
+        <h2>쿠키 정책</h2>
 	        <p>
 	        	이 쿠키 정책(“쿠키 정책“, “정책“)은 각 관련 웹사이트에 명시된 대로 AMETEK, Inc. 또는 그 계열사(“우리“, “당사“, “당사의”)에서 운영하고 이 쿠키 정책이 연결된 모든 웹사이트(“웹사이트“, “서비스“)에서 제공되는 쿠키에 적용됩니다.
 	        </p>
@@ -233,10 +262,10 @@
         			꼭 필요한 쿠키를 제외하고 쿠키 기본 설정 센터를 통해 쿠키 기본 설정을 관리할 수 있습니다. 쿠키 기본 설정 센터는 쿠키 허용에 대한 기본 설정을 기록합니다. 쿠키 기본 설정 센터는 당사 웹사이트를 방문할 때 설정되는 타겟팅 쿠키, 기능 쿠키 및 성능 쿠키를 구체적으로 제어합니다. 꼭 필요한 쿠키는 비활성화할 수 없으며 이 도구를 사용하여 당사 웹사이트에서 액세스할 수 있는 제3자 웹사이트의 쿠키를 차단할 수도 없습니다.
 					<br><br>귀하는 언제든지 쿠키 기본 설정 센터에 액세스할 수 있습니다. 첫 방문 시, “내 쿠키 기본 설정 관리” 버튼을 클릭하면 제공되는 대화 상자에서 쿠키 기본 설정 센터에 액세스할 수 있습니다. 이후에는 화면의 하단 왼쪽 모서리에 있는 쿠키 아이콘을 클릭해서 쿠키 기본 설정 센터에 액세스할 수 있습니다.
         		</p>
-        </div>
-
-        <div class="section" id="youthUsagePolicy">
-            <h3>청소년보호정책</h3>
+    </div>
+	<%-- 청소년보호정책 --%>
+    <div class="section" id="youthUsagePolicy">
+        <h3>청소년보호정책</h3>
         	<p>
         		Vroom은 청소년들이 유해한 환경으로부터 보호될 수 있도록 건전한 서비스 이용환경을 조성하고자 노력하고 있습니다.
         	</p>
@@ -288,13 +317,17 @@
         		<p>
         			회사는 청소년보호를 위해 인터넷기업 윤리강령 및 실천지침을 준수합니다.
         		</p>
-        </div>
+    </div>
 
-        <div class="section" id="sitePolicy">
-             <h2>사이트 운영 방식</h2>
+    <div class="section" id="sitePolicy">
+        <h2>사이트 운영 방식</h2>
         <p>본 사이트는 이용자에게 최상의 서비스를 제공하기 위해 다양한 운영 방침을 따릅니다. 이용자는 이를 숙지하고 이용해 주시기 바랍니다.</p>
         <p>... (상세 내용) ...</p>
-        </div>
     </div>
+
+    <script>
+        // 기본적으로 첫 번째 섹션을 표시
+        showSection('terms');
+    </script>
 </body>
 </html>

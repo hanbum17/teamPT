@@ -10,17 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Page</title>
 
-    <%@ include file="../menu/nav.jsp" %>
-    <%@ include file="../menu/footer.jsp"%>
-    <style>
-
-        
-        /* 지도 스타일 추가 */
-        .footer { 
-        	bottom: -152px;
-        }
-    </style>
-    
+    <%@ include file="nav.jsp"%>
     <link rel="stylesheet"
         href="${pageContext.request.contextPath}/resources/css/userSide.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">  

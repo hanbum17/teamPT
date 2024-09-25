@@ -14,7 +14,7 @@
 <body>
     <!-- NAVIGATION BAR -->
     <nav class="navbar">
-    	<a href="${pageContext.request.contextPath}/vroom/main" class="logo">
+    	<a href="#" class="logo">
     		<img src="${pageContext.request.contextPath}/images/car.png" alt="Car Image" style="height: 25px;">
             VROOM
         </a>
@@ -37,7 +37,7 @@
 	                </ul>
 	            </li>
 	            <!-- 운행 메뉴 -->
-	            <%-- <li class="nav-item">
+	            <li class="nav-item">
 	                <a href="#">운행</a>
 	                <ul class="dropdown">
 	                    <li><a href="#">버스</a>
@@ -57,9 +57,19 @@
 	                        </ul>
 	                    </li>
 	                </ul>
-	            </li> --%>
+	            </li>
             </sec:authorize>
-
+            <!-- 고객센터 메뉴 -->
+            <li class="nav-item">
+                <a href="#">고객센터</a>
+                <ul class="dropdown">
+                    <li><a href="#">문의</a></li>
+                    <li><a href="#">Q&A</a></li>
+                    <sec:authorize access="isAuthenticated()">
+                    	<li><a href="#">피드백</a></li>
+                    </sec:authorize>
+                </ul>
+            </li>
         </ul>
 
         <!-- USER SECTION -->
