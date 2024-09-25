@@ -94,24 +94,7 @@ public class CsController {
         return "redirect:/cs/Center"; // 기본 리다이렉트 (예외 처리)
     }
 
-//    @PostMapping("/deleteProc")
-//    public String deleteProc(@RequestParam("type") String type, @RequestParam("no") Long no) {
-//        boolean success = false;
-//
-//        if ("faq".equals(type)) {
-//            success = csService.removeFAQ(no);
-//        } else if ("feedback".equals(type)) {
-//            success = csService.removeFB(no);
-//        } else if ("inquiry".equals(type)) {
-//            success = csService.removeIn(no);
-//        }
-//
-//        if (success) {
-//            return "success";  // 성공하면 success 반환
-//        } else {
-//            return "failure";  // 실패하면 failure 반환
-//        }
-//    }
+
     @PostMapping("/deleteProc")
     public String deleteProc(@RequestParam("type") String type, @RequestParam("no") Long no) {
         if (type.equals("faq")) {
@@ -121,7 +104,7 @@ public class CsController {
         } else if (type.equals("inquiry")) {
             csService.removeIn(no);
         }
-        return "redirect:/csCenter"; // 삭제 후 리다이렉트
+        return "redirect:/cs/Center"; // 삭제 후 리다이렉트
     }
 
 } //end
