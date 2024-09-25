@@ -7,6 +7,10 @@
     <meta charset="UTF-8">
     <title>Restaurant List</title>
     <style>
+    .container {
+    user-select: none; /* 텍스트 선택 방지 */
+}
+    
         body {
             margin: 0;
             padding: 0;
@@ -31,6 +35,11 @@
         z-index: 0; /* 지도를 배경으로 만들기 위해 z-index를 음수로 설정 */
     }
         
+.selected-card {
+    transform: scale(1.1); /* 카드 크기를 10% 키움 */
+    transition: transform 0.3s; /* 부드러운 변환 효과 */
+    z-index: 1; /* 다른 카드보다 위에 보이도록 설정 */
+}
 
         .container {
             display:  flex;
@@ -263,6 +272,7 @@
 			            <p>${restaurant.faddress}</p>
 			            <p>${restaurant.frating}</p>
 			            
+			            
 			        </div>
 			    </div>
 			</c:forEach>
@@ -388,7 +398,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (isLoading) return;
         isLoading = true;
 		
-        fetch(contextPath + "/api/restaurant?page=" + restPage + "&pageSize=" + restPageSize)
+        fetch(contextPath + "/api/restaurant/more?page=" + restPage + "&pageSize=" + restPageSize)
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
@@ -468,6 +478,75 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initial data load
     loadMoreRestaurants();
 
+});
+
+
+//드래그 관련 변수
+let isDragging = false;
+let startX;
+let scrollLeft;
+
+const container = document.getElementById('restaurant-container');
+
+// 드래그 시작
+container.addEventListener('mousedown', (e) => {
+    isDragging = true;
+    startX = e.pageX - container.offsetLeft;
+    scrollLeft = container.scrollLeft;
+    e.preventDefault(); // 기본 동작 방지
+});
+
+// 드래그 중
+container.addEventListener('mousemove', (e) => {
+    if (!isDragging) return; // 드래그 중이 아닐 때는 무시
+    e.preventDefault(); // 기본 동작 방지
+    const x = e.pageX - container.offsetLeft;
+    const walk = (x - startX) * 2; // 드래그 이동량을 조절 (속도 조정)
+    container.scrollLeft = scrollLeft - walk;
+});
+
+// 드래그 종료
+container.addEventListener('mouseup', () => {
+    isDragging = false;
+});
+
+// 드래그 중 다른 요소에서 마우스 버튼이 떼어질 경우
+container.addEventListener('mouseleave', () => {
+    isDragging = false;
+});
+
+//드래그 관련 변수
+let isDragging = false;
+let startX;
+let scrollLeft;
+
+const container = document.getElementById('restaurant-container');
+
+// 드래그 시작
+container.addEventListener('mousedown', (e) => {
+    isDragging = true;
+    startX = e.pageX - container.offsetLeft;
+    scrollLeft = container.scrollLeft;
+    e.preventDefault(); // 기본 동작 방지
+});
+
+// 드래그 중
+container.addEventListener('mousemove', (e) => {
+    if (!isDragging) return; // 드래그 중이 아닐 때는 무시
+    e.preventDefault(); // 기본 동작 방지
+    const x = e.pageX - container.offsetLeft;
+    const walk = (x - startX) * 2; // 드래그 이동량을 조절 (속도 조정)
+    container.scrollLeft = scrollLeft - walk;
+});
+
+// 드래그 종료
+container.addEventListener('mouseup', () => {
+    isDragging = false;
+});
+
+// 드래그 중 다른 요소에서 마우스 버튼이 떼어질 경우
+container.addEventListener('mouseleave', () => {
+    isDragging = false;
 });
 
 

@@ -5,30 +5,32 @@
 <%@ page import="com.teamproject.myteam01.domain.RestaurantVO" %>
 <%@ page import="java.io.BufferedReader" %>
 <%@ page import="java.io.InputStreamReader" %>
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ include file="../userSide.jsp"%>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/user_menu/detail.css">
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <title>마이페이지</title>
-    <script>
-        function executePythonScripts() {
-            document.getElementById('loading').style.display = 'block'; // 로딩 스피너 표시
-            fetch('/executePythonScripts') // AJAX 요청
-                .then(response => response.json())
-                .then(data => {
-                    console.log('Python scripts executed:', data);
-                    document.getElementById('loading').style.display = 'none'; // 로딩 스피너 숨기기
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    document.getElementById('loading').style.display = 'none'; // 오류 시에도 숨기기
-                });
-        }
+<meta charset="UTF-8">
+<title>추천 목록 페이지</title>
+<script>
+    function executePythonScripts() {
+        document.getElementById('loading').style.display = 'block'; // 로딩 스피너 표시
+        fetch('/api/executePythonScripts') // AJAX 요청
+            .then(response => response.json())
+            .then(data => {
+                console.log('Python scripts executed:', data);
+                document.getElementById('loading').style.display = 'none'; // 로딩 스피너 숨기기
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('loading').style.display = 'none'; // 오류 시에도 숨기기
+            });
+    }
 
-        window.onload = executePythonScripts; // 페이지 로드 시 스크립트 실행
-    </script>
-    <style>
+    window.onload = executePythonScripts; // 페이지 로드 시 스크립트 실행
+</script>
+<style>
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
@@ -54,10 +56,10 @@
     </style>
 </head>
 <body>
-    <div id="loading" style="display:none;">로딩 중...</div>
 
-    <div class="recommendation">
-        <h2>사용자 행사 추천목록 
+<main class="content-box">
+	<div class="recommendation">
+        <h2>행사 추천 
             <% if (request.getAttribute("eRecoType") != null && !((String)request.getAttribute("eRecoType")).isEmpty()) { %>
                 [<%= request.getAttribute("eRecoType") %>]
             <% } %>
@@ -83,7 +85,7 @@
     </div>
 
     <div class="recommendation">
-        <h2>사용자 식당 추천목록 
+        <h2>식당 추천 
             <% if (request.getAttribute("fRecoType") != null && !((String)request.getAttribute("fRecoType")).isEmpty()) { %>
                 [<%= request.getAttribute("fRecoType") %>]
             <% } %>
@@ -108,5 +110,6 @@
             }
         %>
     </div>
+</main>
 </body>
 </html>

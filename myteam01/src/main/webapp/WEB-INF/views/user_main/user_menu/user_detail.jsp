@@ -3,6 +3,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <%@ include file="../userSide.jsp"%>
+
+
+
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/user_menu/detail.css">
 <!-- 메인 콘텐츠 박스 -->
 <main class="content-box">

@@ -4,6 +4,36 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.teamproject.myteam01.mapper.UserMapper">
 
+<!-- <resultMap id="userResultMap" type="com.teamproject.myteam01.domain.UserVO">
+    <result property="userNo" column="USERNO"/>
+    <result property="userId" column="USERID"/>
+    <result property="userName" column="USERNAME"/>
+    <result property="userGender" column="USERGENDER"/>
+    <result property="userAddress" column="USERADDRESS"/>
+    <result property="userType" column="USERTYPE"/>
+    <result property="lastLoginDate" column="LASTLOGINDATE"/>
+    <result property="accountStatus" column="ACCOUNT_STATUS"/>
+    <result property="roles" column="ROLES"/> roles를 String으로 매핑
+</resultMap> -->
+
+	<!-- 유저리스트 조회 -->
+ 	<select id="selectUserList" resultType="com.teamproject.myteam01.domain.UserVO">
+		SELECT u.USERNO, u.USERID, u.USERNAME, u.USERGENDER, 
+			   u.USERADDRESS, u.USERTYPE, u.LASTLOGINDATE, u.ACCOUNT_STATUS,
+		LISTAGG(r.ROLE_NAME, ', ') WITHIN GROUP (ORDER BY r.ROLE_NAME) AS roles
+		FROM USERS u
+		JOIN USER_ROLES ur ON u.USERID = ur.USERID
+		JOIN ROLES r ON ur.ROLE_ID = r.ROLE_ID
+		GROUP BY u.USERNO, u.USERID, u.USERNAME, u.USERGENDER, 
+			   u.USERADDRESS, u.USERTYPE, u.LASTLOGINDATE, u.ACCOUNT_STATUS 
+		ORDER BY u.USERNO DESC
+	</select>
+	<!-- <select id="selectUserList" resultType="String">
+		SELECT USERID
+		FROM USERS
+		ORDER BY USERNO DESC
+	</select> -->
+	
     <!-- 사용자 등록 -->
     <insert id="insertUser" parameterType="com.teamproject.myteam01.domain.UserVO">
         <selectKey keyProperty="userNo" order="BEFORE" resultType="Long">
@@ -53,7 +83,8 @@
             userCall = #{userCall},
             userAddress = #{userAddress},
             userEmail = #{userEmail},
-            userType = #{userType}
+            userType = #{userType},
+            ACCOUNT_STATUS = #{accountStatus}
         WHERE userId = #{userId}
     </update>
     

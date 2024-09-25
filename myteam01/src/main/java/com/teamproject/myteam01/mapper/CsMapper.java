@@ -75,10 +75,22 @@ public interface CsMapper {
 	
 //////////////////////////////////////////////
 	
+	//행사등록
+	public void insertAdminEvent(CsVO cs);
+	
+	//행사 목록 조회
+	public List<CsVO>  selectAdminEventList();
+	
+	//행사 상세 조회
+	public CsVO selectAdminEventDetail(Long cs);
+
+//////////////////////////////////////////////
+
 	// 1대1 문의 내역 조회 - 사용자별
 	public List<CsVO> selectUserInquiries(String userId);
 
 	// 건의사항 내역 조회 - 사용자별
 	public List<CsVO> selectUserFeedbacks(String userId);
+	
 	
 }
