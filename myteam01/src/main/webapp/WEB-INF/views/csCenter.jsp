@@ -287,10 +287,10 @@
                         </tr>
                     </c:if>
                     <c:if test="${feeb.fbdelflag == 0}">
-                        <tr onclick="showDetail('feedback', '${feeb.fbno}', '${feeb.fbtitle}', '${feeb.fbRegDate}', '${feeb.fbcontent}')">
+                        <tr onclick="showDetail('feedback', '${feeb.fbno}', '${feeb.fbtitle}', '' ,'${feeb.fbcontent}', '','${feeb.fbRegDate}' )">
                             <td><c:out value="${feeb.fbno}" /></td>
                             <td><c:out value="${feeb.fbtitle}" /></td>
-                            <td><fmt:formatDate pattern="yyyy/MM/dd" value="${feeb.fbRegDate}" />
+                            <td><fmt:formatDate pattern="yyyy-MM-dd" value="${feeb.fbRegDate}" />
                             	${feeb.fbRegDate}
                             </td>
                         </tr>
@@ -414,7 +414,7 @@
         // 상세 보기 닫기 (초기화)
         hideDetail();  // 상세 보기 창이 열려 있으면 닫음
     }
-
+    
         function showDetail(type, no, title, category, content, response, regdate) {
             // 모든 테이블 숨기기
             var allTables = document.querySelectorAll('.table-container');

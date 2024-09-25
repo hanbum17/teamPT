@@ -25,7 +25,7 @@ public class CsController {
 
     @GetMapping("/Center")
     public String csList(Model model) {
-
+    	System.out.println("__________________________________________==="+csService.csFBList());
         model.addAttribute("FAQList", csService.csList()); // FAQ 목록
         model.addAttribute("feedbackList", csService.csFBList()); // 고객의 소리 목록
         model.addAttribute("inquiryList", csService.csInList()); // 1:1 문의 내역 목록
