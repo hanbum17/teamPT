@@ -24,16 +24,16 @@ public class RestaurantVO {
 	private Double frating;
 	private Double fxcoord;
 	private Double fycoord;
-	
-    private String fcategory;   // 음식점 카테고리
+	private String fcategory;   // 음식점 카테고리
     private String fname;       // 음식점 이름
     private String faddress;    // 음식점 주소
     private Date fregdate;
-    
     private Long ftype;
     private List<AttachFileDTO> attachFileList;
     private List<RestaurantsReviewVO> reivewsList;
     
+    
+    private String type;        // 식당 추천 종류
     private Long page;
 	private Long pageSize;
 	private Long offset;

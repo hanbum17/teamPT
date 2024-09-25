@@ -114,14 +114,14 @@
                         });
 
                         kakao.maps.event.addListener(polygon, 'click', function(mouseEvent) {
-                            var content = '<div class="info">' + 
+                            /* var content = '<div class="info">' + 
                                         '   <div class="title">' + area.name + '</div>' +
                                         '   <div class="size">총 면적 : 약 ' + Math.floor(polygon.getArea()) + ' m<sup>2</sup></div>' +
                                         '</div>';
 
-                            infowindow.setContent(content); 
+                            infowindow.setContent(content);  
                             infowindow.setPosition(mouseEvent.latLng); 
-                            infowindow.setMap(map);
+                            infowindow.setMap(map);*/
 
                             var bounds = new kakao.maps.LatLngBounds();
                             area.path.forEach(coord => bounds.extend(coord));
@@ -140,24 +140,26 @@
                             backButton.style.display = 'block';
 
                             // 서울 클릭 시 구별 폴리곤 추가
-                            if (area.name === 'Seoul') {
-                                fetch('/json/GU_MAP.json')
-                                    .then(response => response.json())
-                                    .then(guData => {
-                                        if (guData.features && Array.isArray(guData.features)) {
-                                            var guAreas = guData.features.map(feature => ({
-                                            	name: feature.properties.name,
-                                                path: feature.geometry.coordinates[0].map(coord => {
-                                                    const lat = coord[1];
-                                                    const lng = coord[0];
-                                                    return new kakao.maps.LatLng(lat, lng);
-                                                })
-                                            }));
-                                            guAreas.forEach(guArea => displayGuArea(guArea));
-                                        }
-                                    })
-                                    .catch(error => console.error('Error loading GU_MAP.json:', error));
-                            }
+
+							if (area.name === 'Seoul') {
+							    fetch('/json/GU_MAP.json')
+							        .then(response => response.json())
+							        .then(guData => {
+							            if (guData.features && Array.isArray(guData.features)) {
+							                var guAreas = guData.features.map(feature => ({
+							                    name: feature.properties.GU_NAME,
+							                    path: feature.geometry.coordinates[0].map(coord => {
+							                        const lat = coord[1];
+							                        const lng = coord[0];
+							                        return new kakao.maps.LatLng(lat, lng);
+							                    })
+							                }));
+							                guAreas.forEach(guArea => displayGuArea(guArea));
+							            }
+							        })
+							        .catch(error => console.error('Error loading GU_MAP.json:', error));
+							} 
+
                         });
                     }
 
@@ -171,11 +173,11 @@
                             fillColor: '#ff0000',
                             fillOpacity: 0.4 
                         });
-
+						
                         kakao.maps.event.addListener(guPolygon, 'mouseover', function(mouseEvent) {
                             guPolygon.setOptions({fillColor: '#ff6666'});
 
-                            customOverlay.setContent('<div class="area">' + guArea.name + '</div>');
+                            customOverlay.setContent('<div class="area">' + feature.properties.name + '</div>');
                             customOverlay.setPosition(mouseEvent.latLng); 
                             customOverlay.setMap(map);
                         });

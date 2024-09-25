@@ -100,4 +100,8 @@
 	<insert id="userIdInsert" parameterType="String">
 		INSERT INTO user_activity (USER_ID, ACCESS_TIME, ACTIVITY) VALUES (#{userId}, SYSTIMESTAMP, '현재로그인')
 	</insert>
+	<!-- 추천목록 가져오기 -->
+	<select id="selectRecommend" resultType="com.teamproject.myteam01.domain.UserActivityVO">
+		SELECT * FROM USER_RECOMMENDATIONS WHERE USERID = #{userId}
+	</select>
 </mapper>
