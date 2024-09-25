@@ -93,7 +93,7 @@ public class VroomRestController {
     }
 
     //스크롤시 추가 데이터 보내기
-    @GetMapping("/restaurant")
+    @GetMapping("/restaurant/more")
     public List<RestaurantVO> restMain(@AuthenticationPrincipal UserDetails userDetails, 
                            @RequestParam(value = "page", defaultValue = "1") Long page, 
                            @RequestParam(value = "pageSize", defaultValue = "12") Long pageSize,
