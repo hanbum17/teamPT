@@ -1,4 +1,4 @@
-w<%@ page language="java" contentType="text/html; charset=UTF-8"
+<%@ page language="java" contentType="text/html; charset=UTF-8"
 pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -52,6 +52,7 @@ pageEncoding="UTF-8"%>
         margin-top: calc(
           (100vh - var(--side-bar-height)) / 2
         ); /* 사이드바 위와 아래의 마진을 동일하게 지정 */
+        z-index: 1000;
       }
 
       /* 아이콘 시작 */
@@ -248,6 +249,107 @@ pageEncoding="UTF-8"%>
       main {
         padding-top: 50px; /* 헤더가 내용 위에 덮이지 않도록 여백 추가 */
       }
+/* main 내부 테이블 스타일 */
+.user-table-container {
+    margin-top: 50px; /* 상단 여백 */
+    padding: 20px;
+    background-color: #ffffff; /* 테이블 배경 흰색 */
+    border-radius: 10px; /* 모서리 둥글게 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 테두리 그림자 */
+    max-width: 70%; /* 중앙에 너비 제한 */
+    margin-left: auto; /* 좌우 중앙 정렬 */
+    margin-right: auto; /* 좌우 중앙 정렬 */
+    overflow-x: auto; /* 테이블이 화면을 넘어가면 가로 스크롤 생성 */
+}
+
+.user-table {
+    width: 100%; /* 테이블 너비 100% */
+    border-collapse: collapse; /* 테이블 경계선을 합쳐줌 */
+    margin-bottom: 20px; /* 테이블 하단 여백 */
+}
+
+.user-table th,
+.user-table td {
+    padding: 12px 15px; /* 셀 내 여백 */
+    border: 1px solid #ddd; /* 셀 경계선 */
+    text-align: center; /* 텍스트 중앙 정렬 */
+    font-size: 14px; /* 폰트 크기 */
+}
+
+.user-table th {
+    background-color: #007bff; /* 헤더 배경색 */
+    color: white; /* 헤더 글자색 */
+    font-weight: bold; /* 글씨 굵게 */
+    text-transform: uppercase; /* 대문자 */
+}
+
+.user-table tbody tr:nth-child(even) {
+    background-color: #f9f9f9; /* 짝수 행 배경 */
+}
+
+.user-table tbody tr:hover {
+    background-color: #f1f1f1; /* 마우스 오버 시 배경 */
+}
+
+.user-table a.user-link {
+    color: #007bff; /* 링크 색상 */
+    text-decoration: none; /* 링크 밑줄 제거 */
+}
+
+.user-table a.user-link:hover {
+    text-decoration: underline; /* 마우스 오버 시 밑줄 추가 */
+}
+
+/* 사용자 상세 정보 페이지 스타일 */
+.user-detail-container {
+    margin-top: 50px; /* 상단 여백 */
+    padding: 20px;
+    background-color: #ffffff; /* 배경 흰색 */
+    border-radius: 10px; /* 모서리 둥글게 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 */
+    max-width: 70%; /* 중앙에 너비 제한 */
+    margin-left: auto; /* 좌우 중앙 정렬 */
+    margin-right: auto; /* 좌우 중앙 정렬 */
+}
+
+.user-detail p {
+    font-size: 16px; /* 글씨 크기 */
+    margin: 10px 0;
+    color: #333; /* 텍스트 색상 */
+}
+
+.user-detail p strong {
+    font-weight: bold;
+    color: #007bff; /* strong 텍스트 색상 */
+}
+
+/* 버튼 스타일 */
+.buttons {
+    margin-top: 20px;
+}
+
+.buttons button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px; /* 모서리 둥글게 */
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.buttons button:hover {
+    background-color: #0056b3;
+}
+
+#delete-btn {
+    background-color: #dc3545;
+}
+
+#delete-btn:hover {
+    background-color: #c82333;
+}
+
     </style>
   </head>
   <body>
@@ -256,7 +358,7 @@ pageEncoding="UTF-8"%>
         <div class="logo">Vroom__Admin</div>
         <nav>
           <ul>
-            <li id="enter_chat"><a href="#">단체채팅방 입장</a></li>
+            <!-- <li id="enter_chat"><a href="#">단체채팅방 입장</a></li> -->
             <li><a href="/logout">Logout</a></li>
             <li><a href="#aboutus">About Us</a></li>
             <li><a href="#contactus">Contact Us</a></li>
@@ -268,7 +370,7 @@ pageEncoding="UTF-8"%>
     <script>
       $("#enter_chat").on("click", function () {
         window.open(
-          "http://195.168.9.110:8080/chat/chat",
+          "http://localhost:8080/chat/chatPage",
           "_blank",
           "width=500, height=500"
         );
@@ -295,14 +397,7 @@ pageEncoding="UTF-8"%>
           </ul>
         </li>
         <li>
-          <a href="#"><i class="fa-solid fa-cat"></i> 사용자관리</a>
-          <ul>
-            <li><a href="/list">사용자 목록 조회</a></li>
-            <li><a href="/event/register">사용자 상세 정보 보기</a></li>
-            <li>
-              <a href="/restaurant/rest_register">사용자 계정 수정 및 삭제</a>
-            </li>
-          </ul>
+          <a href="#" id="selectUserList"><i class="fa-solid fa-cat"></i> 사용자관리</a>
         </li>
         <!-- <li>
       <a href="#">구현x_대시보드</a>

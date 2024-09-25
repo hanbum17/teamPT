@@ -19,7 +19,11 @@ public class UserService {
     private UserMapper userMapper;
 	 
 	public List<UserVO> selectUserList(){
-		return userMapper.selectUserList() ;
+		List<UserVO> userList = userMapper.selectUserList();
+		for(UserVO username : userList) {
+			username.setRoles(userMapper.findRolesByUserId(username.getUserId()));
+		}
+		return userList ;
 	}
 	 
 	private PasswordEncoder passwordEncoder() {
@@ -57,7 +61,14 @@ public class UserService {
     }
 
     public UserVO findByUsername(String userId) {
-        return userMapper.findByUsername(userId);
+    	UserVO userVO = userMapper.findByUsername(userId);
+    	userVO.setRoles(userMapper.findRolesByUserId(userId));
+        return userVO;
+    }
+    
+    public void updateUser(UserVO userVO) {
+    	userMapper.updateUser(userVO);
+    	changePassword(userVO, userVO.getPassword());
     }
 
     public void updateLastLoginDate(String userId) {

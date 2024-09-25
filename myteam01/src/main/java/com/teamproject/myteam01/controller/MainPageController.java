@@ -1,8 +1,11 @@
 package com.teamproject.myteam01.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -16,6 +19,7 @@ import com.teamproject.myteam01.domain.EventVO;
 import com.teamproject.myteam01.domain.RestaurantVO;
 import com.teamproject.myteam01.domain.RestaurantsReviewVO;
 import com.teamproject.myteam01.domain.UserVO;
+import com.teamproject.myteam01.security.CustomUserDetailsService;
 import com.teamproject.myteam01.service.EventService;
 import com.teamproject.myteam01.service.RestaurantService;
 import com.teamproject.myteam01.service.UserService;
@@ -23,11 +27,11 @@ import com.teamproject.myteam01.service.UserService;
 import lombok.RequiredArgsConstructor;
 
 @Controller
-@RequiredArgsConstructor
 @RequestMapping("/admin")
 public class MainPageController {
-
-	final private UserService userService;
+	
+	@Autowired
+	private CustomUserDetailsService customUserService ;
 	@Autowired
 	private UserService userService ;
 	@Autowired
@@ -50,26 +54,25 @@ public class MainPageController {
 	@GetMapping("/manage/userList")
 	@ResponseBody
 	public ResponseEntity<List<UserVO>> userList() {
-		List<UserVO> userList = new ArrayList<UserVO>(); 
-		userList = userService.selectUserList();
+		List<UserVO> userList = userService.selectUserList();
 		return new ResponseEntity<>(userList, HttpStatus.OK);
 	}
 	
 	@GetMapping("/manage/userDetail")
-	public String userDetail() {
-		return "admin_main/manageUserDetail";
+	@ResponseBody
+	public ResponseEntity<UserVO> userDetail(String userId) {
+		UserVO userDetail = userService.findByUsername(userId); 
+		return new ResponseEntity<>(userDetail, HttpStatus.OK);
 	}
 	
 	@PostMapping("/manage/userUpdate")
-	public Integer userUpdate() {
-		
-		return null;
+	@ResponseBody
+	public ResponseEntity<String> userUpdate(UserVO userVO) {
+		System.out.println("userUpdate 정보: " + userVO);
+		userService.updateUser(userVO);
+		return new ResponseEntity<String>("수정되었습니다.", HttpStatus.OK);
 	}
 	
-	@PostMapping("/manage/userDelete")
-	public Integer userDelete() {
-		
-		return null;
 	@GetMapping("/data")
 	public String data(Model model) {
 		
