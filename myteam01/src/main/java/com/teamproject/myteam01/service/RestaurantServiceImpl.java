@@ -176,9 +176,11 @@ public class RestaurantServiceImpl implements RestaurantService{
 
 		@Override
 		public List<RestaurantVO> getRestListByGuName(Map<String, Object> params) {
+			RestaurantVO restVO = new RestaurantVO();
 		    Long offset = (Long) params.get("offset");
 		    Long pageSize = (Long) params.get("pageSize");
 		    String guName = (String) params.get("guName");
+		    restVO.setGuName(guName);
 		    System.out.println("서비스에 전달된 구: "+guName);
 		    
 

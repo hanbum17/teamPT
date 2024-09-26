@@ -70,6 +70,14 @@ public interface CsService {
 	
 ////////////////////////////////////////////////////////
 	
+	public void regEvent(CsVO event);
+	
+	public List<CsVO> getEventList();
+	
+	public CsVO getEventDetail(Long num);
+
+////////////////////////////////////////////////////////
+	
 	List<CsVO> getUserInquiries(String userId);  // 사용자 1대1 문의 조회
 
 	

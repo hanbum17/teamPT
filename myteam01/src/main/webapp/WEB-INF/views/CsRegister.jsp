@@ -27,15 +27,37 @@
                     <option value="기타">기타</option>
                 </select>
             </div>
-            <div class="form-group">
-                <label>질문 제목</label>
-                <input type="text" id="faqtitle" name="faqtitle" class="form-control" />
-            </div>
-            <div class="form-group">
-                <label>답변 내용</label>
-                <textarea id="faqcontent" name="faqcontent" rows="5" class="form-control"></textarea>
-            </div>
+           <div class="form-group">
+               <label>질문 제목</label>
+               <input type="text" id="faqtitle" name="faqtitle" class="form-control" />
+           </div>
+           <div class="form-group">
+               <label>답변 내용</label>
+               <textarea id="faqcontent" name="faqcontent" rows="5" class="form-control"></textarea>
+           </div>
         </div>
+
+		<div id="noticeSection" class="section">
+			<div class="form-group">
+			 	<label for="noticeTitle">공지사항 제목</label>
+                <input type="text" id="noticeTitle" name="notice_title" class="form-control" />
+			</div>
+			<div class="form-group">
+                <label for="noticeContent">공지사항 내용</label>
+                <textarea id="noticeContent" name="notice_content" rows="5" class="form-control"></textarea>
+            </div>
+		</div>
+		
+		<div id="eventSection" class="section">
+			<div class="form-group">
+			 	<label for="eventTitle">행사 제목</label>
+                <input type="text" id="eventTitle" name="event_title" class="form-control" />
+			</div>
+			<div class="form-group">
+                <label for="eventContent">행사 내용</label>
+                <textarea id="eventContent" name="event_content" rows="5" class="form-control"></textarea>
+            </div>
+		</div>
 
         <div id="feedbackSection" class="section">
 
@@ -117,6 +139,18 @@ function checkFormValues() {
         var regExp = /^\s+$/;
         isValid = inquiryTitle && inquiryContent && !regExp.test(inquiryTitle) && !regExp.test(inquiryContent);
         document.getElementById("inquiryContent").value = inquiryContent;
+    } else if (type === "notice"){
+    	var nctitle = document.getElementById("nctitle").value;
+    	var nccontent = convertNewlinesToBr(document.getElementById("nccontent").value);
+    	var regExp = /^\s+$/;
+    	isValid = noticeTitle && noticeContent && !regExp.test(noticeTitle) && !regExp.test(noticeContent);
+        document.getElementById("noticeContent").value = noticeContent;
+    } else if (type === "event"){
+    	var evtitle = document.getElementById("evtitle").value;
+    	var evcontent = convertNewlinesToBr(document.getElementById("evcontent").value);
+    	var regExp = /^\s+$/;
+    	isValid = eventTitle && eventContent && !regExp.test(eventTitle) && !regExp.test(eventContent);
+        document.getElementById("eventContent").value = eventContent;
     }
 
     return isValid;
@@ -145,6 +179,10 @@ $(document).ready(function() {
         showSection('feedbackSection');
     } else if (type === "inquiry") {
         showSection('inquirySection');
+    } else if (type === "notice") {
+    	showSection('noticeSection');
+    } else if (type === "event") {
+    	showSection('eventSection');
     }
 });
 </script>

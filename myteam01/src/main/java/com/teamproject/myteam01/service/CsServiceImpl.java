@@ -143,7 +143,9 @@ public class CsServiceImpl implements CsService{
 	//공지사항 목록조회
 	@Override
 	public List<CsVO> getNoticeList(){
-		return csMapper.selectNoticeList();
+		
+		List<CsVO> se = csMapper.selectNoticeList(); 
+		return se;
 	}
 	
 	//공지사항 상세조회
@@ -154,6 +156,26 @@ public class CsServiceImpl implements CsService{
 	
 ////////////////////////////////////////////////////////////////
 	
+	@Override
+	public void regEvent(CsVO event) {
+		csMapper.insertAdminEvent(event);
+	}
+	
+	//공지사항 목록조회
+	@Override
+	public List<CsVO> getEventList(){
+		
+		List<CsVO> se = csMapper.selectAdminEventList(); 
+		return se;
+	}
+	
+	//공지사항 상세조회
+	@Override
+	public CsVO getEventDetail(Long num) {
+		return csMapper.selectAdminEventDetail(num);
+	}
+	
+////////////////////////////////////////////////////////////////
 	@Override
     public List<CsVO> getUserInquiries(String userId) {
         return csMapper.selectUserInquiries(userId);

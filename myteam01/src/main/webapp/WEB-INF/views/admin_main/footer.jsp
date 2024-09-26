@@ -44,9 +44,6 @@
     </style>
 </head>
 <body>
-    <main>
-        <!-- 메인 콘텐츠가 들어갈 부분 -->
-    </main>
     <footer>
         <a href="/vroom/policy?section=terms">이용약관</a>
 	    <a href="/vroom/policy?section=privacy">개인정보 취급방침</a>

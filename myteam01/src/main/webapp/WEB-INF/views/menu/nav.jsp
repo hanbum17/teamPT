@@ -23,8 +23,8 @@
             <li class="nav-item">
                 <a href="#">공지사항</a>
                 <ul class="dropdown">
-                    <li><a href="#">공지</a></li>
-                    <li><a href="#">이벤트</a></li>
+                    <li><a href="/cs/Center?type=notice">공지</a></li>
+                    <li><a href="/cs/Center?type=event">이벤트</a></li>
                 </ul>
             </li>
             <sec:authorize access="isAuthenticated()">

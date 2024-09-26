@@ -20,12 +20,21 @@ import com.teamproject.myteam01.mapper.UserMapper;
 @Service
 public class UserService {
 
-	 @Autowired
+    @Autowired
     private UserMapper userMapper;
-	 @Autowired
-	 private EventMapper eventMapper;
-	 @Autowired
-	 private RestaurantMapper restMapper;
+    @Autowired
+    private EventMapper eventMapper;
+    @Autowired
+    private RestaurantMapper restMapper;
+	 
+	public List<UserVO> selectUserList(){
+		List<UserVO> userList = userMapper.selectUserList();
+		for(UserVO username : userList) {
+			username.setRoles(userMapper.findRolesByUserId(username.getUserId()));
+		}
+		return userList ;
+	}
+	
 	 
 	 private PasswordEncoder passwordEncoder() {
 	        return new BCryptPasswordEncoder();
@@ -62,7 +71,14 @@ public class UserService {
     }
 
     public UserVO findByUsername(String userId) {
-        return userMapper.findByUsername(userId);
+    	UserVO userVO = userMapper.findByUsername(userId);
+    	userVO.setRoles(userMapper.findRolesByUserId(userId));
+        return userVO;
+    }
+    
+    public void updateUser(UserVO userVO) {
+    	userMapper.updateUser(userVO);
+    	changePassword(userVO, userVO.getPassword());
     }
 
     public void updateLastLoginDate(String userId) {

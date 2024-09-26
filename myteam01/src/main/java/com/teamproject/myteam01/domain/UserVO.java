@@ -1,13 +1,18 @@
 package com.teamproject.myteam01.domain;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -34,7 +39,7 @@ public class UserVO implements UserDetails {
     private Timestamp joinDate; 
     private Timestamp lastLoginDate; 
     private List<String> roles; 
-
+    
     //영범 성별 통계
     private Long maleCnt = 0L ;
     private Long femaleCnt = 0L;
