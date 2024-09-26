@@ -10,15 +10,24 @@
 	</select>
 	
 	<!-- 영범 -->
+	<!-- 오늘 등록한 행사 개수 -->
+	<select id="selectRegEventForCnt" resultType="Long">
+		SELECT COUNT(*) AS count
+		FROM EVENT
+		WHERE TRUNC(EREGDATE) = TRUNC(SYSDATE)
+	</select>
+	
 	<select id="selectRegDate" resultType="com.teamproject.myteam01.domain.EventVO">
 		SELECT eregdate FROM event ORDER BY eregdate DESC FETCH FIRST 100 ROWS ONLY
 	</select>
+	
 	<select id="selectRecentEvent" resultType="com.teamproject.myteam01.domain.EventVO">
 		SELECT *
 		FROM EVENT
 		ORDER BY eregdate DESC
 		FETCH FIRST 10 ROWS ONLY
 	</select>
+	
 	<update id="updaterestreview">
 	    UPDATE event_reviews 
 	    SET eRTITLE = #{ertitle},
@@ -26,6 +35,7 @@
 	        eRMODDATE = DEFAULT
 	    WHERE erno = #{erno}
 	</update>
+	
 	<select id="selectMoreReviews" resultType="com.teamproject.myteam01.domain.EventReviewVO">
 		SELECT *
 		FROM (
@@ -36,10 +46,10 @@
 		) subquery
 		WHERE rn BETWEEN #{offset} + 1 AND #{offset} + #{pageSize}
 	</select>
+	
 	<select id="selectReviewsForStar" resultType="Long"> 
 		SELECT ERRATING FROM event_reviews WHERE ENO = #{eno} ORDER BY ERNO DESC 
 	</select>
-	
 	
 	<update id="updateEventCoord" parameterType="com.teamproject.myteam01.domain.EventVO">
 		UPDATE EVENT

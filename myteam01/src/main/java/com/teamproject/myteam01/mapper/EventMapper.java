@@ -25,6 +25,7 @@ public interface EventMapper {
 	public List<Long> selectReviewsForStar(Long eno);
 	public List<EventVO> selectRegDate();
 	public List<EventVO> selectRecentEvent();
+	public Long selectRegEventForCnt();
 	
 	//희준
 	//행사 목록

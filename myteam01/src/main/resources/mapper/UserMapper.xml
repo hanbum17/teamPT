@@ -129,10 +129,26 @@
 	    DELETE FROM user_activity WHERE ACTIVITY = '현재로그인'
 	</delete>
 	<insert id="userIdInsert" parameterType="String">
-		INSERT INTO user_activity (USER_ID, ACCESS_TIME, ACTIVITY) VALUES (#{userId}, SYSTIMESTAMP, '현재로그인')
+		UPDATE user_activity
+		SET ACCESS_TIME = SYSTIMESTAMP, ACTIVITY = '현재로그인'
+		WHERE USER_ID = #{userId}
 	</insert>
 	<!-- 추천목록 가져오기 -->
 	<select id="selectRecommend" resultType="com.teamproject.myteam01.domain.UserActivityVO">
 		SELECT * FROM USER_RECOMMENDATIONS WHERE USERID = #{userId}
 	</select>
+	<!-- 날짜별 신규 회원 -->
+	<select id="selectNewUserForCnt" resultType="Date">
+		SELECT access_time
+		FROM USER_ACTIVITY
+		WHERE ACTIVITY = '신규회원'
+	</select>
+	<!-- 오늘 가입한 회원 수 -->
+	<select id ="todayNewUser" resultType="Long">
+		SELECT COUNT(DISTINCT USER_ID) AS user_count
+		FROM USER_ACTIVITY
+		WHERE TRUNC(ACCESS_TIME) = TRUNC(CURRENT_DATE)
+		AND ACTIVITY = '신규회원'
+	</select>
+	
 </mapper>

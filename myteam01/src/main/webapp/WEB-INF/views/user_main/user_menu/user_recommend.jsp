@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.util.List" %>
 <%@ page import="com.teamproject.myteam01.domain.EventVO" %>
 <%@ page import="com.teamproject.myteam01.domain.RestaurantVO" %>
@@ -12,24 +11,19 @@
 <meta charset="UTF-8">
 <title>추천 목록 페이지</title>
 <script>
-    function refreshRecommendations() {
-        document.getElementById('loading').style.display = 'block'; // 로딩 스피너 표시
-        fetch('${pageContext.request.contextPath}/executePythonScripts') // AJAX 요청
-            .then(response => response.json()) // JSON 응답을 예상
-            .then(data => {
-                console.log('Python scripts executed:', data);
-                document.getElementById('loading').style.display = 'none'; // 로딩 스피너 숨기기
-                // 여기서 eventList와 restList를 업데이트하는 추가 코드를 작성할 수 있습니다.
-                // 예를 들어, `data.eventList`와 `data.restList`를 사용하여 UI를 업데이트합니다.
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                document.getElementById('loading').style.display = 'none'; // 오류 시에도 숨기기
-            });
+    function executePythonScripts() {
+        fetch('${pageContext.request.contextPath}/executePythonScripts', {
+            method: 'POST' // POST 요청
+        }).then(() => {
+            // Python 스크립트 실행 후 페이지 새로고침
+            location.reload();
+        }).catch(error => {
+            console.error('Error:', error);
+        });
     }
 
     window.onload = function() {
-        refreshRecommendations(); // 초기 로딩 시 실행하는 코드
+        executePythonScripts(); // 초기 로딩 시 Python 스크립트 실행
     };
 </script>
 <style>
@@ -55,9 +49,6 @@
         border-radius: 5px;
         background-color: #f1f1f1;
     }
-    #loading {
-        display: none;
-    }
     .refresh-button {
         margin: 20px 0;
         padding: 10px 20px;
@@ -76,11 +67,7 @@
 
 <main class="content-box">
     <div class="recommendation">
-        <h2>행사 추천 
-            <% if (request.getAttribute("eRecoType") != null && !((String)request.getAttribute("eRecoType")).isEmpty()) { %>
-                [<%= request.getAttribute("eRecoType") %>]
-            <% } %>
-        </h2>
+        <h2>행사 추천</h2>
         <% 
             @SuppressWarnings("unchecked")
             List<EventVO> eventList = (List<EventVO>) request.getAttribute("eventList");
@@ -103,11 +90,7 @@
     </div>
 
     <div class="recommendation">
-        <h2>식당 추천 
-            <% if (request.getAttribute("fRecoType") != null && !((String)request.getAttribute("fRecoType")).isEmpty()) { %>
-                [<%= request.getAttribute("fRecoType") %>]
-            <% } %>
-        </h2>
+        <h2>식당 추천</h2>
         <%
             @SuppressWarnings("unchecked")
             List<RestaurantVO> restList = (List<RestaurantVO>) request.getAttribute("restList");
@@ -129,42 +112,8 @@
         %>
     </div>
 
-    <button class="refresh-button" onclick="refreshRecommendations()">추천 최신화</button>
-    <div id="loading">로딩 중...</div> <!-- 로딩 스피너 -->
+    <button class="refresh-button" onclick="executePythonScripts()">추천 최신화</button>
 </main>
 
-<%
-    // AJAX 요청에 따라 Python 스크립트 실행
-    if ("POST".equalsIgnoreCase(request.getMethod()) && request.getRequestURI().endsWith("/executePythonScripts")) {
-        try {
-            // 첫 번째 스크립트 실행
-            ProcessBuilder processBuilder1 = new ProcessBuilder("C:/myPython/PyvirtualEnvs/PyWebCrawlingEnv/crawling/Scripts/python.exe", 
-                                                                "C:/myPython/PyvirtualEnvs/PyWebCrawlingEnv/crawling/yourpro01/사용자_행사추천.py");
-            processBuilder1.redirectErrorStream(true);
-            processBuilder1.redirectOutput(new File("C:/path/to/logfile1.txt")); // 로그 파일 경로 설정
-            Process process1 = processBuilder1.start();
-            process1.waitFor(); // 첫 번째 프로세스 종료 대기
-
-            // 두 번째 스크립트 실행
-            ProcessBuilder processBuilder2 = new ProcessBuilder("C:/myPython/PyvirtualEnvs/PyWebCrawlingEnv/crawling/Scripts/python.exe", 
-                                                                "C:/myPython/PyvirtualEnvs/PyWebCrawlingEnv/crawling/yourpro01/사용자_식당추천.py");
-            processBuilder2.redirectErrorStream(true);
-            processBuilder2.redirectOutput(new File("C:/path/to/logfile2.txt")); // 로그 파일 경로 설정
-            Process process2 = processBuilder2.start();
-            process2.waitFor(); // 두 번째 프로세스 종료 대기
-
-            // 스크립트 실행 후 추천 목록을 다시 가져와서 JSON 형태로 응답
-            List<EventVO> updatedEventList = // ... 이벤트 목록 업데이트 로직
-            List<RestaurantVO> updatedRestList = // ... 식당 목록 업데이트 로직
-
-            request.setAttribute("eventList", updatedEventList);
-            request.setAttribute("restList", updatedRestList);
-            response.setContentType("application/json");
-            out.print("{ \"eventList\": " + new Gson().toJson(updatedEventList) + ", \"restList\": " + new Gson().toJson(updatedRestList) + " }");
-        } catch (Exception e) {
-            out.print("{ \"error\": \"" + e.getMessage() + "\" }");
-        }
-    }
-%>
 </body>
 </html>

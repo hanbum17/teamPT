@@ -51,6 +51,9 @@
 
     List<String> restaurantLabels = restaurantCounts.keySet().stream().sorted().collect(Collectors.toList());
     List<Integer> restaurantData = restaurantLabels.stream().map(restaurantCounts::get).collect(Collectors.toList());
+
+    // 신규 회원 날짜별 가입 횟수
+   Map<String, Long> dateWithCnt = (Map<String, Long>) request.getAttribute("dateWithCnt");
 %>
 
 <!DOCTYPE html>
@@ -61,34 +64,48 @@
     <style>
         body {
             margin: 0;
-    padding: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f5f5f5;
-    width: 100%;
-    color: #333;
-    background: linear-gradient(120deg, #84fab0, #8fd3f4);
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            width: 100%;
+            color: #333;
+            background: linear-gradient(120deg, #84fab0, #8fd3f4);
         }
         #genderChart {
             width: 300px !important;
             height: 300px !important;
         }
-        .container {
-            display: flex;
-            justify-content: space-between;
-        }
-        .chart-container {
-            width: 45%;
-        }
+.container {
+    display: flex;
+    flex-wrap: wrap; /* 요소들이 줄 바꿈되도록 설정 */
+    justify-content: space-between; /* 간격 자동 조정 */
+    margin:-10px;
+}
+
+.chart-container {
+    width: calc(100% - 20px); /* 전체 너비로 설정 */
+    margin: 10px; /* 간격 추가 */
+    min-height: 300px; /* 최소 높이 설정 */
+    position: relative; /* 자식 요소에 절대 위치 지정 가능 */
+}
+canvas {
+	position: absolute;
+	top: 0; /* 상단 맞춤 */
+    left: 50; /* 좌측 맞춤 */
+    max-width: 100%; /* 캔버스가 컨테이너를 넘지 않도록 설정 */
+    height: 100%; /* 자동 높이 조정 */
+    display: block; /* 블록 요소로 설정하여 여백 문제 해결 */
+}
         .board {
             width: 100%;
             margin-top: 20px;
-            border: 1px solid #ccc; /* 테두리 추가 */
-            border-radius: 5px; /* 모서리 둥글게 */
-            padding: 10px; /* 내부 여백 */
-            background-color: #f9f9f9; /* 배경색 */
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            background-color: #f9f9f9;
         }
         .board h2 {
-            border-bottom: 2px solid #ddd; /* 제목 아래 선 추가 */
+            border-bottom: 2px solid #ddd;
             padding-bottom: 10px;
         }
         .board table {
@@ -96,33 +113,97 @@
             border-collapse: collapse;
         }
         .board th, .board td {
-            border: 1px solid #ccc; /* 각 셀 테두리 */
+            border: 1px solid #ccc;
             padding: 10px;
             text-align: left;
         }
         .board th {
-            background-color: #e9e9e9; /* 헤더 배경색 */
+            background-color: #e9e9e9;
         }
         .content-box {
-		    background-color: #ffffff; /* 흰색 배경 */
-		    border: 1px solid #ccc; /* 테두리 추가 */
-		    border-radius: 5px; /* 모서리 둥글게 */
-		    padding: 20px; /* 내부 여백 */
-		    margin-top: 3%; /* 상단 여백 */
-		    margin-left: 10%; /* 자동으로 왼쪽 여백 조정 */
-		    margin-right: 20px; /* 오른쪽 여백 추가 */
-		    width: 80%; /* 전체 너비에서 여백을 뺀 값 */
+            background-color: #ffffff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 20px;
+            margin-top: 3%;
+            margin-left: 10%;
+            margin-right: 20px;
+            width: 80%;
+        }
+        .summary {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        .summary div {
+		    background-color: #ffffff;
+		    border: 1px solid #ccc;
+		    border-radius: 5px;
+		    padding: 10px;
+		    margin: 10px 0; /* 간격 조정 */
+		    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 약간의 그림자 효과 */
+		}
+		.summary-container {
+		    display: flex; /* Flexbox 사용 */
+		    justify-content: space-between; /* 간격을 자동으로 조정 */
+		    background-color: transparent; /* 배경색 투명하게 설정 */
 		}
 		
-
+		.summary-container span {
+		    background-color: #ffffff;
+		    border: 1px solid #ccc;
+		    border-radius: 5px;
+		    padding: 10px;
+		    margin: 0 10px; /* 좌우 간격 조정 */
+		    flex: 1; /* 각 항목이 동일한 비율로 공간을 차지하도록 설정 */
+		    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+		    text-align: center; /* 가운데 정렬 */
+		}
+		.board {
+    width: 100%;
+    margin-top: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 약간의 그림자 효과 추가 */
+       flex: 1; /* 각 보드가 동일한 비율로 공간을 차지하도록 설정 */
+    min-width: 300px; /* 최소 너비 설정 (작은 화면에서도 보기 좋게) */
+}
     </style>
 </head>
 <body>
     <div class="content-box">
-        <h2>가입한 사용자 성별 비율</h2>
-        <canvas id="genderChart"></canvas>
-        
+        <div class="summary">
+        	<h3>오늘의 활동</h3>
+            <div class="summary-container">
+		        <span>신규 회원 수: <strong>${todayNewCnt}</strong></span>
+		        <span>신규 행사글 등록 수: <strong>${todayNewEventCnt}</strong></span>
+		        <span>신규 식당글 등록 수: <strong>${todayNewRestCnt}</strong></span>
+   			 </div>
+        </div>
+
+       <!-- 가입한 사용자 성별 비율 및 신규 회원 날짜별 가입 횟수 -->
+    <div class="container">
+        <div class="board">
+            <h2>가입한 사용자 성별 비율</h2>
+            <div class="chart-container">
+                <canvas id="genderChart"></canvas>
+            </div>
+        </div>
+
+        <div class="board">
+            <h2>신규 회원 날짜별 가입 횟수</h2>
+            <div class="chart-container">
+                <canvas id="newUserChart"></canvas>
+            </div>
+        </div>
+    </div>
+
         <script>
+            // 성별 비율 차트
             var ctx = document.getElementById('genderChart').getContext('2d');
             var genderChart = new Chart(ctx, {
                 type: 'pie',
@@ -144,6 +225,7 @@
                 },
                 options: {
                     responsive: true,
+                    
                     plugins: {
                         legend: {
                             position: 'top',
@@ -157,19 +239,68 @@
             });
         </script>
 
-        <div class="container">
-            <div class="chart-container">
-                <h2>행사 등록 수 (최근 1주일)</h2>
-                <canvas id="eventRegChart"></canvas>
-            </div>
+        <script>
+    var newUserLabels = [<%= dateWithCnt.keySet().stream().map(date -> "'" + date + "'").collect(Collectors.joining(", ")) %>];
+    var newUserData = [<%= dateWithCnt.values().stream().map(String::valueOf).collect(Collectors.joining(", ")) %>];
 
+    var newUserCtx = document.getElementById('newUserChart').getContext('2d');
+    var newUserChart = new Chart(newUserCtx, {
+        type: 'line',
+        data: {
+            labels: newUserLabels,
+            datasets: [{
+                label: '신규 회원 수',
+                data: newUserData,
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 1,
+                        precision: 0 // 소수점 없애기
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: '신규 회원 날짜별 가입 횟수'
+                }
+            }
+        }
+    });
+</script>
+
+       <div class="container">
+        <!-- 행사 등록 수 (최근 1주일) -->
+        <div class="board">
+            <h2>행사 등록 수 (최근 1주일)</h2>
             <div class="chart-container">
-                <h2>식당 등록 수 (최근 1주일)</h2>
-                <canvas id="restRegChart"></canvas>
+                <canvas id="eventRegChart"></canvas>
             </div>
         </div>
 
+        <!-- 식당 등록 수 (최근 1주일) -->
+        <div class="board">
+            <h2>식당 등록 수 (최근 1주일)</h2>
+            <div class="chart-container">
+                <canvas id="restRegChart"></canvas>
+            </div>
+        </div>
+    </div>
+
         <script>
+            // 행사 등록 차트
             var eventRegCtx = document.getElementById('eventRegChart').getContext('2d');
             var eventRegChart = new Chart(eventRegCtx, {
                 type: 'line',
@@ -185,6 +316,7 @@
                 },
                 options: {
                     responsive: true,
+                    maintainAspectRatio: false,
                     scales: {
                         y: {
                             beginAtZero: true,
@@ -206,6 +338,7 @@
                 }
             });
 
+            // 식당 등록 차트
             var restRegCtx = document.getElementById('restRegChart').getContext('2d');
             var restRegChart = new Chart(restRegCtx, {
                 type: 'line',
@@ -221,6 +354,7 @@
                 },
                 options: {
                     responsive: true,
+                    maintainAspectRatio: false,
                     scales: {
                         y: {
                             beginAtZero: true,
@@ -243,6 +377,7 @@
             });
         </script>
 
+        <!-- 최근 등록된 행사 및 식당 테이블 -->
         <div class="container">
             <div class="board">
                 <h2>최근 등록된 행사글 10개</h2>
@@ -289,6 +424,5 @@
             </div>
         </div>
     </div>
-
 </body>
 </html>

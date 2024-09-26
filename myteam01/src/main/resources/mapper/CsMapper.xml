@@ -176,7 +176,7 @@
         ORDER BY IREGDATE DESC
     </select>
 
-
+	<!-- 문의 답변 대기중 -->
 
 
 

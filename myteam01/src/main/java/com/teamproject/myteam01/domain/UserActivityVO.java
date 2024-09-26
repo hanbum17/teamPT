@@ -1,5 +1,7 @@
 package com.teamproject.myteam01.domain;
 
+import java.util.Date;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,5 +20,7 @@ public class UserActivityVO {
 	private String type;
 	private Long eno;
 	private Long fno;
-	
+	//신규회원
+    private Date access_time ;
+    private Long regDateCount;
 }

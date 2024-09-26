@@ -1,5 +1,19 @@
 package com.teamproject.myteam01.controller;
 
+import java.io.File;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import com.teamproject.myteam01.domain.CsVO;
 import com.teamproject.myteam01.domain.EventVO;
 import com.teamproject.myteam01.domain.RestaurantVO;
@@ -10,19 +24,7 @@ import com.teamproject.myteam01.service.TripService;
 import com.teamproject.myteam01.service.UserRegistrationService;
 import com.teamproject.myteam01.service.UserService;
 
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import jakarta.servlet.http.HttpServletResponse;
 
 @Controller
 public class UserController {
@@ -174,34 +176,7 @@ public class UserController {
         return "user_main/user_menu/user_reservation";
     }
     
-    // 추천 목록 페이지로 이동
-    @GetMapping("/user/user_recommend")
-	public String userRecommend(@AuthenticationPrincipal UserDetails userDetails, Model model) {
-		String userName = userDetails.getUsername();
-		model.addAttribute("userName",userName);
-		
-		//행사 추천 리스트
-		List<EventVO> eventList = userService.recomendEvent(userName);
-		model.addAttribute("eventList",eventList);
-		
-		//식당 추천 리스트
-		List<RestaurantVO> restList = userService.recomendRest(userName);
-		model.addAttribute("restList",restList);
-		
-		//행사 추천 타입 ex) 지역추천 , 무료추천
-		if(!eventList.isEmpty()) {
-			EventVO eRecoType = eventList.get(0);
-			model.addAttribute("eRecoType",eRecoType.getEtype());
-		}
-		
-		//식당 추천 타입 ex) 지역추천 , 무료추천
-		if(!restList.isEmpty()) {
-			RestaurantVO fRecoType = restList.get(0);
-			model.addAttribute("fRecoType",fRecoType.getType());
-		}
-		return "user_main/user_menu/user_recommend";
-	}
-   
+       
 
     // 결제 내역 페이지로 이동
     @GetMapping("/user/user_pay")
@@ -240,4 +215,73 @@ public class UserController {
         return "redirect:/logout"; // 로그아웃 처리 후 메인 페이지로 리다이렉트
     }
 
+    
+    //영범
+    // 추천 목록 페이지로 이동
+    @GetMapping("/user/user_recommend")
+	public String userRecommend(@AuthenticationPrincipal UserDetails userDetails, Model model) {
+		String userName = userDetails.getUsername();
+		model.addAttribute("userName",userName);
+		
+		//행사 추천 리스트
+		List<EventVO> eventList = userService.recomendEvent(userName);
+		model.addAttribute("eventList",eventList);
+		
+		//식당 추천 리스트
+		List<RestaurantVO> restList = userService.recomendRest(userName);
+		model.addAttribute("restList",restList);
+		
+		//행사 추천 타입 ex) 지역추천 , 무료추천
+		if(!eventList.isEmpty()) {
+			EventVO eRecoType = eventList.get(0);
+			model.addAttribute("eRecoType",eRecoType.getEtype());
+		}
+		
+		//식당 추천 타입 ex) 지역추천 , 무료추천
+		if(!restList.isEmpty()) {
+			RestaurantVO fRecoType = restList.get(0);
+			model.addAttribute("fRecoType",fRecoType.getType());
+		}
+		return "user_main/user_menu/user_recommend";
+	}
+
+    //파이썬실행
+    // Python 스크립트 실행
+    @PostMapping("/executePythonScripts")
+    public void executePythonScripts(@AuthenticationPrincipal UserDetails userDetails, HttpServletResponse response) {
+        String userName = userDetails.getUsername();
+
+        try {
+            // 첫 번째 스크립트 실행
+            ProcessBuilder processBuilder1 = new ProcessBuilder(
+                    "python",
+                    "C:/myPython/PyvirtualEnvs/PyWebCrawlingEnv/crawling/yourpro01/사용자_행사추천.py",
+                    userName
+            );
+            processBuilder1.redirectErrorStream(true); // 오류를 표준 출력으로 리디렉션
+            Process process1 = processBuilder1.start();
+            process1.waitFor(); // 첫 번째 프로세스 종료 대기
+
+            // 두 번째 스크립트 실행
+            ProcessBuilder processBuilder2 = new ProcessBuilder(
+                    "python",
+                    "C:/myPython/PyvirtualEnvs/PyWebCrawlingEnv/crawling/yourpro01/사용자_식당추천.py",
+                    userName
+            );
+            processBuilder2.redirectErrorStream(true); // 오류를 표준 출력으로 리디렉션
+            Process process2 = processBuilder2.start();
+            process2.waitFor(); // 두 번째 프로세스 종료 대기
+
+            // 성공적으로 실행되었으면 HTTP 200 응답
+            response.setStatus(HttpServletResponse.SC_OK);
+        } catch (Exception e) {
+            // 오류가 발생하면 HTTP 500 응답
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            e.printStackTrace(); // 로그에 오류 출력 (이 부분은 필요에 따라 유지할 수 있음)
+        }
+    }
+
+        
+ 
+    
 }
