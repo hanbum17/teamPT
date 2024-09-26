@@ -9,22 +9,22 @@
     <meta charset="UTF-8">
     <title>Restaurant Details</title>
    <style>
-	   body, html {
-	        margin: 0;
-	        padding: 0;
-	        height: 100%;
-	        width: 100%;
-	        overflow: hidden; /* 스크롤바가 안 나타나도록 설정 */
-	    }
-	
-	    #map {
-		    position: fixed; /* position을 fixed로 변경 */
-		    top: 0;
-		    left: 0;
-		    width: 100%;
-		    height: 100%; /* 전체 화면을 차지하도록 설정 */
-		    z-index: 0;
-		}
+      body, html {
+           margin: 0;
+           padding: 0;
+           height: 100%;
+           width: 100%;
+           overflow: hidden; /* 스크롤바가 안 나타나도록 설정 */
+       }
+   
+       #map {
+          position: fixed; /* position을 fixed로 변경 */
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%; /* 전체 화면을 차지하도록 설정 */
+          z-index: 0;
+      }
 
     .panel {
         position: absolute;
@@ -135,10 +135,10 @@
 </head>
 <body>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
-	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-	<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=fe9306b4adbbf3249d28d6b7a2c37c0a&libraries=services"></script>
-	<div id="map" style="width: 100%; height: 100vh;"></div>
+   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+   <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=fe9306b4adbbf3249d28d6b7a2c37c0a&libraries=services"></script>
+   <div id="map" style="width: 100%; height: 100vh;"></div>
 
     <div style="position: absolute; top: 10px; left: 10px; font-size: 16px;">
         <c:if test="${not empty user}">
@@ -189,19 +189,18 @@
     </div>
 
     <script>
-    	/* const urlParams = new URLSearchParams(window.location.search);
-	    const lat = parseFloat(urlParams.get('lat'));
-	    const lng = parseFloat(urlParams.get('lng')); */
-	    
-	    var mapContainer = document.getElementById('map'), // 지도를 표시할 div
-		    mapOption = {
-		        center: new kakao.maps.LatLng(37.566826004661, 126.978652258309), // 기본 중심 좌표 (서울시청)
-		        level: 3 // 지도 확대 레벨
-		    };
-	
-		var map = new kakao.maps.Map(mapContainer, mapOption);
-		console.log(map); 
-	
+       /* const urlParams = new URLSearchParams(window.location.search);
+       const lat = parseFloat(urlParams.get('lat'));
+       const lng = parseFloat(urlParams.get('lng')); */
+       
+       var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+          mapOption = {
+              center: new kakao.maps.LatLng(37.566826004661, 126.978652258309), // 기본 중심 좌표 (서울시청)
+              level: 3 // 지도 확대 레벨
+          };
+   
+      var map = new kakao.maps.Map(mapContainer, mapOption);
+   
         const reviewsContainer = document.getElementById('reviews-container');
         const contextPath = "${contextPath}";
         const currentUserId = "${user.userId}"
@@ -244,56 +243,24 @@
                 .then(data => {
                     console.log(data);
                     if (data) {
-                        // 상세 정보를 받아오고 이미지와 텍스트 업데이트
                         document.getElementById('panel-image').src = `/images/bibimbab.jpg`;
                         document.getElementById('panel-name').textContent = data.fname;
                         document.getElementById('panel-category').textContent = data.fcategory;
                         document.getElementById('panel-location').textContent = data.faddress;
                         document.getElementById('fno').value = fno;
-
-                        // 지도의 중심 좌표를 식당의 좌표로 설정
-                        const lat = data.flat; // 서버에서 받은 위도 값
-                        const lng = data.flng; // 서버에서 받은 경도 값
-                        console.log(lat+', '+lng);
-
-                        // 지도 중심 설정
-                        if (map) { // 추가: map 객체가 존재하는지 확인
-                            const mapOption = {
-                                center: new kakao.maps.LatLng(lat, lng), // 식당의 좌표를 지도 중심으로 설정
-                                level: 3 // 확대 레벨
-                            };
-                            map.setCenter(new kakao.maps.LatLng(lat, lng)); // 지도 중심 이동
-
-                            const markerPosition = new kakao.maps.LatLng(lat, lng);
-                            const marker = new kakao.maps.Marker({
-                                position: markerPosition,
-                                map: map // 마커를 지도에 추가
-                            });
-                            
-                            marker.setMap(map); // 마커 표시
-                            window.currentMarker = marker; // 현재 마커를 저장하여 다음에 삭제 가능하도록 함
-
-                            const restaurantContainer = document.getElementById('restaurant-container');
-                            const leftPanel = document.getElementById('left-panel');
-                            const rightPanel = document.getElementById('right-panel');
-
-                            // 왼쪽, 오른쪽 패널 보이기
-                            if (restaurantContainer) {
-                                restaurantContainer.style.display = 'none';
-                            }
-                            if (leftPanel) {
-                                leftPanel.style.display = 'block';
-                            }
-                            if (rightPanel) {
-                                rightPanel.style.display = 'block';
-                            }
-
-                            // 리뷰 정보를 가져옴
-                            return fetch(`${contextPath}/api/getRestaurantReviews?fno=` + fno + '&page=' + page + '&pageSize=' + pageSize);
-                        } else {
-                            console.error('Map object is not initialized.');
-                            alert('지도 객체가 초기화되지 않았습니다.');
+                        const restaurantContainer = document.getElementById('restaurant-container');
+                        const leftPanel = document.getElementById('left-panel');
+                        const rightPanel = document.getElementById('right-panel');
+                        if (restaurantContainer) {
+                            restaurantContainer.style.display = 'none';
                         }
+                        if (leftPanel) {
+                            leftPanel.style.display = 'block';
+                        }
+                        if (rightPanel) {
+                            rightPanel.style.display = 'block';
+                        }
+                        return fetch(`${contextPath}/api/getRestaurantReviews?fno=` + fno + '&page=' + page + '&pageSize=' + pageSize);
                     } else {
                         alert('식당 정보를 찾을 수 없습니다.');
                     }
@@ -312,8 +279,6 @@
                     alert('데이터를 가져오는 데 실패했습니다.');
                 });
         }
-
-
         
         function displayReviews(reviews) {
             let newReviewsHTML = '';
@@ -374,7 +339,7 @@
         }
         
         function deleteReview(frno) {
-        	reviewsContainer.innerHTML = '';
+           reviewsContainer.innerHTML = '';
             if (confirm("정말로 이 리뷰를 삭제하시겠습니까?")) {
                 fetch(`${contextPath}/vroom/deleteReview`, {
                     method: 'POST',
@@ -421,33 +386,28 @@
             const guName = urlParams.get('guName');
             const lat = parseFloat(urlParams.get('lat'));
             const lng = parseFloat(urlParams.get('lng'));
+            
+            const mapContainer = document.getElementById('map');
+            const mapOption = {
+                center: new kakao.maps.LatLng(lat, lng), // 전달받은 좌표로 설정
+                level: 3
+            };
+            
+            const map = new kakao.maps.Map(mapContainer, mapOption);
 
-            // 지도 중심 좌표를 업데이트
-            const newCenter = new kakao.maps.LatLng(lat, lng);
-            map.setCenter(newCenter);
-
-            // 기존 마커 제거
-            if (window.currentMarker) {
-                window.currentMarker.setMap(null);
-            }
-
-            // 새로운 마커 추가
-            const markerPosition = new kakao.maps.LatLng(lat, lng);
+         // 마커 추가
             const marker = new kakao.maps.Marker({
-                position: markerPosition,
+                position: new kakao.maps.LatLng(lat, lng),
                 map: map
+             
             });
-            window.currentMarker = marker;
 
-            // 페이지 이동 (필요한 경우)
             if (guName) {
                 window.location.href = `${contextPath}/vroom/restaurant?guName=${guName}`;
             } else {
-                window.location.href = `${contextPath}/vroom/restaurant`;
+                window.location.href = `${contextPath}/vroom/restaurant`; 
             }
-        }  // **여기서 중괄호가 닫히는 위치를 확인**
-
-
+        }
         document.addEventListener('DOMContentLoaded', function() {
             if (currentFno) {
                 showDetailView(currentFno);
@@ -504,17 +464,13 @@
 
            }
  
-      //-------즐찾
         <c:set var="contextPath" value="${pageContext.request.contextPath }"/>
-
-
            document.addEventListener('DOMContentLoaded', function() {
                const addFavoriteBtn = document.getElementById('addFavoriteBtn');
-
                if (addFavoriteBtn) {
                    addFavoriteBtn.onclick = function() {
                        $.ajax({
-                           url: '/user/getFavoriteLists',  // 즐겨찾기 목록을 가져오는 API 엔드포인트
+                           url: '/user/getFavoriteLists',  
                            method: 'GET',
                            success: function(favoriteLists) {
                                let optionsHtml = '';
@@ -523,7 +479,6 @@
                                    optionsHtml = "<option value=''>목록이 없습니다. 새로 추가해주세요.</option>";
                                } else {
                                    favoriteLists.forEach(list => {
-                                       // 문자열 연결 방식을 사용하여 <option> 태그를 생성
                                        optionsHtml += "<option value=" + list.listId + ">" + list.listName + "</option>";
                                    });
                                }
@@ -541,7 +496,7 @@
                                    cancelButtonText: '취소',
                                    preConfirm: () => {
                                        const listId = Swal.getPopup().querySelector('#favoriteListSelect').value;
-                                       const pageUrl = window.location.href; // 현재 페이지 URL을 즐겨찾기 링크로 사용
+                                       const pageUrl = window.location.href;
                                        const eno = urlParams.get('eno');
                                        const fno = urlParams.get('fno');
                                        const date = new Date().toISOString().slice(0, 10);
@@ -623,9 +578,7 @@
                    };
                }
            });
-
-           const urlParams = new URLSearchParams(window.location.search);
-
+           
            function createHiddenInput(name, value) {
                const input = document.createElement('input');
                input.type = 'hidden';
