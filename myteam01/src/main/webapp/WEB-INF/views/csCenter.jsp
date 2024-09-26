@@ -383,14 +383,23 @@
 			<!-- <h3>고객의 소리 상세보기</h3> -->
             <table style="width: 100%; border-collapse: collapse; border: 1px solid #ddd;">
                 <tr>
+<<<<<<< Updated upstream
                  <!--    <th style="width: 15%;">제목</th>
+=======
+                   <th style="width: 15%;">제목</th>
+>>>>>>> Stashed changes
                     <td id="feedback-title"></td>
                     <th style="width: 15%;">등록일</th>
                     <td id="feedback-regdate"></td> -->
                 </tr>
                 <tr>
+<<<<<<< Updated upstream
                     <!-- <th style="width: 15%;">내용</th>
                     <td colspan="3" id="feedback-content" style="white-space: pre-wrap;"></td> -->
+=======
+                    <th style="width: 15%;">내용</th>
+                    <td colspan="3" id="feedback-content" style="white-space: pre-wrap;"></td> 
+>>>>>>> Stashed changes
                 </tr>
             </table>
             <button class="back-btn" onclick="hideDetail()">닫기</button>
