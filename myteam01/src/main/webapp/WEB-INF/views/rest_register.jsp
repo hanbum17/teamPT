@@ -38,13 +38,13 @@
             <div id="map"></div>
     		<p><em>핀을 클릭하여 위치를 조정하세요.</em></p>
             <div class="form-group">
-                <label for="fxcoord">x좌표</label>
+               <!--  <label type="hidden" for="fxcoord">x좌표</label> -->
 
-                <input type="text" class="form-control" id="fxcoord" name="fxcoord" placeholder="x좌표를 입력하세요" readonly>
+                <input type="hidden" class="form-control" id="fxcoord" name="fxcoord" placeholder="x좌표를 입력하세요" readonly>
             </div>
             <div class="form-group">
-                <label for="fycoord">y좌표</label>
-                <input type="text" class="form-control" id="fycoord" name="fycoord" placeholder="y좌표를 입력하세요" readonly>
+              <!--   <label type="hidden" for="fycoord">y좌표</label> -->
+                <input type="hidden" class="form-control" id="fycoord" name="fycoord" placeholder="y좌표를 입력하세요" readonly>
 
             </div>
             <div class="form-group">
