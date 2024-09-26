@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib uri="jakarta.tags.core" prefix="c" %>
+
+<%@ include file="./menu/nav.jsp"%>
 <c:set var="contextPath" value="${pageContext.request.contextPath }"/>
 <!DOCTYPE html>
 <html lang="ko">
@@ -7,10 +8,6 @@
     <meta charset="UTF-8">
     <title>Restaurant List</title>
     <style>
-    .container {
-    user-select: none; /* 텍스트 선택 방지 */
-}
-    
         body {
             margin: 0;
             padding: 0;
@@ -19,8 +16,8 @@
             background-color: #f7f7f7;
              background-image: url('/image/kakaoMAP.jpg');
             background-size: cover; /* 배경 이미지가 요소의 전체를 덮도록 설정 */
-   			 background-position: center; /* 이미지의 위치를 중앙으로 설정 */
-    		background-repeat: no-repeat; /* 이미지 반복을 방지 */
+             background-position: center; /* 이미지의 위치를 중앙으로 설정 */
+          background-repeat: no-repeat; /* 이미지 반복을 방지 */
             display: flex;
             flex-direction: column;
             justify-content: flex-end;
@@ -35,11 +32,6 @@
         z-index: 0; /* 지도를 배경으로 만들기 위해 z-index를 음수로 설정 */
     }
         
-.selected-card {
-    transform: scale(1.1); /* 카드 크기를 10% 키움 */
-    transition: transform 0.3s; /* 부드러운 변환 효과 */
-    z-index: 1; /* 다른 카드보다 위에 보이도록 설정 */
-}
 
         .container {
             display:  flex;
@@ -56,20 +48,20 @@
         }
 
         .restaurant-card {
-		    display: inline-block;
-		    width: 210px; /* 너비 */
-		    height: 290px; /* 높이 */
-		    margin-right: 20px;
-		    background-color: #f0f0f0;
-		    border-radius: 10px;
-		    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-		    text-align: center;
-		    padding: 10px;
-		    box-sizing: border-box;
-		    cursor: pointer;
-		    flex-shrink: 0;
-		    overflow: hidden; /* 넘치는 내용 숨기기 */
-		}
+          display: inline-block;
+          width: 210px; /* 너비 */
+          height: 290px; /* 높이 */
+          margin-right: 20px;
+          background-color: #f0f0f0;
+          border-radius: 10px;
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+          text-align: center;
+          padding: 10px;
+          box-sizing: border-box;
+          cursor: pointer;
+          flex-shrink: 0;
+          overflow: hidden; /* 넘치는 내용 숨기기 */
+      }
         .restaurant-card img {
             width: 100%;
             height: 60%;
@@ -78,28 +70,28 @@
         }
 
         .restaurant-info {
-		    padding: 20px;
-		    overflow: hidden; /* 넘치는 내용 숨기기 */
-		    text-overflow: ellipsis; /* 넘치는 텍스트를 '...'로 표시 */
-		    white-space: nowrap; /* 텍스트를 한 줄로 표시 */
-		}
+          padding: 20px;
+          overflow: hidden; /* 넘치는 내용 숨기기 */
+          text-overflow: ellipsis; /* 넘치는 텍스트를 '...'로 표시 */
+          white-space: nowrap; /* 텍스트를 한 줄로 표시 */
+      }
 
         .restaurant-info h3 {
-		    margin: 1px 0;
-		    font-size: 18px;
-		    word-break: break-word; /* 단어가 길 경우 줄바꿈 허용 */
-		    word-break: keep-all; /* 단어가 중간에 끊기지 않도록 설정 */s
-		    white-space: normal; /* 제목은 여러 줄로 표시 가능 */
-		}
+          margin: 1px 0;
+          font-size: 18px;
+          word-break: break-word; /* 단어가 길 경우 줄바꿈 허용 */
+          word-break: keep-all; /* 단어가 중간에 끊기지 않도록 설정 */s
+          white-space: normal; /* 제목은 여러 줄로 표시 가능 */
+      }
 
         .restaurant-info p {
-		    margin: 5px 0;
-		    font-size: 14px;
-		    color: #555;
-		    overflow: hidden; /* 넘치는 내용 숨기기 */
-		    text-overflow: ellipsis; /* 넘치는 텍스트를 '...'로 표시 */
-		    white-space: nowrap; /* 텍스트를 한 줄로 표시 */
-		}
+          margin: 5px 0;
+          font-size: 14px;
+          color: #555;
+          overflow: hidden; /* 넘치는 내용 숨기기 */
+          text-overflow: ellipsis; /* 넘치는 텍스트를 '...'로 표시 */
+          white-space: nowrap; /* 텍스트를 한 줄로 표시 */
+      }
 
 
         .container::-webkit-scrollbar {
@@ -162,44 +154,44 @@
       }
 
       #editReviewForm {
-	    display: none;
-	    margin-top: 20px; /* 위치 조정 */
-	    padding: 10px;
-	    border: 1px solid #ddd;
-	    border-radius: 10px;
-	    background-color: #fff;
-	    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-		}
+       display: none;
+       margin-top: 20px; /* 위치 조정 */
+       padding: 10px;
+       border: 1px solid #ddd;
+       border-radius: 10px;
+       background-color: #fff;
+       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
 
-	  .review_ul {
-	           list-style-type: none; /* 리스트의 기본 점을 제거합니다 */
-	           padding: 0;
-		}
-	
-	.event-search-btn {
-	    position: absolute;
-	    top: 700px; /* 컨테이너 상단과의 거리 */
-	    right: 10px; /* 컨테이너 우측과의 거리 */
-	    padding: 10px 20px;
-	    background-color: #007bff;
-	    color: #fff;
-	    border: none;
-	    border-radius: 5px;
-	    cursor: pointer;
-	    z-index: 1000; /* 버튼이 다른 요소 위에 표시되도록 설정 */
-	}
+     .review_ul {
+              list-style-type: none; /* 리스트의 기본 점을 제거합니다 */
+              padding: 0;
+      }
+   
+   .event-search-btn {
+       position: absolute;
+       top: 700px; /* 컨테이너 상단과의 거리 */
+       right: 10px; /* 컨테이너 우측과의 거리 */
+       padding: 10px 20px;
+       background-color: #007bff;
+       color: #fff;
+       border: none;
+       border-radius: 5px;
+       cursor: pointer;
+       z-index: 1000; /* 버튼이 다른 요소 위에 표시되도록 설정 */
+   }
 
-	.event-search-btn:hover {
-    	background-color: #0056b3;
-	}
-	
+   .event-search-btn:hover {
+       background-color: #0056b3;
+   }
+   
 .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 10px 20px; /* 패딩을 줄여서 내용이 위로 이동하도록 설정 */
     background-color: transparent; /* 상단 바 배경 제거 */
-    color: #000;
+    color: #ffffff;
     border-bottom: none; /* 흰색 줄 제거 */
     height: 60px; /* 헤더의 높이를 적절히 설정 */
     position: fixed; /* 헤더를 페이지 상단에 고정 */
@@ -211,30 +203,30 @@
 
 
 
-	.header .logo {
-	    font-size: 30px; /* 글자 크기 2/3로 줄임 */
-	    font-weight: bold;
-	}
-	
-	.header .nav {
-	    font-size: 20px; /* 글자 크기 2/3로 줄임 */
-	}
-	
-	.header .nav a {
-	    color: #000;
-	    text-decoration: none;
-	    margin: 0 15px; /* 글자 사이 간격 조정 */
-	}
-	
+   .header .logo {
+       font-size: 30px; /* 글자 크기 2/3로 줄임 */
+       font-weight: bold;
+   }
+   
+   .header .nav {
+       font-size: 20px; /* 글자 크기 2/3로 줄임 */
+   }
+   
+   .header .nav a {
+       color: #ffffff;
+       text-decoration: none;
+       margin: 0 15px; /* 글자 사이 간격 조정 */
+   }
+   
 }
-	
+   
 
     </style>
 </head>
 <body>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
-<div id="map"></div>
+<div id="map" style="width: 100%; height: 100%;"></div>
 
 <div class="header">
     <div class="logo" id="goToMain">Vroom</div>
@@ -248,9 +240,9 @@
 
 
     <div style="position: absolute; top: 10px; left: 10px; font-size: 16px;">
-        <c:if test="${not empty user}">
+        <c:if test="${not empty user}"><%-- 
             현재 로그인: <strong>${user.userId}</strong>
-            현재 구: <strong>${restVO.guName != null ? restVO.guName : 'N/A'}</strong>
+            현재 구: <strong>${restVO.guName != null ? restVO.guName : 'N/A'}</strong> --%>
         </c:if>
     </div>
 
@@ -260,23 +252,22 @@
     <div class="container" id="restaurant-container">
         <!-- 레스토랑 카드 반복문으로 생성 -->        
         <div class="more-restaurant-card">
-	        <c:forEach var="restaurant" items="${restList}">
-			    <div class="restaurant-card" 
-			         data-fno="${restaurant.fno}" 
-			         data-fxcoord="${restaurant.fxcoord}" 
-			         data-fycoord="${restaurant.fycoord}" 
-			         onclick="window.location.href='${contextPath}/vroom/restaurant/details?fno=${restaurant.fno}&lat=${restaurant.fxcoord}&lng=${restaurant.fycoord}'">
-			        <img src="${contextPath}/images/bibimbab.jpg" alt="${restaurant.fname} Image">
-			        <div class="restaurant-info">
-			            <h3>${restaurant.fname}</h3>
-			            <p>${restaurant.faddress}</p>
-			            <p>${restaurant.frating}</p>
-			            
-			            
-			        </div>
-			    </div>
-			</c:forEach>
-		</div>
+           <c:forEach var="restaurant" items="${restList}">
+             <div class="restaurant-card" 
+                  data-fno="${restaurant.fno}" 
+                  data-fxcoord="${restaurant.fxcoord}" 
+                  data-fycoord="${restaurant.fycoord}" 
+                  onclick="window.location.href='${contextPath}/vroom/restaurant/details?fno=${restaurant.fno}&lat=${restaurant.fxcoord}&lng=${restaurant.fycoord}'">
+                 <img src="${contextPath}/images/bibimbab.jpg" alt="${restaurant.fname} Image">
+                 <div class="restaurant-info">
+                     <h3>${restaurant.fname}</h3>
+                     <p>${restaurant.faddress}</p>
+                     <p>${restaurant.frating}</p>
+                     
+                 </div>
+             </div>
+         </c:forEach>
+      </div>
         <!-- 데이터가 없는 경우 표시할 카드 -->
         <c:if test="${empty restList}">
             <div class="restaurant-card">
@@ -383,22 +374,22 @@ const contextPath = "${contextPath}";
 
 //브라우저 시작되고 반응형 스크립트
 document.addEventListener('DOMContentLoaded', () => {
-	
-	addMouseOverListenerToCards();
-	 const restaurantButton = document.getElementById('event-search-btn');
+   
+   addMouseOverListenerToCards();
+    const restaurantButton = document.getElementById('event-search-btn');
 
-	    restaurantButton.addEventListener('click', () => {
-	        window.location.href = '${contextPath}/vroom/event';
-	    });
-	
+       restaurantButton.addEventListener('click', () => {
+           window.location.href = '${contextPath}/vroom/event';
+       });
+   
     const container = document.getElementById('restaurant-container'); //추가할 컨테이너
 
     //레스토랑 추가 데이터 가져오는 스크립트 (드래그 시 10개씩 추가)
     function loadMoreRestaurants() {
         if (isLoading) return;
         isLoading = true;
-		
-        fetch(contextPath + "/api/restaurant/more?page=" + restPage + "&pageSize=" + restPageSize)
+      
+        fetch(contextPath + "/api/restaurant?page=" + restPage + "&pageSize=" + restPageSize)
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
@@ -420,15 +411,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     }
     
-	
+   
 
     
     //레스토랑 리스트 추가
 
  function appendRestaurants(restaurants) {
     restaurants.forEach(restaurant => {
-    	//console.log('Restaurant Data:', restaurant.fxcoord, restaurant.fycoord);
-    	
+       //console.log('Restaurant Data:', restaurant.fxcoord, restaurant.fycoord);
+       
         const restaurantCard = document.createElement('div');
         restaurantCard.className = 'restaurant-card'; // 스타일 적용
         restaurantCard.dataset.fno = restaurant.fno;
@@ -478,75 +469,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initial data load
     loadMoreRestaurants();
 
-});
-
-
-//드래그 관련 변수
-let isDragging = false;
-let startX;
-let scrollLeft;
-
-const container = document.getElementById('restaurant-container');
-
-// 드래그 시작
-container.addEventListener('mousedown', (e) => {
-    isDragging = true;
-    startX = e.pageX - container.offsetLeft;
-    scrollLeft = container.scrollLeft;
-    e.preventDefault(); // 기본 동작 방지
-});
-
-// 드래그 중
-container.addEventListener('mousemove', (e) => {
-    if (!isDragging) return; // 드래그 중이 아닐 때는 무시
-    e.preventDefault(); // 기본 동작 방지
-    const x = e.pageX - container.offsetLeft;
-    const walk = (x - startX) * 2; // 드래그 이동량을 조절 (속도 조정)
-    container.scrollLeft = scrollLeft - walk;
-});
-
-// 드래그 종료
-container.addEventListener('mouseup', () => {
-    isDragging = false;
-});
-
-// 드래그 중 다른 요소에서 마우스 버튼이 떼어질 경우
-container.addEventListener('mouseleave', () => {
-    isDragging = false;
-});
-
-//드래그 관련 변수
-let isDragging = false;
-let startX;
-let scrollLeft;
-
-const container = document.getElementById('restaurant-container');
-
-// 드래그 시작
-container.addEventListener('mousedown', (e) => {
-    isDragging = true;
-    startX = e.pageX - container.offsetLeft;
-    scrollLeft = container.scrollLeft;
-    e.preventDefault(); // 기본 동작 방지
-});
-
-// 드래그 중
-container.addEventListener('mousemove', (e) => {
-    if (!isDragging) return; // 드래그 중이 아닐 때는 무시
-    e.preventDefault(); // 기본 동작 방지
-    const x = e.pageX - container.offsetLeft;
-    const walk = (x - startX) * 2; // 드래그 이동량을 조절 (속도 조정)
-    container.scrollLeft = scrollLeft - walk;
-});
-
-// 드래그 종료
-container.addEventListener('mouseup', () => {
-    isDragging = false;
-});
-
-// 드래그 중 다른 요소에서 마우스 버튼이 떼어질 경우
-container.addEventListener('mouseleave', () => {
-    isDragging = false;
 });
 
 

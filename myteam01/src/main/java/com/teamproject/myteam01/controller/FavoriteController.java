@@ -135,6 +135,7 @@ public class FavoriteController {
 
 
     @PostMapping("/user/addFavoriteItem")
+    @ResponseBody
     public String addFavoriteItem(@RequestParam("listId") Long listId,
                                   @RequestParam("link") String link,
                                   @RequestParam(value = "eno", required = false) Long eno,
@@ -148,10 +149,8 @@ public class FavoriteController {
         favoriteItemVO.setUserId(userDetails.getUsername()); // 현재 로그인한 사용자의 아이디 설정
         favoriteItemVO.setRegistrationDate(LocalDateTime.now()); // 현재 시간 설정
 
-        System.out.println("FavoriteItemVO: " + favoriteItemVO);
-        
         favoriteService.addFavoriteItem(favoriteItemVO);
-        return "redirect:/user/user_fav_items?listId=" + listId;
+        return "즐겨찾기가 완료되었습니다."; // 완료 메시지를 반환
     }
     
     @PostMapping("/user/favorites/updateList")

@@ -49,6 +49,7 @@ public class UserService {
     }
 
     public void registerUserRole(String userId, String role) {
+    	System.out.println("Registering role: " + role + " for userId: " + userId);
         userMapper.insertUserRole(userId, role);
     }
     

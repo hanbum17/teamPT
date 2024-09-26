@@ -61,15 +61,10 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
-        body {
-            margin: 0;
-		    padding: 0;
-		    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-		    background-color: #f5f5f5;
-		    width: 100%;
-		    color: #333;
-		    background: linear-gradient(120deg, #84fab0, #8fd3f4);
-        }
+
+
+
+        
         #genderChart {
             width: 300px !important;
             height: 300px !important;

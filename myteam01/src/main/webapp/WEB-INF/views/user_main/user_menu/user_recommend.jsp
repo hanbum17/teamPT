@@ -7,7 +7,7 @@
 <%@ page import="java.io.InputStreamReader" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ include file="../userSide.jsp"%>
-<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/user_menu/detail.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/user_menu/recommend.css">
 <!DOCTYPE html>
 <html>
 <head>
@@ -30,36 +30,14 @@
 
     window.onload = executePythonScripts; // 페이지 로드 시 스크립트 실행
 </script>
-<style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #f9f9f9;
-        }
-        .recommendation {
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 20px;
-            background-color: #fff;
-        }
-        h2 {
-            color: #333;
-        }
-        .event, .restaurant {
-            margin: 10px 0;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            background-color: #f1f1f1;
-        }
-    </style>
+
 </head>
 <body>
 
 <main class="content-box">
-	<div class="recommendation">
-        <h2>행사 추천 
+    <!-- 행사 추천 섹션 -->
+    <div class="recommendation">
+        <h2>행사 추천
             <% if (request.getAttribute("eRecoType") != null && !((String)request.getAttribute("eRecoType")).isEmpty()) { %>
                 [<%= request.getAttribute("eRecoType") %>]
             <% } %>
@@ -84,23 +62,22 @@
         %>
     </div>
 
+    <!-- 식당 추천 섹션 -->
     <div class="recommendation">
-        <h2>식당 추천 
+        <h2>식당 추천
             <% if (request.getAttribute("fRecoType") != null && !((String)request.getAttribute("fRecoType")).isEmpty()) { %>
                 [<%= request.getAttribute("fRecoType") %>]
             <% } %>
         </h2>
-        <%
-            @SuppressWarnings("unchecked")
+        <% @SuppressWarnings("unchecked")
             List<RestaurantVO> restList = (List<RestaurantVO>) request.getAttribute("restList");
             if (restList != null && !restList.isEmpty()) {
-                for (RestaurantVO rest : restList) {
-        %>
-            <div class="restaurant">
-                <strong>식당 이름:</strong> <%= rest.getFname() %><br>
-                <strong>주소:</strong> <%= rest.getFaddress() %><br>
-                <strong>카테고리:</strong> <%= rest.getFcategory() %>
-            </div>
+                for (RestaurantVO rest : restList) { %>
+                    <div class="restaurant">
+                        <strong>식당 이름:</strong> <%= rest.getFname() %><br>
+                        <strong>주소:</strong> <%= rest.getFaddress() %><br>
+                        <strong>카테고리:</strong> <%= rest.getFcategory() %>
+                    </div>
         <%
                 }
             } else {
@@ -110,6 +87,13 @@
             }
         %>
     </div>
+
+    <!-- 로딩 스피너 -->
+    <div id="loading">
+        <img src="/resources/images/spinner.gif" alt="Loading...">
+    </div>
 </main>
+
+
 </body>
 </html>

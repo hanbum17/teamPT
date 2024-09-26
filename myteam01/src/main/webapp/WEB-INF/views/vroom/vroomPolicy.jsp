@@ -11,6 +11,24 @@
     <meta charset="UTF-8">
     <title>Vroom Policy</title>
 
+
+	    <!-- Admin 로그인 시 스타일을 변경 -->
+    <sec:authorize access="hasRole('ADMIN')">
+    <style>
+        /* 관리자일 때 핑크색 스타일 적용 */
+        .menu {
+            background-color: #003366; /* 핑크로 변경 */
+        }
+        .menu a {
+            color: #003366; /* 핑크로 변경 */
+        }
+        .menu a:hover {
+            background-color: #001F3F; /* 핑크 계열로 hover 색상 변경 */
+            color: #fff;
+        }
+    </style>
+    </sec:authorize>
+
     <script>
         function showSection(sectionId) {
             // 모든 섹션을 숨김

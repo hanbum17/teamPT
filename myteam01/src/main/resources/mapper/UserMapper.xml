@@ -118,7 +118,7 @@
 	<select id="userGenderCount" resultType="com.teamproject.myteam01.domain.UserVO">
 		SELECT userGender from users
 	</select>
-	<!-- 가입시 activㅑty에 추가 -->
+	<!-- 가입시 activity에 추가 -->
 	<insert id="userRegisterActivity" parameterType="com.teamproject.myteam01.domain.UserVO">
 		INSERT INTO USER_ACTIVITY 
 		VALUES(#{userId} , DEFAULT , '신규회원')
