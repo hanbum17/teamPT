@@ -41,7 +41,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(authz -> authz
                 .requestMatchers("/css/**", "/js/**", "/image/**", "/json/**").permitAll()
                 .requestMatchers("/WEB-INF/views/vroom/**", "/WEB-INF/views/**").permitAll()
-                .requestMatchers("/vroom/**", "/user/**", "/resources/**", "/images/**", "/api/**").permitAll()
+                .requestMatchers("/vroom/**", "/user/**", "/resources/**", "/images/**", "/api/**", "/cs/Center").permitAll()
                 .requestMatchers("/WEB-INF/views/user/login.jsp", "/WEB-INF/views/user/register.jsp", "/WEB-INF/views/user/registerSelect.jsp").anonymous()
                 .requestMatchers("/admin/main/**").hasRole("ADMIN")
                 .anyRequest().authenticated()

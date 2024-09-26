@@ -2,6 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <%@ include file="../menu/nav.jsp"%>
+<%@ include file="../menu/footer.jsp"%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>

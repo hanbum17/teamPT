@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="../menu/nav.jsp"%>
-<%@ include file="../admin_main/header.jsp" %>
+<%@ include file="../menu/footer.jsp"%>
 <%@ taglib uri="jakarta.tags.fmt" prefix="fmt" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath }"/>
 <!DOCTYPE html>
@@ -81,7 +81,6 @@
         </div>
 
         <button type="submit" class="btnRegister" id="btnRegister">등록</button>
-        <button type="button" class="btnCancel" id="btnCancel" onclick="location.href='${contextPath}/event/list'">취소</button>
     </form>
 </div>
 

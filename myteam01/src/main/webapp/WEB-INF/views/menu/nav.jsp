@@ -21,7 +21,7 @@
         <ul class="nav-menu">
             <!-- 공지사항 메뉴 -->
             <li class="nav-item">
-                <a href="#">공지사항</a>
+                <a href="/cs/Center?type=notice">공지사항</a>
                 <ul class="dropdown">
                     <li><a href="/cs/Center?type=notice">공지</a></li>
                     <li><a href="/cs/Center?type=event">이벤트</a></li>
