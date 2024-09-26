@@ -156,7 +156,7 @@
         <p><strong>Category:</strong> <span id="panel-category"></span></p>
         <p><strong>Location:</strong> <span id="panel-location"></span></p>
         <button id="addFavoriteBtn" class="add-fav-btn">즐겨찾기 추가</button>
-        <button class="back-button" onclick="goBack()">Back</button>
+        <button id= "back-button" class="back-button" onclick="goBack()">Back</button>
     </div>
     <div class="panel right-panel" id="right-panel">
         <p>
@@ -382,37 +382,11 @@
             }
         }
         function goBack() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const guName = urlParams.get('guName');
-            const lat = parseFloat(urlParams.get('lat'));
-            const lng = parseFloat(urlParams.get('lng'));
-            
-            const mapContainer = document.getElementById('map');
-            const mapOption = {
-                center: new kakao.maps.LatLng(lat, lng), // 전달받은 좌표로 설정
-                level: 3
-            };
-            
-            const map = new kakao.maps.Map(mapContainer, mapOption);
-
-         // 마커 추가
-            const marker = new kakao.maps.Marker({
-                position: new kakao.maps.LatLng(lat, lng),
-                map: map
-             
-            });
-
-            if (guName) {
-                window.location.href = `${contextPath}/vroom/restaurant?guName=${guName}`;
-            } else {
-                window.location.href = `${contextPath}/vroom/restaurant`; 
-            }
-        }
-        document.addEventListener('DOMContentLoaded', function() {
-            if (currentFno) {
-                showDetailView(currentFno);
-            }
-        });
+        	document.getElementById('back-button').onclick = function() {
+        		window.history.back();
+        	};
+        	
+        	
         function submitReview() {
 
            reviewsContainer.innerHTML = '';
