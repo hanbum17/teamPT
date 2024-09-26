@@ -63,7 +63,7 @@
                             <button type="submit"><i class="fa-regular fa-newspaper"></i> 등록한 리뷰</button>
                         </form>
                     </li>
-                    <li class="menu-item">
+<!--                     <li class="menu-item">
                         <form action="/user/user_reservation" method="get">
                             <button type="submit"><i class="fa-solid fa-cart-shopping"></i> 예약 내역</button>
                         </form>
@@ -72,18 +72,19 @@
                         <form action="/user/user_pay" method="get">
                             <button type="submit"><i class="fa-solid fa-coins"></i> 결제 내역</button>
                         </form>
-                    </li>
+                    </li> -->
                     <li class="menu-item">
                         <form action="/user/user_inquiry" method="get">
                             <button type="submit"><i class="fa-solid fa-comment"></i> 문의 내역</button>
                         </form>
                     </li>
-                    <li class="menu-item"><sec:authorize
+<%--                     <li class="menu-item"><sec:authorize
                             access="hasAnyRole('ROLE_ADMIN', 'ROLE_BUSINESS')">
                             <form action="/user/user_business" method="get">
                                 <button type="submit"><i class="fa-regular fa-building"></i> 비지니스 - 등록된 사업 정보</button>
                             </form>
-                        </sec:authorize></li>
+                        </sec:authorize>
+                    </li> --%>
                     <!-- 회원탈퇴 메뉴 -->
                     <li class="menu-item delete-account">
                         <form id="deleteAccountForm" action="/user/deleteAccount" method="post">

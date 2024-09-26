@@ -9,8 +9,9 @@
 <%@ page import="java.util.stream.Collectors" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
-<%@ include file="header.jsp" %>
+
 <%@ include file="../menu/nav.jsp"%>
+<%@ include file="../menu/footer.jsp"%>
 <%
     UserVO userCounts = (UserVO) request.getAttribute("user");
     Long maleCnt = userCounts.getMaleCnt() != null ? userCounts.getMaleCnt() : 0;
@@ -61,12 +62,12 @@
     <style>
         body {
             margin: 0;
-    padding: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f5f5f5;
-    width: 100%;
-    color: #333;
-    background: linear-gradient(120deg, #84fab0, #8fd3f4);
+		    padding: 0;
+		    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+		    background-color: #f5f5f5;
+		    width: 100%;
+		    color: #333;
+		    background: linear-gradient(120deg, #84fab0, #8fd3f4);
         }
         #genderChart {
             width: 300px !important;
@@ -108,9 +109,8 @@
 		    border: 1px solid #ccc; /* 테두리 추가 */
 		    border-radius: 5px; /* 모서리 둥글게 */
 		    padding: 20px; /* 내부 여백 */
-		    margin-top: 3%; /* 상단 여백 */
-		    margin-left: 10%; /* 자동으로 왼쪽 여백 조정 */
-		    margin-right: 20px; /* 오른쪽 여백 추가 */
+		    margin: 100px auto ; /* 상단 여백 */
+
 		    width: 80%; /* 전체 너비에서 여백을 뺀 값 */
 		}
 

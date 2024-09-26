@@ -56,20 +56,20 @@
         }
 
         .restaurant-card {
-            display: inline-block;
-            width: 200px;
-            height: 280px;
-            margin-right: 20px;
-            background-color: #f0f0f0;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            padding: 10px;
-            box-sizing: border-box;
-            cursor: pointer;
-            flex-shrink: 0;
-        }
-
+		    display: inline-block;
+		    width: 210px; /* 너비 */
+		    height: 290px; /* 높이 */
+		    margin-right: 20px;
+		    background-color: #f0f0f0;
+		    border-radius: 10px;
+		    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+		    text-align: center;
+		    padding: 10px;
+		    box-sizing: border-box;
+		    cursor: pointer;
+		    flex-shrink: 0;
+		    overflow: hidden; /* 넘치는 내용 숨기기 */
+		}
         .restaurant-card img {
             width: 100%;
             height: 60%;
@@ -78,54 +78,29 @@
         }
 
         .restaurant-info {
-            padding: 20px;
-        }
+		    padding: 20px;
+		    overflow: hidden; /* 넘치는 내용 숨기기 */
+		    text-overflow: ellipsis; /* 넘치는 텍스트를 '...'로 표시 */
+		    white-space: nowrap; /* 텍스트를 한 줄로 표시 */
+		}
 
         .restaurant-info h3 {
-            margin: 1px 0;
-            font-size: 18px;
-        }
+		    margin: 1px 0;
+		    font-size: 18px;
+		    word-break: break-word; /* 단어가 길 경우 줄바꿈 허용 */
+		    word-break: keep-all; /* 단어가 중간에 끊기지 않도록 설정 */s
+		    white-space: normal; /* 제목은 여러 줄로 표시 가능 */
+		}
 
         .restaurant-info p {
-            margin: 5px 0;
-            font-size: 14px;
-            color: #555;
-        }
+		    margin: 5px 0;
+		    font-size: 14px;
+		    color: #555;
+		    overflow: hidden; /* 넘치는 내용 숨기기 */
+		    text-overflow: ellipsis; /* 넘치는 텍스트를 '...'로 표시 */
+		    white-space: nowrap; /* 텍스트를 한 줄로 표시 */
+		}
 
-        .panel {
-            position: absolute;
-            top: 50px;
-            width: 28%;
-            height: calc(100vh - 100px);
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-            background-color: #fff;
-            padding: 20px;
-            box-sizing: border-box;
-            display: none;
-        }
-
-        .left-panel {
-            left: 5%;
-            border: 1px solid #ddd;
-            padding: 20px;
-            box-sizing: border-box;
-        }
-
-        .right-panel {
-            right: 5%;
-            border: 1px solid #ddd;
-            padding: 20px;
-            box-sizing: border-box;
-        }
-
-        .panel h2 {
-            margin-bottom: 20px;
-        }
-
-        .panel p {
-            margin-bottom: 10px;
-        }
 
         .container::-webkit-scrollbar {
             display: none;
@@ -250,6 +225,9 @@
 	    text-decoration: none;
 	    margin: 0 15px; /* 글자 사이 간격 조정 */
 	}
+	
+}
+	
 
     </style>
 </head>
@@ -272,6 +250,7 @@
     <div style="position: absolute; top: 10px; left: 10px; font-size: 16px;">
         <c:if test="${not empty user}">
             현재 로그인: <strong>${user.userId}</strong>
+            현재 구: <strong>${restVO.guName != null ? restVO.guName : 'N/A'}</strong>
         </c:if>
     </div>
 
@@ -286,7 +265,7 @@
 			         data-fno="${restaurant.fno}" 
 			         data-fxcoord="${restaurant.fxcoord}" 
 			         data-fycoord="${restaurant.fycoord}" 
-			         onclick="window.location.href='${contextPath}/vroom/restaurant/details?fno=${restaurant.fno}'">
+			         onclick="window.location.href='${contextPath}/vroom/restaurant/details?fno=${restaurant.fno}&lat=${restaurant.fxcoord}&lng=${restaurant.fycoord}'">
 			        <img src="${contextPath}/images/bibimbab.jpg" alt="${restaurant.fname} Image">
 			        <div class="restaurant-info">
 			            <h3>${restaurant.fname}</h3>
@@ -304,8 +283,8 @@
                 <img src="${contextPath}/images/bibimbab.jpg" alt="No Data Image">
                 <div class="restaurant-info">
                     <h3>No Restaurants Available</h3>
-                    <p>Location: N/A</p>
-                    <p>Rating: N/A</p>
+                    <p> N/A</p>
+                    <p>N/A</p>
                 </div>
             </div>
         </c:if>
@@ -324,7 +303,6 @@ var map = new kakao.maps.Map(mapContainer, mapOption);
 
 // 기본 마커 생성
 var marker = new kakao.maps.Marker({
-    position: map.getCenter(),
     draggable: true // 마커를 드래그 가능하게 설정
 });
 
@@ -464,8 +442,8 @@ document.addEventListener('DOMContentLoaded', () => {
             "<img src='" + contextPath + "/images/bibimbab.jpg' alt='" + restaurant.fname + " Image'>" +
             "<div class='restaurant-info'>" +
             "    <h3>" + restaurant.fname + "</h3>" +
-            "    <p>Location: " + restaurant.faddress + "</p>" +
-            "    <p>Rating: " + restaurant.frating + "</p>" +
+            "    <p>" + restaurant.faddress + "</p>" +
+            "    <p>" + restaurant.frating + "</p>" +
             "</div>";
 
         container.appendChild(restaurantCard);
