@@ -10,6 +10,7 @@
     <title>VROOM Navigation</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/nav.css">
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 </head>
 <body>
     <!-- NAVIGATION BAR -->
@@ -44,30 +45,7 @@
 	                    <li><a href="/restaurant/rest_register">음식점</a></li>
 	                </ul>
 	            </li>
-	            <!-- 운행 메뉴 -->
-	            <%-- <li class="nav-item">
-	                <a href="#">운행</a>
-	                <ul class="dropdown">
-	                    <li><a href="#">버스</a>
-	                        <ul class="sub-dropdown">
-	                            <li><a href="#">버스 신청</a></li>
-	                            <sec:authorize access="hasAnyRole('ADMIN', 'BUSINESS')">
-	                            	<li><a href="#">버스 등록</a></li>
-                            	</sec:authorize>
-	                        </ul>
-	                    </li>
-	                    <li><a href="#">렌터카</a>
-	                        <ul class="sub-dropdown">
-	                            <li><a href="#">렌터카 찾기</a></li>
-	                            <sec:authorize access="hasAnyRole('ADMIN', 'BUSINESS')">
-	                            	<li><a href="#">렌터카 등록</a></li>
-                            	c
-	                        </ul>
-	                    </li>
-	                </ul>
-	            </li> --%>
             </sec:authorize>
-
         </ul>
 
         <!-- USER SECTION -->
@@ -94,12 +72,16 @@
 		    </sec:authorize>
 		</div>
     </nav>
+
     <script>
 	$("#chat_room").on("click", function(){
-		
-		window.open("http://195.168.9.110:8080/chat/chat", "_blank", "width=500, height=500") ;
-		
+		window.open("http://195.168.9.110:8080/chat/chat", "_blank", "width=500, height=500");
 	});
+
+    // 관리자 로그인 시 배경을 변경
+    <sec:authorize access="hasRole('ADMIN')">
+        $('html, body, .navbar').addClass('admin-mode');
+    </sec:authorize>
 	</script>
 </body>
 </html>
