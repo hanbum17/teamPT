@@ -1,8 +1,12 @@
 
 package com.teamproject.myteam01.service;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -103,7 +107,6 @@ public class UserService {
     
     
     //영범
-    
     //성별 통계
     public UserVO countGender() {
     	List<UserVO> genderCount = userMapper.userGenderCount();
@@ -117,13 +120,11 @@ public class UserService {
         }
     	return result;
     }
-    
     //메인화면 접속시 로그인 되어있으면 파이썬에 아이디 넘기기 위해 db에 넣기
     public void userIdInsert(String user) {
     	userMapper.deleteUserActivity();
     	userMapper.userIdInsert(user);
     }
-    
     //사용자에게 추천할 행사 정보 리스트
     public List<EventVO> recomendEvent(String user) {
     	
@@ -142,7 +143,6 @@ public class UserService {
         
         return eventList; // 리스트 반환
     }
-    
     //상용자에게 추천할 행사 정보 리스트
     public List<RestaurantVO> recomendRest(String user){
     	List<UserActivityVO> recomendList = userMapper.selectRecommend(user);
@@ -161,7 +161,48 @@ public class UserService {
     	}
     	return restList;
     }
+    public Map<String, Long> getNewUserCountByDate() {
+        // UserActivityVO 리스트 가져오기
+        List<Date> activities = userMapper.selectNewUserForCnt();
+        System.out.println("88888888888888888888888888888888888" + activities);
+        // 날짜별 개수를 저장할 맵
+        Map<String, Long> dateCountMap = new HashMap<>();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd"); // 날짜 형식 정의
+        
+        // activities 리스트가 비어있는지 체크
+        if (activities == null || activities.isEmpty()) {
+            System.out.println("No user activities found.");
+            return dateCountMap; // 빈 맵 반환
+        }
 
+        // regDate를 기준으로 개수 세기
+        for (Date activity : activities) {
+            if (activity != null) { // activity가 null인지 확인
+                Date regDate = activity;
+                if (regDate != null) {
+                    String formattedDate = dateFormat.format(regDate); // 날짜 포맷팅
+                    dateCountMap.put(formattedDate, dateCountMap.getOrDefault(formattedDate, 0L) + 1);
+                    System.out.println("+++++++++++++++++++++++++++++++"+formattedDate);
+				} /*
+					 * else {
+					 * 
+					 * System.out.println("Activity regDate is null for activity: " + activity); }
+					 */
+            } else {
+            	
+            }
+        }
+
+        
+        return dateCountMap; // 날짜별 개수 반환
+    }
+
+    //오늘 신규 회원 수 조회
+    public Long getTodayNewUserCount() {
+    	return userMapper.todayNewUser();
+    }
+    
+    
     
 }
 
