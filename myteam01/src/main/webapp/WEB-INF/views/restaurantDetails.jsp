@@ -464,13 +464,17 @@
 
            }
  
+      //-------즐찾
         <c:set var="contextPath" value="${pageContext.request.contextPath }"/>
+
+
            document.addEventListener('DOMContentLoaded', function() {
                const addFavoriteBtn = document.getElementById('addFavoriteBtn');
+
                if (addFavoriteBtn) {
                    addFavoriteBtn.onclick = function() {
                        $.ajax({
-                           url: '/user/getFavoriteLists',  
+                           url: '/user/getFavoriteLists',  // 즐겨찾기 목록을 가져오는 API 엔드포인트
                            method: 'GET',
                            success: function(favoriteLists) {
                                let optionsHtml = '';
@@ -479,6 +483,7 @@
                                    optionsHtml = "<option value=''>목록이 없습니다. 새로 추가해주세요.</option>";
                                } else {
                                    favoriteLists.forEach(list => {
+                                       // 문자열 연결 방식을 사용하여 <option> 태그를 생성
                                        optionsHtml += "<option value=" + list.listId + ">" + list.listName + "</option>";
                                    });
                                }
@@ -496,7 +501,7 @@
                                    cancelButtonText: '취소',
                                    preConfirm: () => {
                                        const listId = Swal.getPopup().querySelector('#favoriteListSelect').value;
-                                       const pageUrl = window.location.href;
+                                       const pageUrl = window.location.href; // 현재 페이지 URL을 즐겨찾기 링크로 사용
                                        const eno = urlParams.get('eno');
                                        const fno = urlParams.get('fno');
                                        const date = new Date().toISOString().slice(0, 10);
@@ -578,7 +583,9 @@
                    };
                }
            });
-           
+
+           const urlParams = new URLSearchParams(window.location.search);
+
            function createHiddenInput(name, value) {
                const input = document.createElement('input');
                input.type = 'hidden';
