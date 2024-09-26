@@ -234,7 +234,7 @@
 <body>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
-<div id="map"></div>
+<div id="map" style="width: 100%; height: 100%;"></div>
 
 <div class="header">
     <div class="logo" id="goToMain">Vroom</div>
@@ -248,9 +248,9 @@
 
 
     <div style="position: absolute; top: 10px; left: 10px; font-size: 16px;">
-        <c:if test="${not empty user}">
+        <c:if test="${not empty user}"><%-- 
             현재 로그인: <strong>${user.userId}</strong>
-            현재 구: <strong>${restVO.guName != null ? restVO.guName : 'N/A'}</strong>
+            현재 구: <strong>${restVO.guName != null ? restVO.guName : 'N/A'}</strong> --%>
         </c:if>
     </div>
 
