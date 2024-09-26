@@ -236,9 +236,9 @@
                     <td colspan="3" id="notice-content" style="white-space: pre-wrap;"></td>
                 </tr>
             </table>
-           <!-- <button class="back-btn" onclick="hideDetail()">닫기</button> --> 
-            <!--<button class="edit-btn" onclick="editDetail('notice')">수정</button>  -->
-            <!-- <button class="delete-btn" onclick="confirmDelete('notice', ${nc.notice_num})">삭제</button> -->
+           <button class="back-btn" onclick="hideDetail()">닫기</button>
+            <button class="edit-btn" onclick="editDetail('notice')">수정</button> 
+            <button class="delete-btn" onclick="confirmDelete('notice', ${nc.notice_num})">삭제</button>
         </div>
     </div>
     
@@ -339,9 +339,9 @@
                     <td colspan="3" id="faq-content" style="white-space: pre-wrap;"></td>
                 </tr>
             </table>
-            <%-- <button class="back-btn" onclick="hideDetail()">닫기</button>
+             <button class="back-btn" onclick="hideDetail()">닫기</button>
             <button class="edit-btn" onclick="editDetail('faq')">수정</button>
-            <button class="delete-btn" onclick="confirmDelete('faq', ${cs.faqno})">삭제</button> --%>
+            <button class="delete-btn" onclick="confirmDelete('faq', ${cs.faqno})">삭제</button> 
         </div>
     </div>
 
@@ -354,7 +354,7 @@
         <div class="table-container">
             <table>
                 <tr>
-           <!--          <th>번호</th>
+             <th>번호</th>
                     <th>제목</th>
                     <th>등록일</th> 
                 </tr>
@@ -375,7 +375,7 @@
                     </c:if>
                 </c:forEach>
             </table>
-        </div>-->
+        </div>
 
 
         <!-- 고객의소리 상세정보 표시할 공간 -->
@@ -393,10 +393,10 @@
                     <td colspan="3" id="feedback-content" style="white-space: pre-wrap;"></td> -->
                 </tr>
             </table>
-           <%--  <button class="back-btn" onclick="hideDetail()">닫기</button>
+            <button class="back-btn" onclick="hideDetail()">닫기</button>
            <button class="edit-btn" onclick="editDetail('feedback')">수정</button> 
              <button class="delete-btn" onclick="confirmDelete('feedback', ${feeb.fbno})">삭제</button>
- --%>
+ 
 
         </div>
     </div>
