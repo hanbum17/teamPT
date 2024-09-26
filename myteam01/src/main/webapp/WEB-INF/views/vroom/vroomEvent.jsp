@@ -172,7 +172,11 @@
 <script>
 // 식당 조회 버튼 클릭 이벤트 처리
 document.getElementById('restaurant-search-btn').addEventListener('click', () => {
-    window.location.href = '${contextPath}/vroom/restaurant';
+	const urlParams = new URLSearchParams(window.location.search); // URL 파라미터를 여기서 정의
+    const guName = urlParams.get('guName'); 
+    console.log(guName); 
+    const targetUrl = '${contextPath}/vroom/restaurant?guName=' + guName;
+    window.location.href = targetUrl; 
 });
 
 // 카카오 지도 초기화
