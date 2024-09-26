@@ -178,7 +178,7 @@ public class CsController {
                                  @RequestParam(value = "ino", required = false) Long ino,
                                  @RequestParam(value = "notice_num", required = false) Long notice_num,
                                  @RequestParam(value = "event_num", required = false) Long event_num, Model model) {
-        CsVO cs = null;
+        CsVO cs = new CsVO();
 
         if ("faq".equals(type) && faqno != null) {
             cs = csService.getFAQ(faqno);

@@ -193,7 +193,7 @@
 
 
 	 <!-- Notice Section -->
-    <div id="notice" class="section active">
+    <div id="notice" class="section">
         <div class="section-header">
             <h3>공지사항</h3>
             <button type="button" class="register-btn" onclick="location.href='${contextPath}/cs/register?type=notice'">공지사항 등록</button>
@@ -212,7 +212,7 @@
                         </tr>
                     </c:if>
                     <c:if test="${nc.notice_delflag == 0}">
-                        <tr onclick="showDetail('notice', '${nc.notice_num}', '${nc.notice_title}',' ', '${nc.notice_content}', '','${nc.notice_regdate}')">
+                        <tr onclick="showDetail('notice', '${nc.notice_num}', '${nc.notice_title}', '', '${nc.notice_content}', '','${nc.notice_regdate}')">
                             <td><c:out value="${nc.notice_title}" /></td>
                             <td> <fmt:formatDate pattern="yyyy/MM/dd" value="${nc.notice_regdate}" /></td>
                         </tr>
@@ -242,7 +242,7 @@
         </div>
     </div>
     
-    <div id="event" class="section active">
+    <div id="event" class="section">
         <div class="section-header">
             <h3>이벤트</h3>
             <button type="button" class="register-btn" onclick="location.href='${contextPath}/cs/register?type=event'">행사 등록</button>
@@ -261,9 +261,10 @@
                         </tr>
                     </c:if>
                     <c:if test="${ev.event_delflag == 0}">
-                        <tr onclick="showDetail('event', '${ev.event_num}', '${ev.event_title}',' ', '${ev.event_content}', '','${ev.event_regdate}')">
+                        <tr onclick="showDetail('event', '${ev.event_num}', '${ev.event_title}', '', '${ev.event_content}', '','${ev.event_regdate}')">
                             <td><c:out value="${ev.event_title}" /></td>
                             <td> <fmt:formatDate pattern="yyyy/MM/dd" value="${ev.event_regdate}" /></td>
+                            
                         </tr>
                     </c:if>
                 </c:forEach>
@@ -287,7 +288,7 @@
             </table>
             <button class="back-btn" onclick="hideDetail()">닫기</button>
             <button class="edit-btn" onclick="editDetail('event')">수정</button>
-            <button class="delete-btn" onclick="confirmDelete('notice', ${ev.event_num})">삭제</button>
+            <button class="delete-btn" onclick="confirmDelete('event', ${ev.event_num})">삭제</button>
         </div>
     </div>
     

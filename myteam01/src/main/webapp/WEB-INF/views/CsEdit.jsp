@@ -67,11 +67,11 @@ label {
 <div id="noticeSection" class="section" style="${param.type != 'notice' ? 'display:none;' : ''}">
     <input type="hidden" name="notice_num" value="${cs.notice_num != null ? cs.notice_num : ''}" />
     <div class="form-group">
-        <label>제목</label>
+        <label for="notice_title">제목</label>
         <input type="text" id="notice_title" name="notice_title" class="form-control" value="${cs.notice_title != null ? cs.notice_title : ''}" />
     </div>
     <div class="form-group">
-        <label>내용</label>
+        <label for="notice_content">내용</label>
         <textarea id="notice_content" name="notice_content" rows="5" class="form-control">${cs.notice_content != null ? cs.notice_content : ''}</textarea>
     </div>
 </div>
@@ -80,12 +80,12 @@ label {
 <div id="eventSection" class="section" style="${param.type != 'event' ? 'display:none;' : ''}">
     <input type="hidden" name="event_num" value="${cs.event_num != null ? cs.event_num : ''}" />
     <div class="form-group">
-        <label>제목</label>
-        <input type="text" id="event_title" name="event_title" class="form-control" value="${cs.event_title != null ? cs.event_title : ''}" />
+        <label for="eventtitle">제목</label>
+        <input type="text" id="eventtitle" name="event_title" class="form-control" value="${cs.event_title != null ? cs.event_title : ''}" />
     </div>
     <div class="form-group">
-        <label>내용</label>
-        <textarea id="event_content" name="event_content" rows="5" class="form-control">${cs.event_content != null ? cs.event_content : ''}</textarea>
+        <label for="eventcontent">내용</label>
+        <textarea id="eventcontent" name="event_content" rows="5" class="form-control">${cs.event_content != null ? cs.event_content : ''}</textarea>
     </div>
 </div>
 
@@ -180,15 +180,15 @@ label {
         }
         
         if ($("#noticeSection").is(":visible")) {
-            $("#notice_title").prop("required", true);
+            $("#noticetitle").prop("required", true);
         } else {
-            $("#notice_title").prop("required", false);
+            $("#noticetitle").prop("required", false);
         }
         
         if ($("#eventSection").is(":visible")) {
-            $("#event_title").prop("required", true);
+            $("#eventtitle").prop("required", true);
         } else {
-            $("#evemt_title").prop("required", false);
+            $("#evemttitle").prop("required", false);
         }
 
         // 유효성 검사 함수가 제대로 동작하는지 확인
