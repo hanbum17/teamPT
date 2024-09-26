@@ -113,6 +113,7 @@
 		    margin-right: 20px; /* 오른쪽 여백 추가 */
 		    width: 80%; /* 전체 너비에서 여백을 뺀 값 */
 		}
+		
 
     </style>
 </head>

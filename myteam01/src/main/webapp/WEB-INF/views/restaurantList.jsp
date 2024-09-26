@@ -488,6 +488,7 @@ let scrollLeft;
 
 const container = document.getElementById('restaurant-container');
 
+
 // 드래그 시작
 container.addEventListener('mousedown', (e) => {
     isDragging = true;
@@ -495,6 +496,7 @@ container.addEventListener('mousedown', (e) => {
     scrollLeft = container.scrollLeft;
     e.preventDefault(); // 기본 동작 방지
 });
+
 
 // 드래그 중
 container.addEventListener('mousemove', (e) => {
@@ -505,39 +507,6 @@ container.addEventListener('mousemove', (e) => {
     container.scrollLeft = scrollLeft - walk;
 });
 
-// 드래그 종료
-container.addEventListener('mouseup', () => {
-    isDragging = false;
-});
-
-// 드래그 중 다른 요소에서 마우스 버튼이 떼어질 경우
-container.addEventListener('mouseleave', () => {
-    isDragging = false;
-});
-
-//드래그 관련 변수
-let isDragging = false;
-let startX;
-let scrollLeft;
-
-const container = document.getElementById('restaurant-container');
-
-// 드래그 시작
-container.addEventListener('mousedown', (e) => {
-    isDragging = true;
-    startX = e.pageX - container.offsetLeft;
-    scrollLeft = container.scrollLeft;
-    e.preventDefault(); // 기본 동작 방지
-});
-
-// 드래그 중
-container.addEventListener('mousemove', (e) => {
-    if (!isDragging) return; // 드래그 중이 아닐 때는 무시
-    e.preventDefault(); // 기본 동작 방지
-    const x = e.pageX - container.offsetLeft;
-    const walk = (x - startX) * 2; // 드래그 이동량을 조절 (속도 조정)
-    container.scrollLeft = scrollLeft - walk;
-});
 
 // 드래그 종료
 container.addEventListener('mouseup', () => {
@@ -548,7 +517,6 @@ container.addEventListener('mouseup', () => {
 container.addEventListener('mouseleave', () => {
     isDragging = false;
 });
-
 
 
 

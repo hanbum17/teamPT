@@ -32,33 +32,34 @@
         }
 
         .container {
-            display: flex;
-            overflow-x: auto;
-            white-space: nowrap;
-            padding: 20px;
-            box-sizing: border-box;
-            background-color: transparent;
-            width: 100%;
-            height: 300px;
-            align-items: center;
-            position: fixed;
-            bottom: 0;
-        }
+		    display: flex;
+		    overflow-x: auto; /* 수평 스크롤 허용 */
+		    white-space: nowrap;
+		    padding: 20px;
+		    box-sizing: border-box;
+		    background-color: transparent;
+		    width: 100%;
+		    height: 300px; /* 높이 유지 */
+		    align-items: center;
+		    position: fixed; /* 맨 아래 고정 */
+		    bottom: 0; /* 아래 고정 */
+		    z-index: 1; /* 다른 요소 위에 보이도록 설정 */
+		}
 
         .event-card {
-            display: inline-block;
-            width: 200px;
-            height: 280px;
-            margin-right: 20px;
-            background-color: #f0f0f0;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            padding: 10px;
-            box-sizing: border-box;
-            cursor: pointer;
-            flex-shrink: 0;
-        }
+		    display: inline-block; /* 카드가 수평으로 나열됨 */
+		    width: 200px;
+		    height: 280px;
+		    margin-right: 20px;
+		    background-color: #f0f0f0;
+		    border-radius: 10px;
+		    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+		    text-align: center;
+		    padding: 10px;
+		    box-sizing: border-box;
+		    cursor: pointer;
+		    flex-shrink: 0; /* 크기 축소 방지 */
+		}
 
         .event-card img {
             width: 100%;
@@ -248,18 +249,16 @@ const container = document.getElementById('event-container');
 
 
 
-// 드래그 시작
+//드래그 시작
 container.addEventListener('mousedown', (e) => {
     isDragging = true;
     startX = e.pageX - container.offsetLeft;
     scrollLeft = container.scrollLeft;
-    e.preventDefault(); // 기본 동작 방지
 });
 
 // 드래그 중
 container.addEventListener('mousemove', (e) => {
     if (!isDragging) return; // 드래그 중이 아닐 때는 무시
-    e.preventDefault(); // 기본 동작 방지
     const x = e.pageX - container.offsetLeft;
     const walk = (x - startX) * 2; // 드래그 이동량을 조절 (속도 조정)
     container.scrollLeft = scrollLeft - walk;
@@ -274,6 +273,7 @@ container.addEventListener('mouseup', () => {
 container.addEventListener('mouseleave', () => {
     isDragging = false;
 });
+
 </script>
 </body>
 </html>

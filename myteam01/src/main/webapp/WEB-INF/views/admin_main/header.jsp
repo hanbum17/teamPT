@@ -32,6 +32,7 @@ pageEncoding="UTF-8"%>
             body {
               height: 5000px;
               background-color: #444;
+              
             }
 
             /* 사이드바 시작 */
