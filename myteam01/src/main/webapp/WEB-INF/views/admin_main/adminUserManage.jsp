@@ -8,6 +8,13 @@
 <style>
 <%@ include file="header.jsp" %>
 </style>
+<style>
+ button{
+ 	position: relative;
+ 	width: 500px;
+ 	height: 100px;
+ }
+</style>
 </head>
 <body>
 

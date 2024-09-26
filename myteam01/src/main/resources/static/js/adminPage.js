@@ -9,7 +9,8 @@ function formatDate(dateString) {
 
 $("#selectUserList").on("click", function (e) {
     e.preventDefault();
-
+	$(".content-box").empty();
+	
     $.ajax({
         type: "get",
         url: "/admin/manage/userList",
@@ -32,7 +33,7 @@ $("#selectUserList").on("click", function (e) {
                         <tbody></tbody>
                     </table>
                 </div>`;
-            document.querySelector('main').innerHTML = th; // 테이블 추가
+            document.querySelector('.content-box').innerHTML = th; // 테이블 추가
 
             for (var i in result) {
                 displayData(result[i]);
@@ -83,7 +84,7 @@ $(document).ready(function() {
                 let genderText = result.userGender === "M" ? "남자" : "여자";
 
                 // 기존 내용을 삭제
-                document.querySelector('main').innerHTML = '';
+                document.querySelector('.content-box').innerHTML = '';
 
                 // 새로운 상세 페이지 구조 정의 (수정 버튼 추가)
                 let detailPage = `
@@ -109,8 +110,8 @@ $(document).ready(function() {
                         </div>
                     </div>`;
 
-                // 새로운 상세 페이지를 main 태그에 추가
-                document.querySelector('main').innerHTML = detailPage;
+                // 새로운 상세 페이지를 .content-box div태그에 추가
+                document.querySelector('.content-box').innerHTML = detailPage;
 
                 // 수정 버튼 클릭 시
                 $("#edit-btn").on("click", function() {
