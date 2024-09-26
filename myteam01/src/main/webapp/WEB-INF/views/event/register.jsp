@@ -81,7 +81,6 @@
         </div>
 
         <button type="submit" class="btnRegister" id="btnRegister">등록</button>
-        <button type="button" class="btnCancel" id="btnCancel" onclick="location.href='${contextPath}/event/list'">취소</button>
     </form>
 </div>
 
