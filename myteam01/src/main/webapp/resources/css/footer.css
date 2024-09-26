@@ -68,3 +68,13 @@
 .footer a:hover {
     text-decoration: underline;
 }
+
+/* admin으로 로그인 시 변경할 스타일 */
+.admin-footer a {
+    color: #003366; /* 핑크 색상 */
+}
+
+.admin-footer a:hover {
+    color: #001F3F; /* 좀 더 진한 핑크 */
+    text-decoration: underline;
+}

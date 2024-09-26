@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,7 +8,7 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/footer.css">
 </head>
 <body>
-	<div class="footer">
+    <div class="footer <sec:authorize access="hasRole('ADMIN')">admin-footer</sec:authorize>">
         <a href="/vroom/policy?section=terms">이용약관</a>
         <a href="/vroom/policy?section=privacy">개인정보 취급방침</a>
         <a href="/vroom/policy?section=cookiePolicy">쿠키정책</a>
