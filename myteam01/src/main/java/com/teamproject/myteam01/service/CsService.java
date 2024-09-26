@@ -66,15 +66,30 @@ public interface CsService {
 	public List<CsVO> getNoticeList();
 	
 	//공지사항 상세조회
-	public CsVO getNoticeDetail(Long num);
+	public CsVO getNoticeDetail(Long notice_num);
+	
+	//공지사항 수정
+	public boolean modifyNT(CsVO nt);
+	
+	//공지사항 삭제
+	public boolean removeNT(Long notice_num);
 	
 ////////////////////////////////////////////////////////
 	
+	//이벤트 등록
 	public void regEvent(CsVO event);
 	
+	//이벤트 목록조회
 	public List<CsVO> getEventList();
 	
-	public CsVO getEventDetail(Long num);
+	//이벤트 상세조회
+	public CsVO getEventDetail(Long event_num);
+	
+	//이벤트 수정
+	public boolean modifyAE(CsVO ae);
+	
+	//이벤트 삭제
+	public boolean removeAE(Long event_num);
 
 ////////////////////////////////////////////////////////
 	

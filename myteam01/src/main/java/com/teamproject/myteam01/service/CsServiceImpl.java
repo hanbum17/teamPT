@@ -134,45 +134,86 @@ public class CsServiceImpl implements CsService{
 	
 /////////////////////////////////////////////////////////////
 	
-	//공지사항 등록
-	@Override
-	public void regNotice(CsVO notice) {
-		csMapper.insertNotice(notice);
-	}
+	
+
 	
 	//공지사항 목록조회
 	@Override
 	public List<CsVO> getNoticeList(){
-		
-		List<CsVO> se = csMapper.selectNoticeList(); 
-		return se;
+		return csMapper.selectNoticeList();
 	}
+	
+	//공지사항 등록
+		@Override
+		public void regNotice(CsVO notice) {
+			csMapper.insertNotice(notice);
+		}
 	
 	//공지사항 상세조회
 	@Override
-	public CsVO getNoticeDetail(Long num) {
-		return csMapper.selectNoticeDetail(num);
+	public CsVO getNoticeDetail(Long notice_num) {
+		System.out.println("공지사항 번호: " + notice_num); // notice_num 값 확인
+		CsVO notice = csMapper.selectNoticeDetail(notice_num);
+		System.out.println("공지사항 데이터: " + notice); // 가져온 공지사항 데이터 확인
+		return notice;
 	}
+	
+	
+
+	//공지사항 수정
+		@Override
+		public boolean modifyNT(CsVO nt) {
+			System.out.println("서비스 : notice 수정");
+			return csMapper.updateNT(nt) == 1;
+		}
+		
+	//공지사항 삭제
+	@Override
+	public boolean removeNT(Long notice_num) {
+		System.out.println("서비스 : notice 삭제");
+		return csMapper.delNT(notice_num) == 1;
+			
+		}
 	
 ////////////////////////////////////////////////////////////////
 	
+
+	//이벤트 목록조회
+	@Override
+	public List<CsVO> getEventList(){
+		return  csMapper.selectAdminEventList(); 
+		
+	}
+	
+	//이벤트 등록
 	@Override
 	public void regEvent(CsVO event) {
 		csMapper.insertAdminEvent(event);
 	}
 	
-	//공지사항 목록조회
+	
+	//이벤트 상세조회
 	@Override
-	public List<CsVO> getEventList(){
-		
-		List<CsVO> se = csMapper.selectAdminEventList(); 
-		return se;
+	public CsVO getEventDetail(Long event_num) {
+		System.out.println("이벤트 번호:------------------------------------------ " + event_num); // event_num 값 확인
+		CsVO event = csMapper.selectAdminEventDetail(event_num);
+		System.out.println("이벤트 데이터:------------------------------------------ " + event); // 가져온 이벤트 데이터 확인
+		return event;
 	}
 	
-	//공지사항 상세조회
+	//이벤트 수정
 	@Override
-	public CsVO getEventDetail(Long num) {
-		return csMapper.selectAdminEventDetail(num);
+	public boolean modifyAE(CsVO ae) {
+		System.out.println("서비스 : adminevent 수정");
+		return csMapper.updateAE(ae) == 1;
+	}
+	
+	//이벤트 삭제
+	@Override
+	public boolean removeAE(Long event_Num) {
+		System.out.println("서비스 : adminevent 삭제");
+		return csMapper.delAE(event_Num) == 1;
+		
 	}
 	
 ////////////////////////////////////////////////////////////////

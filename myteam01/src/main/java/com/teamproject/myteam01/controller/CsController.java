@@ -146,7 +146,7 @@ public class CsController {
         return "CsRegister";
     }
 
- // 문의/건의사항 등록 처리
+    // 등록 처리
     @PostMapping("/registerProc")
 
     public String regiFAQ(@RequestParam(value = "type") String type, CsVO csvo, @AuthenticationPrincipal UserDetails userDetails, RedirectAttributes redirectAttributes) {
@@ -170,10 +170,14 @@ public class CsController {
         return "redirect:/cs/Center";
     }
 
+    // 수정 처리
     @GetMapping("/edit")
-    public String showCsEditForm(@RequestParam(value = "type") String type, @RequestParam(value = "faqno", required = false) Long faqno, 
+    public String showCsEditForm(@RequestParam(value = "type") String type, 
+    							 @RequestParam(value = "faqno", required = false) Long faqno, 
                                  @RequestParam(value = "fbno", required = false) Long fbno, 
-                                 @RequestParam(value = "ino", required = false) Long ino, Model model) {
+                                 @RequestParam(value = "ino", required = false) Long ino,
+                                 @RequestParam(value = "notice_num", required = false) Long notice_num,
+                                 @RequestParam(value = "event_num", required = false) Long event_num, Model model) {
         CsVO cs = null;
 
         if ("faq".equals(type) && faqno != null) {
@@ -182,6 +186,12 @@ public class CsController {
             cs = csService.getFB(fbno);
         } else if ("inquiry".equals(type) && ino != null) {
             cs = csService.getIn(ino);
+        }else if ("notice".equals(type) && notice_num != null) {
+            cs = csService.getNoticeDetail(notice_num);
+            System.out.println("------------------------------공지사항 데이터: " + cs);
+        } else if ("event".equals(type) && event_num != null) {
+            cs = csService.getEventDetail(event_num);
+            System.out.println("------------------------------이벤트 데이터: " + cs);
         }
 
         model.addAttribute("cs", cs);
@@ -199,6 +209,10 @@ public class CsController {
             success = csService.modifyFB(cs);
         } else if ("inquiry".equals(type)) {
             success = csService.modifyIn(cs);
+        } else if ("notice".equals(type)) {
+            success = csService.modifyNT(cs);
+        } else if ("event".equals(type)) {
+            success = csService.modifyAE(cs);
         }
 
         if (success) {
@@ -211,6 +225,10 @@ public class CsController {
                 return "redirect:/cs/edit?fbno=" + cs.getFbno();
             } else if ("inquiry".equals(type)) {
                 return "redirect:/cs/edit?ino=" + cs.getIno();
+             } else if ("notice".equals(type)) {
+                return "redirect:/cs/edit?notice_num=" + cs.getNotice_num();
+            } else if ("event".equals(type)) {
+                return "redirect:/cs/edit?event_num=" + cs.getEvent_num();
             }
         }
         return "redirect:/cs/Center"; // 기본 리다이렉트 (예외 처리)
@@ -227,7 +245,14 @@ public class CsController {
             csService.removeFB(no);
         } else if (type.equals("inquiry")) {
             csService.removeIn(no);
+        } else if (type.equals("notice")) {
+            csService.removeNT(no);
+        } else if (type.equals("event")) {
+            csService.removeAE(no);
         }
+        
+        
+        
         return "redirect:/cs/Center"; // 삭제 후 리다이렉트
     }
 

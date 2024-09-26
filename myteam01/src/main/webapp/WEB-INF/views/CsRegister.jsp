@@ -139,18 +139,20 @@ function checkFormValues() {
         var regExp = /^\s+$/;
         isValid = inquiryTitle && inquiryContent && !regExp.test(inquiryTitle) && !regExp.test(inquiryContent);
         document.getElementById("inquiryContent").value = inquiryContent;
+        
     } else if (type === "notice"){
     	var nctitle = document.getElementById("nctitle").value;
     	var nccontent = convertNewlinesToBr(document.getElementById("nccontent").value);
     	var regExp = /^\s+$/;
     	isValid = noticeTitle && noticeContent && !regExp.test(noticeTitle) && !regExp.test(noticeContent);
-        document.getElementById("noticeContent").value = noticeContent;
+        document.getElementById("nccontent").value = noticeContent;
+        
     } else if (type === "event"){
     	var evtitle = document.getElementById("evtitle").value;
     	var evcontent = convertNewlinesToBr(document.getElementById("evcontent").value);
     	var regExp = /^\s+$/;
     	isValid = eventTitle && eventContent && !regExp.test(eventTitle) && !regExp.test(eventContent);
-        document.getElementById("eventContent").value = eventContent;
+        document.getElementById("evcontent").value = eventContent;
     }
 
     return isValid;

@@ -64,25 +64,37 @@ public interface CsMapper {
 	
 ///////////////////////////////////////////
 	
-	//공지사항 등록
+	// 공지사항 등록
 	public void insertNotice(CsVO cs);
 	
-	//공지사항 목록 조회
+	// 공지사항 목록 조회
 	public List<CsVO> selectNoticeList();
 	
-	//공지사항 상세 조회
-	public CsVO selectNoticeDetail(Long noticeNum);
+	// 공지사항 상세 조회
+	public CsVO selectNoticeDetail(Long notice_num);
+	
+	// 공지사항 수정
+	public int updateNT(CsVO cs);
+
+	// 공지사항 삭제
+	public int delNT(Long notice_num);
 	
 //////////////////////////////////////////////
 	
-	//행사등록
+	// 행사등록
 	public void insertAdminEvent(CsVO cs);
 	
-	//행사 목록 조회
-	public List<CsVO>  selectAdminEventList();
+	// 행사 목록 조회
+	public List<CsVO> selectAdminEventList();
 	
-	//행사 상세 조회
-	public CsVO selectAdminEventDetail(Long cs);
+	// 행사 상세 조회
+	public CsVO selectAdminEventDetail(Long event_Num);
+	
+	// 행사 수정
+	public int updateAE(CsVO cs);
+
+	// 행사 삭제
+	public int delAE(Long event_Num);
 
 //////////////////////////////////////////////
 

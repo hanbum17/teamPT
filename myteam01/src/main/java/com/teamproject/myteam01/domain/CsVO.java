@@ -46,20 +46,20 @@ public class CsVO {
 	
 	///////
 	//공지사항
+	private Long notice_num;
 	private String notice_title;
 	private String notice_content;
-	private Long notice_num;
-	private Long notice_delflag;
+	private Integer notice_delflag;
 	private Date notice_regdate;
-	private Date notice_moddate;
+	private Timestamp notice_moddate;
 	
 	////////
-	//행사
+	//이벤트
+	private Long event_num;
 	private String event_title;
 	private String event_content;
-	private Long event_num;
-	private Long event_delflag;
+	private Integer event_delflag;
 	private Date event_regdate;
-	private Date event_moddate;
+	private Timestamp event_moddate;
 	
 }//end

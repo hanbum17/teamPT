@@ -9,22 +9,22 @@
     <meta charset="UTF-8">
     <title>Restaurant Details</title>
    <style>
-	   body, html {
-	        margin: 0;
-	        padding: 0;
-	        height: 100%;
-	        width: 100%;
-	        overflow: hidden; /* 스크롤바가 안 나타나도록 설정 */
-	    }
-	
-	    #map {
-		    position: fixed; /* position을 fixed로 변경 */
-		    top: 0;
-		    left: 0;
-		    width: 100%;
-		    height: 100%; /* 전체 화면을 차지하도록 설정 */
-		    z-index: 0;
-		}
+      body, html {
+           margin: 0;
+           padding: 0;
+           height: 100%;
+           width: 100%;
+           overflow: hidden; /* 스크롤바가 안 나타나도록 설정 */
+       }
+   
+       #map {
+          position: fixed; /* position을 fixed로 변경 */
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%; /* 전체 화면을 차지하도록 설정 */
+          z-index: 0;
+      }
 
     .panel {
         position: absolute;
@@ -135,10 +135,10 @@
 </head>
 <body>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
-	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-	<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=fe9306b4adbbf3249d28d6b7a2c37c0a&libraries=services"></script>
-	<div id="map" style="width: 100%; height: 500px;"></div>
+   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+   <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=fe9306b4adbbf3249d28d6b7a2c37c0a&libraries=services"></script>
+   <div id="map" style="width: 100%; height: 100vh;"></div>
 
     <div style="position: absolute; top: 10px; left: 10px; font-size: 16px;">
         <c:if test="${not empty user}">
@@ -189,18 +189,18 @@
     </div>
 
     <script>
-    	/* const urlParams = new URLSearchParams(window.location.search);
-	    const lat = parseFloat(urlParams.get('lat'));
-	    const lng = parseFloat(urlParams.get('lng')); */
-	    
-	    var mapContainer = document.getElementById('map'), // 지도를 표시할 div
-		    mapOption = {
-		        center: new kakao.maps.LatLng(37.566826004661, 126.978652258309), // 기본 중심 좌표 (서울시청)
-		        level: 3 // 지도 확대 레벨
-		    };
-	
-		var map = new kakao.maps.Map(mapContainer, mapOption);
-	
+       /* const urlParams = new URLSearchParams(window.location.search);
+       const lat = parseFloat(urlParams.get('lat'));
+       const lng = parseFloat(urlParams.get('lng')); */
+       
+       var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+          mapOption = {
+              center: new kakao.maps.LatLng(37.566826004661, 126.978652258309), // 기본 중심 좌표 (서울시청)
+              level: 3 // 지도 확대 레벨
+          };
+   
+      var map = new kakao.maps.Map(mapContainer, mapOption);
+   
         const reviewsContainer = document.getElementById('reviews-container');
         const contextPath = "${contextPath}";
         const currentUserId = "${user.userId}"
@@ -339,7 +339,7 @@
         }
         
         function deleteReview(frno) {
-        	reviewsContainer.innerHTML = '';
+           reviewsContainer.innerHTML = '';
             if (confirm("정말로 이 리뷰를 삭제하시겠습니까?")) {
                 fetch(`${contextPath}/vroom/deleteReview`, {
                     method: 'POST',
@@ -396,11 +396,11 @@
             const map = new kakao.maps.Map(mapContainer, mapOption);
 
          // 마커 추가
-	         const marker = new kakao.maps.Marker({
-	             position: new kakao.maps.LatLng(lat, lng),
-	             map: map
+            const marker = new kakao.maps.Marker({
+                position: new kakao.maps.LatLng(lat, lng),
+                map: map
              
-	         });
+            });
 
             if (guName) {
                 window.location.href = `${contextPath}/vroom/restaurant?guName=${guName}`;
