@@ -59,6 +59,7 @@
 <head>
     <title>관리자 데이터</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <style>
         body {
             margin: 0;

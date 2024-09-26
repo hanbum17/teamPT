@@ -40,9 +40,9 @@ public class MainPageController {
 	@Autowired
 	private RestaurantService restService;
 	
-	@GetMapping("/manage/adminUserManage")
+	@GetMapping("/manage")
 	public String adminUserManage() {
-		return "admin_main/adminUserManage";
+		return "admin_main/userManage";
 	}
 	@GetMapping("/manage/userList")
 	@ResponseBody
@@ -61,11 +61,17 @@ public class MainPageController {
 	@PostMapping("/manage/userUpdate")
 	@ResponseBody
 	public ResponseEntity<String> userUpdate(UserVO userVO) {
-		System.out.println("userUpdate 정보: " + userVO);
 		userService.updateUser(userVO);
 		return new ResponseEntity<String>("수정되었습니다.", HttpStatus.OK);
 	}
 	
+	@PostMapping("/manage/userDelete")
+	@ResponseBody
+	public ResponseEntity<String> userDelete(String userId){
+		System.out.println("삭제요청 유저정보: " + userId);
+		userService.deleteUser(userId);
+		return new ResponseEntity<String>("삭제되었습니다.",HttpStatus.OK);
+	}
 	
 	//오래걸리는건 db에서 가져올 때 모든 날짜를 가져오기 때문에 버퍼링이 걸린다.
 	@GetMapping("/main")

@@ -40,6 +40,7 @@ public interface UserMapper {
     // 사용자 정보를 업데이트
     void updateUser(UserVO userVO);
     
+    void deleteUser(String userId);
     //영범 
     //성별 통계
     List<UserVO> userGenderCount();

@@ -80,6 +80,10 @@ public class UserService {
     	userMapper.updateUser(userVO);
     	changePassword(userVO, userVO.getPassword());
     }
+    
+    public void deleteUser(String userId) {
+    	userMapper.deleteUser(userId);
+    }
 
     public void updateLastLoginDate(String userId) {
         userMapper.updateLastLoginDate(userId);

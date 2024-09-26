@@ -10,6 +10,7 @@
     <title>VROOM Navigation</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/nav.css">
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
 </head>
 <body>
     <!-- NAVIGATION BAR -->
@@ -32,7 +33,7 @@
 	                <a href="/list">글관리</a>
 	            </li>
 				<li class="nav-item">
-	                <a href="/admin/manage/adminUserManage">사용자관리</a>
+	                <a href="/admin/manage" id="selectUserList">사용자관리</a>
 	            </li>
             </sec:authorize>
             <sec:authorize access="isAuthenticated()">

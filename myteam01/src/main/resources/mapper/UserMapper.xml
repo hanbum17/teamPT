@@ -78,7 +78,6 @@
     <update id="updateUser" parameterType="com.teamproject.myteam01.domain.UserVO">
         UPDATE users
         SET userPw = #{userPw},
-            userName = #{userName},
             userGender = #{userGender},
             userCall = #{userCall},
             userAddress = #{userAddress},
