@@ -154,8 +154,7 @@ public class CsServiceImpl implements CsService{
 	@Override
 	public CsVO getNoticeDetail(Long notice_num) {
 		System.out.println("서비스 - 공지사항 번호: " + notice_num); // notice_num 값 확인
-		CsVO notice = new CsVO();
-		notice = csMapper.selectNoticeDetail(notice_num);
+		CsVO notice = csMapper.selectNoticeDetail(notice_num);
 		System.out.println("서비스 - 공지사항 데이터: " + notice); // 가져온 공지사항 데이터 확인
 		return notice;
 	}

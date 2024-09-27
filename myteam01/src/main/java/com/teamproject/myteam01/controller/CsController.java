@@ -179,7 +179,7 @@ public class CsController {
                                  @RequestParam(value = "notice_num", required = false) Long notice_num,
                                  @RequestParam(value = "event_num", required = false) Long event_num, Model model) {
         CsVO cs = new CsVO();
-        						System.out.println("--------------------------공지" + notice_num);
+        						System.out.println("----------------------컨트롤러 공지" + notice_num);
         if ("faq".equals(type) && faqno != null) {
             cs = csService.getFAQ(faqno);
         } else if ("feedback".equals(type) && fbno != null) {
@@ -188,10 +188,10 @@ public class CsController {
             cs = csService.getIn(ino);
         }else if ("notice".equals(type) && notice_num != null) {
             cs = csService.getNoticeDetail(notice_num);
-            System.out.println("------------------------------공지사항 데이터: " + cs);
+            System.out.println("--------------------------컨트롤러 공지사항 데이터: " + cs);
         } else if ("event".equals(type) && event_num != null) {
             cs = csService.getEventDetail(event_num);
-            System.out.println("------------------------------이벤트 데이터: " + cs);
+            System.out.println("--------------------------컨트롤러 이벤트 데이터: " + cs);
         }
 
         model.addAttribute("cs", cs);

@@ -120,7 +120,7 @@
         WHERE FBNO = #{fbno}
     </delete>
     
-    <resultMap id="noticeResultMap" type="com.teamproject.myteam01.domain.CsVO">
+	<resultMap id="noticeResultMap" type="com.teamproject.myteam01.domain.CsVO">
         <result property="notice_num" column="notice_num"/>
         <result property="notice_title" column="notice_title"/>
         <result property="notice_content" column="notice_content"/> <!-- phone_number를 call에 매핑 -->
@@ -134,14 +134,14 @@
     	<result property="event_regdate" column="event_regdate"/>
     	<result property="event_delflag" column="event_delflag"/>
     </resultMap>
-    
+ 
     
 	<!-- 공지사항등록 -->
 	<insert id="insertNotice" parameterType="com.teamproject.myteam01.domain.CsVO">
 		<selectKey keyProperty="notice_num" order="BEFORE" resultType="Long">
-		 SELECT teampj.notice_seq.nextval FROM dual
+		 SELECT teampj.NOTICE_seq.nextval FROM dual
 		</selectKey>
-		INSERT INTO teampj.notice (NOTICE_NUM, NOTICE_TITLE, NOTICE_CONTENT, NOTICE_REGDATE, NOTICE_MODDATE,  NOTICE_DELFLAG)
+		INSERT INTO teampj.NOTICE (NOTICE_NUM, NOTICE_TITLE, NOTICE_CONTENT, NOTICE_REGDATE, NOTICE_MODDATE,  NOTICE_DELFLAG)
 		VALUES (#{notice_num}, #{notice_title} , #{notice_content}, DEFAULT , DEFAULT , DEFAULT)
 	</insert>
 
@@ -149,16 +149,16 @@
 	<!-- 공지사항 목록조회 -->
 	<select id="selectNoticeList" resultMap="noticeResultMap">
 		SELECT NOTICE_NUM, NOTICE_TITLE, NOTICE_CONTENT, NOTICE_REGDATE, NOTICE_DELFLAG
-		FROM teampj.notice
+		FROM teampj.NOTICE
 		WHERE NOTICE_DELFLAG = 0
         ORDER BY NOTICE_NUM DESC
 	</select>
 	
 	<!-- 공지사항 상세조회 -->
-	<select id="selectNoticeDetail" resultType="com.teamproject.myteam01.domain.CsVO">
+	<select id="selectNoticeDetail" resultMap="noticeResultMap">
 		SELECT NOTICE_NUM, NOTICE_TITLE, NOTICE_CONTENT, NOTICE_REGDATE, NOTICE_DELFLAG 
-		FROM teampj.notice 
-		WHERE notice_num = #{notice_num}
+		FROM teampj.NOTICE 
+		WHERE NOTICE_NUM = #{notice_num}
 	</select>
 	
 	
@@ -181,7 +181,7 @@
 	<!-- 이벤트 사항등록 -->
 	<insert id="insertAdminEvent" parameterType="com.teamproject.myteam01.domain.CsVO">
 		<selectKey keyProperty="event_num" order="BEFORE" resultType="Long">
-		 SELECT teampj.admin_event_seq.nextval FROM dual
+		 SELECT teampj.ADMIN_EVENT_seq.nextval FROM dual
 		</selectKey>
 		INSERT INTO teampj.admin_event(EVENT_NUM, EVENT_TITLE, EVENT_CONTENT, EVENT_REGDATE, EVENT_MODDATE, EVENT_DELFLAG)
 		VALUES (#{event_num}, #{event_title} , #{event_content}, DEFAULT , DEFAULT , DEFAULT)
@@ -189,15 +189,15 @@
 	
 	<!-- 이벤트 목록조회 -->
 	<select id="selectAdminEventList" resultMap="eventResultMap">
-		SELECT * FROM teampj.admin_event
+		SELECT * FROM teampj.ADMIN_EVENT
 		WHERE EVENT_DELFLAG = 0
         ORDER BY EVENT_NUM DESC
 	</select>
 	
 	<!-- 이벤트 상세조회 -->
-	<select id="selectAdminEventDetail" resultType="com.teamproject.myteam01.domain.CsVO">
-		SELECT * FROM teampj.admin_event 
-		WHERE event_num = #{event_num}
+	<select id="selectAdminEventDetail" resultMap="eventResultMap">
+		SELECT * FROM teampj.ADMIN_EVENT 
+		WHERE EVENT_NUM = #{event_num}
 	</select>
 	
 	
