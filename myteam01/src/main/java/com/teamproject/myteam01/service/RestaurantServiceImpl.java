@@ -161,7 +161,7 @@ public class RestaurantServiceImpl implements RestaurantService{
 				}
 	        }
 
-			System.out.println("테스트3");
+			System.out.println("추가 서비스 전달 구:"+restVO.getGuName());
 
 			return restList;
 		}
