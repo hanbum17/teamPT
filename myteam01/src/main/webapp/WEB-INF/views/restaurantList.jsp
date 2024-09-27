@@ -301,7 +301,7 @@ document.getElementById('loginLink').addEventListener('click', function(event) {
 });
 
 
-
+const guName = "서대문구";
 let isLoading = false;
 let restPage = 2; // 전역 변수로 설정
 const restPageSize = 10;
@@ -329,7 +329,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (isLoading) return;
         isLoading = true;
       
-        fetch(contextPath + "/api/restaurant/more?page=" + restPage + "&pageSize=" + restPageSize)
+
+        fetch(contextPath + "/api/restaurant?guName="+guName+"page=" + restPage + "&pageSize=" + restPageSize)
+
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
