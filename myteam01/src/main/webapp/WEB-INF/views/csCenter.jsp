@@ -193,7 +193,7 @@
 
 
 	 <!-- Notice Section -->
-    <div id="notice" class="section active">
+    <div id="notice" class="section">
         <div class="section-header">
             <h3>공지사항</h3>
             <button type="button" class="register-btn" onclick="location.href='${contextPath}/cs/register?type=notice'">공지사항 등록</button>
@@ -212,7 +212,7 @@
                         </tr>
                     </c:if>
                     <c:if test="${nc.notice_delflag == 0}">
-                        <tr onclick="showDetail('notice', '${nc.notice_num}', '${nc.notice_title}',' ', '${nc.notice_content}', '','${nc.notice_regdate}')">
+                        <tr onclick="showDetail('notice', '${nc.notice_num}', '${nc.notice_title}', '', '${nc.notice_content}', '','${nc.notice_regdate}')">
                             <td><c:out value="${nc.notice_title}" /></td>
                             <td> <fmt:formatDate pattern="yyyy/MM/dd" value="${nc.notice_regdate}" /></td>
                         </tr>
@@ -242,9 +242,9 @@
         </div>
     </div>
     
-    <div id="event" class="section active">
+    <div id="event" class="section">
         <div class="section-header">
-            <h3>행사</h3>
+            <h3>이벤트</h3>
             <button type="button" class="register-btn" onclick="location.href='${contextPath}/cs/register?type=event'">행사 등록</button>
         </div>
         <div class="table-container">
@@ -261,18 +261,19 @@
                         </tr>
                     </c:if>
                     <c:if test="${ev.event_delflag == 0}">
-                        <tr onclick="showDetail('event', '${ev.event_num}', '${ev.event_title}',' ', '${ev.event_content}', '','${ev.event_regdate}')">
+                        <tr onclick="showDetail('event', '${ev.event_num}', '${ev.event_title}', '', '${ev.event_content}', '','${ev.event_regdate}')">
                             <td><c:out value="${ev.event_title}" /></td>
                             <td> <fmt:formatDate pattern="yyyy/MM/dd" value="${ev.event_regdate}" /></td>
+                            
                         </tr>
                     </c:if>
                 </c:forEach>
             </table>
         </div>
 
-        <!-- notice Detail Section -->
+        <!-- event Detail Section -->
         <div id="event-detail" class="detail-view" style="display: none;">
-            <h3>행사 상세보기</h3>
+            <h3>이벤트 상세보기</h3>
             <table style="width: 100%; border-collapse: collapse;">
                 <tr>
                     <th style="width: 15%;">제목</th>
@@ -287,7 +288,7 @@
             </table>
             <button class="back-btn" onclick="hideDetail()">닫기</button>
             <button class="edit-btn" onclick="editDetail('event')">수정</button>
-            <button class="delete-btn" onclick="confirmDelete('notice', ${ev.event_num})">삭제</button>
+            <button class="delete-btn" onclick="confirmDelete('event', ${ev.event_num})">삭제</button>
         </div>
     </div>
     
@@ -356,7 +357,8 @@
                 <tr>
                     <th>번호</th>
                     <th>제목</th>
-                    <th>날짜</th>
+                    <th>등록일</th>
+
                 </tr>
                 <c:forEach items="${feedbackList}" var="feeb">
                     <c:if test="${feeb.fbdelflag == 1}">
@@ -366,11 +368,10 @@
                         </tr>
                     </c:if>
                     <c:if test="${feeb.fbdelflag == 0}">
-                        <tr onclick="showDetail('feedback', '${feeb.fbno}', '${feeb.fbtitle}', '', '${feeb.fbcontent}', '', '${feeb.fbRegDate}', )">
+                        <tr onclick="showDetail('feedback', '${feeb.fbno}', '${feeb.fbtitle}', '', '${feeb.fbcontent}', '', '${feeb.fbRegDate}' )">
                             <td><c:out value="${feeb.fbno}" /></td>
                             <td><c:out value="${feeb.fbtitle}" /></td>
-                            <td><fmt:formatDate pattern="yyyy/MM/dd" value="${feeb.fbRegDate}" />
-                            </td>
+                            <td><fmt:formatDate pattern="yyyy/MM/dd" value="${feeb.fbRegDate}" /></td>
                         </tr>
                     </c:if>
                 </c:forEach>
@@ -519,46 +520,49 @@
             detailSection = document.getElementById('inquiry-detail');
             detailSection.style.display = 'block';
 
-            document.getElementById('inquiry-title').innerText = decodeURIComponent(title || '');
-            document.getElementById('inquiry-category').innerText = decodeURIComponent(category || '');
-            document.getElementById('inquiry-content').innerHTML = decodeURIComponent(content || '').replace(/\n/g, '<br>');
-            document.getElementById('inquiry-response').innerHTML = decodeURIComponent(response || '').replace(/\n/g, '<br>');
+            document.getElementById('inquiry-title').innerText = decodeURIComponent(title);
+            document.getElementById('inquiry-category').innerText = decodeURIComponent(category);
+            document.getElementById('inquiry-content').innerHTML = decodeURIComponent(content).replace(/\n/g, '<br>');
+            document.getElementById('inquiry-response').innerHTML = decodeURIComponent(response).replace(/\n/g, '<br>');
             
             document.querySelector('.edit-btn').setAttribute('data-ino', no);
             document.querySelector('.delete-btn').setAttribute('data-ino', no);
+            
         } else if (type === 'feedback') {
             detailSection = document.getElementById('feedback-detail');
             detailSection.style.display = 'block';
 
-            document.getElementById('feedback-title').innerText = decodeURIComponent(title || '');
-            document.getElementById('feedback-regdate').innerText = decodeURIComponent(regdate || '');
-            document.getElementById('feedback-content').innerHTML = decodeURIComponent(content || '').replace(/\n/g, '<br>');
+            document.getElementById('feedback-title').innerText = decodeURIComponent(title);
+            document.getElementById('feedback-regdate').innerText = decodeURIComponent(regdate);
+            document.getElementById('feedback-content').innerHTML = decodeURIComponent(content).replace(/\n/g, '<br>');
 
             document.querySelector('.edit-btn').setAttribute('data-fbno', no);
             document.querySelector('.delete-btn').setAttribute('data-fbno', no);
+            
         } else if (type === 'notice') {
             detailSection = document.getElementById('notice-detail');
             detailSection.style.display = 'block';
 
-            document.getElementById('notice-title').innerText = title || '';
-            document.getElementById('notice-regdate').innerText = regdate || '';
-            document.getElementById('notice-content').innerHTML = content.replace(/\n/g, '<br>');
+            document.getElementById('notice-title').innerText = decodeURIComponent(title)
+            document.getElementById('notice-regdate').innerText = decodeURIComponent(regdate)
+            document.getElementById('notice-content').innerHTML = decodeURIComponent(content).replace(/\n/g, '<br>');
 
             document.querySelector('.edit-btn').setAttribute('data-notice_num', no);
             document.querySelector('.delete-btn').setAttribute('data-notice_num', no);
+            
         } else if (type === 'event') {
             detailSection = document.getElementById('event-detail');
             detailSection.style.display = 'block';
 
-            document.getElementById('event-title').innerText = title || '';
-            document.getElementById('event-regdate').innerText = regdate || '';
-            document.getElementById('event-content').innerHTML = content.replace(/\n/g, '<br>');
+            document.getElementById('event-title').innerText = decodeURIComponent(title)
+            document.getElementById('event-regdate').innerText = decodeURIComponent(regdate)
+            document.getElementById('event-content').innerHTML = decodeURIComponent(content).replace(/\n/g, '<br>');
 
             document.querySelector('.edit-btn').setAttribute('data-event_num', no);
             document.querySelector('.delete-btn').setAttribute('data-event_num', no);
         }
+ 
     }
-
     function hideDetail() {
         // 테이블 다시 보이기
         var allTables = document.querySelectorAll('.table-container');
@@ -580,17 +584,19 @@
         var event_num = document.querySelector('.edit-btn')?.getAttribute('data-event_num');
 
         if (faqno) {
-            window.location.href = `${contextPath}/cs/edit?faqno=${faqno}&type=faq`;
+            window.location.href = '${contextPath}/cs/edit?faqno=' + faqno + '&type=faq';
         } else if (ino) {
-            window.location.href = `${contextPath}/cs/edit?ino=${ino}&type=inquiry`;
+            window.location.href = '${contextPath}/cs/edit?ino=' + ino + '&type=inquiry';
         } else if (fbno) {
-            window.location.href = `${contextPath}/cs/edit?fbno=${fbno}&type=feedback`;
+            window.location.href = '${contextPath}/cs/edit?fbno=' + fbno + '&type=feedback';
         } else if (notice_num) {
-            window.location.href = `${contextPath}/cs/edit?notice_num=${notice_num}&type=notice`;
+            window.location.href = '${contextPath}/cs/edit?notice_num=' + notice_num + '&type=notice';
         } else if (event_num) {
-            window.location.href = `${contextPath}/cs/edit?event_num=${event_num}&type=event`;
+            window.location.href = '${contextPath}/cs/edit?event_num=' + event_num + '&type=event';
         }
-    }
+    } 
+    
+    
 
     function confirmDelete() {
         var faqno = document.querySelector('.delete-btn')?.getAttribute('data-faqno');
