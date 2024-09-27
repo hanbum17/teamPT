@@ -103,70 +103,6 @@
             scrollbar-width: none;
         }
 
-        .back-button {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .back-button:hover {
-            background-color: #0056b3;
-        }
-
-        #reviews_wrap {
-            margin-top: 20px;
-        }
-        .small-text {
-          font-size: 0.8em; /* 작은 글씨 크기 */
-          color: #555; /* 원하는 색상 */
-            margin-left: 5px; /* 레이아웃에 맞게 여백 조절 */
-      }
-      #reviews-container {
-          max-height: 640px; /* 상자의 최대 높이 설정 */
-          overflow-y: scroll; /* 세로 스크롤 추가 */
-          padding: 10px; /* 여백 추가 */
-          border: 0.5px solid #ddd; /* 상자 테두리 */
-          border-radius: 10px; /* 상자 모서리 둥글게 */
-          background-color: #fff; /* 상자 배경색 */
-          box-shadow: 0 0 10px rgba(0, 0, 0, 0); /* 상자 그림자 */
-      }
-
-      /* 웹킷 기반 브라우저에서 스크롤바 숨기기 */
-      #reviews-container::-webkit-scrollbar {
-          width: 0; /* 스크롤바의 너비를 0으로 설정하여 숨김 */
-          background: transparent; /* 스크롤바의 배경색을 투명하게 설정 */
-      }
-      .load-more-btn{
-         width: 100%;
-         padding: 10px;
-         border: none;
-         border-radius: 5px;
-         background-color: #007bff;
-         color: #fff;
-         cursor: pointer;
-      }
-
-      #editReviewForm {
-       display: none;
-       margin-top: 20px; /* 위치 조정 */
-       padding: 10px;
-       border: 1px solid #ddd;
-       border-radius: 10px;
-       background-color: #fff;
-       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      }
-
-     .review_ul {
-              list-style-type: none; /* 리스트의 기본 점을 제거합니다 */
-              padding: 0;
-      }
    
    .event-search-btn {
        position: absolute;
@@ -365,7 +301,7 @@ document.getElementById('loginLink').addEventListener('click', function(event) {
 });
 
 
-
+const guName = "서대문구";
 let isLoading = false;
 let restPage = 2; // 전역 변수로 설정
 const restPageSize = 10;
@@ -374,22 +310,28 @@ const contextPath = "${contextPath}";
 
 //브라우저 시작되고 반응형 스크립트
 document.addEventListener('DOMContentLoaded', () => {
-   
+	const urlParams = new URLSearchParams(window.location.search); // URL 파라미터를 여기서 정의
+    const guName = urlParams.get('guName'); 
+    console.log(guName); delete
+	
    addMouseOverListenerToCards();
     const restaurantButton = document.getElementById('event-search-btn');
 
-       restaurantButton.addEventListener('click', () => {
-           window.location.href = '${contextPath}/vroom/event';
-       });
+    restaurantButton.addEventListener('click', () => {
+        const targetUrl = '${contextPath}/vroom/event?guName=' + guName;
+        window.location.href = targetUrl; 
+    });
    
     const container = document.getElementById('restaurant-container'); //추가할 컨테이너
 
-    //레스토랑 추가 데이터 가져오는 스크립트 (드래그 시 10개씩 추가)
+  //레스토랑 추가 데이터 가져오는 스크립트 (드래그 시 10개씩 추가)
     function loadMoreRestaurants() {
         if (isLoading) return;
         isLoading = true;
       
-        fetch(contextPath + "/api/restaurant?page=" + restPage + "&pageSize=" + restPageSize)
+
+        fetch(contextPath + "/api/restaurant/more?page=" + restPage + "&pageSize=" + restPageSize)
+
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
@@ -410,6 +352,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
 
     }
+
     
    
 
@@ -471,8 +414,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 });
 
-
-
 //드래그 관련 변수
 let isDragging = false;
 let startX;
@@ -512,6 +453,8 @@ container.addEventListener('mouseleave', () => {
 
 
 
+
 </script>
+
 </body>
 </html>

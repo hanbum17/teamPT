@@ -97,10 +97,17 @@
 	<delete id="deleteReview"> DELETE EVENT_REVIEWS WHERE ERNO = #{erno} </delete>
 	
 	
+	<select id="selectEventListByGuName" resultType="com.teamproject.myteam01.domain.EventVO"> 
+		SELECT *
+		FROM teampj.EVENT
+		WHERE EGUNAME LIKE  #{guName} 
+		ORDER BY ENO DESC
+		OFFSET #{offset} ROWS
+		FETCH NEXT #{pageSize} ROWS ONLY
+	</select>
 	
 	<select id="selectEventList2" resultType="com.teamproject.myteam01.domain.EventVO"> 
-		SELECT ENO, ENAME, EPERIOD, ECOST, EADDRESS, EPLACE, ESITE, EHOST, ECONTENT, 
-		   UNO, EVIEWSCNT, ERATING, EXCOORD, EYCOORD, ETYPE 
+		SELECT ENO ,ENAME ,EPERIOD ,ESITE ,EHOST ,EADDRESS ,UNO ,EVIEWSCNT ,ERATING ,EXCOORD ,EYCOORD ,ETYPE ,EREGDATE ,EGUNAME ,ECOST
 		FROM teampj.EVENT
 		ORDER BY ENO DESC
 		OFFSET #{offset} ROWS

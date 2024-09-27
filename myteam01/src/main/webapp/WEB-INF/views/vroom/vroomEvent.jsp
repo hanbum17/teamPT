@@ -13,52 +13,56 @@
             font-family: Arial, sans-serif;
             height: 100vh;
             background-color: #f7f7f7;
-            background-image: url('/image/kakaoMAP.jpg');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
+             background-image: url('/image/kakaoMAP.jpg');
+            background-size: cover; /* 배경 이미지가 요소의 전체를 덮도록 설정 */
+             background-position: center; /* 이미지의 위치를 중앙으로 설정 */
+          background-repeat: no-repeat; /* 이미지 반복을 방지 */
             display: flex;
             flex-direction: column;
             justify-content: flex-end;
         }
 
+          
         #map {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-        }
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0; /* 지도를 배경으로 만들기 위해 z-index를 음수로 설정 */
+    }
+        
 
         .container {
-		    display: flex;
-		    overflow-x: auto; /* 수평 스크롤 허용 */
-		    white-space: nowrap;
-		    padding: 20px;
-		    box-sizing: border-box;
-		    background-color: transparent;
-		    width: 100%;
-		    height: 300px; /* 높이 유지 */
-		    align-items: center;
-		    position: fixed; /* 맨 아래 고정 */
-		    bottom: 0; /* 아래 고정 */
-		    z-index: 1; /* 다른 요소 위에 보이도록 설정 */
-		}
+            display:  flex;
+            overflow-x: auto;
+            white-space: nowrap;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: transparent;
+            width: 100%;
+            height: 300px;
+            align-items: center;
+            position: fixed;
+            bottom: 0;
+        }
+
 
         .event-card {
-		    display: inline-block; /* 카드가 수평으로 나열됨 */
-		    width: 200px;
-		    height: 280px;
-		    margin-right: 20px;
-		    background-color: #f0f0f0;
-		    border-radius: 10px;
-		    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-		    text-align: center;
-		    padding: 10px;
-		    box-sizing: border-box;
-		    cursor: pointer;
-		    flex-shrink: 0; /* 크기 축소 방지 */
+		  display: inline-block;
+          width: 210px; /* 너비 */
+          height: 290px; /* 높이 */
+          margin-right: 20px;
+          background-color: #f0f0f0;
+          border-radius: 10px;
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+          text-align: center;
+          padding: 10px;
+          box-sizing: border-box;
+          cursor: pointer;
+          flex-shrink: 0;
+          overflow: hidden; /* 넘치는 내용 숨기기 */
+
 		}
 
         .event-card img {
@@ -69,32 +73,38 @@
         }
 
         .event-info {
-            padding: 20px;
+          padding: 20px;
+          overflow: hidden; /* 넘치는 내용 숨기기 */
+          text-overflow: ellipsis; /* 넘치는 텍스트를 '...'로 표시 */
+          white-space: nowrap; /* 텍스트를 한 줄로 표시 */
         }
 
         .event-info h3 {
-            margin: 1px 0;
-            font-size: 18px;
+           margin: 1px 0;
+          font-size: 18px;
+          word-break: break-word; /* 단어가 길 경우 줄바꿈 허용 */
+          word-break: keep-all; /* 단어가 중간에 끊기지 않도록 설정 */s
+          white-space: normal; /* 제목은 여러 줄로 표시 가능 */
         }
 
         .event-info p {
             margin: 5px 0;
-            font-size: 14px;
-            color: #555;
+          font-size: 14px;
+          color: #555;
+          overflow: hidden; /* 넘치는 내용 숨기기 */
+          text-overflow: ellipsis; /* 넘치는 텍스트를 '...'로 표시 */
+          white-space: nowrap; /* 텍스트를 한 줄로 표시 */
         }
-
-        .panel {
-            position: absolute;
-            top: 50px;
-            width: 28%;
-            height: calc(100vh - 100px);
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-            background-color: #fff;
-            padding: 20px;
-            box-sizing: border-box;
+        
+        .container::-webkit-scrollbar {
             display: none;
         }
+        
+        .container {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+      
 
         .restaurant-search-btn {
 	    position: absolute;
@@ -112,6 +122,40 @@
 	.restaurant-search-btn:hover {
     	background-color: #0056b3;
 	}
+	
+	.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px; /* 패딩을 줄여서 내용이 위로 이동하도록 설정 */
+    background-color: transparent; /* 상단 바 배경 제거 */
+    color: #ffffff;
+    border-bottom: none; /* 흰색 줄 제거 */
+    height: 60px; /* 헤더의 높이를 적절히 설정 */
+    position: fixed; /* 헤더를 페이지 상단에 고정 */
+    width: 100%; /* 헤더가 전체 너비를 차지하도록 설정 */
+    top: 0; /* 상단에 위치하도록 설정 */
+    left: 0; /* 왼쪽에 위치하도록 설정 */
+    z-index: 1000; /* 다른 요소들 위에 표시되도록 설정 */
+}
+
+.header .logo {
+       font-size: 30px; /* 글자 크기 2/3로 줄임 */
+       font-weight: bold;
+   }
+   
+   .header .nav {
+       font-size: 20px; /* 글자 크기 2/3로 줄임 */
+   }
+   
+   .header .nav a {
+       color: #ffffff;
+       text-decoration: none;
+       margin: 0 15px; /* 글자 사이 간격 조정 */
+   }
+   
+}
+	
 
     </style>
 </head>
@@ -146,7 +190,8 @@
                  data-eno="${event.eno}" 
                  data-excoord="${event.excoord}" 
                  data-eycoord="${event.eycoord}" 
-                 onclick="window.location.href='${contextPath}/vroom/event/details?eno=${event.eno}'">
+                 onclick="window.location.href='${contextPath}/vroom/event/details?eno=${event.eno}&lat=${event.excoord}&lng=${event.eycoord}'" >
+                 
                 <img src="${contextPath}/images/event.jpg" alt="${event.ename} Image">
                 <div class="event-info">
                     <h3>${event.ename}</h3>
@@ -173,7 +218,11 @@
 <script>
 // 식당 조회 버튼 클릭 이벤트 처리
 document.getElementById('restaurant-search-btn').addEventListener('click', () => {
-    window.location.href = '${contextPath}/vroom/restaurant';
+	const urlParams = new URLSearchParams(window.location.search); // URL 파라미터를 여기서 정의
+    const guName = urlParams.get('guName'); 
+    console.log(guName); 
+    const targetUrl = '${contextPath}/vroom/restaurant?guName=' + guName;
+    window.location.href = targetUrl; 
 });
 
 // 카카오 지도 초기화
@@ -211,9 +260,6 @@ function setMarker(lng, lat) {
     markers.push(newMarker);
     map.setCenter(new kakao.maps.LatLng(lat, lng));
 
-    console.log('setMarker 함수: lat ' + lat + ', lng ' + lng);
-    console.log('지도 중심:', map.getCenter());
-    console.log('마커 배열:', markers);
 }
 
 // 마우스 오버 리스너 추가
@@ -248,6 +294,18 @@ let scrollLeft;
 const container = document.getElementById('event-container');
 
 
+
+container.addEventListener('scroll', () => {
+    if (container.scrollWidth - container.scrollLeft <= container.clientWidth + 50) {
+        // Load more data when scrolling close to the end
+        loadMoreRestaurants();
+    }
+});
+
+container.addEventListener('wheel', (event) => {
+    event.preventDefault();
+    container.scrollLeft += event.deltaY;
+});
 
 //드래그 시작
 container.addEventListener('mousedown', (e) => {

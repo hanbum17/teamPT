@@ -33,4 +33,17 @@ public class EventReviewVO {
 	private Long page;
 	private Long pageSize;
 	private Long offset;
+	
+	public EventReviewVO(Long page, Long pageSize) {
+		
+		if(page == null || pageSize == null || page == 0L || pageSize == 0L) {
+			this.page = 1L;
+			this.pageSize = 5L;
+		} else {
+			this.page = page;
+			this.pageSize = pageSize;
+		}
+	}
 }
+
+
