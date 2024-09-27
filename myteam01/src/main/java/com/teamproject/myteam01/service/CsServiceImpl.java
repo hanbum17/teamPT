@@ -208,7 +208,7 @@ public class CsServiceImpl implements CsService{
 	
 
 	//이벤트 수정
-ain
+
 	@Override
 	public boolean modifyAE(CsVO ae) {
 		System.out.println("서비스 : adminevent 수정");
