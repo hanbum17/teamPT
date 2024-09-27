@@ -113,6 +113,7 @@ public class CsServiceImpl implements CsService{
 	@Override
 	public CsVO getFB(Long fbno) {
 		CsVO feeb = csMapper.selectFB(fbno);
+		System.out.println("피드백 데이터 : " + feeb); // 가져온 공지사항 데이터 확인
 		return feeb ;
 	}
 	
@@ -152,9 +153,10 @@ public class CsServiceImpl implements CsService{
 	//공지사항 상세조회
 	@Override
 	public CsVO getNoticeDetail(Long notice_num) {
-		System.out.println("공지사항 번호: " + notice_num); // notice_num 값 확인
-		CsVO notice = csMapper.selectNoticeDetail(notice_num);
-		System.out.println("공지사항 데이터: " + notice); // 가져온 공지사항 데이터 확인
+		System.out.println("서비스 - 공지사항 번호: " + notice_num); // notice_num 값 확인
+		CsVO notice = new CsVO();
+		notice = csMapper.selectNoticeDetail(notice_num);
+		System.out.println("서비스 - 공지사항 데이터: " + notice); // 가져온 공지사항 데이터 확인
 		return notice;
 	}
 	

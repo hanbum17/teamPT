@@ -271,7 +271,7 @@
             </table>
         </div>
 
-        <!-- notice Detail Section -->
+        <!-- event Detail Section -->
         <div id="event-detail" class="detail-view" style="display: none;">
             <h3>이벤트 상세보기</h3>
             <table style="width: 100%; border-collapse: collapse;">

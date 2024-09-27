@@ -179,7 +179,7 @@ public class CsController {
                                  @RequestParam(value = "notice_num", required = false) Long notice_num,
                                  @RequestParam(value = "event_num", required = false) Long event_num, Model model) {
         CsVO cs = new CsVO();
-
+        						System.out.println("--------------------------공지" + notice_num);
         if ("faq".equals(type) && faqno != null) {
             cs = csService.getFAQ(faqno);
         } else if ("feedback".equals(type) && fbno != null) {
