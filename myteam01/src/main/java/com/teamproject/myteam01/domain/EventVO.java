@@ -30,7 +30,7 @@ public class EventVO {
     private String eycoord;     // 행사 Y좌표
     private Date eregdate;		// 행사 생성일
     private String etype;        // 행사 추천 종류
-    private String ecatecory;
+    private String eplace; 
     
     private String guName;
     
