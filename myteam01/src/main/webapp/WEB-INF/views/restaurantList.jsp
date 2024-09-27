@@ -330,7 +330,7 @@ document.addEventListener('DOMContentLoaded', () => {
         isLoading = true;
       
 
-        fetch(contextPath + "/api/restaurant?guName="+guName+"page=" + restPage + "&pageSize=" + restPageSize)
+        fetch(contextPath + "/api/restaurant/more?page=" + restPage + "&pageSize=" + restPageSize)
 
             .then(response => {
                 if (!response.ok) {
