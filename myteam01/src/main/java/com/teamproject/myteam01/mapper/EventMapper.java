@@ -2,8 +2,11 @@ package com.teamproject.myteam01.mapper;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.teamproject.myteam01.domain.EventReviewVO;
 import com.teamproject.myteam01.domain.EventVO;
+import com.teamproject.myteam01.domain.RestaurantVO;
 import com.teamproject.myteam01.domain.RestaurantsReviewVO;
 
 public interface EventMapper {
@@ -45,6 +48,8 @@ public interface EventMapper {
 	
 	//행사 조회수 증가
 	public void updateEviewsCnt(Long eno);
+	
+	public List<EventVO> selectEventListByGuName(@Param("guName") String guName, @Param("offset") Long offset, @Param("pageSize") Long pageSize);
 	
 	
 	

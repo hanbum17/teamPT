@@ -1,12 +1,12 @@
 package com.teamproject.myteam01.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
 import com.teamproject.myteam01.domain.EventReviewVO;
 import com.teamproject.myteam01.domain.EventVO;
-import com.teamproject.myteam01.domain.RestaurantsReviewVO;
 import com.teamproject.myteam01.mapper.EventMapper;
 
 import lombok.RequiredArgsConstructor;
@@ -92,6 +92,24 @@ public class EventServiceImpl implements EventService{
 		
 		return reviews;
 	}
+	
+	@Override
+	public List<EventVO> getEventListByGuName(Map<String, Object> params) {
+		EventVO eventVO = new EventVO();
+	    Long offset = (Long) params.get("offset");
+	    Long pageSize = (Long) params.get("pageSize");
+	    String guName = (String) params.get("guName");
+	    eventVO.setGuName(guName);
+	    System.out.println("서비스에 전달된 구: "+guName);
+	    
+
+	    // Mapper 호출
+	    return eventMapper.selectEventListByGuName(guName, offset, pageSize);
+	}
+	
+	
+	
+	
 	@Override
 	public List<EventReviewVO> modifyreview(EventReviewVO eventReviewVO) {
 		System.out.println("리뷰 수정 서비스 값: "+eventReviewVO);

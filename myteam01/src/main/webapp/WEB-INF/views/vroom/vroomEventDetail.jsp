@@ -8,191 +8,180 @@
     <meta charset="UTF-8">
     <title>event Details</title>
    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-            height: 100vh;
-            background-color: #f7f7f7;
-            background-image: url('/image/kakaoMAP.jpg');
-            background-size: cover; /* 배경 이미지가 요소의 전체를 덮도록 설정 */
-   			 background-position: center; /* 이미지의 위치를 중앙으로 설정 */
-    		background-repeat: no-repeat; /* 이미지 반복을 방지 */
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-        }
-
-        .container {
-            display:  flex;
-            overflow-x: auto;
-            white-space: nowrap;
-            padding: 20px;
-            box-sizing: border-box;
-            background-color: #fff;
-            width: 100%;
-            height: 300px;
-            align-items: center;
-            position: fixed;
-            bottom: 0;
-        }
-
-        .event-card {
-            display: inline-block;
-            width: 200px;
-            height: 280px;
-            margin-right: 20px;
-            background-color: #f0f0f0;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            padding: 10px;
-            box-sizing: border-box;
-            cursor: pointer;
-            flex-shrink: 0;
-        }
-
-        .event-card img {
-            width: 100%;
-            height: 60%;
-            border-radius: 10px;
-            object-fit: cover;
-        }
-
-        .event-info {
-            padding: 20px;
-        }
-
-        .event-info h3 {
-            margin: 1px 0;
-            font-size: 18px;
-        }
-
-        .event-info p {
-            margin: 5px 0;
-            font-size: 14px;
-            color: #555;
-        }
-
-        .panel {
-		    position: absolute;
-		    top: 50px;
-		    width: 28%;
-		    height: calc(100vh - 100px); /* 패널의 높이 설정 */
-		    border-radius: 10px;
-		    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-		    background-color: #fff;
-		    padding: 20px;
-		    box-sizing: border-box;
-		    display: none;
-		    overflow: hidden; /* 패널 내부 콘텐츠가 넘칠 경우 숨기기 */
-		}
-
-        .left-panel {
-            left: 5%;
-            border: 1px solid #ddd;
-            padding: 20px;
-            box-sizing: border-box;
-        }
-
-        .right-panel {
-		    right: 5%;
-		    border: 1px solid #ddd;
-		    padding: 20px;
-		    box-sizing: border-box;
-		    overflow-y: auto; /* 스크롤 활성화 */
-		}
-
-        .panel h2 {
-            margin-bottom: 20px;
-        }
-
-        .panel p {
-            margin-bottom: 10px;
-        }
-
-        .container::-webkit-scrollbar {
-            display: none;
-        }
-
-        .container {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
-
-        .back-button {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .back-button:hover {
-            background-color: #0056b3;
-        }
-
-        #reviews_wrap {
-       	 	display: none; 
-            margin-top: 20px;
-        }
-        .small-text {
-          font-size: 0.8em; /* 작은 글씨 크기 */
-          color: #555; /* 원하는 색상 */
-            margin-left: 5px; /* 레이아웃에 맞게 여백 조절 */
-        }
-        #reviews-container {
-		    max-height: calc(100vh - 250px); /* 패널 높이에 따라 조정 */
-		    overflow-y: auto; /* 스크롤 추가 */
-		    padding: 10px;
-		    border: 0.5px solid #ddd;
-		    border-radius: 10px;
-		    background-color: #fff;
-		    box-shadow: 0 0 10px rgba(0, 0, 0, 0);
-		}
-
-      /* 웹킷 기반 브라우저에서 스크롤바 숨기기 */
-      	#reviews-container::-webkit-scrollbar {
-		    width: 0; /* 스크롤바 숨기기 */
-		    background: transparent;
-		}
-      .load-more-btn{
-         width: 100%;
-         padding: 10px;
-         border: none;
-         border-radius: 5px;
-         background-color: #007bff;
-         color: #fff;
-         cursor: pointer;
+        body, html {
+           margin: 0;
+           padding: 0;
+           height: 100%;
+           width: 100%;
+           overflow: hidden; /* 스크롤바가 안 나타나도록 설정 */
+       }
+   
+       #map {
+          position: fixed; /* position을 fixed로 변경 */
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%; /* 전체 화면을 차지하도록 설정 */
+          z-index: 0;
       }
 
-      #editReviewForm {
-		    display: none;
-		    margin-top: 20px; /* 위치 조정 */
-		    padding: 10px;
-		    border: 1px solid #ddd;
-		    border-radius: 10px;
-		    background-color: #fff;
-		    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-		}
-
-	 .review_ul {
-	            list-style-type: none; /* 리스트의 기본 점을 제거합니다 */
-	            padding: 0;
-	        }
+    .panel {
+        position: absolute;
+        top: 50px;
+        width: 28%;
+        height: calc(100vh - 100px); /* 패널 높이 */
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+        background-color: #fff;
+        padding: 20px;
+        box-sizing: border-box;
+        display: block; /* 패널이 보이도록 설정 */
+        z-index: 10; /* 지도 위에 오도록 설정 */
+        overflow: hidden;
+    }
+	.left-panel {
+	        left: 5%;
+	        border: 1px solid #ddd;
+	        padding: 20px;
+	        box-sizing: border-box;
+	    }
+	
+	    .right-panel {
+	        right: 5%;
+	        border: 1px solid #ddd;
+	        padding: 20px;
+	        box-sizing: border-box;
+	        overflow-y: auto;
+	    }
+	
+	    .panel h2 {
+	        margin-bottom: 20px;
+	    }
+	
+	    .panel p {
+	        margin-bottom: 10px;
+	    }
+	
+	    .back-button {
+	        position: absolute;
+	        bottom: 20px;
+	        left: 50%;
+	        transform: translateX(-50%);
+	        padding: 10px 20px;
+	        background-color: #007bff;
+	        color: #fff;
+	        border: none;
+	        border-radius: 5px;
+	        cursor: pointer;
+	    }
+	
+	    .back-button:hover {
+	        background-color: #0056b3;
+	    }
+	
+	    #reviews_wrap {
+	        display: none;
+	        margin-top: 20px;
+	    }
+	
+	    .small-text {
+	        font-size: 0.8em;
+	        color: #555;
+	        margin-left: 5px;
+	    }
+	
+	    #reviews-container {
+	        max-height: calc(100vh - 250px);
+	        overflow-y: auto;
+	        padding: 10px;
+	        border: 0.5px solid #ddd;
+	        border-radius: 10px;
+	        background-color: #fff;
+	        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+	    }
+	
+	    #reviews-container::-webkit-scrollbar {
+	        width: 0;
+	        background: transparent;
+	    }
+	
+	    .load-more-btn {
+	        width: 100%;
+	        padding: 10px;
+	        border: none;
+	        border-radius: 5px;
+	        background-color: #007bff;
+	        color: #fff;
+	        cursor: pointer;
+	    }
+	
+	    #editReviewForm {
+	        display: none;
+	        margin-top: 20px;
+	        padding: 10px;
+	        border: 1px solid #ddd;
+	        border-radius: 10px;
+	        background-color: #fff;
+	        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+	    }
+	
+	    .review_ul {
+	        list-style-type: none;
+	        padding: 0;
+	    }
+	    
+	    #reviewForm input, #reviewForm textarea {
+	    width: 100%;
+	    padding: 10px;
+	    margin-bottom: 10px;
+	    border: 1px solid #ddd;
+	    border-radius: 5px;
+	    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+	    box-sizing: border-box; /* 패딩 포함 */
+	}
+	#review_register_btn {
+	    background-color: #28a745; /* 성공적인 녹색 */
+	    color: #fff;
+	    padding: 10px;
+	    border: none;
+	    border-radius: 5px;
+	    cursor: pointer;
+	    transition: background-color 0.3s;
+	}
+	#review_register_btn:hover {
+	    background-color: #218838; /* 버튼 호버 색상 */
+	}
+	/* 리뷰 수정 양식 스타일 */
+	#editReviewForm input, #editReviewForm textarea {
+	    width: 100%;
+	    padding: 10px;
+	    margin-bottom: 10px;
+	    border: 1px solid #ddd;
+	    border-radius: 5px;
+	    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+	    box-sizing: border-box; /* 패딩 포함 */
+	}
+	
+	/* 리뷰 컨테이너 스타일 */
+	#reviews-container {
+	    max-height: calc(100vh - 250px);
+	    overflow-y: auto;
+	    padding: 10px;
+	    border: 0.5px solid #ddd;
+	    border-radius: 10px;
+	    background-color: #f8f9fa; /* 부드러운 배경색 */
+	    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+	}
 
 
     </style>
 </head>
 <body>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+   <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=fe9306b4adbbf3249d28d6b7a2c37c0a&libraries=services"></script>
+   <div id="map" style="width: 100%; height: 100vh;"></div>
 
     <div style="position: absolute; top: 10px; left: 10px; font-size: 16px;">
         <c:if test="${not empty user}">
@@ -205,21 +194,21 @@
         <img id="panel-image" src="" alt="Detail Image" style="width: 100%; height: auto; border-radius: 10px; margin-bottom: 20px;">
         <p><strong id="panel-name"></strong></p>
         <p>
-            <strong>Rating:</strong>
+            
             <span id="panel-rating"></span>
             <span id="rating-extra" class="small-text"></span>
         </p>
-        <p><strong>Category:</strong> <span id="panel-category"></span></p>
-        <p><strong>Location:</strong> <span id="panel-location"></span></p>
+        <p><strong>기간: </strong><span id="panel-period"></span></p>
+        <p><strong>장소: </strong><span id="panel-location"></span></p>
         <button id="addFavoriteBtn" class="add-fav-btn">즐겨찾기 추가</button>
-        <button class="back-button" onclick="goBack()">Back</button>
+        <button id="BackBtn" class="back-button" onclick="goBack()">Back</button>
     </div>
 
     <!-- 오른쪽 패널: 리뷰/별점 -->
     <div class="panel right-panel" id="right-panel">
         <!-- 별점 부분 -->
         <p>
-            <strong>Rating:</strong>
+            
             <span id="panel-rating"></span>
             <span id="rating-extra" class="small-text"></span>
         </p>
@@ -302,9 +291,27 @@
                     console.log(data);
                     if (data) {
                         // 왼쪽 패널 설정
+                        
+                        const lat = data.eycoord; // 위도
+                        const lng = data.excoord; // 경도
+                        
+                        const mapContainer = document.getElementById('map');
+                        const mapOption = {
+                            center: new kakao.maps.LatLng(lat, lng), // 전달받은 좌표로 설정
+                            level: 3 // 지도 확대 레벨
+                        };
+                        const map = new kakao.maps.Map(mapContainer, mapOption);
+                        
+                        // 마커 추가
+                        const marker = new kakao.maps.Marker({
+                            position: new kakao.maps.LatLng(lat, lng),
+                            map: map
+                        });
+                        
+                        
                         document.getElementById('panel-image').src = `/images/event.jpg`;
                         document.getElementById('panel-name').textContent = data.ename;
-                        //document.getElementById('panel-category').textContent = data.ecategory;
+                        document.getElementById('panel-period').textContent = data.eperiod;
                         document.getElementById('panel-location').textContent = data.eaddress;
                         document.getElementById('eno').value = eno;
 
@@ -469,9 +476,37 @@
         }
 
 
-        function goBack() {
-            window.location.href = '/vroom/event';  
+		function goBack() {
+        	
+            const urlParams = new URLSearchParams(window.location.search);
+            const guName = urlParams.get('guName');
+            const lat = parseFloat(urlParams.get('lat'));
+            const lng = parseFloat(urlParams.get('lng'));
+            
+            const mapContainer = document.getElementById('map');
+            const mapOption = {
+                center: new kakao.maps.LatLng(lat, lng), // 전달받은 좌표로 설정
+                level: 3
+            };
+            
+            const map = new kakao.maps.Map(mapContainer, mapOption);
+
+         // 마커 추가
+            const marker = new kakao.maps.Marker({
+                position: new kakao.maps.LatLng(lat, lng),
+                map: map
+             
+            });
+
+            window.history.back();
         }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            if (currentFno) {
+                showDetailView(currentFno);
+            }
+        });
+        
 
         document.addEventListener('DOMContentLoaded', function() {
             if (currentEno) {

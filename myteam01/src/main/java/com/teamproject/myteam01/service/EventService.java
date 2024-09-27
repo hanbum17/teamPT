@@ -1,11 +1,10 @@
 package com.teamproject.myteam01.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.teamproject.myteam01.domain.EventReviewVO;
 import com.teamproject.myteam01.domain.EventVO;
-import com.teamproject.myteam01.domain.RestaurantVO;
-import com.teamproject.myteam01.domain.RestaurantsReviewVO;
 
 public interface EventService {
 
@@ -39,6 +38,9 @@ public interface EventService {
 	public boolean modifyEvent(EventVO event);
 	//행사 삭제
 	public boolean removeEvent(Long eno);
+	
+	
+	public List<EventVO> getEventListByGuName(Map<String, Object> params);
 
 	
 	

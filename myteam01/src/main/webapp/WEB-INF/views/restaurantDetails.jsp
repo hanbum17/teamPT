@@ -193,18 +193,18 @@
         <img id="panel-image" src="" alt="Detail Image" style="width: 100%; height: auto; border-radius: 10px; margin-bottom: 20px;">
         <p><strong id="panel-name"></strong></p>
         <p>
-            <strong>Rating:</strong>
+            
             <span id="panel-rating"></span>
             <span id="rating-extra" class="small-text"></span>
         </p>
-        <p><strong>Category:</strong> <span id="panel-category"></span></p>
-        <p><strong>Location:</strong> <span id="panel-location"></span></p>
+        <p> <span id="panel-category"></span></p>
+        <p> <span id="panel-location"></span></p>
         <button id="addFavoriteBtn" class="add-fav-btn">즐겨찾기 추가</button>
         <button id="BackBtn" class="back-button" onclick="goBack()">Back</button>
     </div>
 	<div class="panel right-panel" id="right-panel">
 	    <p>
-	        <strong>Rating:</strong>
+	        
 	        <span id="panel-rating"></span>
 	        <span id="rating-extra" class="small-text"></span>
 	    </p>
@@ -245,8 +245,6 @@
         const pageSize = 5;
         
         
-        
-
         function submitEditReview() {
            reviewsContainer.innerHTML = '';
             const form = document.getElementById('reviewEditForm');
@@ -384,6 +382,8 @@
                 }
             }
         }
+        
+        
         function editReview(frno, title, content) {
             document.getElementById('editFrno').value = frno;
             document.getElementById('editFrtitle').value = title;
