@@ -67,15 +67,20 @@ public interface CsService {
 	
 	//공지사항 상세조회
 	public CsVO getNoticeDetail(Long num);
+
 	
 ////////////////////////////////////////////////////////
 	
+	//행사 등록
 	public void regEvent(CsVO event);
 	
+	//행사 목록조회
 	public List<CsVO> getEventList();
 	
+	//행사 상세조회
 	public CsVO getEventDetail(Long num);
 
+	
 ////////////////////////////////////////////////////////
 	
 	List<CsVO> getUserInquiries(String userId);  // 사용자 1대1 문의 조회

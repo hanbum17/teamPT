@@ -152,8 +152,6 @@
 		SELECT * FROM notice WHERE #{notice_num}
 	</select>
 	
-	
-	
 	<!-- 이벤트 사항등록 -->
 	<insert id="insertAdminEvent" parameterType="com.teamproject.myteam01.domain.CsVO">
 		INSERT INTO admin_event(EVENT_NUM, EVENT_TITLE, EVENT_CONTENT, EVENT_REGDATE, EVENT_MODDATE, UNO, EVENT_DELFLAG)
@@ -170,8 +168,6 @@
 		SELECT * FROM admin_event WHERE #{event_num}
 	</select>
 	
-	
-	
 	<!-- 1대1 문의 내역 조회 -->
     <select id="selectUserInquiries" parameterType="String" resultType="com.teamproject.myteam01.domain.CsVO">
         SELECT INO, ICATEGORY, ITITLE, ICONTENT, IREGDATE, IRESPONSE
@@ -180,7 +176,7 @@
         ORDER BY IREGDATE DESC
     </select>
 
-
+	<!-- 문의 답변 대기중 -->
 
 
 

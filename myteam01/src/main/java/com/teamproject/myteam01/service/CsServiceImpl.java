@@ -154,14 +154,16 @@ public class CsServiceImpl implements CsService{
 		return csMapper.selectNoticeDetail(num);
 	}
 	
+	
 ////////////////////////////////////////////////////////////////
 	
+	//행사 등록
 	@Override
 	public void regEvent(CsVO event) {
 		csMapper.insertAdminEvent(event);
 	}
 	
-	//공지사항 목록조회
+	//행사 목록조회
 	@Override
 	public List<CsVO> getEventList(){
 		
@@ -169,11 +171,12 @@ public class CsServiceImpl implements CsService{
 		return se;
 	}
 	
-	//공지사항 상세조회
+	//행사 상세조회
 	@Override
 	public CsVO getEventDetail(Long num) {
 		return csMapper.selectAdminEventDetail(num);
 	}
+	
 	
 ////////////////////////////////////////////////////////////////
 	@Override

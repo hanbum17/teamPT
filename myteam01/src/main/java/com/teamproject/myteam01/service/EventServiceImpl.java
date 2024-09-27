@@ -21,6 +21,11 @@ public class EventServiceImpl implements EventService{
 	
 	//영범 추가
 	@Override
+	public Long regEventCnt() {
+		return eventMapper.selectRegEventForCnt();
+	}
+	
+	@Override
 	public List<EventReviewVO> selectMoreReviews(EventReviewVO eventReviewVO){
 		Long offSet = (eventReviewVO.getPage()- 1 ) * eventReviewVO.getPageSize();
 		eventReviewVO.setOffset(offSet);

@@ -356,6 +356,7 @@
                 <tr>
                     <th>번호</th>
                     <th>제목</th>
+                    <th>날짜</th>
                 </tr>
                 <c:forEach items="${feedbackList}" var="feeb">
                     <c:if test="${feeb.fbdelflag == 1}">

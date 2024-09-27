@@ -73,6 +73,12 @@ public interface CsMapper {
 	//공지사항 상세 조회
 	public CsVO selectNoticeDetail(Long noticeNum);
 	
+	//공지사항 수정
+	public CsVO updateNotice(CsVO csVO);
+	
+	//공지사항 삭제
+	public void deleteNotice(Long num);
+	
 //////////////////////////////////////////////
 	
 	//행사등록
@@ -84,6 +90,12 @@ public interface CsMapper {
 	//행사 상세 조회
 	public CsVO selectAdminEventDetail(Long cs);
 
+	//행사 수정
+	public CsVO updateAdminEvent(CsVO csVO);
+	
+	//행사 삭제
+	public void deleteAdminEvent(Long num);
+	
 //////////////////////////////////////////////
 
 	// 1대1 문의 내역 조회 - 사용자별

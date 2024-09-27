@@ -15,10 +15,23 @@
 <body>
     <!-- NAVIGATION BAR -->
     <nav class="navbar">
-    	<a href="${pageContext.request.contextPath}/vroom/main" class="logo">
-    		<img src="${pageContext.request.contextPath}/images/car.png" alt="Car Image" style="height: 25px;">
-            VROOM<sec:authorize access="hasAnyRole('ADMIN')">_ADMIN</sec:authorize>
-        </a>
+    
+    	<!-- ADMIN 권한-->
+        <sec:authorize access="hasRole('ADMIN')">
+            <a href="${pageContext.request.contextPath}/admin/main" class="logo">
+	    		<img src="${pageContext.request.contextPath}/images/car.png" alt="Car Image" style="height: 25px;">
+	            VROOM_ADMIN
+	        </a>
+        </sec:authorize>
+        <!-- 일반 유저 -->
+        <sec:authorize access="!hasRole('ADMIN')">
+            <a href="${pageContext.request.contextPath}/vroom/main" class="logo">
+	    		<img src="${pageContext.request.contextPath}/images/car.png" alt="Car Image" style="height: 25px;">
+	            VROOM
+	        </a>
+        </sec:authorize>
+        
+    	
         <ul class="nav-menu">
             <!-- 공지사항 메뉴 -->
             <li class="nav-item">
