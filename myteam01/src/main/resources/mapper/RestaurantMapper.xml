@@ -96,7 +96,11 @@
 
    
    <!-- 영범  -->
-   
+   <select id="selectRegRestaurntsForCnt" resultType="Long">
+		SELECT COUNT(*) AS count
+		FROM RESTAURANTS
+		WHERE TRUNC(FREGDATE) = TRUNC(SYSDATE)
+	</select>
 	<select id="selectMoreReviews" resultType="com.teamproject.myteam01.domain.RestaurantsReviewVO">
 		SELECT *
 		FROM (

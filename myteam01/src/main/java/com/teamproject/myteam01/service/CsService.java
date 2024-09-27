@@ -66,6 +66,7 @@ public interface CsService {
 	public List<CsVO> getNoticeList();
 	
 	//공지사항 상세조회
+
 	public CsVO getNoticeDetail(Long notice_num);
 	
 	//공지사항 수정
@@ -91,6 +92,8 @@ public interface CsService {
 	//이벤트 삭제
 	public boolean removeAE(Long event_num);
 
+
+	
 ////////////////////////////////////////////////////////
 	
 	List<CsVO> getUserInquiries(String userId);  // 사용자 1대1 문의 조회

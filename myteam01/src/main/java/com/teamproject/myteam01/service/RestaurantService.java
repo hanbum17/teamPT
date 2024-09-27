@@ -25,4 +25,5 @@ public interface RestaurantService {
 	public List<RestaurantsReviewVO> selectMoreReviews(RestaurantsReviewVO restReviewVO);
 	public List<RestaurantVO> restRegDate();
 	public List<RestaurantVO> recentRest();
+	public Long regRestCnt();
 }

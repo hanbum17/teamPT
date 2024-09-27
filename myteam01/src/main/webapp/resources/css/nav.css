@@ -25,7 +25,7 @@ body, html {
 .logo {
     font-family: 'Raleway', sans-serif;
     font-size: 28px;
-    color: #007bff;
+    color: #007bff; /* 기본 색상 */
     text-decoration: none;
     margin-left: 20px;
 }
@@ -55,7 +55,7 @@ body, html {
 }
 
 .nav-item > a:hover {
-    color: #007bff;
+    color: #007bff; /* 기본 색상 */
 }
 
 /* 드롭다운 메뉴 */
@@ -90,35 +90,10 @@ body, html {
 
 .dropdown li a:hover {
     background-color: #f0f0f0;
-    color: #007bff;
+    color: #007bff; /* 기본 색상 */
 }
 
 .nav-item:hover .dropdown {
-    display: block;
-}
-
-/* 서브 드롭다운 메뉴 */
-.sub-dropdown {
-    display: none;
-    position: absolute;
-    top: 0;
-    left: 100%;
-    background-color: #fff;
-    list-style: none;
-    padding: 10px 0;
-    margin: 0;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    border: 1px solid #e0e0e0;
-    border-radius: 5px;
-    z-index: 1000;
-    width: 180px;
-}
-
-.sub-dropdown li a {
-    padding-left: 30px;
-}
-
-.dropdown li:hover .sub-dropdown {
     display: block;
 }
 
@@ -137,7 +112,7 @@ body, html {
 }
 
 .nav-right a {
-    color: #007bff;
+    color: #007bff; /* 기본 색상 */
     text-decoration: none;
     padding: 5px 10px;
     font-size: 14px;
@@ -184,3 +159,23 @@ body, html {
         gap: 10px;
     }
 }
+
+/* Admin 전용 배경색 및 링크 색상 */
+html.admin-mode, body.admin-mode{
+    background: linear-gradient(120deg, #003366, #001F3F);
+    
+}
+
+.navbar.admin-mode .logo, .navbar.admin-mode .nav-right a, .navbar.admin-mode .nav-item > a:hover, .navbar.admin-mode .dropdown li a:hover {
+	color: #003366 !important; /* 링크 색상 변경 */
+}
+
+.navbar.admin-mode .nav-right #chat_room {
+	color: #ffffff !important;
+}
+
+.navbar.admin-mode .nav-right a:hover {
+    background-color: #c6e2ff; /* 연한 핑크 톤 */
+    color: #001F3F; /* 어두운 핑크 톤 */
+}
+

@@ -161,6 +161,7 @@ public class CsServiceImpl implements CsService{
 	
 	
 
+
 	//공지사항 수정
 		@Override
 		public boolean modifyNT(CsVO nt) {
@@ -187,13 +188,16 @@ public class CsServiceImpl implements CsService{
 	}
 	
 	//이벤트 등록
+
 	@Override
 	public void regEvent(CsVO event) {
 		csMapper.insertAdminEvent(event);
 	}
 	
+
 	
 	//이벤트 상세조회
+
 	@Override
 	public CsVO getEventDetail(Long event_num) {
 		System.out.println("이벤트 번호:------------------------------------------ " + event_num); // event_num 값 확인
@@ -202,7 +206,9 @@ public class CsServiceImpl implements CsService{
 		return event;
 	}
 	
+
 	//이벤트 수정
+ain
 	@Override
 	public boolean modifyAE(CsVO ae) {
 		System.out.println("서비스 : adminevent 수정");
@@ -216,6 +222,7 @@ public class CsServiceImpl implements CsService{
 		return csMapper.delAE(event_Num) == 1;
 		
 	}
+	
 	
 ////////////////////////////////////////////////////////////////
 	@Override

@@ -200,7 +200,12 @@ public class RestaurantServiceImpl implements RestaurantService{
 			return restaurantMapper.selectRecentRest();
 		}
 
-		
+		//영범
+		//오늘 등록된 식당개수
+		@Override
+		public Long regRestCnt() {
+			return restaurantMapper.selectRegRestaurntsForCnt();
+		}
 	
 	
 }

@@ -161,6 +161,7 @@
 		WHERE NOTICE_NUM = #{notice_num}
 	</select>
 	
+
 	
 	 <!-- 공지사항 수정 -->
     <update id="updateNT">
@@ -178,6 +179,7 @@
 	
 	
 	
+
 	<!-- 이벤트 사항등록 -->
 	<insert id="insertAdminEvent" parameterType="com.teamproject.myteam01.domain.CsVO">
 		<selectKey keyProperty="event_num" order="BEFORE" resultType="Long">
@@ -200,6 +202,7 @@
 		WHERE EVENT_NUM = #{event_num}
 	</select>
 	
+
 	
 	 <!-- 이벤트 수정 -->
     <update id="updateAE">
@@ -219,6 +222,7 @@
 	
 	
  <!--  1대1 문의 내역 조회 (유저페이지)  -->
+
     <select id="selectUserInquiries" parameterType="String" resultType="com.teamproject.myteam01.domain.CsVO">
         SELECT INO, ICATEGORY, ITITLE, ICONTENT, IREGDATE, IRESPONSE
         FROM INQUIRY
@@ -226,7 +230,7 @@
         ORDER BY IREGDATE DESC
     </select> 
 
-
+	<!-- 문의 답변 대기중 -->
 
 
 

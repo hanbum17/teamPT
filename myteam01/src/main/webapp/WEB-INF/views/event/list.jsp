@@ -1,7 +1,8 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ include file="../admin_main/header.jsp" %>
+
 <%@ include file="../menu/nav.jsp"%>
+<%@ include file="../menu/footer.jsp"%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -12,13 +13,6 @@
 </head>
 
 <body>
-    <header class="header">
-        <h2 class="title">행사 & 음식점 목록</h2>
-        <div class="top-bar">
-            <a href="<c:url value='/logout'/>" class="logout-link">로그아웃</a>
-            <button type="button" id="btnToEveRegister" class="register-button">행사 등록</button>
-        </div>
-    </header>
 
     <!-- Search and Filter Form -->
     <form id="searchForm" method="get" action="/list" autocomplete="off" class="search-form">

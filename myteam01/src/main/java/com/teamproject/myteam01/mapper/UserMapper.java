@@ -1,10 +1,10 @@
 package com.teamproject.myteam01.mapper;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import com.teamproject.myteam01.domain.UserActivityVO;
 import com.teamproject.myteam01.domain.UserVO;
@@ -45,10 +45,14 @@ public interface UserMapper {
     List<UserVO> userGenderCount();
     //신규회원 활동 저장
     void userRegisterActivity(UserVO userVO);
+    //신규회원 날짜별 조회
+    List<Date> selectNewUserForCnt();
     //현재 로그인 정보 db에 저장 (파이썬넘기기위해)
     void deleteUserActivity();
     void userIdInsert(String user);
     //사용자 추천 정보
     List<UserActivityVO> selectRecommend(String user);
+    //오늘 신규 회원 수
+    Long todayNewUser();
     
 }

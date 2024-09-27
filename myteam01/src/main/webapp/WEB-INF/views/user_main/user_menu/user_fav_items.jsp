@@ -37,16 +37,16 @@
 								</c:when>
 
 								<c:when test="${favoriteItem.restaurant != null}">
-									<h4>${favoriteItem.restaurant.rname}</h4>
+									<h4>${favoriteItem.restaurant.fname}</h4>
 									<p>
-										<c:forEach var="i" begin="1" end="${favoriteItem.restaurant.rrating}">
+										<c:forEach var="i" begin="1" end="${favoriteItem.restaurant.frating}">
 											<i class="fa fa-star"></i>
 										</c:forEach>
-										<c:forEach var="i" begin="${favoriteItem.restaurant.rrating + 1}" end="5">
+										<c:forEach var="i" begin="${favoriteItem.restaurant.frating + 1}" end="5">
 											<i class="fa fa-regular fa-star"></i>
 										</c:forEach>
 									</p>
-									<p class="ellipsis-text">${favoriteItem.restaurant.raddress}</p>
+									<p class="ellipsis-text">${favoriteItem.restaurant.faddress}</p>
 								</c:when>
 							</c:choose>
 						</div>

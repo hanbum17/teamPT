@@ -26,6 +26,7 @@ public interface EventService {
 	public List<EventReviewVO> selectMoreReviews(EventReviewVO eventReviewVO);
 	public List<EventVO> eventRegDate();
 	public List<EventVO> recentEvent();
+	public Long regEventCnt();
 	
 	//희준
 	//행사 목록
