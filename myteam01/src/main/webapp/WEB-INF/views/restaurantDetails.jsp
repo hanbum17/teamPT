@@ -1,4 +1,3 @@
-
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="jakarta.tags.core" prefix="c" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath }"/>
@@ -130,6 +129,51 @@
         list-style-type: none;
         padding: 0;
     }
+    
+    #reviewForm input, #reviewForm textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box; /* 패딩 포함 */
+}
+#review_register_btn {
+    background-color: #28a745; /* 성공적인 녹색 */
+    color: #fff;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+#review_register_btn:hover {
+    background-color: #218838; /* 버튼 호버 색상 */
+}
+/* 리뷰 수정 양식 스타일 */
+#editReviewForm input, #editReviewForm textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box; /* 패딩 포함 */
+}
+
+/* 리뷰 컨테이너 스타일 */
+#reviews-container {
+    max-height: calc(100vh - 250px);
+    overflow-y: auto;
+    padding: 10px;
+    border: 0.5px solid #ddd;
+    border-radius: 10px;
+    background-color: #f8f9fa; /* 부드러운 배경색 */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+
 </style>
 
 </head>
@@ -156,51 +200,40 @@
         <p><strong>Category:</strong> <span id="panel-category"></span></p>
         <p><strong>Location:</strong> <span id="panel-location"></span></p>
         <button id="addFavoriteBtn" class="add-fav-btn">즐겨찾기 추가</button>
-        <button class="back-button" onclick="goBack()">Back</button>
+        <button id="BackBtn" class="back-button" onclick="goBack()">Back</button>
     </div>
-    <div class="panel right-panel" id="right-panel">
-        <p>
-            <strong>Rating:</strong>
-            <span id="panel-rating"></span>
-            <span id="rating-extra" class="small-text"></span>
-        </p>
-        <button id="review-button" onclick="toggleReviewForm()" style="display: block; width: 100%; padding: 10px; border: none; border-radius: 5px; background-color: #007bff; color: #fff; cursor: pointer;">
-            리뷰 입력
-        </button>
-        <div id="reviews_wrap" style="display: none; margin-top: 20px;">
-          <form id="reviewForm">
-              <input type="text" id="frtitle" name="frtitle" placeholder="제목"><br>
-              <textarea id="frcontent" name="frcontent" placeholder="내용"></textarea><br>
-              <input type="text" id="frwriter" name="frwriter" placeholder="작성자" readonly><br>
-              <input type="text" id="frrating" name="frrating" placeholder="별점 0~5"><br>
-              <input type="text" id="fno" name="fno" readonly> <!-- 여기에 fno를 동적으로 설정 -->
-              <button id="review_register_btn" type="button" onclick="submitReview()">리뷰등록</button>
-          </form>
-      </div>
-        <div id="editReviewForm" style="display:none;">
-            <form id="reviewEditForm" action="${contextPath}/vroom/updateReview" method="post">
-                <input type="hidden" id="editFrno" name="frno">
-                <input type="text" id="editFrtitle" name="frtitle" placeholder="제목"><br>
-                <textarea id="editFrcontent" name="frcontent" placeholder="내용"></textarea><br>
-                <button type="button" onclick="submitEditReview()">수정 완료</button>
-            </form>
-        </div>
-        <div id="reviews-container"></div>
-    </div>
+	<div class="panel right-panel" id="right-panel">
+	    <p>
+	        <strong>Rating:</strong>
+	        <span id="panel-rating"></span>
+	        <span id="rating-extra" class="small-text"></span>
+	    </p>
+	    <button id="review-button" onclick="toggleReviewForm()" style="display: block; width: 100%; padding: 10px; border: none; border-radius: 5px; background-color: #007bff; color: #fff; cursor: pointer;">
+	        리뷰 입력
+	    </button>
+	    <div id="reviews_wrap" style="display: none; margin-top: 20px;">
+	        <form id="reviewForm">
+	            <input type="text" id="frtitle" name="frtitle" placeholder="제목" required>
+	            <textarea id="frcontent" name="frcontent" placeholder="내용" rows="4" required></textarea>
+	            <input type="text" id="frwriter" name="frwriter" placeholder="작성자" readonly>
+	            <input type="number" id="frrating" name="frrating" placeholder="별점 0~5" min="0" max="5" required>
+	            <input type="hidden" id="fno" name="fno"> <!-- 여기에 fno를 동적으로 설정 -->
+	            <button id="review_register_btn" type="button" onclick="submitReview()">리뷰 등록</button>
+	        </form>
+	    </div>
+	    <div id="editReviewForm" style="display: none;">
+	        <form id="reviewEditForm" action="${contextPath}/vroom/updateReview" method="post">
+	            <input type="hidden" id="editFrno" name="frno">
+	            <input type="text" id="editFrtitle" name="frtitle" placeholder="제목" required>
+	            <textarea id="editFrcontent" name="frcontent" placeholder="내용" rows="4" required></textarea>
+	            <button type="button" onclick="submitEditReview()">수정 완료</button>
+	        </form>
+	    </div>
+	    <div id="reviews-container"></div>
+	</div>
 
     <script>
-    	/* const urlParams = new URLSearchParams(window.location.search);
-	    const lat = parseFloat(urlParams.get('lat'));
-	    const lng = parseFloat(urlParams.get('lng')); */
-	    
-	    var mapContainer = document.getElementById('map'), // 지도를 표시할 div
-		    mapOption = {
-		        center: new kakao.maps.LatLng(37.566826004661, 126.978652258309), // 기본 중심 좌표 (서울시청)
-		        level: 3 // 지도 확대 레벨
-		    };
-	
-		var map = new kakao.maps.Map(mapContainer, mapOption);
-	
+
         const reviewsContainer = document.getElementById('reviews-container');
         const contextPath = "${contextPath}";
         const currentUserId = "${user.userId}"
@@ -243,6 +276,23 @@
                 .then(data => {
                     console.log(data);
                     if (data) {
+                        // fxcoord와 fycoord로 맵 좌표 설정
+                        const lat = data.fycoord; // 위도
+                        const lng = data.fxcoord; // 경도
+                        
+                        const mapContainer = document.getElementById('map');
+                        const mapOption = {
+                            center: new kakao.maps.LatLng(lat, lng), // 전달받은 좌표로 설정
+                            level: 3 // 지도 확대 레벨
+                        };
+                        const map = new kakao.maps.Map(mapContainer, mapOption);
+                        
+                        // 마커 추가
+                        const marker = new kakao.maps.Marker({
+                            position: new kakao.maps.LatLng(lat, lng),
+                            map: map
+                        });
+
                         document.getElementById('panel-image').src = `/images/bibimbab.jpg`;
                         document.getElementById('panel-name').textContent = data.fname;
                         document.getElementById('panel-category').textContent = data.fcategory;
@@ -264,6 +314,7 @@
                     } else {
                         alert('식당 정보를 찾을 수 없습니다.');
                     }
+                    
                 })
                 .then(response => {
                     if (!response.ok) {
@@ -381,7 +432,9 @@
                 resetReviewForm(); 
             }
         }
+        
         function goBack() {
+        	
             const urlParams = new URLSearchParams(window.location.search);
             const guName = urlParams.get('guName');
             const lat = parseFloat(urlParams.get('lat'));
@@ -402,17 +455,15 @@
              
 	         });
 
-            if (guName) {
-                window.location.href = `${contextPath}/vroom/restaurant?guName=${guName}`;
-            } else {
-                window.location.href = `${contextPath}/vroom/restaurant`; 
-            }
+            window.history.back();
         }
+        
         document.addEventListener('DOMContentLoaded', function() {
             if (currentFno) {
                 showDetailView(currentFno);
             }
         });
+        
         function submitReview() {
 
            reviewsContainer.innerHTML = '';

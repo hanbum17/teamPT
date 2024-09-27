@@ -384,21 +384,27 @@ const contextPath = "${contextPath}";
 
 //브라우저 시작되고 반응형 스크립트
 document.addEventListener('DOMContentLoaded', () => {
-	
-	addMouseOverListenerToCards();
-	 const restaurantButton = document.getElementById('event-search-btn');
 
-	    restaurantButton.addEventListener('click', () => {
-	        window.location.href = '${contextPath}/vroom/event';
-	    });
+	const urlParams = new URLSearchParams(window.location.search); // URL 파라미터를 여기서 정의
+    const guName = urlParams.get('guName'); 
+    console.log(guName); delete
 	
+   addMouseOverListenerToCards();
+    const restaurantButton = document.getElementById('event-search-btn');
+
+    restaurantButton.addEventListener('click', () => {
+        const targetUrl = '${contextPath}/vroom/event?guName=' + guName;
+        window.location.href = targetUrl; 
+    });
+   
+
     const container = document.getElementById('restaurant-container'); //추가할 컨테이너
 
-    //레스토랑 추가 데이터 가져오는 스크립트 (드래그 시 10개씩 추가)
+  //레스토랑 추가 데이터 가져오는 스크립트 (드래그 시 10개씩 추가)
     function loadMoreRestaurants() {
         if (isLoading) return;
         isLoading = true;
-		
+
         fetch(contextPath + "/api/restaurant/more?page=" + restPage + "&pageSize=" + restPageSize)
             .then(response => {
                 if (!response.ok) {
@@ -420,6 +426,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
 
     }
+
     
 	
 
