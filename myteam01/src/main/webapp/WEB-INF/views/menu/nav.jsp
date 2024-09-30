@@ -96,5 +96,6 @@
         $('html, body, .navbar').addClass('admin-mode');
     </sec:authorize>
 	</script>
+	
 </body>
 </html>
