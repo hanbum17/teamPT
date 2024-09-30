@@ -37,12 +37,12 @@
             </div>
             <div id="map"></div>
     		<p><em>핀을 클릭하여 위치를 조정하세요.</em></p>
-            <div class="form-group">
+            <div class="form-group" style="display: none;">
                 <label for="fxcoord">x좌표</label>
 
                 <input type="text" class="form-control" id="fxcoord" name="fxcoord" placeholder="x좌표를 입력하세요" readonly>
             </div>
-            <div class="form-group">
+            <div class="form-group" style="display: none;">
                 <label for="fycoord">y좌표</label>
                 <input type="text" class="form-control" id="fycoord" name="fycoord" placeholder="y좌표를 입력하세요" readonly>
 
