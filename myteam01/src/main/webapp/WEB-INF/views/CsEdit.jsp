@@ -110,9 +110,10 @@ label {
         <input type="text" id="faqtitle" name="faqtitle" class="form-control" value="${cs.faqtitle != null ? cs.faqtitle : ''}" />
     </div>
     <div class="form-group">
-        <label>답변 내용</label>
-        <textarea id="faqcontent" name="faqcontent" rows="5" class="form-control">${cs.faqcontent != null ? cs.faqcontent : ''}</textarea>
-    </div>
+    <label>답변 내용</label>
+    <textarea id="faqcontent" name="faqcontent" rows="5" class="form-control" 
+        <c:if test="${!user.isAdmin}">readonly</c:if>>${cs.faqcontent != null ? cs.faqcontent : ''}</textarea>
+</div>
 </div>
 
 <!-- 고객의 소리 (Feedback) 섹션 -->
@@ -144,14 +145,19 @@ label {
         <label for="inquiryTitle">문의 제목</label>
         <input type="text" id="inquiryTitle" name="ititle" class="form-control" value="${cs.ititle != null ? cs.ititle : ''}" />
     </div>
+
     <div class="form-group">
         <label for="inquiryContent">문의 내용</label>
         <textarea id="inquiryContent" name="icontent" rows="5" class="form-control">${cs.icontent != null ? cs.icontent : ''}</textarea>
     </div>
-    <div class="form-group">
-        <label for="inquiryResponse">문의 답변</label>
-        <textarea id="inquiryResponse" name="iresponse" rows="5" class="form-control">${cs.iresponse != null ? cs.iresponse : ''}</textarea>
-    </div>
+
+
+
+        <div class="form-group">
+            <label for="inquiryResponse">문의 답변</label>
+            <textarea id="inquiryResponse" name="iresponse" rows="5" class="form-control">${cs.iresponse != null ? cs.iresponse : ''}</textarea>
+        </div>
+
 </div>
 
     <button type="submit" id="btnSave" class="btnSave">저장</button>

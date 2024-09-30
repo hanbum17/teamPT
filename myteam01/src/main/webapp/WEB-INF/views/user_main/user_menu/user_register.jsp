@@ -17,10 +17,10 @@
                             <a href="<c:choose>
                                         
                                         <c:when test="${item.ITEMTYPE == 'RESTAURANT'}">
-                                            /restaurant/detail?fno=${item.ITEMID}
+                                            /vroom/restaurant/details?fno=${item.ITEMID}
                                         </c:when>
                                         <c:when test="${item.ITEMTYPE == 'EVENT'}">
-                                            /event/detail?eno=${item.ITEMID}
+                                            /vroom/event/details?eno=${item.ITEMID}
                                         </c:when>
                                     </c:choose>">
                                 <c:out value="${item.ITEMNAME}"/>
