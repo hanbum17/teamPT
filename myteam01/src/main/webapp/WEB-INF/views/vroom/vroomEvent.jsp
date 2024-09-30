@@ -47,7 +47,17 @@
             bottom: 0;
         }
 
-
+		.event-card, .event-card * {
+    user-select: none; /* 텍스트 선택 방지 */
+}
+/* 이미지 드래그 방지 */
+.event-card img {
+    -webkit-user-drag: none; /* 이미지 드래그 방지 (크롬, 사파리) */
+    -khtml-user-drag: none;
+    -moz-user-drag: none;
+    -o-user-drag: none;
+    user-drag: none; /* 이미지 드래그 방지 (기타 브라우저) */
+}
         .event-card {
 		  display: inline-block;
           width: 210px; /* 너비 */
