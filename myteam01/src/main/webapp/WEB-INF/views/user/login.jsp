@@ -69,7 +69,14 @@
     </div>
     
 
-
+	<!-- 성공 메시지가 있을 때 alert로 표시 -->
+	<c:if test="${not empty message}">
+	    <script>
+	        $(document).ready(function() {
+	            alert("${message}");
+	        });
+	    </script>
+	</c:if>
     <c:if test="${not empty error}">
         <script>
             Swal.fire({

@@ -107,7 +107,7 @@ public class RestaurantController {
              // USER_REGISTRATIONS 테이블에 등록
              userRegistrationService.registerUserRestaurant(userDetails.getUsername(), fno);
 
-             return "redirect:/restaurant/rest_register";
+             return "redirect:/event/list";
          }
 
 

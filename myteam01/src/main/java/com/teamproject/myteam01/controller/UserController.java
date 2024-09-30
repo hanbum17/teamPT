@@ -60,7 +60,7 @@ public class UserController {
         // 사용자 ID 중복 확인
         if (userService.isUserIdDuplicate(user.getUserId())) {
             redirectAttributes.addFlashAttribute("error", "이미 사용 중인 ID입니다.");
-            return "redirect:/user/register?role="+ role;  // 로그인 페이지로 이동
+            return "redirect:/user/register?role=" + role;
         }
 
         // 사용자 등록
@@ -68,11 +68,11 @@ public class UserController {
 
         // 사용자 역할 설정
         userService.registerUserRole(user.getUserId(), role);
-        
+
+        // 성공 메시지 설정
         redirectAttributes.addFlashAttribute("message", "회원가입이 성공적으로 완료되었습니다.");
         return "redirect:/user/login";
     }
-
     @GetMapping("/user/login")
     public String showLoginForm() {
         return "user/login";
