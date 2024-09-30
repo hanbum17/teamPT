@@ -237,8 +237,10 @@
                 </tr>
             </table>
             <button class="back-btn" onclick="hideDetail()">닫기</button>
-            <button class="edit-btn" onclick="editDetail('notice')">수정</button>
-            <button class="delete-btn" onclick="confirmDelete('notice', ${nc.notice_num})">삭제</button>
+            <sec:authorize access="hasRole('ADMIN')">
+	            <button class="edit-btn" onclick="editDetail('notice')">수정</button>
+	            <button class="delete-btn" onclick="confirmDelete('notice', ${nc.notice_num})">삭제</button>
+            </sec:authorize>
         </div>
     </div>
     
@@ -287,8 +289,11 @@
                 </tr>
             </table>
             <button class="back-btn" onclick="hideDetail()">닫기</button>
-            <button class="edit-btn" onclick="editDetail('event')">수정</button>
-            <button class="delete-btn" onclick="confirmDelete('event', ${ev.event_num})">삭제</button>
+            <sec:authorize access="hasRole('ADMIN')">
+            	<button class="edit-btn" onclick="editDetail('event')">수정</button>
+            
+            	<button class="delete-btn" onclick="confirmDelete('event', ${ev.event_num})">삭제</button>
+       		</sec:authorize>
         </div>
     </div>
     
@@ -341,8 +346,11 @@
                 </tr>
             </table>
             <button class="back-btn" onclick="hideDetail()">닫기</button>
-            <button class="edit-btn" onclick="editDetail('faq')">수정</button>
-            <button class="delete-btn" onclick="confirmDelete('faq', ${cs.faqno})">삭제</button>
+            <sec:authorize access="hasRole('ADMIN')">
+            	<button class="edit-btn" onclick="editDetail('faq')">수정</button>
+            
+            	<button class="delete-btn" onclick="confirmDelete('faq', ${cs.faqno})">삭제</button>
+           	</sec:authorize>
         </div>
     </div>
 
@@ -395,9 +403,11 @@
                 </tr>
             </table>
             <button class="back-btn" onclick="hideDetail()">닫기</button>
-            <button class="edit-btn" onclick="editDetail('feedback')">수정</button>
-            <button class="delete-btn" onclick="confirmDelete('feedback', ${feeb.fbno})">삭제</button>
-
+            <sec:authorize access="hasRole('ADMIN')">
+            	<button class="edit-btn" onclick="editDetail('feedback')">수정</button>
+       		
+            	<button class="delete-btn" onclick="confirmDelete('feedback', ${feeb.fbno})">삭제</button>
+			</sec:authorize>
 
         </div>
     </div>
@@ -453,9 +463,11 @@
 				</tr>
             </table>
             <button class="back-btn" onclick="hideDetail()">닫기</button>
-            <button class="edit-btn" onclick="editDetail('inquiry')">수정</button>
-            <button class="delete-btn" onclick="confirmDelete('inquiry', ${inq.ino})">삭제</button>
-
+            <sec:authorize access="hasRole('ADMIN')">
+            	<button class="edit-btn" onclick="editDetail('inquiry')">수정</button>
+            
+            	<button class="delete-btn" onclick="confirmDelete('inquiry', ${inq.ino})">삭제</button>
+			</sec:authorize>
         </div>
     </div>
 </main>
