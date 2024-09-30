@@ -144,14 +144,18 @@ label {
         <label for="inquiryTitle">문의 제목</label>
         <input type="text" id="inquiryTitle" name="ititle" class="form-control" value="${cs.ititle != null ? cs.ititle : ''}" />
     </div>
-    <div class="form-group">
-        <label for="inquiryContent">문의 내용</label>
-        <textarea id="inquiryContent" name="icontent" rows="5" class="form-control">${cs.icontent != null ? cs.icontent : ''}</textarea>
-    </div>
-    <div class="form-group">
-        <label for="inquiryResponse">문의 답변</label>
-        <textarea id="inquiryResponse" name="iresponse" rows="5" class="form-control">${cs.iresponse != null ? cs.iresponse : ''}</textarea>
-    </div>
+
+	    <div class="form-group">
+	        <label for="inquiryContent">문의 내용</label>
+	        <textarea id="inquiryContent" name="icontent" rows="5" class="form-control">${cs.icontent != null ? cs.icontent : ''}</textarea>
+	    </div>
+
+    <sec:authorize access="hasRole('ADMIN')">
+	    <div class="form-group">
+	        <label for="inquiryResponse">문의 답변</label>
+	        <textarea id="inquiryResponse" name="iresponse" rows="5" class="form-control">${cs.iresponse != null ? cs.iresponse : ''}</textarea>
+	    </div>
+    </sec:authorize>
 </div>
 
     <button type="submit" id="btnSave" class="btnSave">저장</button>
